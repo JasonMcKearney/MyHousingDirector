@@ -1,25 +1,38 @@
 import React, { Component } from 'react';
-//import PopUp from "./PopUp"; 
+import ReactDOM from 'react-dom';
+import './Home.css';
 
 export class Home extends Component {
-    displayName = Home.name
 
-    /*stae = {
-        seen: false
-    };
-
-    togglePop = () => {
-        this.setState({
-            seen: !this.state.seen
-        });
-    };*/
-
+    state = { buttonState: false};
 
     render() {
+
+        
+       
+
+
         return (
 
+            
             <div>
-                </div>
-         );
+               
+                    <h1 className = 'home-header'>Welcome to MyHousingDirector</h1>
+                    <br />
+                    <button className='btn-login' > Log-In</button>
+
+            
+                
+         
+              
+
+           </div>
+        );
     }
 }
+
+
+
+
+
+    
