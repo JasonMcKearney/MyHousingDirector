@@ -10,10 +10,8 @@
     text-align: center;
 }
 .btn-login {
-    <!-- HTML ! -->
-    <button class="button-9" role="button">Button 9</button>
-    /* CSS */
-    .button-9 appearance: button;
+
+
     backface-visibility: hidden;
     background-color: #405cf5;
     border-radius: 6px;

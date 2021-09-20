@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import './Home.css';
+import { LinkContainer } from 'react-router-bootstrap';
 
 export class Home extends Component {
 
@@ -18,10 +18,11 @@ export class Home extends Component {
             <div>
                
                     <h1 className = 'home-header'>Welcome to MyHousingDirector</h1>
-                    <br />
-                    <button className='btn-login' > Log-In</button>
-
-            
+                <br />
+                <LinkContainer to={'/LogIn'}>
+                    <button className='btn-login' > LogIn </button>
+                </LinkContainer>
+                
                 
          
               
