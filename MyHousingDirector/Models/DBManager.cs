@@ -26,7 +26,7 @@ namespace MyHousingDirector.Models
 		public bool SaveUser()
 		{
 			bool bRet = false;
-			using (MySqlConnection conn = GetConnection())
+/*			using (MySqlConnection conn = GetConnection())
 			{
 				// Hash password
 				uc.password = BCrypt.Net.BCrypt.HashPassword(uc.password);
@@ -45,6 +45,7 @@ namespace MyHousingDirector.Models
 
 				Query.ExecuteNonQuery();
 			}
+*/
 			return true;
 		}
 		#endregion
