@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
+using JavaScriptEngineSwitcher.V8;
+using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+//using React.AspNet;
 
 namespace MyHousingDirector
 {
@@ -35,6 +39,7 @@ namespace MyHousingDirector
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
             }
             else
             {
