@@ -1,4 +1,4 @@
-﻿.login-box {
+﻿/* .login-box {
     width: 25%;
     height: 100%;
     margin-left: 60%;
@@ -24,4 +24,62 @@
     border-radius: 5px;
     font-size: 28px;
     align-self: center;
+} */
+
+
+.box {
+    width: 100%;
+    height: 100%;
+    border: 1px solid red;
+    display: flex;
+}
+
+.box-left {
+    flex: 1;
+    background: blue;
+    height: 100%;
+    text-align: center;
+    color: #fff;
+}
+.box-right{
+    width: 320px;
+    height: 100%;
+    display: flex;
+    padding: 0px 20px;
+    justify-content: flex-start;
+    text-align: center;
+    flex-direction: column;
+    
+}
+.dormpicture {
+    width: 100%;
+    height: 100%;
+}
+.imgBox-left {
+    text-align: center;
+}
+.imgBox-right {
+    text-align: center;
+}
+.logo {
+    padding-top: 50px;
+    width: 280px;
+}
+
+.form .ant-form-item{
+    display: flex;
+    justify-content: center; 
+}
+.form .ant-col{
+    margin-left:  0;
+}
+
+.form #basic_username{
+    border-radius: 20px;
+}
+.form #basic_password{
+    border-radius: 20px;
+}
+.form .ant-input-password{
+    border-radius: 20px;
 }
