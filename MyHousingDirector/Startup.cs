@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using JavaScriptEngineSwitcher.V8;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
-using MyHousingDirector.Models;
+using MyHousingDirector.Controllers;
 //using React.AspNet;
 
 namespace MyHousingDirector
