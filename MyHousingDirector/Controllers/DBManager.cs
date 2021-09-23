@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
-using MyHousingDirector.Models;
 using System.Data;
 
 namespace MyHousingDirector.Controllers
 {
 	public class DBManager
-	{
+	{	
 		public string ConnectionString { get; set; }
 
 		public DBManager(string connectionString)
@@ -23,8 +22,6 @@ namespace MyHousingDirector.Controllers
 		{
 			return new MySqlConnection(ConnectionString);
 		}
-
-
 
 		#region Login/Create Account
 		// Test Query...
@@ -54,11 +51,10 @@ namespace MyHousingDirector.Controllers
 					return true;
 				}
 		*/
-		[HttpGet]
-		// Get userid from database
-		public JsonResult GetUserID()
+		[HttpGet("[action]")]
+		public IEnumerable<LoginDataController> CheckUserAccnt()
 		{
-			DataTable table = new DataTable();
+			List<string> test = new List<string>();
 			//int userID = -1;
 			using (MySqlConnection conn = GetConnection())
 			{
@@ -78,15 +74,18 @@ namespace MyHousingDirector.Controllers
 					int fieldCount = reader.GetValues(values);
 					if (2 == fieldCount)
 					{
-						table.Load(reader);
+						test.Add(reader.ToString());
 					}
 				}
 				reader.Close();
 			}
-			return new JsonResult(table);
+			return Enumerable.Range(1, 2).Select(index => new LoginDataController
+			{
+				ID = Convert.ToInt32(test[0]),
+				UserName = test[1],
+				// password
+			});
 		}
 #endregion
-
-
 	}
 }
