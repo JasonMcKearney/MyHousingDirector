@@ -34,7 +34,7 @@ namespace MyHousingDirector
             });
 
             // Allows DBManager to get connection string
-            services.Add(new ServiceDescriptor(typeof(DBManager), new DBManager(Configuration.GetConnectionString("DefaultConnection"))));
+            services.Add(new ServiceDescriptor(typeof(DBManagerController), new DBManagerController(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddSession();
         }
 

@@ -9,11 +9,11 @@ using System.Data;
 
 namespace MyHousingDirector.Controllers
 {
-	public class DBManager
+	public class DBManagerController : Controller
 	{	
 		public string ConnectionString { get; set; }
 
-		public DBManager(string connectionString)
+		public DBManagerController(string connectionString)
 		{
 			this.ConnectionString = connectionString;
 		}
@@ -82,7 +82,7 @@ namespace MyHousingDirector.Controllers
 			return Enumerable.Range(1, 2).Select(index => new LoginDataController
 			{
 				ID = Convert.ToInt32(test[0]),
-				UserName = test[1],
+				UserName = test[1]
 				// password
 			});
 		}
