@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using JavaScriptEngineSwitcher.V8;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+using MyHousingDirector.Models;
 //using React.AspNet;
 
 namespace MyHousingDirector
@@ -31,6 +32,10 @@ namespace MyHousingDirector
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            // Allows DBManager to get connection string
+            services.Add(new ServiceDescriptor(typeof(DBManager), new DBManager(Configuration.GetConnectionString("DefaultConnection"))));
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
