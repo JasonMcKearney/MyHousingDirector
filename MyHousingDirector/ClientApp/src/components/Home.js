@@ -10,7 +10,7 @@ export class Home extends Component {
         return (
             <div>
                
-                    <h1 className = 'home-header'>Welcome to MyHousingDirector</h1>
+                <h1 className = 'home-header'>Welcome to MyHousingDirector</h1>
                 <br />
                 <LinkContainer to={'/LogIn'}>
                     <button className='btn-login' > LogIn </button>

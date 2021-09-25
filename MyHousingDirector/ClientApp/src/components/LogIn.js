@@ -1,9 +1,15 @@
 ﻿import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
 import './LogIn.css'
 
+const contentStyle = {
+    height: '400px',
+    color: '#fff',
+    textAlign: 'center',
+    // background: '#364d79',
+};
 
 export class LogIn extends Component {
 
@@ -20,16 +26,28 @@ export class LogIn extends Component {
         return (
             <div className="box">
                 <div className="box-left">
-                    <div className="imgBox-left">
-                        <img src={dormpicture} className="dormpicture" />
+                    <div style={{
+                        width: '100%'
+                    }}>
+                        <Carousel autoplay>
+                            <div className="swiper-item">
+                                <img style={{
+                                    width: '80%'
+                                }} src={dormpicture} />
+                            </div>
+                            <div className="swiper-item">
+                                <img style={{
+                                    width: '80%'
+                                }} src={dormpicture} />
+                            </div>
+                        </Carousel>
                     </div>
-
                 </div>
                 <div className="box-right">
                     <div className="imgBox-right">
                         <img src={logo} className="logo" />
                     </div>
-                  
+
                     <Form
                         name="basic"
                         labelCol={{ span: 8 }}
@@ -59,8 +77,10 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button type="primary" htmlType="submit">
-                                Submit
+                            <Button onClick={() => {
+                                this.props.history.push('/home');
+                            }} type="primary" htmlType="Login">
+                                Login
                             </Button>
                         </Form.Item>
 
