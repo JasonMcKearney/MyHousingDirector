@@ -4,13 +4,20 @@ import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
 import './LogIn.css'
 
-const contentStyle = {
-    height: '400px',
-    color: '#fff',
-    textAlign: 'center',
-    // background: '#364d79',
-};
+import { Swiper, SwiperSlide } from 'swiper/react';
+// import Swiper core and required modules
+import SwiperCore, {
+    Pagination,
+    Autoplay
+} from 'swiper/core';
+// Import Swiper styles
+import 'swiper/swiper.min.css';
+import 'swiper/components/navigation/navigation.min.css';
+import 'swiper/components/pagination/pagination.min.css';
+import 'swiper/components/scrollbar/scrollbar.min.css';
 
+// install Swiper modules
+SwiperCore.use([Pagination, Autoplay]);
 export class LogIn extends Component {
 
     onFinish = (values) => {
@@ -27,20 +34,26 @@ export class LogIn extends Component {
             <div className="box">
                 <div className="box-left">
                     <div style={{
-                        width: '100%'
+                        width: '100%',
+                        height: '100%'
                     }}>
-                        <Carousel autoplay>
-                            <div className="swiper-item">
-                                <img style={{
-                                    width: '80%'
-                                }} src={dormpicture} />
-                            </div>
-                            <div className="swiper-item">
-                                <img style={{
-                                    width: '80%'
-                                }} src={dormpicture} />
-                            </div>
-                        </Carousel>
+                        <Swiper autoplay={{
+                            delay: 2000,
+                            disableOnInteraction: false,
+                        }} pagination={true}>
+                            <SwiperSlide key="1">
+                                <div className="carouselItem">
+                                    <img src={dormpicture} className="carouselItemTopImg" />
+                                </div>
+                            </SwiperSlide>
+                            <SwiperSlide key="2">
+                                <div className="carouselItem">
+                                    <div className="carouselItemTop">
+                                        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic15.nipic.com%2F20110811%2F8029346_082444436000_2.jpg&refer=http%3A%2F%2Fpic15.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635210128&t=8e283b98e9acd56e9adcb990642ee1aa" className="carouselItemTopImg" />
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                        </Swiper>
                     </div>
                 </div>
                 <div className="box-right">
@@ -79,8 +92,8 @@ export class LogIn extends Component {
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
                                 this.props.history.push('/home');
-                            }} type="primary" htmlType="Login">
-                                Login
+                            }} type="primary" htmlType="submit">
+                                Submit
                             </Button>
                         </Form.Item>
 
