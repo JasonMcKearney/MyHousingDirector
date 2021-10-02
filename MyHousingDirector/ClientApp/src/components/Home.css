@@ -1,4 +1,4 @@
-﻿.home-header{
+﻿/*.home-header{
 
     background-color: rgb(20 67 220);
     font-family:'Global Monospace';
@@ -38,7 +38,7 @@
     touch-action: manipulation;
     width: 250px;
     left: 40%;
-}
+}*/
 
 
 
@@ -56,6 +56,17 @@
     background: #fff;
 }
 
-.home_box {
+.home_leftbox {
     height: 100%;
+    text-align: center;
+}
+
+.Homepagelogo {
+    height: 130px;
+    margin: 16px;
+}
+
+.Homepagecontent{
+    color:white;
+    font-size:20px;
 }

@@ -91,10 +91,10 @@ export class LogIn extends Component {
                             <Checkbox>Remember me</Checkbox>
                         </Form.Item>
 
-                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                        <Form.Item LogIn={{ offset: 8, span: 16 }}>
                             <Button type="primary" htmlType="submit">
 
-                                Submit
+                                Log In
                             </Button>
                         </Form.Item>
 

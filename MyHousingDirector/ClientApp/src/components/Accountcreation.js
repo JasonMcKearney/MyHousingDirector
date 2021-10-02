@@ -1,18 +1,13 @@
 ﻿import React, { Component } from 'react';
 import 'antd/dist/antd.css';
-import './nav1.css'
+import './Accountcreation.css'
 
 import {
     Form,
     Input,
-    InputNumber,
-    Cascader,
     Select,
-    Row,
-    Col,
     Checkbox,
     Button,
-    AutoComplete,
 } from 'antd';
 const { Option } = Select;
 const formItemLayout = {
@@ -37,7 +32,7 @@ const tailFormItemLayout = {
         },
     },
 };
-export default class nav1 extends Component {
+export default class accountcreation extends Component {
 
     onFinish = (values) => {
         console.log('Success:', values);
@@ -126,6 +121,26 @@ export default class nav1 extends Component {
                         <Option value="female">Female</Option>
                         <Option value="other">Other</Option>
                     </Select>
+                </Form.Item>
+
+                <Form.Item
+                    name="apartment"
+                    label="Apartment"
+                    rules={[{ required: true, message: 'Please select Apartment' }]}
+                >
+                    <Select placeholder="select your apartment">
+                        <Option value="Apartment - 1">Apartment - 1</Option>
+                        <Option value="Apartment - 2">Apartment - 2</Option>
+                        <Option value="Apartment - 3">Apartment - 3</Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item
+                    name="dormnumber"
+                    label="Dorm #number"
+                    rules={[{ required: true, message: 'Please input your dormnumber!', whitespace: true }]}
+                >
+                    <Input />
                 </Form.Item>
 
                 <Form.Item

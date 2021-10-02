@@ -1,15 +1,18 @@
 ﻿import React, { Component } from 'react';
-import { Layout, Menu } from 'antd';
-import { UploadOutlined, UserOutlined, VideoCameraOutlined, createFromIconfontCN } from '@ant-design/icons';
+import { Layout, Menu, Form, Button } from 'antd';
+import { createFromIconfontCN } from '@ant-design/icons';
 import { Route, Switch } from 'react-router';
 import { Link } from 'react-router-dom';
-import  nav1  from './nav1';
+import accountcreation from './Accountcreation';
 import './Home.css';
-import { LinkContainer } from 'react-router-bootstrap';
+import Homepagelogo from '../img/Homepage-logo.gif';
 
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_2846432_0s4wy6kbmr7c.js',
+    scriptUrl: '//at.alicdn.com/t/font_2846432_1h7nk13g669.js',
+});
+const UserIcon = createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_2846432_1h7nk13g669.js',
 });
 
 export class Home extends Component {
@@ -18,7 +21,7 @@ export class Home extends Component {
 
     render() {
         return (
-            <div className="home_box">
+            <div className="home_leftbox">
 
                 <Layout style={{ height: '100%' }}>
                 <Sider
@@ -31,24 +34,39 @@ export class Home extends Component {
                         console.log(collapsed, type);
                     }}
                 >
-                    <div className="logo" />
+                        <div className="Homepagelogo" >
+                            <img src={Homepagelogo} className="Homepagelogo" />
+                        </div>
+
+                        <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
+                            Welcome!
+                        </div>
+
+
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
-                                <Link to="/home/nav1">nav 1</Link>
+                                <Link to="/home/nav1">Homepage</Link>
                             
                         </Menu.Item>
-                        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                            <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
                             
-                                <Link to="/home/nav2">nav 2</Link>
+                                <Link to="/home/Accountcreation">Accountcreation</Link>
                         </Menu.Item>
 
-                        <Menu.Item key="3" icon={<UploadOutlined />}>
-                            nav 3
+                        <Menu.Item key="3" /*icon={<UploadOutlined />}*/>
+                                <Link to="/home/nav3">nav3</Link>
                           </Menu.Item>
-                        <Menu.Item key="4" icon={<UserOutlined />}>
-                            nav 4
+                        <Menu.Item key="4" /*icon={<UserOutlined />}*/>
+                                <Link to="/home/nav4">nav4</Link>
                          </Menu.Item>
-                    </Menu>
+                        </Menu>
+                        <Form.Item Logout={{ offset: 8, span: 16 }}>
+                            <Button onClick={() => {
+                                    this.props.history.push('/LogIn');
+                            }} type="primary" htmlType="Logout">
+                                    Logout
+                            </Button>
+                        </Form.Item>
                 </Sider>
                 <Layout>
                     <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
@@ -56,20 +74,23 @@ export class Home extends Component {
                             <div className="site-layout-background" style={{ padding: 24, height: '100%' }}>
                                 <Switch>
                                
-                                    <Route path='/home/nav1' component={nav1}  /> 
-                                    <Route path='/home/nav2' render={() => { return (<h1>nav2</h1>) }} /> 
+                                    <Route path='/home/nav1' render={() => { return (<h1>nav1</h1>) }} /> 
+                                    <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
-                                    <Route path='/home' component={nav1} /> 
+                                    <Route path='/home' render={() => { return (<h1>nav1</h1>) }} /> 
                                
                                 </Switch>
                             
                             
-        </div>
-                    </Content>
+                            </div>
+
+                        </Content>
+
                     <Footer style={{ textAlign: 'center' }}></Footer>
                 </Layout>
                 </Layout>
+
             </div>
         );
     }
