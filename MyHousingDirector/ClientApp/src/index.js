@@ -21,7 +21,8 @@ ReactDOM.render(
     }}>
       <Route path='/' exact component={LogIn}  />
       <Route path='/LogIn' component={LogIn}  />  
-      <Route path='/home' component={Home}  />  
+      <Route path='/home' component={Home}  />
+            
       {/* <App /> */}
     </div>
   </BrowserRouter>,

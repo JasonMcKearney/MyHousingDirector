@@ -22,6 +22,8 @@ export class LogIn extends Component {
 
     onFinish = (values) => {
         console.log('Success:', values);
+        /*ajax*/
+     this.props.history.push('/home');
     };
 
     onFinishFailed = (errorInfo) => {
@@ -90,9 +92,8 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button onClick={() => {
-                                this.props.history.push('/home');
-                            }} type="primary" htmlType="submit">
+                            <Button type="primary" htmlType="submit">
+
                                 Submit
                             </Button>
                         </Form.Item>
@@ -117,6 +118,6 @@ export class LogIn extends Component {
                     <input type="submit" value="Submit" />
                 </form> */}
             </div>
-        );
+            );
     }
 }
