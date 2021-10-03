@@ -18,6 +18,7 @@ import 'swiper/components/scrollbar/scrollbar.min.css';
 import Password from 'antd/lib/input/Password';
 import axios from 'axios'
 
+
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
 export class LogIn extends Component {
@@ -27,10 +28,10 @@ export class LogIn extends Component {
  
         this.state = {
             username: '',
-            Password: ''
+            password: ''
         }
  
-        this.Password = this.Password.bind(this);
+        this.password = this.password.bind(this);
         this.username = this.username.bind(this);
         this.login = this.login.bind(this);
     }
@@ -38,35 +39,32 @@ export class LogIn extends Component {
     username(event) {
         this.setState({ username: event.target.value })
     }
-    Password(event) {
-        this.setState({ Password: event.target.value })
+    password(event) {
+        this.setState({ password: event.target.value })
     }
     login(event) {
         debugger;
-        fetch('http://localhost:3001/api/DStudent/Login', {
-            method: 'post',
+        fetch('http://localhost:44323/api/DStudent/api/DStudent/Login', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
+            method: 'POST',
+            //mode: 'no-cors',
             body: JSON.stringify({
                 username: this.state.username,
-                Password: this.state.Password
+                password: this.state.password
             })
         }).then((Response) => Response.json())
             .then((result) => {
                 console.log(result);
                 if (result.Status == 'Invalid')
                     alert('Invalid User');
-               /// else
+                else
+                    this.props.history.push('/home')
                 //    this.props.history.push("/Dashboard");
             })
     }
-
-
-
-
-
 
     onFinish = (values) => {
         console.log('Success:', values);
@@ -130,7 +128,7 @@ export class LogIn extends Component {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                             //Input= {type="text"  this.state.Password}
                         >
-                            <Input.Password type="text" onChange={this.Password} placeholder="password" />
+                            <Input type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
 
                         <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
@@ -138,9 +136,8 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button onClick={() => {
-                                this.CheckStudentDetails /*this.props.history.push('/home')*/;
-                            }} type="primary" htmlType="submit">
+                            <Button onClick={this.login} 
+                                               type="primary" htmlType="submit">
                                 Submit
                             </Button>
                         </Form.Item>
