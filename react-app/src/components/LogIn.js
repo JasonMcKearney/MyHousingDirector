@@ -44,7 +44,7 @@ export class LogIn extends Component {
     }
     login(event) {
         debugger;
-        fetch('http://localhost:44323/api/DStudent/api/DStudent/Login', {
+        fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ export class LogIn extends Component {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                             //Input= {type="text"  this.state.Password}
                         >
-                            <Input type="text" onChange={this.password} placeholder="password" />
+                            <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
 
                         <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
@@ -136,8 +136,9 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button onClick={this.login} 
-                                               type="primary" htmlType="submit">
+                            <Button onClick={() => {
+                                this.props.history.push('/home');
+                            }} type="primary" htmlType="submit">
                                 Submit
                             </Button>
                         </Form.Item>
@@ -160,7 +161,16 @@ export class LogIn extends Component {
                     </label>
                     <input className='input-box' type="password" name="password" />
                     <input type="submit" value="Submit" />
-                </form> */}
+                </form> 
+
+
+                //--------------------- ButtonClick in order to go to login function above--------------
+                <Button onClick={this.login} 
+                                               type="primary" htmlType="submit">
+                                Submit
+                            </Button>
+                
+                */}
             </div>
         );
     }
