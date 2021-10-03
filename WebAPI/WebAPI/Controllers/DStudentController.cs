@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using WebAPI.Models;
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     public class DStudentController : ControllerBase
     {
@@ -104,6 +106,33 @@ namespace WebAPI.Controllers
         private bool DStudentsExists(int id)
         {
             return _context.DBUserTbls.Any(e => e.user_id == id);
+        }
+
+/*        [Route("StudentExists")]
+        public object CheckStudentDetails(string user_name)
+        {
+            var obj = _context.DBUserTbls.Where(e => e.username == user_name).ToList().FirstOrDefault();
+            return new Response
+            {
+                Status = "test",
+                Message = "test Successfuly"
+            };
+        }
+*/
+
+        [Route("api/DStudent/Login")]
+        [HttpPost]
+        public Response EmployeeLogin(Login login)
+        {
+            var log = _context.DBUserTbls.Where(x => x.username.Equals(login.username) &&
+                      x.password.Equals(login.password)).FirstOrDefault();
+
+            if (log == null)
+            {
+                return new Response { Status = "Invalid", Message = "Invalid User." };
+            }
+            else
+                return new Response { Status = "Success", Message = "Login Successfully" };
         }
     }
 }
