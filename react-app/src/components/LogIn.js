@@ -136,9 +136,8 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button onClick={() => {
-                                this.props.history.push('/home');
-                            }} type="primary" htmlType="submit">
+                        <Button onClick={this.login} 
+                                type="primary" htmlType="submit">
                                 Submit
                             </Button>
                         </Form.Item>
