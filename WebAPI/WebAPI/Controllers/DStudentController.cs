@@ -105,5 +105,35 @@ namespace WebAPI.Controllers
         {
             return _context.DBUserTbls.Any(e => e.user_id == id);
         }
+
+        [Route("StudentExists")]
+        public object CheckStudentDetails(string user_name)
+        {
+            var obj = _context.DBUserTbls.Where(e => e.username == user_name).ToList().FirstOrDefault();
+            return new Response
+            {
+                Status = "test",
+                Message = "test Successfuly"
+            };
+        }
+
+
+     /*   [Route("Login")]
+        [HttpPost]
+        public Response employeeLogin(Login login)
+        {
+            var log = _context.DBUserTbls.Where(x => x.username.Equals(login.Username) &&
+                      x.password.Equals(login.Password)).FirstOrDefault();
+
+            if (log == null)
+            {
+                return new Response { Status = "Invalid", Message = "Invalid User." };
+            }
+            else
+                return new Response { Status = "Success", Message = "Login Successfully" };
+        }
+
+        */
+
     }
 }

@@ -15,10 +15,58 @@ import 'swiper/swiper.min.css';
 import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
+import Password from 'antd/lib/input/Password';
+import axios from 'axios'
 
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
 export class LogIn extends Component {
+
+    constructor() {
+        super();
+ 
+        this.state = {
+            username: '',
+            Password: ''
+        }
+ 
+        this.Password = this.Password.bind(this);
+        this.username = this.username.bind(this);
+        this.login = this.login.bind(this);
+    }
+
+    username(event) {
+        this.setState({ username: event.target.value })
+    }
+    Password(event) {
+        this.setState({ Password: event.target.value })
+    }
+    login(event) {
+        debugger;
+        fetch('http://localhost:3001/api/DStudent/Login', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: this.state.username,
+                Password: this.state.Password
+            })
+        }).then((Response) => Response.json())
+            .then((result) => {
+                console.log(result);
+                if (result.Status == 'Invalid')
+                    alert('Invalid User');
+               /// else
+                //    this.props.history.push("/Dashboard");
+            })
+    }
+
+
+
+
+
 
     onFinish = (values) => {
         console.log('Success:', values);
@@ -73,16 +121,16 @@ export class LogIn extends Component {
                     >
                         <Form.Item
                             name="username"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
-                        >
-                            <Input placeholder="username" />
+                            rules={[{ required: true, message: 'Please input your username!' }]}                        >
+                            <Input type="text" onChange={this.username} placeholder="username" />
                         </Form.Item>
 
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
+                            //Input= {type="text"  this.state.Password}
                         >
-                            <Input.Password placeholder="password" />
+                            <Input.Password type="text" onChange={this.Password} placeholder="password" />
                         </Form.Item>
 
                         <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
@@ -91,7 +139,7 @@ export class LogIn extends Component {
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
-                                this.props.history.push('/home');
+                                this.CheckStudentDetails /*this.props.history.push('/home')*/;
                             }} type="primary" htmlType="submit">
                                 Submit
                             </Button>
