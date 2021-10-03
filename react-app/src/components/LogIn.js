@@ -4,22 +4,20 @@ import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
 import './LogIn.css'
 
-import Swiper, { Navigation, Pagination } from 'swiper';
-
-import { SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.min.css'
-import 'swiper/swiper.min.css'
-
-// modules styles
-import 'swiper/components/navigation/navigation.min.css'
-import 'swiper/components/pagination/pagination.min.css'
+import { Swiper, SwiperSlide } from 'swiper/react';
+// import Swiper core and required modules
+import SwiperCore, {
+    Pagination,
+    Autoplay
+} from 'swiper/core';
+// Import Swiper styles
+import 'swiper/swiper.min.css';
+import 'swiper/components/navigation/navigation.min.css';
+import 'swiper/components/pagination/pagination.min.css';
+import 'swiper/components/scrollbar/scrollbar.min.css';
 
 // install Swiper modules
-new Swiper('.my-swiper', {
-    // pass modules here
-    modules: [Navigation, Pagination],
-    // ...
-  });
+SwiperCore.use([Pagination, Autoplay]);
 export class LogIn extends Component {
 
     onFinish = (values) => {
