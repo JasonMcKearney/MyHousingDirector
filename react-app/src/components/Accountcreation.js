@@ -137,13 +137,13 @@ export default class accountcreation extends Component {
                     </Select>
                 </Form.Item>
 
-                <Form.Item
+                {/* <Form.Item
                     name="dormnumber"
                     label="Dorm #number"
                     rules={[{ required: true, message: 'Please input your dormnumber!', whitespace: true }]}
                 >
                     <Input />
-                </Form.Item>
+                </Form.Item> */}
 
                 <Form.Item
                     name="agreement"
