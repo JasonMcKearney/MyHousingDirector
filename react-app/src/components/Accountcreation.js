@@ -124,14 +124,16 @@ export default class accountcreation extends Component {
                 </Form.Item>
 
                 <Form.Item
-                    name="apartment"
-                    label="Apartment"
-                    rules={[{ required: true, message: 'Please select Apartment' }]}
+                    name="year"
+                    label="Year:"
+                    rules={[{ required: true, message: 'Please select the users Year' }]}
                 >
-                    <Select placeholder="select your apartment">
-                        <Option value="Apartment - 1">Apartment - 1</Option>
-                        <Option value="Apartment - 2">Apartment - 2</Option>
-                        <Option value="Apartment - 3">Apartment - 3</Option>
+                    <Select placeholder="select the users year">
+                        <Option value="Freshman">Freshman</Option>
+                        <Option value="Sophmore">Sophmore</Option>
+                        <Option value="Junior">Junior</Option>
+                        <Option value="Senior">Senior</Option>
+                        <Option value="Masters+">Masters+</Option>
                     </Select>
                 </Form.Item>
 

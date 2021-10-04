@@ -84,7 +84,7 @@ export class LogIn extends Component {
                         height: '100%'
                     }}>
                         <Swiper autoplay={{
-                            delay: 2000,
+                            delay: 19000,
                             disableOnInteraction: false,
                         }} pagination={true}>
                             <SwiperSlide key="1">
