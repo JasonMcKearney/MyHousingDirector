@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import {Link } from "react-router-dom";
 import 'antd/dist/antd.css';
 import './Accountcreation.css'
 
@@ -157,9 +158,11 @@ export default class accountcreation extends Component {
                     {...tailFormItemLayout}
                 >
                 <Form.Item> 
-                        <Button type="primary">
+                     <Link to="/User_Form" >   
+                        <Button  type="primary">
                             Open User-Form
                         </Button>
+                    </Link>
                 </Form.Item>
                 
                     <Checkbox>
