@@ -103,10 +103,10 @@ export default class accountcreation extends Component {
                 </Form.Item>
 
                 <Form.Item
-                    name="nickname"
-                    label="Nickname"
-                    tooltip="What do you want others to call you?"
-                    rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+                    name="sutdent_ID"
+                    label="Student_ID"
+                    tooltip="Every User Must have a User ID"
+                    rules={[{ required: true, message: 'Please input a user ID', whitespace: true }]}
                 >
                     <Input />
                 </Form.Item>
@@ -156,10 +156,17 @@ export default class accountcreation extends Component {
                     ]}
                     {...tailFormItemLayout}
                 >
+                <Form.Item> 
+                        <Button type="primary">
+                            Open User-Form
+                        </Button>
+                </Form.Item>
+                
                     <Checkbox>
                         I have read the <a href="">agreement</a>
                     </Checkbox>
                 </Form.Item>
+                
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
                         Register
@@ -167,7 +174,7 @@ export default class accountcreation extends Component {
                 </Form.Item>
             </Form>
 
-
+          
 
 
             );
