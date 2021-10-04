@@ -11,7 +11,7 @@ using WebAPI.Models;
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    [EnableCors("AllowOrigin")]
+    [EnableCors("AllowAll")]
     [ApiController]
     public class DStudentController : ControllerBase
     {
@@ -124,6 +124,9 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response EmployeeLogin(Login login)
         {
+            System.Diagnostics.Debug.WriteLine(login.username);
+            System.Diagnostics.Debug.WriteLine(login.password);
+
             var log = _context.DBUserTbls.Where(x => x.username.Equals(login.username) &&
                       x.password.Equals(login.password)).FirstOrDefault();
 
