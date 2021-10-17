@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox, Carousel } from 'antd';
+import { Form, Input, Button, Checkbox, Carousel, Select, message } from 'antd';
 import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
 import './LogIn.css'
@@ -20,17 +20,19 @@ import axios from 'axios'
 
 
 // install Swiper modules
+const Option = Select.Option;
 SwiperCore.use([Pagination, Autoplay]);
 export class LogIn extends Component {
 
     constructor() {
         super();
- 
+
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            usertype: 'Admin'
         }
- 
+
         this.password = this.password.bind(this);
         this.username = this.username.bind(this);
         this.login = this.login.bind(this);
@@ -56,9 +58,16 @@ export class LogIn extends Component {
         }).then((Response) => Response.json())
             .then((result) => {
                 if (result.status === "Invalid")
-                    this.props.history.push('/LogIn')
+                    // this.props.history.push('/LogIn')
+                    message.error('Invalid Username or Passsword!')
                 else
-                    this.props.history.push('/home')
+                    if(this.state.usertype == 'Admin'){
+                        this.props.history.push('/home')
+                    }
+                    else{
+                        this.props.history.push('/student')
+                    }
+                    
             })
     }
 
@@ -113,6 +122,19 @@ export class LogIn extends Component {
                         autoComplete="off"
                         className="form"
                     >
+
+                        <Form.Item>
+                            <Select value={this.state.usertype} onChange={(value) => {
+                                this.setState({ usertype: value })
+            
+                            }} >
+
+                                <Option value="Admin">Admin</Option>
+                                <Option value="Student">Student</Option>
+
+                            </Select>
+                        </Form.Item>
+
                         <Form.Item
                             name="username"
                             rules={[{ required: true, message: 'Please input your username!' }]}                        >
@@ -122,7 +144,7 @@ export class LogIn extends Component {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
-                            //Input= {type="text"  this.state.Password}
+                        //Input= {type="text"  this.state.Password}
                         >
                             <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
@@ -132,7 +154,7 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button onClick={this.login} 
+                            <Button onClick={this.login}
                                 type="primary" htmlType="submit">
                                 Submit
                             </Button>
