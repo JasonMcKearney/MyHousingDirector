@@ -43,26 +43,22 @@ export class LogIn extends Component {
         this.setState({ password: event.target.value })
     }
     login(event) {
-        debugger;
         fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
             headers: {
+                'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
             },
             method: 'POST',
-            //mode: 'no-cors',
             body: JSON.stringify({
                 username: this.state.username,
                 password: this.state.password
             })
         }).then((Response) => Response.json())
             .then((result) => {
-                console.log(result);
-                if (result.Status == 'Invalid')
-                    alert('Invalid User');
+                if (result.status === "Invalid")
+                    this.props.history.push('/LogIn')
                 else
                     this.props.history.push('/home')
-                //    this.props.history.push("/Dashboard");
             })
     }
 
@@ -136,9 +132,8 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button onClick={() => {
-                                this.props.history.push('/home');
-                            }} type="primary" htmlType="submit">
+                        <Button onClick={this.login} 
+                                type="primary" htmlType="submit">
                                 Submit
                             </Button>
                         </Form.Item>

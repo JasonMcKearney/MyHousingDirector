@@ -57,7 +57,9 @@ namespace WebAPI
 ///*
 			services.AddCors(c =>
 			{
-				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+				c.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin()
+										.AllowAnyHeader()
+										.AllowAnyMethod());
 			});
 
 /*
@@ -108,7 +110,6 @@ namespace WebAPI
 				.AllowAnyOrigin()
 				.AllowAnyMethod()
 				.AllowAnyHeader());
-				//.AllowCredentials());
 
 			//app.UseAuthorization();
 
