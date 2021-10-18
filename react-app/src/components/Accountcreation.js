@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import {Link } from "react-router-dom";
 import 'antd/dist/antd.css';
 import './Accountcreation.css'
 
@@ -105,10 +104,10 @@ export default class accountcreation extends Component {
                 </Form.Item>
 
                 <Form.Item
-                    name="sutdent_ID"
-                    label="Student_ID"
-                    tooltip="Every User Must have a User ID"
-                    rules={[{ required: true, message: 'Please input a user ID', whitespace: true }]}
+                    name="nickname"
+                    label="Nickname"
+                    tooltip="What do you want others to call you?"
+                    rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
                 >
                     <Input />
                 </Form.Item>
@@ -142,10 +141,10 @@ export default class accountcreation extends Component {
                 <Form.Item
                     name="Student_ID"
                     label="Studetn ID"
-                    rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student ID', whitespace: true}]}
+                    rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student', whitespace: true}]}
                 >
                     <Input />
-                </Form.Item> */}
+                </Form.Item>
 
                 <Form.Item
                     name="agreement"
@@ -158,19 +157,10 @@ export default class accountcreation extends Component {
                     ]}
                     {...tailFormItemLayout}
                 >
-                <Form.Item> 
-                     <Link to="/User_Form" >   
-                        <Button  type="primary">
-                            Open User-Form
-                        </Button>
-                    </Link>
-                </Form.Item>
-                
                     <Checkbox>
                         I have read the <a href="">agreement</a>
                     </Checkbox>
                 </Form.Item>
-                
                 <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit">
                         Register
@@ -178,7 +168,7 @@ export default class accountcreation extends Component {
                 </Form.Item>
             </Form>
 
-          
+
 
 
             );
