@@ -9,6 +9,7 @@ import {
     Checkbox,
     Button,
 } from 'antd';
+
 const { Option } = Select;
 const formItemLayout = {
     labelCol: {
@@ -138,9 +139,9 @@ export default class accountcreation extends Component {
                 </Form.Item>
 
                 <Form.Item
-                    name="dormnumber"
-                    label="Dorm #number"
-                    rules={[{ required: true, message: 'Please input your dormnumber!', whitespace: true }]}
+                    name="Student_ID"
+                    label="Studetn ID"
+                    rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student ID', whitespace: true}]}
                 >
                     <Input />
                 </Form.Item>
