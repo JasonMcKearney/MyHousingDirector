@@ -14,5 +14,6 @@ namespace WebAPI.Models
 		}
 
 		public DbSet<DStudents> DBUserTbls { get; set; }
+		public DbSet<DAdmin> admin_tbl { get; set; }
 	}
 }

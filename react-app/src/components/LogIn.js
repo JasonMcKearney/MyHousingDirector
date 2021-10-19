@@ -43,6 +43,7 @@ export class LogIn extends Component {
         this.setState({ password: event.target.value })
     }
     login(event) {
+        // Student Login in...
         fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
             headers: {
                 'Content-Type': 'application/json',
@@ -56,9 +57,38 @@ export class LogIn extends Component {
         }).then((Response) => Response.json())
             .then((result) => {
                 if (result.status === "Invalid")
-                    this.props.history.push('/LogIn')
+                {
+                        // Admin Log in...
+                        fetch('http://localhost:16648/api/Admin/Login', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                            },
+                            method: 'POST',
+                            body: JSON.stringify({
+                                username: this.state.username,
+                                password: this.state.password
+                            })
+                        }).then((Response) => Response.json())
+                            .then((result) => {
+                                if (result.status === "Invalid")
+                                {
+                                    this.props.history.push('/LogIn')
+                                    alert("Invalid username or password");
+                                }
+                                else
+                                {
+                                    this.props.history.push('/home')
+                                    alert("Welcome Admin!");
+                                }
+                            })
+                }
                 else
+                {
+                    // Bring to student page
                     this.props.history.push('/home')
+                    alert("Welcome Student!");
+                }
             })
     }
 
