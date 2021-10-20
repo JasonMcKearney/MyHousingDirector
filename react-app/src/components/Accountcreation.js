@@ -141,7 +141,7 @@ export default class accountcreation extends Component {
                 <Form.Item
                     name="Student_ID"
                     label="Studetn ID"
-                    rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student ID', whitespace: true}]}
+                    rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student', whitespace: true}]}
                 >
                     <Input />
                 </Form.Item>
