@@ -4,6 +4,7 @@ import { createFromIconfontCN } from '@ant-design/icons';
 import { Route, Switch } from 'react-router';
 import { Link } from 'react-router-dom';
 import accountcreation from './Accountcreation';
+import Search from './Search';
 import './Home.css';
 import Homepagelogo from '../img/Homepage-logo.gif';
 
@@ -74,11 +75,12 @@ export class Home extends Component {
                             <div className="site-layout-background" style={{ padding: 24, height: '100%' }}>
                                 <Switch>
                                
-                                    <Route path='/home/nav1' render={() => { return (<h1>nav1</h1>) }} /> 
+                                    <Route path='/home/Search' component = {Search} /> 
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
-                                    <Route path='/home' render={() => { return (<h1>nav1</h1>) }} /> 
+                                    <Route path='/home'  component = {Search} /> 
+                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} /> 
                                
                                 </Switch>
                             
