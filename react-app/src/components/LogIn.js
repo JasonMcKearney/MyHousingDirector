@@ -18,6 +18,9 @@ import 'swiper/components/scrollbar/scrollbar.min.css';
 import Password from 'antd/lib/input/Password';
 import axios from 'axios'
 
+// Import Cookies
+import Cookie from 'universal-cookie'
+const cookie = new Cookie();
 
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
@@ -78,6 +81,7 @@ export class LogIn extends Component {
                                 }
                                 else
                                 {
+                                    cookie.set('Username', "test", { path: '/' });
                                     this.props.history.push('/home')
                                     alert("Welcome Admin!");
                                 }
@@ -85,6 +89,7 @@ export class LogIn extends Component {
                 }
                 else
                 {
+                    cookie.set('Username', this.username, { path: '/' });
                     // Bring to student page
                     this.props.history.push('/home')
                     alert("Welcome Student!");

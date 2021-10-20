@@ -10,6 +10,10 @@ import {
     Button,
 } from 'antd';
 
+// Get cookies
+import Cookies from 'js-cookie';
+
+
 const { Option } = Select;
 const formItemLayout = {
     labelCol: {
@@ -34,7 +38,6 @@ const tailFormItemLayout = {
     },
 };
 export default class accountcreation extends Component {
-
     onFinish = (values) => {
         console.log('Success:', values);
         this.props.history.push('/home');
@@ -44,11 +47,10 @@ export default class accountcreation extends Component {
         console.log('Failed:', errorInfo);
     };
 
-    render() {
-
+    render() {  
+        Cookies.get('name')
         return (
             <Form>
-                
                 <Form.Item
                     name="email"
                     label="E-mail"
@@ -105,7 +107,7 @@ export default class accountcreation extends Component {
 
                 <Form.Item
                     name="nickname"
-                    label="Nickname"
+                    label = "Nickname"
                     tooltip="What do you want others to call you?"
                     rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
                 >

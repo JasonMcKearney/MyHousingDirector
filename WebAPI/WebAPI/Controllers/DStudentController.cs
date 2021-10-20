@@ -123,7 +123,7 @@ namespace WebAPI.Controllers
  
         [Route("api/DStudent/Login")]
         [HttpPost]
-        public Response EmployeeLogin(Login login)
+        public Response StudentLogin(Login login)
         {
             System.Diagnostics.Debug.WriteLine(login.username);
             System.Diagnostics.Debug.WriteLine(login.password);
@@ -137,6 +137,23 @@ namespace WebAPI.Controllers
             }
             else
                 return new Response { Status = "Success", Message = "Login Successfully" };
+        }
+
+        [Route("api/DStudent/AddStudent")]
+        [HttpPost]
+        public Response AddStudent(DStudents student)
+        {
+            // Check if student exists
+            /* 
+            if(DStudentsExists()
+			{
+                return new Response { Status = "Invalid", Message = "Cannot" };
+            }
+            */
+
+            _context.DBUserTbls.Add(student);
+
+            return new Response { Status = "Success", Message = "Login Successfully" };
         }
     }
 }
