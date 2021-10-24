@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using MySql.Data.MySqlClient;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -17,21 +20,34 @@ namespace WebAPI.Controllers
     {
         private readonly HousingDBContext _context;
 
-        public DStudentController(HousingDBContext context)
+//        public string ConnectionString { get; set; }
+
+
+        private IConfiguration _configuration;
+
+        private MySqlConnection GetConnection()
+        {
+            string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
+            return new MySqlConnection(myConnectionString);
+            //throw new NotImplementedException();
+        }
+
+        public DStudentController(HousingDBContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: api/DStudent
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DStudents>>> GetDBUserTbls()
+        public async Task<ActionResult<IEnumerable<StudentsViewModel>>> GetDBUserTbls()
         {
             return await _context.DBUserTbls.ToListAsync();
         }
 
         // GET: api/DStudent/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<DStudents>> GetDStudents(int id)
+        public async Task<ActionResult<StudentsViewModel>> GetDStudents(int id)
         {
             var dStudents = await _context.DBUserTbls.FindAsync(id);
 
@@ -46,7 +62,7 @@ namespace WebAPI.Controllers
         // PUT: api/DStudent/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDStudents(int id, DStudents dStudents)
+        public async Task<IActionResult> PutDStudents(int id, StudentsViewModel dStudents)
         {
             /* if (id != dStudents.user_id)
              {
@@ -79,7 +95,7 @@ namespace WebAPI.Controllers
         // POST: api/DStudent
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<DStudents>> PostDStudents(DStudents dStudents)
+        public async Task<ActionResult<StudentsViewModel>> PostDStudents(StudentsViewModel dStudents)
         {
             _context.DBUserTbls.Add(dStudents);
             await _context.SaveChangesAsync();
@@ -108,19 +124,19 @@ namespace WebAPI.Controllers
             return _context.DBUserTbls.Any(e => e.user_id == id);
         }
 
-/*        [Route("StudentExists")]
-        public object CheckStudentDetails(string user_name)
-        {
-            var obj = _context.DBUserTbls.Where(e => e.username == user_name).ToList().FirstOrDefault();
-            return new Response
-            {
-                Status = "test",
-                Message = "test Successfuly"
-            };
-        }
-*/
+        /*        [Route("StudentExists")]
+                public object CheckStudentDetails(string user_name)
+                {
+                    var obj = _context.DBUserTbls.Where(e => e.username == user_name).ToList().FirstOrDefault();
+                    return new Response
+                    {
+                        Status = "test",
+                        Message = "test Successfuly"
+                    };
+                }
+        */
 
- 
+
         [Route("api/DStudent/Login")]
         [HttpPost]
         public Response StudentLogin(Login login)
@@ -139,19 +155,52 @@ namespace WebAPI.Controllers
                 return new Response { Status = "Success", Message = "Login Successfully" };
         }
 
-        [Route("api/DStudent/AddStudent")]
+        [Route("AddStudent")]
         [HttpPost]
-        public Response AddStudent(DStudents student)
-        {
-            // Check if student exists
-            /* 
-            if(DStudentsExists()
+        public Response AddStudent(StudentsViewModel student)
+        {           
+            bool bSuccessfull = true;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand CheckUser = conn.CreateCommand();
+
+                // Checks to see if there are duplicate usernames
+                CheckUser.Parameters.AddWithValue("@username", student.username);
+                CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where userName = @userName";
+
+                // if 1 then already exist
+                int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
+
+                if (UserExist >= 1)
+                {
+                    bSuccessfull = false;
+                }
+                else
+                {
+                    //   // Hash password
+                    //   uc.password = BCrypt.Net.BCrypt.HashPassword(uc.password);
+                    //   uc.confirmPassword = BCrypt.Net.BCrypt.HashPassword(uc.confirmPassword);
+
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @email, @password, @confirmpassword, @gender, @year, @studentID)";
+                    Query.Parameters.AddWithValue("@username", student.username);
+                    Query.Parameters.AddWithValue("@email", student.email);
+                    Query.Parameters.AddWithValue("@password", student.password);
+                    Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
+                    Query.Parameters.AddWithValue("@gender", student.gender);
+                    Query.Parameters.AddWithValue("@year", student.year);
+                    Query.Parameters.AddWithValue("@studentID", student.studentID);
+
+                    Query.ExecuteNonQuery();
+                }
+            }
+
+            if(!bSuccessfull)
 			{
                 return new Response { Status = "Invalid", Message = "Cannot" };
             }
-            */
-
-            _context.DBUserTbls.Add(student);
 
             return new Response { Status = "Success", Message = "Login Successfully" };
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-	public class DStudents
+	public class StudentsViewModel
 	{
         /*[Key]
         public int user_id { get; set; }
@@ -40,9 +40,8 @@ namespace WebAPI.Models
         public string password { get; set; }
         public string confirmpassword { get; set; }
         public string verificationCode { get; set; }
-        public string Nickname { get; set; }
-        public string Gender { get; set; }
-        public int Year { get; set; }
-        public int StudentID { get; set; }
+        public string gender { get; set; }
+        public int year { get; set; }
+        public int studentID { get; set; }
     }
 }
