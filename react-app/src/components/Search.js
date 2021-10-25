@@ -33,6 +33,11 @@ export default class Search extends Component {
 
                             </Form.Item>
 
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Search
+                                </Button>
+                            </Form.Item>
                         </Form>
 
                     </div>
