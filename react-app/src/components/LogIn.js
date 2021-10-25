@@ -19,8 +19,7 @@ import Password from 'antd/lib/input/Password';
 import axios from 'axios'
 
 // Import Cookies
-import Cookie from 'universal-cookie'
-const cookie = new Cookie();
+//import Cookies from 'js-cookie'
 
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
@@ -81,7 +80,7 @@ export class LogIn extends Component {
                                 }
                                 else
                                 {
-                                    cookie.set('Username', "test", { path: '/' });
+//                                    Cookies.set('Username', this.username);
                                     this.props.history.push('/home')
                                     alert("Welcome Admin!");
                                 }
@@ -89,7 +88,7 @@ export class LogIn extends Component {
                 }
                 else
                 {
-                    cookie.set('Username', this.username, { path: '/' });
+//                    Cookies.set('Username', this.username);
                     // Bring to student page
                     this.props.history.push('/home')
                     alert("Welcome Student!");

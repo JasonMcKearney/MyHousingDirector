@@ -10,10 +10,6 @@ import {
     Button,
 } from 'antd';
 
-// Get cookies
-import Cookies from 'js-cookie';
-
-
 const { Option } = Select;
 const formItemLayout = {
     labelCol: {
@@ -38,6 +34,94 @@ const tailFormItemLayout = {
     },
 };
 export default class accountcreation extends Component {
+    constructor() {
+        super();
+ 
+        this.state = {
+            username: '',
+            email: '',
+            password: '',
+            confirmpassword: '',
+            gender: '',
+            year:'',
+            studentID:''
+        }
+ 
+        this.username = this.username.bind(this);
+        this.email = this.email.bind(this);
+        this.password = this.password.bind(this);
+        this.confirmpassword = this.confirmpassword.bind(this);
+        this.gender = this.gender.bind(this);
+        this.year = this.year.bind(this);
+        this.studentID = this.studentID.bind(this);
+        this.AddStudent = this.AddStudent.bind(this);
+    }
+    username(event) {
+        this.setState({ username: event.target.value })
+    }
+    email(event) {
+        this.setState({ email: event.target.value })
+    }
+    password(event) {
+        this.setState({ password: event.target.value })
+    }
+    confirmpassword(event) {
+        this.setState({ confirmpassword: event.target.value })
+    }
+    gender(event) {
+        this.setState({ gender: event.target.value })
+    }
+    year(event) {
+        this.setState({ gender: event.target.value })
+    }
+    studentID(event) {
+        this.setState({ gender: event.target.value })
+    }
+
+    AddStudent(event) {
+        // Admin add student account...
+        fetch('http://localhost:16648/api/DStudent/AddStudent', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                username: this.state.username,
+                email: this.state.email,
+                password: this.state.password,
+                confirmpassword: this.state.confirmpassword,
+                gender: this.state.gender,
+                year: this.state.year,
+                studentID: this.state.studentID
+            })
+        }).then((Response) => Response.json())
+            .then((result) => {
+                if (result.status == "User Exists")
+                {
+                    alert("Student Account Already Created.");   
+                }
+                else if(result.status == "Invalid")
+                {
+                    alert("Registering Student Unsuccessful.");   
+                }
+                else
+                {
+                    // Bring to student page
+                    this.props.history.push('/home/accountcreation')
+                    alert("Student Created");
+                }
+            })
+    }
+
+    canBeSubmitted() {
+        const {username, email, password, confirmpassword, gender, year, studentID} = this.state;
+
+        return username.length > 0 && email.length > 0 && password.length > 
+        0 && confirmpassword.length > 0 &&  gender.length > 0 && year.length > 0 && studentID.length > 0;
+    }
+
+
     onFinish = (values) => {
         console.log('Success:', values);
         this.props.history.push('/home');
@@ -48,7 +132,7 @@ export default class accountcreation extends Component {
     };
 
     render() {  
-        Cookies.get('name')
+        const isEnabled = this.canBeSubmitted();
         return (
             <Form>
                 <Form.Item
@@ -65,7 +149,7 @@ export default class accountcreation extends Component {
                         },
                     ]}
                 >
-                    <Input />
+                     <Input type="text" onChange={this.email} />
                 </Form.Item>
 
                 <Form.Item
@@ -79,7 +163,7 @@ export default class accountcreation extends Component {
                     ]}
                     hasFeedback
                 >
-                    <Input.Password />
+                     <Input type="text" onChange={this.password} />
                 </Form.Item>
 
                 <Form.Item
@@ -102,16 +186,16 @@ export default class accountcreation extends Component {
                         }),
                     ]}
                 >
-                    <Input.Password />
+                    <Input type="text" onChange={this.confirmpassword} />
                 </Form.Item>
 
                 <Form.Item
                     name="nickname"
                     label = "Nickname"
                     tooltip="What do you want others to call you?"
-                    rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}
+                    rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}  
                 >
-                    <Input />
+                     <Input type="text" onChange={this.username} />
                 </Form.Item>
 
                 <Form.Item
@@ -119,11 +203,12 @@ export default class accountcreation extends Component {
                     label="Gender"
                     rules={[{ required: true, message: 'Please select gender!' }]}
                 >
-                    <Select placeholder="select your gender">
+                    <Select placeholder="select your gender" onchange={this.gender}>
                         <Option value="male">Male</Option>
                         <Option value="female">Female</Option>
                         <Option value="other">Other</Option>
                     </Select>
+                  
                 </Form.Item>
 
                 <Form.Item
@@ -131,9 +216,9 @@ export default class accountcreation extends Component {
                     label="Year:"
                     rules={[{ required: true, message: 'Please select the users Year' }]}
                 >
-                    <Select placeholder="select the users year">
+                    <Select placeholder="select the users year" value={this.state.year}>
                         <Option value="Freshman">Freshman</Option>
-                        <Option value="Sophmore">Sophmore</Option>
+                        <Option value="Sophomore">Sophomore</Option>
                         <Option value="Junior">Junior</Option>
                         <Option value="Senior">Senior</Option>
                         <Option value="Masters+">Masters+</Option>
@@ -142,10 +227,10 @@ export default class accountcreation extends Component {
 
                 <Form.Item
                     name="Student_ID"
-                    label="Studetn ID"
+                    label="Student ID"
                     rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student ID', whitespace: true}]}
                 >
-                    <Input />
+                    <Input type="text" onChange={this.studentID}  value={this.state.studentID}/>
                 </Form.Item>
 
                 <Form.Item
@@ -164,9 +249,9 @@ export default class accountcreation extends Component {
                     </Checkbox>
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
+                    <Button disabled={!isEnabled} onClick={this.AddStudent} type="primary" htmlType="submit">
                         Register
-        </Button>
+                    </Button>
                 </Form.Item>
             </Form>
 

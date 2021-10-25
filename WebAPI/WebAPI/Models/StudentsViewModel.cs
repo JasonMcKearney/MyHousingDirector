@@ -32,6 +32,7 @@ namespace WebAPI.Models
         [Column(TypeName = "nvarchar(16)")]
         public string verificationCode { get; set; }
         */
+        [Key]
         public int user_id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
@@ -41,7 +42,7 @@ namespace WebAPI.Models
         public string confirmpassword { get; set; }
         public string verificationCode { get; set; }
         public string gender { get; set; }
-        public int year { get; set; }
-        public int studentID { get; set; }
+        public string year { get; set; }
+        public string studentID { get; set; }
     }
 }

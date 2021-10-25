@@ -27,9 +27,9 @@ namespace WebAPI.Controllers
 
         private MySqlConnection GetConnection()
         {
-            string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
+              string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
-            //throw new NotImplementedException();
+     //       throw new NotImplementedException();
         }
 
         public DStudentController(HousingDBContext context, IConfiguration configuration)
@@ -175,6 +175,7 @@ namespace WebAPI.Controllers
                 if (UserExist >= 1)
                 {
                     bSuccessfull = false;
+                    return new Response { Status = "User Exists", Message = "Cannot" };
                 }
                 else
                 {
