@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox, Carousel, Select, message } from 'antd';
+import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
 import './LogIn.css'
@@ -18,21 +18,21 @@ import 'swiper/components/scrollbar/scrollbar.min.css';
 import Password from 'antd/lib/input/Password';
 import axios from 'axios'
 
+// Import Cookies
+//import Cookies from 'js-cookie'
 
 // install Swiper modules
-const Option = Select.Option;
 SwiperCore.use([Pagination, Autoplay]);
 export class LogIn extends Component {
 
     constructor() {
         super();
-
+ 
         this.state = {
             username: '',
-            password: '',
-            usertype: 'Admin'
+            password: ''
         }
-
+ 
         this.password = this.password.bind(this);
         this.username = this.username.bind(this);
         this.login = this.login.bind(this);
@@ -45,6 +45,7 @@ export class LogIn extends Component {
         this.setState({ password: event.target.value })
     }
     login(event) {
+        // Student Login in...
         fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
             headers: {
                 'Content-Type': 'application/json',
@@ -58,16 +59,40 @@ export class LogIn extends Component {
         }).then((Response) => Response.json())
             .then((result) => {
                 if (result.status === "Invalid")
-                    // this.props.history.push('/LogIn')
-                    message.error('Invalid Username or Passsword!')
+                {
+                        // Admin Log in...
+                        fetch('http://localhost:16648/api/Admin/Login', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                            },
+                            method: 'POST',
+                            body: JSON.stringify({
+                                username: this.state.username,
+                                password: this.state.password
+                            })
+                        }).then((Response) => Response.json())
+                            .then((result) => {
+                                if (result.status === "Invalid")
+                                {
+                                    this.props.history.push('/LogIn')
+                                    alert("Invalid username or password");
+                                }
+                                else
+                                {
+//                                    Cookies.set('Username', this.username);
+                                    this.props.history.push('/home')
+                                    alert("Welcome Admin!");
+                                }
+                            })
+                }
                 else
-                    if(this.state.usertype == 'Admin'){
-                        this.props.history.push('/home')
-                    }
-                    else{
-                        this.props.history.push('/student')
-                    }
-                    
+                {
+//                    Cookies.set('Username', this.username);
+                    // Bring to student page
+                    this.props.history.push('/home')
+                    alert("Welcome Student!");
+                }
             })
     }
 
@@ -122,19 +147,6 @@ export class LogIn extends Component {
                         autoComplete="off"
                         className="form"
                     >
-
-                        <Form.Item>
-                            <Select value={this.state.usertype} onChange={(value) => {
-                                this.setState({ usertype: value })
-            
-                            }} >
-
-                                <Option value="Admin">Admin</Option>
-                                <Option value="Student">Student</Option>
-
-                            </Select>
-                        </Form.Item>
-
                         <Form.Item
                             name="username"
                             rules={[{ required: true, message: 'Please input your username!' }]}                        >
@@ -144,7 +156,7 @@ export class LogIn extends Component {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
-                        //Input= {type="text"  this.state.Password}
+                            //Input= {type="text"  this.state.Password}
                         >
                             <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
@@ -154,7 +166,7 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button onClick={this.login}
+                        <Button onClick={this.login} 
                                 type="primary" htmlType="submit">
                                 Submit
                             </Button>
