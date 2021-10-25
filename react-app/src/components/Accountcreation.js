@@ -72,10 +72,10 @@ export default class accountcreation extends Component {
         this.setState({ gender: event.target.value })
     }
     year(event) {
-        this.setState({ gender: event.target.value })
+        this.setState({ year: event.target.value })
     }
     studentID(event) {
-        this.setState({ gender: event.target.value })
+        this.setState({ studentID: event.target.value })
     }
 
     AddStudent(event) {
@@ -114,14 +114,6 @@ export default class accountcreation extends Component {
             })
     }
 
-    canBeSubmitted() {
-        const {username, email, password, confirmpassword, gender, year, studentID} = this.state;
-
-        return username.length > 0 && email.length > 0 && password.length > 
-        0 && confirmpassword.length > 0 &&  gender.length > 0 && year.length > 0 && studentID.length > 0;
-    }
-
-
     onFinish = (values) => {
         console.log('Success:', values);
         this.props.history.push('/home');
@@ -131,8 +123,7 @@ export default class accountcreation extends Component {
         console.log('Failed:', errorInfo);
     };
 
-    render() {  
-        const isEnabled = this.canBeSubmitted();
+    render() {          
         return (
             <Form>
                 <Form.Item
@@ -216,7 +207,7 @@ export default class accountcreation extends Component {
                     label="Year:"
                     rules={[{ required: true, message: 'Please select the users Year' }]}
                 >
-                    <Select placeholder="select the users year" value={this.state.year}>
+                    <Select placeholder="select the users year" onChange={this.year}>
                         <Option value="Freshman">Freshman</Option>
                         <Option value="Sophomore">Sophomore</Option>
                         <Option value="Junior">Junior</Option>
@@ -230,7 +221,7 @@ export default class accountcreation extends Component {
                     label="Student ID"
                     rules={[{ required: false,pattern: new RegExp(/^[1-9]\d*$/, "g"),  message: 'Student ID has to be all numbers', whitespace: true },{ required:true,  message: 'Please enter a Student ID', whitespace: true}]}
                 >
-                    <Input type="text" onChange={this.studentID}  value={this.state.studentID}/>
+                    <Input type="text" onChange={this.studentID} />
                 </Form.Item>
 
                 <Form.Item
@@ -249,7 +240,7 @@ export default class accountcreation extends Component {
                     </Checkbox>
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    <Button disabled={!isEnabled} onClick={this.AddStudent} type="primary" htmlType="submit">
+                    <Button  onClick={this.AddStudent} type="primary" htmlType="submit">
                         Register
                     </Button>
                 </Form.Item>
