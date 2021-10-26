@@ -80,7 +80,7 @@ export default class accountcreation extends Component {
 
     AddStudent(event) {
         // Admin add student account...
-        fetch('http://localhost:16648/api/DStudent/AddStudent', {
+        fetch('http://localhost:16648/api/Admin/AddStudent', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -107,8 +107,8 @@ export default class accountcreation extends Component {
                 }
                 else
                 {
-                    // Bring to student page
-                    this.props.history.push('/home/accountcreation')
+                    // Bring to accountcreation page
+                    this.props.history.push('/home')
                     alert("Student Created");
                 }
             })
@@ -122,6 +122,18 @@ export default class accountcreation extends Component {
     onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+      
+   /* handleDropdownChange(e) {
+        this.setState({ year: e.target.value });
+    }
+*/
+    handleGenderDropdownChange = (e) =>{
+        this.setState({gender: e});
+    }
+
+    handleYearDropdownChange = (e) =>{
+        this.setState({year: e});
+    }
 
     render() {          
         return (
@@ -194,7 +206,7 @@ export default class accountcreation extends Component {
                     label="Gender"
                     rules={[{ required: true, message: 'Please select gender!' }]}
                 >
-                    <Select placeholder="select your gender" onchange={this.gender}>
+                    <Select placeholder="select your gender" /*value={this.state.gender}*/ onChange={this.handleGenderDropdownChange}>
                         <Option value="male">Male</Option>
                         <Option value="female">Female</Option>
                         <Option value="other">Other</Option>
@@ -207,7 +219,7 @@ export default class accountcreation extends Component {
                     label="Year:"
                     rules={[{ required: true, message: 'Please select the users Year' }]}
                 >
-                    <Select placeholder="select the users year" onChange={this.year}>
+                    <Select placeholder="select the users year" /*value={this.state.year}*/ onChange={this.handleYearDropdownChange}>
                         <Option value="Freshman">Freshman</Option>
                         <Option value="Sophomore">Sophomore</Option>
                         <Option value="Junior">Junior</Option>
