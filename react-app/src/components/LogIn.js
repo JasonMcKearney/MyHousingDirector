@@ -90,7 +90,7 @@ export class LogIn extends Component {
                 {
 //                    Cookies.set('Username', this.username);
                     // Bring to student page
-                    this.props.history.push('/home')
+                    this.props.history.push('/Student')
                     alert("Welcome Student!");
                 }
             })
