@@ -10,18 +10,26 @@
     float: right;
     margin: 16px 0 16px 24px;
   }
+
+.Student-content-background {
+    background: #fff;
+}
   
   .Student-page-background {
     background: #fff;
   }
 
-  .Student-nav-bar{
-    height:70px;
+.Student-nav-bar {
+    height: 70px;
     background: #47F84E;
-
-  }
+    justify-content: flex-start;
+}
 
   .Student-page-Sider{
       width: 200px;
       height: 96%;
   }
+
+ .logoutbox{
+     margin-right: 10px;
+ }

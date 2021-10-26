@@ -56,23 +56,28 @@ export class Home extends Component {
 
                         <Menu.Item key="3" /*icon={<UploadOutlined />}*/>
                                 <Link to="/home/nav3">nav3</Link>
-                          </Menu.Item>
+                            </Menu.Item>
+
                         <Menu.Item key="4" /*icon={<UserOutlined />}*/>
                                 <Link to="/home/nav4">nav4</Link>
-                         </Menu.Item>
+                            </Menu.Item>
+
                         </Menu>
+
+
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
                                     this.props.history.push('/LogIn');
                             }} type="primary" htmlType="Logout">
-                                    Logout
+                                Logout
                             </Button>
+
                         </Form.Item>
                 </Sider>
                 <Layout>
-                    <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
+                    <Header className="Admin-background" style={{ padding: 0 }} />
                         <Content style={{ margin: '24px 16px 0' }}>
-                            <div className="site-layout-background" style={{ padding: 24, height: '100%' }}>
+                            <div className="Admin-content-background" style={{ padding: 24, height: '100%' }}>
                                 <Switch>
                                
                                     <Route path='/home/Search' component = {Search} /> 

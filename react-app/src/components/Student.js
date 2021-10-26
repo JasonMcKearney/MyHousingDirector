@@ -1,5 +1,8 @@
 ﻿import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import {
+    Layout, Menu, Breadcrumb, Button, Form} from 'antd';
+import { Route, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import './Student.css';
 
@@ -11,43 +14,51 @@ export class Student extends Component {
   render() {
 
     return (
-      <Layout style={{ height: '100%' }}>
-        <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">Home</Menu.Item>
-          <Menu.Item key="2">nav 1</Menu.Item>
-          <Menu.Item key="3">nav 2</Menu.Item>
-        </Menu>
+        <Layout style={{ height: '100%' }}>
+                <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
+                <Menu.Item key="1">
+                    <Link to="/student/home">home</Link>
+                    </Menu.Item>
+                <Menu.Item key="2">
+                    <Link to="/student/nav1">nav1</Link>
+                    </Menu.Item>
+                <Menu.Item key="3">
+                    <Link to="/student/nav2">nav2</Link>
+                    </Menu.Item>
+
+
+
+                    <Form.Item Logout={{ offset: 8, span: 16 }}>
+                        <Button onClick={() => {
+                            this.props.history.push('/LogIn');
+                        }} type="primary" htmlType="Logout">
+                            Logout
+                            </Button>
+
+                    </Form.Item>
+
+                </Menu>
+
+
         <Content style={{ padding: '0 50px' }}>
           <Breadcrumb style={{ margin: '40px 0' }}>
           </Breadcrumb>
-          <Layout className="Student-page-background" style={{ height: '100%' }}>
-            <Sider className="Student-page-Sider">
-              <Menu
-                mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
-                style={{ height: '100%' }}
-              >
-                <SubMenu key="sub1" icon={<UserOutlined />} title="subnav 1">
-                  <Menu.Item key="1">option1</Menu.Item>
-                  <Menu.Item key="2">option2</Menu.Item>
-                  <Menu.Item key="3">option3</Menu.Item>
-                  <Menu.Item key="4">option4</Menu.Item>
-                </SubMenu>
-                <SubMenu key="sub2" icon={<LaptopOutlined />} title="subnav 2">
-                  <Menu.Item key="5">option5</Menu.Item>
-                  <Menu.Item key="6">option6</Menu.Item>
-                  <Menu.Item key="7">option7</Menu.Item>
-                  <Menu.Item key="8">option8</Menu.Item>
-                </SubMenu>
-                <SubMenu key="sub3" icon={<NotificationOutlined />} title="subnav 3">
-                  <Menu.Item key="9">option9</Menu.Item>
-                  <Menu.Item key="10">option10</Menu.Item>
-                  <Menu.Item key="11">option11</Menu.Item>
-                  <Menu.Item key="12">option12</Menu.Item>
-                </SubMenu>
-              </Menu>
-            </Sider>
+                <Layout className="Student-page-background" style={{ height: '100%' }}>
+                    <Content style={{ margin: '24px 16px 0' }}>
+                        <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
+                            <Switch>
+
+                                <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
+                                <Route path='/student/nav1' render={() => { return (<h1>nav1</h1>) }} />
+                                <Route path='/student/nav2' render={() => { return (<h1>nav2</h1>) }} />
+                                <Route path='/student' render={() => { return (<h1>Home</h1>) }} />
+
+                            </Switch>
+
+
+                        </div>
+
+                    </Content>
           </Layout>
         </Content>
         <Footer style={{ textAlign: 'center' }}></Footer>
