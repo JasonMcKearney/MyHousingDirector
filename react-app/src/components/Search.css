@@ -1,5 +1,13 @@
+#wrapper{
+  width: 80%;
+  border: 1px solid black;
+  overflow: hidden;
+  float:center;
+}
 #searchBar{
 
+    width: 50px;
+    float: left;
     border-radius:10px;
     border-width: 3px;
     
@@ -20,32 +28,26 @@
     
     font-size:100px;
     margin: 5px;
-
-
-}
-.container-search{
-
-    height:100%;
-
-}
+   
+  }
+  
 .resultsBox::-webkit-scrollbar {
     width: 20px;
     border-radius: 10px;
     border-width: 5px;
   }
   
-  /* Track */
+
 .resultsBox::-webkit-scrollbar-track {
     background: #f1f1f1; 
   }
-   
-  /* Handle */
+
 .resultsBox::-webkit-scrollbar-thumb {
     background: #888; 
      border-radius: 5px
   }
   
-  /* Handle on hover */
+ 
 .resultsBox::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
@@ -53,4 +55,24 @@
 
     border-radius: 5px;
 
+  } 
+.container-search{
+
+    height:100%;
+
+}
+  .search-bar{
+
+    width: 300px;
+    display:flex;
+    border: 1px solid red;
+}
+
+  
+ .search-button
+  {
+    display:flex;
+    float: left;
+    border: 1px solid green;
+    overflow: hidden; 
   }
