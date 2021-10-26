@@ -1,15 +1,19 @@
 #wrapper{
-  width: 80%;
-  border: 1px solid black;
+  width: 100%;
   overflow: hidden;
-  float:center;
+  float:center; 
 }
 #searchBar{
 
-    width: 50px;
+    height: 5vh;
+    width: 95%;
     float: left;
     border-radius:10px;
     border-width: 3px;
+    border-style: solid;
+    font-size: 3vh;
+    font-family: frank ruhal ribre;
+    
     
 
 }
@@ -63,15 +67,16 @@
 }
   .search-bar{
 
-    width: 300px;
-    display:flex;
+    float: left;
+    width: 100%;
     border: 1px solid red;
 }
 
   
  .search-button
   {
-    display:flex;
+    
+    width: 100%;
     float: left;
     border: 1px solid green;
     overflow: hidden; 
