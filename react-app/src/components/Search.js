@@ -16,23 +16,25 @@ export default class Search extends Component {
 
         return (
             <div className="container-search">
-                <div>
+                <div >
                     <h1>Search</h1>
 
                     <div>
 
                         <Form>
 
-                            <Form.Item
-                                id="searchBar"
-                                name="searchBar"
-                                label="Search"
-                            >
-
+                            <div >
+                          
+                                <div ClassName = "search-bar">
                                 <Input placeholder="Please input a Students name or ID" />
+                                <Button ClassName="search-button"  htmlType="submit" >
+                                        Search
+                                    </Button>
+                                </div>
+                            
+                            </div>
 
-                            </Form.Item>
-
+                            
                         </Form>
 
                     </div>

@@ -25,3 +25,12 @@
       width: 200px;
       height: 96%;
   }
+  .search-bar{
+
+    float:left;
+
+  }
+  .search-button
+  {
+    float:left;
+  }
