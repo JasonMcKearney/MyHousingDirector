@@ -20,9 +20,6 @@ namespace WebAPI.Controllers
     {
         private readonly HousingDBContext _context;
 
-//        public string ConnectionString { get; set; }
-
-
         private IConfiguration _configuration;
 
         private MySqlConnection GetConnection()
@@ -153,63 +150,6 @@ namespace WebAPI.Controllers
             }
             else
                 return new Response { Status = "Success", Message = "Login Successfully" };
-        }
-
-        [Route("AddStudent")]
-        [HttpPost]
-        public Response AddStudent(StudentsViewModel student)
-        {           
-            bool bSuccessfull = false;
-
-            if (student.username.Length > 0 && student.email.Length > 0 && student.password.Length >
-        0 && student.confirmpassword.Length > 0 && student.gender.Length > 0 && student.year.Length > 0 && student.studentID.Length > 0)
-            {
-                using (MySqlConnection conn = GetConnection())
-                {
-                    conn.Open();
-                    MySqlCommand CheckUser = conn.CreateCommand();
-
-                    // Checks to see if there are duplicate usernames
-                    CheckUser.Parameters.AddWithValue("@username", student.username);
-                    CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where userName = @userName";
-
-                    // if 1 then already exist
-                    int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
-
-                    if (UserExist >= 1)
-                    {
-                        bSuccessfull = false;
-                        return new Response { Status = "User Exists", Message = "Cannot" };
-                    }
-                    else
-                    {
-                        //   // Hash password
-                        //   uc.password = BCrypt.Net.BCrypt.HashPassword(uc.password);
-                        //   uc.confirmPassword = BCrypt.Net.BCrypt.HashPassword(uc.confirmPassword);
-
-                        // Inserting data into fields of database
-                        MySqlCommand Query = conn.CreateCommand();
-                        Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @email, @password, @confirmpassword, @gender, @year, @studentID)";
-                        Query.Parameters.AddWithValue("@username", student.username);
-                        Query.Parameters.AddWithValue("@email", student.email);
-                        Query.Parameters.AddWithValue("@password", student.password);
-                        Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
-                        Query.Parameters.AddWithValue("@gender", student.gender);
-                        Query.Parameters.AddWithValue("@year", student.year);
-                        Query.Parameters.AddWithValue("@studentID", student.studentID);
-
-                        Query.ExecuteNonQuery();
-                        bSuccessfull = true;
-                    }
-                }
-            }
-            
-            if(!bSuccessfull)
-			{
-                return new Response { Status = "Invalid", Message = "Cannot" };
-            }
-
-            return new Response { Status = "Success", Message = "Login Successfully" };
         }
     }
 }
