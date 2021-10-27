@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
-import Homepagelogo from '../img/Homepage-logo.gif';
+import Homepagelogo from '../img/logo.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
