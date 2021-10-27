@@ -10,25 +10,28 @@ import { LogIn } from './components/LogIn';
 import { Home } from './components/Home';
 import { Student } from './components/Student';
 import registerServiceWorker from './registerServiceWorker';
-import { StudentProfile } from './components/StudentProfile';
+import { CookiesProvider } from 'react-cookie';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
-  <BrowserRouter basename={baseUrl}>
-    <div style={{
-      height: '100%'
-    }}>
-      <Route path='/' exact component={LogIn} />
-      <Route path='/LogIn' component={LogIn} />
-      <Route path='/home' component={Home} />
-      <Route path='/student' component={Student} />
-      <Route path='/StudentProfile' component={StudentProfile} />
 
-      {/* <App /> */}
-    </div>
-  </BrowserRouter>,
-  rootElement);
+  <CookiesProvider>
+    <BrowserRouter basename={baseUrl}>
+      <div style={{
+        height: '100%'
+      }}>
+        <Route path='/' exact component={LogIn} />
+        <Route path='/LogIn' component={LogIn} />
+        <Route path='/home' component={Home} />
+        <Route path='/student' component={Student} />
+
+        {/* <App /> */}
+      </div>
+    </BrowserRouter>,
+  </CookiesProvider>,
+  rootElement
+);
 
 registerServiceWorker();

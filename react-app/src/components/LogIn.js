@@ -17,6 +17,7 @@ import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
 import Password from 'antd/lib/input/Password';
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 // Import Cookies
 //import Cookies from 'js-cookie'
@@ -40,6 +41,7 @@ export class LogIn extends Component {
 
     username(event) {
         this.setState({ username: event.target.value })
+        Cookies.set("username", event.target.value);
     }
     password(event) {
         this.setState({ password: event.target.value })
@@ -88,12 +90,13 @@ export class LogIn extends Component {
                 }
                 else
                 {
-//                    Cookies.set('Username', this.username);
+
                     // Bring to student page
                     this.props.history.push('/Student')
                     alert("Welcome Student!");
                 }
             })
+       
     }
 
     onFinish = (values) => {
