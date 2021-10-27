@@ -7,6 +7,7 @@ import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
 import Homepagelogo from '../img/logo.png';
+import  StudentProfile  from './StudentProfile';
 
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
@@ -40,13 +41,13 @@ export class Home extends Component {
                         </div>
 
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
-                            Welcome!
+                            Welcome Admin!
                         </div>
 
 
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
-                                <Link to="/home/nav1">Homepage</Link>
+                                <Link to="/home/Search">Search</Link>
                             
                         </Menu.Item>
                             <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
@@ -60,6 +61,7 @@ export class Home extends Component {
                         <Menu.Item key="4" /*icon={<UserOutlined />}*/>
                                 <Link to="/home/nav4">nav4</Link>
                          </Menu.Item>
+                         
                         </Menu>
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
@@ -79,7 +81,7 @@ export class Home extends Component {
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
-                                    <Route path='/home'  component = {Search} /> 
+                                    <Route path='/home/StudentProfile' component ={StudentProfile}/>
                                     <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} /> 
                                
                                 </Switch>

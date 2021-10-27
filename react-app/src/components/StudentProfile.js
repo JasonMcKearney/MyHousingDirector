@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 
-export class StudentProfile extends Component {
+export default class StudentProfile extends Component {
 
 
     render(){
         
         return(
 
+            <div>
+                <p>test</p>
 
-            <p>test</p>
-
+            </div>
+           
 
         );
 

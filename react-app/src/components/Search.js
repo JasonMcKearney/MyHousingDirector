@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './Search.css';
 
-
 export default class Search extends Component {
 
     render() {
@@ -11,7 +10,7 @@ export default class Search extends Component {
         return (
             <div className="container-search">
                 <div >
-                    <h1>Search</h1>
+                    <h1 id='heading'> Search A Student </h1>
                     <div>
                         <form>
                             <div >
@@ -39,7 +38,10 @@ export default class Search extends Component {
 
                 <div className="resultsBox">
                     <div className ="result-node"> 
-                    <Link className= "student-name" to={'/StudentProfile'}>Jason McKearneyy</Link>
+                   
+                    <Link className = "student-name" to="/home/StudentProfile">Jason</Link>
+                   
+                   {/* <a className='student-name' onClick ={()=>{ this.props.history.push('/home/StudentProfile')}}>Jason</a> */}
                     </div>
 
                 </div>

@@ -62,7 +62,7 @@ export class LogIn extends Component {
                     message.error('Invalid Username or Passsword!')
                 else
                     if(this.state.usertype == 'Admin'){
-                        this.props.history.push('/home')
+                        this.props.history.push('/home/Search')
                     }
                     else{
                         this.props.history.push('/student')
@@ -166,28 +166,7 @@ export class LogIn extends Component {
                     </Form>
                 </div>
 
-                {/* <form className= 'login-box' >
-                    <label className = 'label '>
-                        Email:
-                        
-                    </label>
-                    <input className='input-box' type="text" name="email" />
-                    <label className='label'>
-                        Password:
-                       
-                    </label>
-                    <input className='input-box' type="password" name="password" />
-                    <input type="submit" value="Submit" />
-                </form> 
-
-
-                //--------------------- ButtonClick in order to go to login function above--------------
-                <Button onClick={this.login} 
-                                               type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                
-                */}
+             
             </div>
         );
     }
