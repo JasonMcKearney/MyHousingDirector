@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './Search.css';
 
@@ -38,7 +39,7 @@ export default class Search extends Component {
 
                 <div className="resultsBox">
                     <div className ="result-node"> 
-                        <a className="student-name">Jason McKearney</a>
+                    <Link className= "student-name" to={'/StudentProfile'}>Jason McKearneyy</Link>
                     </div>
 
                 </div>
