@@ -2,8 +2,22 @@
 
 
 float: left;
-height: 10%;
-width: 10%;
+height: 70%;
+width: 40%;
 background-color: black;
+
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.grid-item{
+
+  
+    padding: 20px;
+    border-width: 3px;
+    border-color: black;
+    border-style: solid;
 
 }

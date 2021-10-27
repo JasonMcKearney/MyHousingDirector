@@ -52,7 +52,7 @@ export class Home extends Component {
                         </Menu.Item>
                             <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
                             
-                                <Link to="/home/Accountcreation">Accountcreation</Link>
+                                <Link to="/home/Accountcreation">Account creation</Link>
                         </Menu.Item>
 
                         <Menu.Item key="3" /*icon={<UploadOutlined />}*/>

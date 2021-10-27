@@ -8,10 +8,14 @@ export default class StudentProfile extends Component {
     render(){
         
         return(
-            <div>
-                 <div>
+            <div className = "grid-container">
+                 <div className = "grid-item">
                     <img className = "student-image" src ={defualt_Image}></img>
 
+                </div>
+
+                <div className = "grid-item">
+                    <h1>test</h1>
                 </div>
             </div>
 
