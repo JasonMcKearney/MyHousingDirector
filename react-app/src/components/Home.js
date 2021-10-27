@@ -7,6 +7,7 @@ import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
 import Homepagelogo from '../img/Homepage-logo.gif';
+import Cookies from 'js-cookie';
 
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
@@ -64,6 +65,7 @@ export class Home extends Component {
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
                                     this.props.history.push('/LogIn');
+                                    Cookies.remove('username')
                             }} type="primary" htmlType="Logout">
                                     Logout
                             </Button>
