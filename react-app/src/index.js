@@ -24,7 +24,7 @@ ReactDOM.render(
       <Route path='/LogIn' component={LogIn} />
       <Route path='/home' component={Home} />
       <Route path='/student' component={Student} />
-      <Route path='/StudentProfile' component={StudentProfile} />
+
 
       {/* <App /> */}
     </div>

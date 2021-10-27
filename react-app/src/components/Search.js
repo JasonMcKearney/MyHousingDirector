@@ -39,7 +39,7 @@ export default class Search extends Component {
 
                 <div className="resultsBox">
                     <div className ="result-node"> 
-                    <Link className= "student-name" to={'/StudentProfile'}>Jason McKearneyy</Link>
+                    <Link className= "student-name" to={'/home/StudentProfile'}>Jason McKearneyy</Link>
                     </div>
 
                 </div>

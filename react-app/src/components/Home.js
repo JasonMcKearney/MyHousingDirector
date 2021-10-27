@@ -46,7 +46,7 @@ export class Home extends Component {
 
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
-                                <Link to="/home/nav1">Homepage</Link>
+                                <Link to="/home/Search">Homepage</Link>
                             
                         </Menu.Item>
                             <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
@@ -85,7 +85,7 @@ export class Home extends Component {
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
                                     <Route path='/home'  component = {Search} /> 
-                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} /> 
+                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />
                                
                                 </Switch>
                             
