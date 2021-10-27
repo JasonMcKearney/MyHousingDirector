@@ -135,7 +135,17 @@ namespace WebAPI.Controllers
                 return new Response { Status = "Invalid", Message = "Invalid User." };
             }
             else
+         
                 return new Response { Status = "Success", Message = "Login Successfully" };
+        }
+
+        [Route("api/DStudent/SearchStudent")]
+        [HttpPost]
+        public Response SearchStudent(string adminSearch)
+        {
+            {
+                return new Response { Status = "Sucsses" };
+            }
         }
     }
 }

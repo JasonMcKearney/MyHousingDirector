@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import defualt_Image from '../img/defualt_Image.jpg';
+import './StudentProfile.css'
 
 export default class StudentProfile extends Component {
 
@@ -6,12 +8,12 @@ export default class StudentProfile extends Component {
     render(){
         
         return(
-
             <div>
-                <p>test</p>
+                 <div>
+                    <img className = "student-image" src ={defualt_Image}></img>
 
+                </div>
             </div>
-           
 
         );
 
