@@ -25,7 +25,7 @@ export class NavMenu extends Component {
             </LinkContainer>
             <LinkContainer to={'/counter'}>
               <NavItem>
-                <Glyphicon glyph='education' /> Create User
+                <Glyphicon glyph='education'/> Create User
               </NavItem>
             </LinkContainer>
             <LinkContainer to={'/fetchdata'}>

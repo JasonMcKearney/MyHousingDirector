@@ -1,17 +1,19 @@
 #wrapper{
-  width: 80%;
-  border: 1px solid black;
+  width: 100%;
   overflow: hidden;
-  float:center;
+  float:center; 
 }
 #searchBar{
 
-    width: 50px;
+    height: 5vh;
+    width: 95%;
     float: left;
     border-radius:10px;
     border-width: 3px;
+    border-style: solid;
+    font-size: 3vh;
+    font-family: frank ruhal ribre;
     
-
 }
 .resultsBox{
 
@@ -63,16 +65,61 @@
 }
   .search-bar{
 
-    width: 300px;
-    display:flex;
+    float: left;
+    width: 100%;
     border: 1px solid red;
 }
 
   
  .search-button
   {
-    display:flex;
+    
+    width: 100%;
     float: left;
-    border: 1px solid green;
     overflow: hidden; 
+  
   }
+
+
+  #primary-button{
+
+    height: 5vh;
+    width: 4vw;
+    background-color: blue;
+
+    border-width: 3px;
+    border-color:rgb(0, 0, 0);
+    border-top-right-radius:10%;
+    border-bottom-right-radius:10%;
+    animation-name:button;
+
+    font-family: frank ruhal ribre;
+    font-size: 18px;
+    color:white;
+    
+   
+ 
+
+
+
+  }
+ 
+  .result-node{
+
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    width: 100%;
+    height: 10%;
+    font-size: 10px;
+  }
+  .student-name{
+    float: left;
+    margin-top: 10px;
+    margin-left:1%;
+    font-size: 16px;
+    font-weight: bolder;
+
+  }
+  
