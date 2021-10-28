@@ -1,9 +1,19 @@
+#wrapper{
+  width: 100%;
+  overflow: hidden;
+  float:center; 
+}
 #searchBar{
 
+    height: 5vh;
+    width: 95%;
+    float: left;
     border-radius:10px;
     border-width: 3px;
+    border-style: solid;
+    font-size: 3vh;
+    font-family: frank ruhal ribre;
     
-
 }
 .resultsBox{
 
@@ -20,32 +30,26 @@
     
     font-size:100px;
     margin: 5px;
-
-
-}
-.container-search{
-
-    height:100%;
-
-}
+   
+  }
+  
 .resultsBox::-webkit-scrollbar {
     width: 20px;
     border-radius: 10px;
     border-width: 5px;
   }
   
-  /* Track */
+
 .resultsBox::-webkit-scrollbar-track {
     background: #f1f1f1; 
   }
-   
-  /* Handle */
+
 .resultsBox::-webkit-scrollbar-thumb {
     background: #888; 
      border-radius: 5px
   }
   
-  /* Handle on hover */
+ 
 .resultsBox::-webkit-scrollbar-thumb:hover {
     background: #555; 
   }
@@ -53,4 +57,69 @@
 
     border-radius: 5px;
 
+  } 
+.container-search{
+
+    height:100%;
+
+}
+  .search-bar{
+
+    float: left;
+    width: 100%;
+    border: 1px solid red;
+}
+
+  
+ .search-button
+  {
+    
+    width: 100%;
+    float: left;
+    overflow: hidden; 
+  
   }
+
+
+  #primary-button{
+
+    height: 5vh;
+    width: 4vw;
+    background-color: blue;
+
+    border-width: 3px;
+    border-color:rgb(0, 0, 0);
+    border-top-right-radius:10%;
+    border-bottom-right-radius:10%;
+    animation-name:button;
+
+    font-family: frank ruhal ribre;
+    font-size: 18px;
+    color:white;
+    
+   
+ 
+
+
+
+  }
+ 
+  .result-node{
+
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    width: 100%;
+    height: 10%;
+    font-size: 10px;
+  }
+  .student-name{
+    float: left;
+    margin-top: 10px;
+    margin-left:1%;
+    font-size: 16px;
+    font-weight: bolder;
+
+  }
+  
