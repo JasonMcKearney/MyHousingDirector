@@ -2,14 +2,35 @@
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import './Student.css';
+import Cookies from 'js-cookie';
 
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
 export class Student extends Component {
+  constructor(props){
+    super(props);
+    fetch('http://localhost:16648/api/DStudent/', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                username: Cookies.get("username")
+            })
+          }).then((Response) => Response.json())
+          .then((result) => {
+              var ID = result.studentID;
+              var firstName = result.firstName;
+              var lastName = result.lastName
 
+              Cookies.set("ID", ID);
+              Cookies.set("FN", firstName);
+              Cookies.set("LN", lastName);
+            })
+  }
   render() {
-
     return (
       <Layout style={{ height: '100%' }}>
         <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
@@ -48,6 +69,8 @@ export class Student extends Component {
                 </SubMenu>
               </Menu>
             </Sider>
+              <h1>Welcome, {Cookies.get("FN")} {Cookies.get("LN")}!</h1>
+              <h2>Student ID {Cookies.get("ID")}</h2>
           </Layout>
         </Content>
         <Footer style={{ textAlign: 'center' }}></Footer>
