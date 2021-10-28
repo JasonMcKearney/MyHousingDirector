@@ -9,45 +9,9 @@ import {
     Checkbox,
     Button,
 } from 'antd';
-import e from 'cors';
 
 export default class Search extends Component {
-    constructor() {
-        super();
- 
-        this.state = {
-            searchBar: ''
-        };
 
-        this.searchBar = this.searchBar.bind(this);
-    }
-    searchBar(e) {
-        this.setState({ searchBar: e.target.value })
-    }
-    submit(event) {
-        fetch('http://localhost:16648/api/DStudent/{id}', {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                searchBar: this.searchBar.state
-            })
-        }).then((Response) => Response.json())
-            .then((result) => {
-                this.props.history.push('/search')
-            })
-    }
-
-    onFinish = (values) => {
-        console.log('Success:', values);
-    };
-
-    onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-    
     render() {
 
         return (
@@ -64,15 +28,10 @@ export default class Search extends Component {
                                 name="searchBar"
                                 label="Search"
                             >
-                                <Input type="text" onChange={this.searchBar} placeholder="Please input a Students name or ID" />
+
+                                <Input placeholder="Please input a Students name or ID" />
 
                             </Form.Item>
-                            <Form.Item>
-                            <Button onClick={this.submit} 
-                                type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                        </Form.Item>
 
                         </Form>
 

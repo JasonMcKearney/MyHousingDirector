@@ -44,7 +44,5 @@ namespace WebAPI.Controllers
 
         // Create student account
 
-
-        //[Route("Search")]
     }
 }

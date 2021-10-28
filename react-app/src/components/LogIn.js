@@ -32,7 +32,7 @@ export class LogIn extends Component {
         this.state = {
             username: '',
             password: ''
-        };
+        }
  
         this.password = this.password.bind(this);
         this.username = this.username.bind(this);
