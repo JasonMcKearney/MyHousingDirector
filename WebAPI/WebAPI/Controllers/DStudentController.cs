@@ -92,12 +92,36 @@ namespace WebAPI.Controllers
         // POST: api/DStudent
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<StudentsViewModel>> PostDStudents(StudentsViewModel dStudents)
+        public StudentsViewModel GetStudentInfo(StudentsViewModel check)
         {
-            _context.DBUserTbls.Add(dStudents);
-            await _context.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine(check.username);
 
-            return CreatedAtAction("GetDStudents", new { id = dStudents.user_id }, dStudents);
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand getID = conn.CreateCommand();
+                MySqlCommand getFirstName = conn.CreateCommand();
+                MySqlCommand getLastName = conn.CreateCommand();
+
+                // Checks to see if there are duplicate usernames
+                getID.Parameters.AddWithValue("@username", check.username);
+                getID.CommandText = "select studentID from housingdirector_schema.DBUserTbls where username = @username";
+                getFirstName.Parameters.AddWithValue("@username", check.username);
+                getFirstName.CommandText = "select firstName from housingdirector_schema.DBUserTbls where username = @username";
+                getLastName.Parameters.AddWithValue("@username", check.username);
+                getLastName.CommandText = "select lastName from housingdirector_schema.DBUserTbls where username = @username";
+
+                string IDResult = (string)getID.ExecuteScalar();
+                string FNResult = (string)getFirstName.ExecuteScalar();
+                string LNResult = (string)getLastName.ExecuteScalar();
+
+                System.Diagnostics.Debug.WriteLine(IDResult);
+                System.Diagnostics.Debug.WriteLine(FNResult);
+                System.Diagnostics.Debug.WriteLine(LNResult);
+
+
+                return new StudentsViewModel { studentID = IDResult,  firstName = FNResult, lastName = LNResult};
+            }
         }
 
         // DELETE: api/DStudent/5
@@ -138,8 +162,6 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response StudentLogin(Login login)
         {
-            System.Diagnostics.Debug.WriteLine(login.username);
-            System.Diagnostics.Debug.WriteLine(login.password);
 
             var log = _context.DBUserTbls.Where(x => x.username.Equals(login.username) &&
                       x.password.Equals(login.password)).FirstOrDefault();
