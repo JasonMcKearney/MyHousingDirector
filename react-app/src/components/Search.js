@@ -40,10 +40,12 @@ export default class search extends Component {
             })
         }).then((Response) => Response.json())
         .then((result) => {
+            Cookies.set('test', "test")
             this.setState({
                 StudentData: result.data.username
             })
-            Cookies.set("test", "test")
+            
+            
         })
     }
 
@@ -155,7 +157,7 @@ export default class search extends Component {
                         <h1>  
                             {  
                                 this.state.StudentData.map((p, index) => {  
-                                  return <tr key={index}><td>{p.username,0}</td></tr>;  
+                                  return <tr key={index}><td>{p.username}</td></tr>;  
                                 })   
                             }  
                         </h1>  
@@ -172,7 +174,3 @@ export default class search extends Component {
         );
     } 
 }
-
-ReactDOM.render(  
-    <ProductsList />
-);
