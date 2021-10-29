@@ -11,7 +11,8 @@ export default class search extends Component {
 
         this.state = {
             sUsernameToSearch : '',
-            usernamesFoundArray: []
+            //usernamesFoundArray: []
+            StudentData: []
         }
        this.sUsernameToSearch = this.sUsernameToSearch.bind(this);
     }
@@ -20,40 +21,102 @@ export default class search extends Component {
         this.setState({ sUsernameToSearch: event.target.value })
     }
 
-    usernamesFoundArray(event) {
+ /*   usernamesFoundArray(event) {
         this.setState({usernamesFoundArray: event.target.value})
     }
-
+*/
    // const [data, setData] = useState([]);
-    LookForStudents(event) {
-        // Admin find students that match ...
+   
+   LookForStudents(event) {
         fetch('http://localhost:16648/api/Admin/FindStudents', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'GET',
+            body: JSON.stringify({
+                sUsernameToSearch: this.state.sUsernameToSearch
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            this.setState({
+                StudentData: result.data
+            })
+            Cookies.set("test", "test")
+            
+        })
+    }
+
+
+    /*LookForStudents() {
+        axios('http://localhost:16648/api/Admin/FindStudents'), {
+              params:{
+                  sUsernameToSearch: this.state.sUsernameToSearch.toString()
+              }
+            }
+            .then(function (response) {
+                this.setState({
+                    StudentData: response.data
+                })
+            })
+        }
+*/
+
+
+
+
+
+
+        /*  headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'GET',
+          body: JSON.stringify({
+                sUsernameToSearch: this.state.sUsernameToSearch.toString()
+            })
+         // }).then((Response) => Response.json())
+          //.then((result) => {
+              .then(result => {
+                this.setState({
+                    StudentData: result.data
+                });
+            })
+    }
+*/          
+/*        
+        // Admin find students that match ...
+        axios.get('http://localhost:16648/api/Admin/FindStudents', {
           /*  headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            */
+            
             method: 'GET',
             body: JSON.stringify({
                 sUsernameToSearch: this.state.sUsernameToSearch
             })
         }).then((data) => data.json())
             .then(data => {
-               /* // Here you need to use an temporary array to store NeededInfo only 
-                let tmpArray = [];
-                for (var i = 0; i < data.results.length; i++) {
-                    tmpArray.push(data.results[i].NeededInfo)
-                }
-                */
+             // create an array of contacts only with relevant data
+            const newContacts = response.data.map(c => {
+            return {
+              name: c.name
+              
+            };
+          });
+  
+          // create a new "State" object without mutating 
+          // the original State object. 
+          const newState = Object.assign({}, this.state, {
+            contacts: newContacts
+          });
 
-                this.setState({
-                    //usernamesFoundArray : [...this.state.usernamesFoundArray, tmpArray]                    
-                    usernamesFoundArray: data
-                })
-                //Cookies.set("usernamesfoundarray", tmpArray);
-            })
-    }
-
+           // store the new state object in the component's state
+            this.setState(newState);
+        })
+        .catch(error => console.log(error));
+*/
     render() {
         console.log(this.state.usernamesFoundArray);
         return (
@@ -70,7 +133,7 @@ export default class search extends Component {
                                      </div>
                                    
                                     <div >
-                                        <button id = "primary-button" ClassName="primary-button" htmlType="submit" onClick={this.LookForStudents}>Search </button>
+                                        <button onClick={this.LookForStudents} id = "primary-button" ClassName="primary-button" htmlType="submit">Search </button>
                                     </div>
                                 </div>
 
@@ -85,19 +148,26 @@ export default class search extends Component {
 
                 </div>
 
-                <div className="resultsBox">
-                    <div>
-                     <div className ="result-node"> 
-	                    <Link className= "student-name" to={'/StudentProfile'}>{this.state.usernamesFoundArray}</Link>
-                    </div>
-                        <Link className= "student-name" to={'/StudentProfile'} id="username">
-                            {this.state.usernamesFoundArray.map(item=>(
-                            <option key={item.username}>{item.username}</option> 
-                            ))
-                            }
-                        </Link>
-                    </div>
-                </div>
+                <section>  
+                <h1>Products List</h1>  
+                <div>  
+                    <table>   
+                        <tbody>  
+                            {  
+                                this.state.StudentData.map((p, index) => {  
+                                  return <tr key={index}><td>{p.username, 0}</td></tr>;  
+                                })   
+                            }  
+                        </tbody>  
+                    </table>  
+                </div>  
+  
+  
+            </section> 
+
+
+
+                
             </div>
         );
     } 

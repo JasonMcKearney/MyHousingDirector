@@ -115,9 +115,9 @@ namespace WebAPI.Controllers
         // Find Student Accounts that match a few characters (Search functionality on Admin page)
         [Route("FindStudents")]
         [HttpGet]
-        public List<string> FindStudents(string sUsernameToSearch)
+        public List<StudentsViewModel> FindStudents(string sUsernameToSearch)
         {
-            List<string> eventData = new List<string>();
+            List<StudentsViewModel> eventData = new List<StudentsViewModel>();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -143,14 +143,16 @@ namespace WebAPI.Controllers
 
                     // Execute the SQL command against the DB:
                     MySqlDataReader reader = FindUsersLike.ExecuteReader();
+
                     while (reader.Read()) // Read returns false if the user does not exist!
                     {
-                        eventData.Add(reader[0].ToString());
+                        eventData.Add(new StudentsViewModel()
+                        {
+                            username = reader[0].ToString()
+                        });
                     }
                     reader.Close();
                 }
-                else
-                    eventData.Add("");
             }
             return eventData;
         }
