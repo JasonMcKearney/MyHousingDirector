@@ -111,5 +111,48 @@ namespace WebAPI.Controllers
 
             return new Response { Status = "Success", Message = "Login Successfully" };
         }
+
+        // Find Student Accounts that match a few characters (Search functionality on Admin page)
+        [Route("FindStudents")]
+        [HttpGet]
+        public List<string> FindStudents(string sUsernameToSearch)
+        {
+            List<string> eventData = new List<string>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                // Inserting data into fields of database
+                MySqlCommand FindTotalUsers = conn.CreateCommand();
+                FindTotalUsers.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.DBUserTbls where username like @username";
+                FindTotalUsers.ExecuteNonQuery();
+
+                // If nNumStudents is 1 then there are at least one student account created to check
+                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+
+                if (nNumStudents >= 1)
+                {
+                    MySqlCommand FindUsersLike = conn.CreateCommand();
+
+                    // Pulls all students usernames like entered characters
+                    FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
+                    FindUsersLike.CommandText = "select username from housingdirector_schema.DBUserTbls where username like @username";
+
+                    FindUsersLike.ExecuteNonQuery();
+
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
+                    while (reader.Read()) // Read returns false if the user does not exist!
+                    {
+                        eventData.Add(reader[0].ToString());
+                    }
+                    reader.Close();
+                }
+                else
+                    eventData.Add("");
+            }
+            return eventData;
+        }
     }
 }
