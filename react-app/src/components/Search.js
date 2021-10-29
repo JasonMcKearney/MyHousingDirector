@@ -27,6 +27,7 @@ export default class search extends Component {
 */
    // const [data, setData] = useState([]);
    
+   
    LookForStudents(event) {
         fetch('http://localhost:16648/api/Admin/FindStudents', {
             headers: {
@@ -40,10 +41,9 @@ export default class search extends Component {
         }).then((Response) => Response.json())
         .then((result) => {
             this.setState({
-                StudentData: result.data
+                StudentData: result.data.username
             })
             Cookies.set("test", "test")
-            
         })
     }
 
@@ -151,15 +151,15 @@ export default class search extends Component {
                 <section>  
                 <h1>Products List</h1>  
                 <div>  
-                    <table>   
-                        <tbody>  
+                    <div>   
+                        <h1>  
                             {  
                                 this.state.StudentData.map((p, index) => {  
-                                  return <tr key={index}><td>{p.username, 0}</td></tr>;  
+                                  return <tr key={index}><td>{p.username,0}</td></tr>;  
                                 })   
                             }  
-                        </tbody>  
-                    </table>  
+                        </h1>  
+                    </div>  
                 </div>  
   
   
@@ -172,3 +172,7 @@ export default class search extends Component {
         );
     } 
 }
+
+ReactDOM.render(  
+    <ProductsList />
+);
