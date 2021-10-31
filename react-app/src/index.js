@@ -11,6 +11,7 @@ import { Home } from './components/Home';
 import { Student } from './components/Student';
 import registerServiceWorker from './registerServiceWorker';
 import { CookiesProvider } from 'react-cookie';
+import Search from 'antd/lib/transfer/search';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
@@ -26,6 +27,7 @@ ReactDOM.render(
         <Route path='/LogIn' component={LogIn} />
         <Route path='/home' component={Home} />
         <Route path='/student' component={Student} />
+        <Route path='/StudentProfile' component={Search} />
 
         {/* <App /> */}
       </div>
