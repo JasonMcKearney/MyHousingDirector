@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
@@ -15,16 +16,13 @@ import 'swiper/swiper.min.css';
 import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
-import Password from 'antd/lib/input/Password';
-import axios from 'axios'
 import Cookies from 'js-cookie'
-
 // Import Cookies
 //import Cookies from 'js-cookie'
 
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
-export class LogIn extends Component {
+class LogIn extends Component {
 
     constructor() {
         super();
@@ -82,6 +80,11 @@ export class LogIn extends Component {
                                 }
                                 else
                                 {
+                                    this.props.updateUserinfo({
+                                        username: this.state.username,
+                                        pwd: this.state.password
+                                    });
+
 //                                    Cookies.set('Username', this.username);
                                     this.props.history.push('/home')
                                     alert("Welcome Admin!");
@@ -90,7 +93,10 @@ export class LogIn extends Component {
                 }
                 else
                 {
-
+                    this.props.updateUserinfo({
+                        username: this.state.username,
+                        pwd: this.state.password
+                    });
                     // Bring to student page
                     this.props.history.push('/Student')
                     alert("Welcome Student!");
@@ -207,3 +213,25 @@ export class LogIn extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        userinfo: state.userinfo
+    }
+}
+// 将redux 派发函数映射成组件的props 函数
+const mapDispatchToProps = (
+    dispatch,
+    ownProps
+) => {
+    return {
+        updateUserinfo(payload) {
+            dispatch({
+                type: 'UPDATE_USERINFO',
+                payload
+            });
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(LogIn);
