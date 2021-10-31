@@ -5,25 +5,29 @@ import './StudentProfile.css'
 export default class StudentProfile extends Component {
 
 
-    render(){
-        
-        return(
-            <div className = "grid-container">
-                 <div className = "grid-item">
-                    <img className = "student-image" src ={defualt_Image}></img>
+    render() {
+
+        return (
+            <div>
+                <div>
+                    <img className="student-image" src={defualt_Image}></img>
 
                 </div>
-
-                <div className = "grid-item">
-                    <h1>test</h1>
+                <div className="grid-container">
+                    <div className="grid-item">
+                        <h1>Name:</h1>
+                        <p className = "student-information">Jason McKearney</p>
+                    </div>
+                    <div className="grid-item">
+                        <h1>test2</h1>
+                    </div>
                 </div>
             </div>
-
         );
 
     }
 
-    
+
 
 
 }

@@ -2,22 +2,51 @@
 
 
 float: left;
-height: 70%;
-width: 40%;
+height: 30%;
+width: 10%;
 background-color: black;
 
 }
 
 .grid-container{
     display: grid;
+    margin-top: 3em;
+    margin-left: 15em;
+    width: 100%;
+    float: left;
     grid-template-columns: auto auto auto;
 }
 .grid-item{
 
   
-    padding: 20px;
-    border-width: 3px;
+    border-width: 0px;
+    border-bottom-width: 3px;
+    
     border-color: black;
     border-style: solid;
+    width: 50%;
+    height:60%;
+
+}
+.information-titles{
+
+float: left;
+
+}
+h1{
+
+    float: left;
+    font-size:28px;
+    padding-top: 10px;
+}
+.student-information{
+
+
+    font-size: 24px;
+    float: left;
+    padding-top: 10px;
+    padding-left: 20px;
+    font-family: frank ruhal ribre;
+
 
 }
