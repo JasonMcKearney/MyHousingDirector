@@ -37,30 +37,27 @@ class Student extends Component {
                     })
                 }}>
                     <div>
-                        <Form.Item
-                            name="email"
-                            label="E-mail"
-                            rules={[
-                                {
-                                    type: 'email',
-                                    message: 'The input is not valid E-mail!',
-                                },
-                                {
-                                    required: true,
-                                    message: 'Please input your E-mail!',
-                                },
-                            ]}
-                        >
-                            <Input type="text" onChange={this.email} />
-                        </Form.Item>
+                            <Form.Item
+                                name=" Old password"
+                                label="Old Password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your password!',
+                                    },
+                                ]}
+                                hasFeedback
+                            >
+                                <Input type="text" onChange={this.password} />
+                            </Form.Item>
 
                         <Form.Item
-                            name="password"
-                            label="Password"
+                            name=" New password"
+                            label="New Password"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input your password!',
+                                    message: 'Please input your new password!',
                                 },
                             ]}
                             hasFeedback
@@ -70,17 +67,17 @@ class Student extends Component {
 
                         <Form.Item
                             name="confirm"
-                            label="Confirm Password"
+                            label="Confirm New Password"
                             dependencies={['password']}
                             hasFeedback
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please confirm your password!',
+                                    message: 'Please confirm your new password!',
                                 },
                                 ({ getFieldValue }) => ({
                                     validator(_, value) {
-                                        if (!value || getFieldValue('password') === value) {
+                                        if (!value || getFieldValue('New password') === value) {
                                             return Promise.resolve();
                                         }
                                         return Promise.reject(new Error('The two passwords that you entered do not match!'));
