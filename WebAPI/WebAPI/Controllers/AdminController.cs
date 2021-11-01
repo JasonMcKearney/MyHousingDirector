@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
@@ -110,6 +111,97 @@ namespace WebAPI.Controllers
             }
 
             return new Response { Status = "Success", Message = "Login Successfully" };
+        }
+
+        // Find Student Accounts that match a few characters (Search functionality on Admin page)
+        //[Route("FindStudents/{sUsernameToSearch}")]
+        [Route("FindStudents/{sUsernameToSearch}")]
+        [HttpPost]
+        public List<StudentsViewModel> FindStudents(string sUsernameToSearch)
+        {
+            List <StudentsViewModel> eventData = new List<StudentsViewModel>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                // Inserting data into fields of database
+                MySqlCommand FindTotalUsers = conn.CreateCommand();
+                FindTotalUsers.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.DBUserTbls where username like @username";
+                FindTotalUsers.ExecuteNonQuery();
+
+                // If nNumStudents is 1 then there are at least one student account created to check
+                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+
+                if (nNumStudents >= 1)
+                {
+                    MySqlCommand FindUsersLike = conn.CreateCommand();
+
+                    // Pulls all students usernames like entered characters
+                    FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
+                    FindUsersLike.CommandText = "select username from housingdirector_schema.DBUserTbls where username like @username";
+
+                    FindUsersLike.ExecuteNonQuery();
+
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
+
+                    while (reader.Read()) // Read returns false if the user does not exist!
+                    {
+                        eventData.Add(new StudentsViewModel()
+                        {
+                            username = reader[0].ToString()
+                        });
+                    }
+                    reader.Close();
+                }
+            }
+            return eventData;
+        }
+
+        // Find Student Accounts that match a few characters (Search functionality on Admin page)
+        [Route("FindStudents2")]
+        [HttpGet]
+        public List<StudentsViewModel> FindStudents2()
+        {
+            List<StudentsViewModel> eventData = new List<StudentsViewModel>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                // Inserting data into fields of database
+                MySqlCommand FindTotalUsers = conn.CreateCommand();
+                FindTotalUsers.Parameters.AddWithValue("@username", "Ja" + "%");
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.DBUserTbls where username like @username";
+                FindTotalUsers.ExecuteNonQuery();
+
+                // If nNumStudents is 1 then there are at least one student account created to check
+                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+
+                if (nNumStudents >= 1)
+                {
+                    MySqlCommand FindUsersLike = conn.CreateCommand();
+
+                    // Pulls all students usernames like entered characters
+                    FindUsersLike.Parameters.AddWithValue("@username", "Ja" + "%");
+                    FindUsersLike.CommandText = "select username from housingdirector_schema.DBUserTbls where username like @username";
+
+                    FindUsersLike.ExecuteNonQuery();
+
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
+
+                    while (reader.Read()) // Read returns false if the user does not exist!
+                    {
+                        eventData.Add(new StudentsViewModel()
+                        {
+                            username = reader[0].ToString()
+                        });
+                    }
+                    reader.Close();
+                }
+            }
+            return eventData;
         }
     }
 }
