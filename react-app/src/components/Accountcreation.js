@@ -166,7 +166,7 @@ export default class accountcreation extends Component {
                     ]}
                     hasFeedback
                 >
-                     <Input type="text" onChange={this.password} />
+                     <Input.Password type="text" onChange={this.password} />
                 </Form.Item>
 
                 <Form.Item
@@ -189,7 +189,7 @@ export default class accountcreation extends Component {
                         }),
                     ]}
                 >
-                    <Input type="text" onChange={this.confirmpassword} />
+                    <Input.Password type="text" onChange={this.confirmpassword} />
                 </Form.Item>
 
                 <Form.Item
