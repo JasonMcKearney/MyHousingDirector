@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
+import loginpic1 from '../img/loginpic1.png';
 import './LogIn.css'
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required modules
 import SwiperCore, {
@@ -136,6 +136,13 @@ class LogIn extends Component {
                                 <div className="carouselItem">
                                     <div className="carouselItemTop">
                                         <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic15.nipic.com%2F20110811%2F8029346_082444436000_2.jpg&refer=http%3A%2F%2Fpic15.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635210128&t=8e283b98e9acd56e9adcb990642ee1aa" className="carouselItemTopImg" />
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                            <SwiperSlide key="3">
+                                <div className="carouselItem">
+                                    <div className="carouselItemTop">
+                                        <img src={loginpic1} className="carouselItemTopImg" />
                                     </div>
                                 </div>
                             </SwiperSlide>
