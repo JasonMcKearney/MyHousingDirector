@@ -6,18 +6,21 @@ import { Route } from 'react-router';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import { LogIn } from './components/LogIn';
+import LogIn  from './components/LogIn';
 import { Home } from './components/Home';
-import { Student } from './components/Student';
+import Student from './components/Student';
 import registerServiceWorker from './registerServiceWorker';
 import { CookiesProvider } from 'react-cookie';
 import Search from 'antd/lib/transfer/search';
+import { Provider } from 'react-redux'
+import store from './redux/store';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 
 ReactDOM.render(
 
+    <Provider store={store}>
   <CookiesProvider>
     <BrowserRouter basename={baseUrl}>
       <div style={{
@@ -32,7 +35,8 @@ ReactDOM.render(
         {/* <App /> */}
       </div>
     </BrowserRouter>,
-  </CookiesProvider>,
+        </CookiesProvider>,
+        </Provider>,
   rootElement
 );
 

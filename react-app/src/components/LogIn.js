@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+﻿﻿import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
@@ -16,22 +16,26 @@ import 'swiper/swiper.min.css';
 import 'swiper/components/navigation/navigation.min.css';
 import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
+import Password from 'antd/lib/input/Password';
+import axios from 'axios'
 import Cookies from 'js-cookie'
+
 // Import Cookies
 //import Cookies from 'js-cookie'
 
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
+
 class LogIn extends Component {
 
     constructor() {
         super();
- 
+
         this.state = {
             username: '',
             password: ''
         }
- 
+
         this.password = this.password.bind(this);
         this.username = this.username.bind(this);
         this.login = this.login.bind(this);
@@ -58,41 +62,38 @@ class LogIn extends Component {
             })
         }).then((Response) => Response.json())
             .then((result) => {
-                if (result.status === "Invalid")
-                {
-                        // Admin Log in...
-                        fetch('http://localhost:16648/api/Admin/Login', {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                            },
-                            method: 'POST',
-                            body: JSON.stringify({
-                                username: this.state.username,
-                                password: this.state.password
-                            })
-                        }).then((Response) => Response.json())
-                            .then((result) => {
-                                if (result.status === "Invalid")
-                                {
-                                    this.props.history.push('/LogIn')
-                                    alert("Invalid username or password");
-                                }
-                                else
-                                {
-                                    this.props.updateUserinfo({
-                                        username: this.state.username,
-                                        pwd: this.state.password
-                                    });
+                if (result.status === "Invalid") {
+                    // Admin Log in...
+                    fetch('http://localhost:16648/api/Admin/Login', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: this.state.username,
+                            password: this.state.password
+                        })
+                    }).then((Response) => Response.json())
+                        .then((result) => {
+                            if (result.status === "Invalid") {
+                                this.props.history.push('/LogIn')
+                                alert("Invalid username or password");
+                            }
+                            else {
+                                this.props.updateUserinfo({
+                                    username: this.state.username,
+                                    pwd: this.state.password
+                                });
 
-//                                    Cookies.set('Username', this.username);
-                                    this.props.history.push('/home')
-                                    alert("Welcome Admin!");
-                                }
-                            })
+                                //                                    Cookies.set('Username', this.username);
+                                this.props.history.push('/home')
+                                alert("Welcome Admin!");
+                            }
+                        })
                 }
-                else
-                {
+                else {
+
                     this.props.updateUserinfo({
                         username: this.state.username,
                         pwd: this.state.password
@@ -102,7 +103,7 @@ class LogIn extends Component {
                     alert("Welcome Student!");
                 }
             })
-       
+
     }
 
     onFinish = (values) => {
@@ -165,7 +166,7 @@ class LogIn extends Component {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
-                            //Input= {type="text"  this.state.Password}
+                        //Input= {type="text"  this.state.Password}
                         >
                             <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
@@ -175,7 +176,7 @@ class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button onClick={this.login} 
+                            <Button onClick={this.login}
                                 type="primary" htmlType="submit">
                                 Submit
                             </Button>
