@@ -22,10 +22,12 @@ export class Student extends Component {
           }).then((Response) => Response.json())
           .then((result) => {
               var ID = result.studentID;
+              var username = result.username;
               var firstName = result.firstName;
               var lastName = result.lastName
 
               Cookies.set("ID", ID);
+              Cookies.set("UN", username);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
             })
@@ -69,7 +71,7 @@ export class Student extends Component {
                 </SubMenu>
               </Menu>
             </Sider>
-              <h1>Welcome, {Cookies.get("FN")} {Cookies.get("LN")}!</h1>
+              <h1>Welcome, {Cookies.get("UN")}!</h1>
               <h2>Student ID {Cookies.get("ID")}</h2>
           </Layout>
         </Content>

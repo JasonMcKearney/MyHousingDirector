@@ -95,33 +95,28 @@ namespace WebAPI.Controllers
         public StudentsViewModel GetStudentInfo(StudentsViewModel check)
         {
             System.Diagnostics.Debug.WriteLine(check.username);
+            string usernameResult = null;
+            string studentIDResult = null;
 
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
                 MySqlCommand getID = conn.CreateCommand();
-                MySqlCommand getFirstName = conn.CreateCommand();
-                MySqlCommand getLastName = conn.CreateCommand();
 
-                // Checks to see if there are duplicate usernames
                 getID.Parameters.AddWithValue("@username", check.username);
-                getID.CommandText = "select studentID from housingdirector_schema.DBUserTbls where username = @username";
-                getFirstName.Parameters.AddWithValue("@username", check.username);
-                getFirstName.CommandText = "select firstName from housingdirector_schema.DBUserTbls where username = @username";
-                getLastName.Parameters.AddWithValue("@username", check.username);
-                getLastName.CommandText = "select lastName from housingdirector_schema.DBUserTbls where username = @username";
+                getID.CommandText = "select studentID, username from housingdirector_schema.DBUserTbls where username = @username";
+                
+                MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
-                string IDResult = (string)getID.ExecuteScalar();
-                string FNResult = (string)getFirstName.ExecuteScalar();
-                string LNResult = (string)getLastName.ExecuteScalar();
+                while (ReturnedInfo.Read())
+                {
+                    usernameResult = ReturnedInfo.GetString(1);
+                    studentIDResult = ReturnedInfo.GetString(0);
+                }
+                ReturnedInfo.Close();
 
-                System.Diagnostics.Debug.WriteLine(IDResult);
-                System.Diagnostics.Debug.WriteLine(FNResult);
-                System.Diagnostics.Debug.WriteLine(LNResult);
-
-
-                return new StudentsViewModel { studentID = IDResult,  firstName = FNResult, lastName = LNResult};
             }
+            return new StudentsViewModel { studentID = studentIDResult, username = usernameResult };
         }
 
         // DELETE: api/DStudent/5
@@ -144,19 +139,6 @@ namespace WebAPI.Controllers
         {
             return _context.DBUserTbls.Any(e => e.user_id == id);
         }
-
-        /*        [Route("StudentExists")]
-                public object CheckStudentDetails(string user_name)
-                {
-                    var obj = _context.DBUserTbls.Where(e => e.username == user_name).ToList().FirstOrDefault();
-                    return new Response
-                    {
-                        Status = "test",
-                        Message = "test Successfuly"
-                    };
-                }
-        */
-
 
         [Route("api/DStudent/Login")]
         [HttpPost]
