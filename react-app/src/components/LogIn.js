@@ -1,9 +1,10 @@
-﻿import React, { Component } from 'react';
+﻿﻿import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
 import dormpicture from '../img/dormpicture.png';
+import loginpic1 from '../img/loginpic1.png';
 import './LogIn.css'
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required modules
 import SwiperCore, {
@@ -24,16 +25,17 @@ import Cookies from 'js-cookie'
 
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
-export class LogIn extends Component {
+
+class LogIn extends Component {
 
     constructor() {
         super();
- 
+
         this.state = {
             username: '',
             password: ''
         }
- 
+
         this.password = this.password.bind(this);
         this.username = this.username.bind(this);
         this.login = this.login.bind(this);
@@ -60,43 +62,48 @@ export class LogIn extends Component {
             })
         }).then((Response) => Response.json())
             .then((result) => {
-                if (result.status === "Invalid")
-                {
-                        // Admin Log in...
-                        fetch('http://localhost:16648/api/Admin/Login', {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                            },
-                            method: 'POST',
-                            body: JSON.stringify({
-                                username: this.state.username,
-                                password: this.state.password
-                            })
-                        }).then((Response) => Response.json())
-                            .then((result) => {
-                                if (result.status === "Invalid")
-                                {
-                                    this.props.history.push('/LogIn')
-                                    alert("Invalid username or password");
-                                }
-                                else
-                                {
-//                                    Cookies.set('Username', this.username);
-                                    this.props.history.push('/home')
-                                    alert("Welcome Admin!");
-                                }
-                            })
-                }
-                else
-                {
+                if (result.status === "Invalid") {
+                    // Admin Log in...
+                    fetch('http://localhost:16648/api/Admin/Login', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: this.state.username,
+                            password: this.state.password
+                        })
+                    }).then((Response) => Response.json())
+                        .then((result) => {
+                            if (result.status === "Invalid") {
+                                this.props.history.push('/LogIn')
+                                alert("Invalid username or password");
+                            }
+                            else {
+                                this.props.updateUserinfo({
+                                    username: this.state.username,
+                                    pwd: this.state.password
+                                });
 
+                                //                                    Cookies.set('Username', this.username);
+                                this.props.history.push('/home')
+                                alert("Welcome Admin!");
+                            }
+                        })
+                }
+                else {
+
+                    this.props.updateUserinfo({
+                        username: this.state.username,
+                        pwd: this.state.password
+                    });
                     // Bring to student page
                     this.props.history.push('/Student')
                     alert("Welcome Student!");
                 }
             })
-       
+
     }
 
     onFinish = (values) => {
@@ -132,6 +139,13 @@ export class LogIn extends Component {
                                     </div>
                                 </div>
                             </SwiperSlide>
+                            <SwiperSlide key="3">
+                                <div className="carouselItem">
+                                    <div className="carouselItemTop">
+                                        <img src={loginpic1} className="carouselItemTopImg" />
+                                    </div>
+                                </div>
+                            </SwiperSlide>
                         </Swiper>
                     </div>
                 </div>
@@ -159,7 +173,7 @@ export class LogIn extends Component {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
-                            //Input= {type="text"  this.state.Password}
+                        //Input= {type="text"  this.state.Password}
                         >
                             <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
@@ -169,7 +183,7 @@ export class LogIn extends Component {
                         </Form.Item>
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button onClick={this.login} 
+                            <Button onClick={this.login}
                                 type="primary" htmlType="submit">
                                 Submit
                             </Button>
@@ -207,3 +221,25 @@ export class LogIn extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        userinfo: state.userinfo
+    }
+}
+// 将redux 派发函数映射成组件的props 函数
+const mapDispatchToProps = (
+    dispatch,
+    ownProps
+) => {
+    return {
+        updateUserinfo(payload) {
+            dispatch({
+                type: 'UPDATE_USERINFO',
+                payload
+            });
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(LogIn);

@@ -1,13 +1,17 @@
 ﻿import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import { Layout, Menu, Breadcrumb, Button, Form, Modal, Input } from 'antd';
+import { Route, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'
 import './Student.css';
 import Cookies from 'js-cookie';
+import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
-export class Student extends Component {
+
+class Student extends Component {
   constructor(props){
     super(props);
     fetch('http://localhost:16648/api/DStudent/', {
@@ -22,61 +26,138 @@ export class Student extends Component {
           }).then((Response) => Response.json())
           .then((result) => {
               var ID = result.studentID;
-              var username = result.username;
               var firstName = result.firstName;
               var lastName = result.lastName
 
               Cookies.set("ID", ID);
-              Cookies.set("UN", username);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
             })
-  }
-  render() {
-    return (
-      <Layout style={{ height: '100%' }}>
-        <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">Home</Menu.Item>
-          <Menu.Item key="2">nav 1</Menu.Item>
-          <Menu.Item key="3">nav 2</Menu.Item>
-        </Menu>
-        <Content style={{ padding: '0 50px' }}>
-          <Breadcrumb style={{ margin: '40px 0' }}>
-          </Breadcrumb>
-          <Layout className="Student-page-background" style={{ height: '100%' }}>
-            <Sider className="Student-page-Sider">
-              <Menu
-                mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
-                style={{ height: '100%' }}
-              >
-                <SubMenu key="sub1" icon={<UserOutlined />} title="subnav 1">
-                  <Menu.Item key="1">option1</Menu.Item>
-                  <Menu.Item key="2">option2</Menu.Item>
-                  <Menu.Item key="3">option3</Menu.Item>
-                  <Menu.Item key="4">option4</Menu.Item>
-                </SubMenu>
-                <SubMenu key="sub2" icon={<LaptopOutlined />} title="subnav 2">
-                  <Menu.Item key="5">option5</Menu.Item>
-                  <Menu.Item key="6">option6</Menu.Item>
-                  <Menu.Item key="7">option7</Menu.Item>
-                  <Menu.Item key="8">option8</Menu.Item>
-                </SubMenu>
-                <SubMenu key="sub3" icon={<NotificationOutlined />} title="subnav 3">
-                  <Menu.Item key="9">option9</Menu.Item>
-                  <Menu.Item key="10">option10</Menu.Item>
-                  <Menu.Item key="11">option11</Menu.Item>
-                  <Menu.Item key="12">option12</Menu.Item>
-                </SubMenu>
-              </Menu>
-            </Sider>
-              <h1>Welcome, {Cookies.get("UN")}!</h1>
-              <h2>Student ID {Cookies.get("ID")}</h2>
-          </Layout>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}></Footer>
-      </Layout>
+    }
+
+    state = {
+        showModal: false
+    }
+
+    componentDidMount() {
+        console.log("this.props = ", this.props.userinfo)
+        let { username, pwd } = this.props.userinfo;
+        if (pwd == 'george') {
+            this.setState({
+                showModal: true
+            })
+        }
+    }
+
+
+    render() {
+        let { showModal } = this.state;
+        return (
+            <Layout style={{ height: '100%' }}>
+                <div>
+                    <Modal title="Change Your password" visible={showModal} onOk={() => {
+                    }} onCancel={() => {
+                        this.setState({
+                            showModal: false
+                        })
+                    }}>
+                        <div>
+                            <Form.Item
+                                name=" Old password"
+                                label="Old Password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your password!',
+                                    },
+                                ]}
+                                hasFeedback
+                            >
+                                <Input type="text" onChange={this.password} />
+                            </Form.Item>
+
+                            <Form.Item
+                                name=" New password"
+                                label="New Password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your new password!',
+                                    },
+                                ]}
+                                hasFeedback
+                            >
+                                <Input type="text" onChange={this.password} />
+                            </Form.Item>
+
+                            <Form.Item
+                                name="confirm"
+                                label="Confirm New Password"
+                                dependencies={['password']}
+                                hasFeedback
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please confirm your new password!',
+                                    },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('New password') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                        },
+                                    }),
+                                ]}
+                            >
+                                <Input type="text" onChange={this.confirmpassword} />
+                            </Form.Item>
+
+                        </div>
+                    </Modal>
+                        <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
+                            <Menu.Item key="1">
+                                <Link to="/student/home">home</Link>
+                            </Menu.Item>
+                            <Menu.Item key="2">
+                                <Link to="/student/nav1">nav1</Link>
+                            </Menu.Item>
+                            <Menu.Item key="3">
+                                <Link to="/student/nav2">nav2</Link>
+                            </Menu.Item>
+                        </Menu>
+                        <div>
+                            <Button onClick={() => {
+                                this.props.history.push('/LogIn');
+                            }} type="primary" htmlType="Logout">
+                                Logout
+                            </Button>
+
+                    </div>
+                    </div>
+                      <Content style={{ padding: '0 50px' }}>
+                            <Breadcrumb style={{ margin: '40px 0' }}>
+                            </Breadcrumb>
+                            <Layout className="Student-page-background" style={{ height: '100%' }}>
+                                <Content style={{ margin: '24px 16px 0' }}>
+                                    <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
+                                        <Switch>
+
+                                            <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
+                                            <Route path='/student/nav1' render={() => { return (<h1>nav1</h1>) }} />
+                                            <Route path='/student/nav2' render={() => { return (<h1>nav2</h1>) }} />
+                                            <Route path='/student' render={() => { return (<h1>Home</h1>) }} />
+
+                                        </Switch>
+
+
+                                    </div>
+
+                                </Content>
+                            </Layout>
+                      </Content>
+                <Footer style={{ textAlign: 'center' }}></Footer>
+            </Layout>
     );
 
   }
@@ -88,3 +169,24 @@ export class Student extends Component {
 
 
 
+const mapStateToProps = (state) => {
+    return {
+        userinfo: state.userinfo
+    }
+}
+
+const mapDispatchToProps = (
+    dispatch,
+    ownProps
+) => {
+    return {
+        updateUserinfo(payload) {
+            dispatch({
+                type: 'UPDATE_USERINFO',
+                payload
+            });
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(Student);
