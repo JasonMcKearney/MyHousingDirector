@@ -41,26 +41,26 @@ export class Home extends Component {
                         </div>
 
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
-                            Welcome!
+                            Welcome, { Cookies.get("username") }
                         </div>
 
 
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
-                                <Link to="/home/Search">Homepage</Link>
+                                <Link to="/home/Search">Search for user</Link>
                             
                         </Menu.Item>
                             <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
                             
-                                <Link to="/home/Accountcreation">Accountcreation</Link>
+                                <Link to="/home/Accountcreation">Create new user</Link>
                         </Menu.Item>
 
                         <Menu.Item key="3" /*icon={<UploadOutlined />}*/>
-                                <Link to="/home/nav3">nav3</Link>
+                                <Link to="/home/nav3">Delete a user</Link>
                             </Menu.Item>
 
                         <Menu.Item key="4" /*icon={<UserOutlined />}*/>
-                                <Link to="/home/nav4">nav4</Link>
+                                <Link to="/home/nav4">Move a user</Link>
                             </Menu.Item>
 
                         </Menu>
@@ -68,8 +68,8 @@ export class Home extends Component {
 
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
-                                    this.props.history.push('/LogIn');
                                     Cookies.remove('username')
+                                    this.props.history.push('/LogIn');
                             }} type="primary" htmlType="Logout">
                                 Logout
                             </Button>

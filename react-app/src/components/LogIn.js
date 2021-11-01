@@ -89,7 +89,6 @@ class LogIn extends Component {
 
                                 //                                    Cookies.set('Username', this.username);
                                 this.props.history.push('/home')
-                                alert("Welcome Admin!");
                             }
                         })
                 }
@@ -101,7 +100,6 @@ class LogIn extends Component {
                     });
                     // Bring to student page
                     this.props.history.push('/Student/home')
-                    alert("Welcome Student!");
                 }
             })
 
@@ -174,7 +172,6 @@ class LogIn extends Component {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
-                        //Input= {type="text"  this.state.Password}
                         >
                             <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
@@ -191,7 +188,7 @@ class LogIn extends Component {
                         </Form.Item>
 
                         <div>
-                            <a>Forget password</a>
+                            <a>Forgot password</a>
                         </div>
                     </Form>
                 </div>
