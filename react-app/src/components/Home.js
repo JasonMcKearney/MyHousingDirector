@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
-import Homepagelogo from '../img/Homepage-logo.gif';
+import logo from '../img/logo.png'
 import Cookies from 'js-cookie';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -37,7 +37,7 @@ export class Home extends Component {
                     }}
                 >
                         <div className="Homepagelogo" >
-                            <img src={Homepagelogo} className="Homepagelogo" />
+                            <img src={logo} className="Homepagelogo" />
                         </div>
 
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
