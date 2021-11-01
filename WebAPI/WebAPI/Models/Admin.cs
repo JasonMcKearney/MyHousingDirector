@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Models
 {
-	public class DAdmin
+	public class Admin
 	{
         [Key]
         public int admin_id { get; set; }

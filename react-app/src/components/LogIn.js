@@ -51,7 +51,7 @@ class LogIn extends Component {
     }
     login(event) {
         // Student Login in...
-        fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
+        fetch('http://localhost:16648/api/Student/api/DStudent/Login', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -100,7 +100,7 @@ class LogIn extends Component {
                         pwd: this.state.password
                     });
                     // Bring to student page
-                    this.props.history.push('/Student')
+                    this.props.history.push('/Student/home')
                     alert("Welcome Student!");
                 }
             })

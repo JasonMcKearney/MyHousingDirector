@@ -14,7 +14,7 @@ const { Header, Content, Footer, Sider } = Layout;
 class Student extends Component {
   constructor(props){
     super(props);
-    fetch('http://localhost:16648/api/DStudent/', {
+    fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -125,13 +125,17 @@ class Student extends Component {
                             <Menu.Item key="3">
                                 <Link to="/student/nav2">nav2</Link>
                             </Menu.Item>
+                            <Menu.Item key="4">
+                              <Button onClick={() => {
+                                  this.props.history.push('/LogIn');
+                              }} type="primary" htmlType="Logout">
+                                  Logout
+                              </Button>
+                            </Menu.Item>
                         </Menu>
+                        
                         <div>
-                            <Button onClick={() => {
-                                this.props.history.push('/LogIn');
-                            }} type="primary" htmlType="Logout">
-                                Logout
-                            </Button>
+                            
 
                     </div>
                     </div>
@@ -147,6 +151,8 @@ class Student extends Component {
                                             <Route path='/student/nav2' render={() => { return (<h1>nav2</h1>) }} />
                                             <Route path='/student' render={() => { return (<h1>Home</h1>) }} />
                                         </Switch>
+                                        <h2>Welcome, {Cookies.get("username")}</h2>
+                                        <h2>Your student ID is: {Cookies.get("ID")}</h2>
                                     </div>
 
                                 </Content>
