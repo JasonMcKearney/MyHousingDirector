@@ -39,6 +39,8 @@ export default class accountcreation extends Component {
  
         this.state = {
             username: '',
+            firstname: '',
+            lastname:'',
             email: '',
             password: '',
             confirmpassword: '',
@@ -48,6 +50,8 @@ export default class accountcreation extends Component {
         }
  
         this.username = this.username.bind(this);
+        this.firstname = this.firstname.bind(this);
+        this.lastname = this.lastname.bind(this);
         this.email = this.email.bind(this);
         this.password = this.password.bind(this);
         this.confirmpassword = this.confirmpassword.bind(this);
@@ -58,6 +62,12 @@ export default class accountcreation extends Component {
     }
     username(event) {
         this.setState({ username: event.target.value })
+    }
+    firstname(event) {
+        this.setState({ firstname: event.target.value })
+    }
+    lastname(event) {
+        this.setState({ lastname: event.target.value })
     }
     email(event) {
         this.setState({ email: event.target.value })
@@ -88,6 +98,8 @@ export default class accountcreation extends Component {
             method: 'POST',
             body: JSON.stringify({
                 username: this.state.username,
+                firstname: this.state.firstname,
+                lastname: this.state.lastname,
                 email: this.state.email,
                 password: this.state.password,
                 confirmpassword: this.state.confirmpassword,
@@ -138,6 +150,32 @@ export default class accountcreation extends Component {
     render() {          
         return (
             <Form>
+                <Form.Item
+                    name="firstname"
+                    label="First Name"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your first name!',
+                        },
+                    ]}
+                >
+                    <Input type="text" onChange={this.firstname} />
+                </Form.Item>
+
+                <Form.Item
+                    name="lastname"
+                    label="Last Name"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your last name!',
+                        },
+                    ]}
+                >
+                    <Input type="text" onChange={this.lastname} />
+                </Form.Item>
+
                 <Form.Item
                     name="email"
                     label="E-mail"
