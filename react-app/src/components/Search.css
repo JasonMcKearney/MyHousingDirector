@@ -3,14 +3,22 @@
   overflow: hidden;
   float:center; 
 }
+#heading{
+  font-family: frank ruhal ribre;
+
+}
 #searchBar{
 
     height: 5vh;
     width: 95%;
+    margin-left:5px;
+    padding-left:5px;
     float: left;
-    border-radius:10px;
+    border-top-left-radius:10px;
+    border-bottom-left-radius:10px;
     border-width: 3px;
     border-style: solid;
+    border-color: black;
     font-size: 3vh;
     font-family: frank ruhal ribre;
     
@@ -106,7 +114,7 @@
  
   .result-node{
 
-    border-width: 2px;
+    border-width: 3px;
     border-style: solid;
     border-color: black;
     border-radius: 10px;
@@ -118,7 +126,7 @@
     float: left;
     margin-top: 10px;
     margin-left:1%;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bolder;
 
   }

@@ -63,6 +63,7 @@ class LogIn extends Component {
             })
         }).then((Response) => Response.json())
             .then((result) => {
+
                 if (result.status === "Invalid") {
                     // Admin Log in...
                     fetch('http://localhost:16648/api/Admin/Login', {
@@ -195,6 +196,8 @@ class LogIn extends Component {
                         </div>
                     </Form>
                 </div>
+
+
             </div>
         );
     }
