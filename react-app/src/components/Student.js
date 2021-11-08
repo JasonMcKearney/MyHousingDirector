@@ -27,7 +27,7 @@ class Student extends Component {
           .then((result) => {
               var ID = result.studentID;
               var firstName = result.firstName;
-              var lastName = result.lastName
+              var lastName = result.lastName;
 
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
@@ -142,15 +142,11 @@ class Student extends Component {
                                 <Content style={{ margin: '24px 16px 0' }}>
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
-
                                             <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
                                             <Route path='/student/nav1' render={() => { return (<h1>nav1</h1>) }} />
                                             <Route path='/student/nav2' render={() => { return (<h1>nav2</h1>) }} />
                                             <Route path='/student' render={() => { return (<h1>Home</h1>) }} />
-
                                         </Switch>
-
-
                                     </div>
 
                                 </Content>
@@ -159,10 +155,7 @@ class Student extends Component {
                 <Footer style={{ textAlign: 'center' }}></Footer>
             </Layout>
     );
-
   }
-
-
 }
 
 

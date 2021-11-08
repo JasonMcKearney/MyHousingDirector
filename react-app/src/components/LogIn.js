@@ -2,8 +2,9 @@
 import { connect } from 'react-redux'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
-import dormpicture from '../img/dormpicture.png';
 import loginpic1 from '../img/loginpic1.png';
+import loginpic2 from '../img/loginpic2.JPG';
+import loginpic3 from '../img/loginpic3.JPG';
 import './LogIn.css'
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required modules
@@ -129,13 +130,13 @@ class LogIn extends Component {
                         }} pagination={true}>
                             <SwiperSlide key="1">
                                 <div className="carouselItem">
-                                    <img src={dormpicture} className="carouselItemTopImg" />
+                                    <img src={loginpic3} className="carouselItemTopImg" />
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide key="2">
                                 <div className="carouselItem">
                                     <div className="carouselItemTop">
-                                        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic15.nipic.com%2F20110811%2F8029346_082444436000_2.jpg&refer=http%3A%2F%2Fpic15.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635210128&t=8e283b98e9acd56e9adcb990642ee1aa" className="carouselItemTopImg" />
+                                        <img src={loginpic2} className="carouselItemTopImg" />
                                     </div>
                                 </div>
                             </SwiperSlide>
@@ -194,29 +195,6 @@ class LogIn extends Component {
                         </div>
                     </Form>
                 </div>
-
-                {/* <form className= 'login-box' >
-                    <label className = 'label '>
-                        Email:
-                        
-                    </label>
-                    <input className='input-box' type="text" name="email" />
-                    <label className='label'>
-                        Password:
-                       
-                    </label>
-                    <input className='input-box' type="password" name="password" />
-                    <input type="submit" value="Submit" />
-                </form> 
-
-
-                //--------------------- ButtonClick in order to go to login function above--------------
-                <Button onClick={this.login} 
-                                               type="primary" htmlType="submit">
-                                Submit
-                            </Button>
-                
-                */}
             </div>
         );
     }
@@ -227,7 +205,7 @@ const mapStateToProps = (state) => {
         userinfo: state.userinfo
     }
 }
-// 将redux 派发函数映射成组件的props 函数
+
 const mapDispatchToProps = (
     dispatch,
     ownProps
