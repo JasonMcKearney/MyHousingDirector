@@ -19,27 +19,20 @@ namespace WebAPI
 {
 	public class Startup
 	{
+		private readonly IConfiguration _configuration;
+
 		public Startup(IConfiguration configuration)
 		{
-			Configuration = configuration;
+			_configuration = configuration;
 		}
-
-		public IConfiguration Configuration { get; }
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-
 			services.AddControllers();
 
-			//services.AddDbContext<HousingDBContext>(options => 
-			//options.usemysql)
-			//	services.AddDbContext<HousingDBContext>(options =>
-			//	options.UseMySql(Configuration.GetConnectionString("DevConnection")));
-			//services.Add(new ServiceDescriptor(typeof(HousingDBContext), new HousingDBContext(Configuration.GetConnectionString("DevConnection"))));
-
 			// Replace with your connection string.
-			var connectionString = Configuration.GetConnectionString("DevConnection");
+			var connectionString = _configuration.GetConnectionString("DevConnection");
 
 			// Replace with your server version and type.
 			// Use 'MariaDbServerVersion' for MariaDB.
@@ -53,22 +46,13 @@ namespace WebAPI
 					.UseMySql(connectionString, serverVersion)
 			);
 
-
-///*
+			///*
 			services.AddCors(c =>
 			{
 				c.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin()
 										.AllowAnyHeader()
 										.AllowAnyMethod());
 			});
-
-/*
-			services.AddCors(c =>
-			{
-				c.AddPolicy("AllowOrigin", options => options.WithOrigins("https://localhost:44323"));
-			});
-*/
-
 
 			services.AddSwaggerGen(c =>
 			{
@@ -79,29 +63,12 @@ namespace WebAPI
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-/*
-			app.UseCors(builder => builder
-				.AllowAnyOrigin()
-				.AllowAnyMethod()
-				.AllowAnyHeader()
-				.AllowCredentials());
-*/
-
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI v1"));
 			}
-
-
-		/*	// global cors policy
-			app.UseCors(x => x
-				.AllowAnyMethod()
-				.AllowAnyHeader()
-				.SetIsOriginAllowed(origin => true) // allow any origin
-				.AllowCredentials()); // allow credentials
-		*/
 
 			app.UseRouting();
 
@@ -117,8 +84,6 @@ namespace WebAPI
 			{
 				endpoints.MapControllers();
 			});
-
-
 		}
 	}
 }

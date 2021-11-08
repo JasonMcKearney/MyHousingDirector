@@ -1,9 +1,11 @@
-﻿import React, { Component } from 'react';
-import { Form, Input, Button, Checkbox, Carousel, Select, message } from 'antd';
+﻿﻿import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import logo from '../img/logo.png';
-import dormpicture from '../img/dormpicture.png';
+import loginpic1 from '../img/loginpic1.png';
+import loginpic2 from '../img/loginpic2.JPG';
+import loginpic3 from '../img/loginpic3.JPG';
 import './LogIn.css'
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import Swiper core and required modules
 import SwiperCore, {
@@ -17,20 +19,22 @@ import 'swiper/components/pagination/pagination.min.css';
 import 'swiper/components/scrollbar/scrollbar.min.css';
 import Password from 'antd/lib/input/Password';
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
+// Import Cookies
+//import Cookies from 'js-cookie'
 
 // install Swiper modules
-const Option = Select.Option;
 SwiperCore.use([Pagination, Autoplay]);
-export class LogIn extends Component {
+
+class LogIn extends Component {
 
     constructor() {
         super();
 
         this.state = {
             username: '',
-            password: '',
-            usertype: 'Admin'
+            password: ''
         }
 
         this.password = this.password.bind(this);
@@ -40,11 +44,13 @@ export class LogIn extends Component {
 
     username(event) {
         this.setState({ username: event.target.value })
+        Cookies.set("username", event.target.value);
     }
     password(event) {
         this.setState({ password: event.target.value })
     }
     login(event) {
+        // Student Login in...
         fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
             headers: {
                 'Content-Type': 'application/json',
@@ -57,18 +63,49 @@ export class LogIn extends Component {
             })
         }).then((Response) => Response.json())
             .then((result) => {
-                if (result.status === "Invalid")
-                    // this.props.history.push('/LogIn')
-                    message.error('Invalid Username or Passsword!')
-                else
-                    if(this.state.usertype == 'Admin'){
-                        this.props.history.push('/home/Search')
-                    }
-                    else{
-                        this.props.history.push('/student')
-                    }
-                    
+
+                if (result.status === "Invalid") {
+                    // Admin Log in...
+                    fetch('http://localhost:16648/api/Admin/Login', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        method: 'POST',
+                        body: JSON.stringify({
+                            username: this.state.username,
+                            password: this.state.password
+                        })
+                    }).then((Response) => Response.json())
+                        .then((result) => {
+                            if (result.status === "Invalid") {
+                                this.props.history.push('/LogIn')
+                                alert("Invalid username or password");
+                            }
+                            else {
+                                this.props.updateUserinfo({
+                                    username: this.state.username,
+                                    pwd: this.state.password
+                                });
+
+                                //                                    Cookies.set('Username', this.username);
+                                this.props.history.push('/home')
+                                alert("Welcome Admin!");
+                            }
+                        })
+                }
+                else {
+
+                    this.props.updateUserinfo({
+                        username: this.state.username,
+                        pwd: this.state.password
+                    });
+                    // Bring to student page
+                    this.props.history.push('/Student')
+                    alert("Welcome Student!");
+                }
             })
+
     }
 
     onFinish = (values) => {
@@ -94,13 +131,20 @@ export class LogIn extends Component {
                         }} pagination={true}>
                             <SwiperSlide key="1">
                                 <div className="carouselItem">
-                                    <img src={dormpicture} className="carouselItemTopImg" />
+                                    <img src={loginpic3} className="carouselItemTopImg" />
                                 </div>
                             </SwiperSlide>
                             <SwiperSlide key="2">
                                 <div className="carouselItem">
                                     <div className="carouselItemTop">
-                                        <img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic15.nipic.com%2F20110811%2F8029346_082444436000_2.jpg&refer=http%3A%2F%2Fpic15.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1635210128&t=8e283b98e9acd56e9adcb990642ee1aa" className="carouselItemTopImg" />
+                                        <img src={loginpic2} className="carouselItemTopImg" />
+                                    </div>
+                                </div>
+                            </SwiperSlide>
+                            <SwiperSlide key="3">
+                                <div className="carouselItem">
+                                    <div className="carouselItemTop">
+                                        <img src={loginpic1} className="carouselItemTopImg" />
                                     </div>
                                 </div>
                             </SwiperSlide>
@@ -122,19 +166,6 @@ export class LogIn extends Component {
                         autoComplete="off"
                         className="form"
                     >
-
-                        <Form.Item>
-                            <Select value={this.state.usertype} onChange={(value) => {
-                                this.setState({ usertype: value })
-            
-                            }} >
-
-                                <Option value="Admin">Admin</Option>
-                                <Option value="Student">Student</Option>
-
-                            </Select>
-                        </Form.Item>
-
                         <Form.Item
                             name="username"
                             rules={[{ required: true, message: 'Please input your username!' }]}                        >
@@ -166,8 +197,30 @@ export class LogIn extends Component {
                     </Form>
                 </div>
 
-             
+
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        userinfo: state.userinfo
+    }
+}
+
+const mapDispatchToProps = (
+    dispatch,
+    ownProps
+) => {
+    return {
+        updateUserinfo(payload) {
+            dispatch({
+                type: 'UPDATE_USERINFO',
+                payload
+            });
+        }
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(LogIn);

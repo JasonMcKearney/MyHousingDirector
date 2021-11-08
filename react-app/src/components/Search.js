@@ -1,54 +1,66 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './Search.css';
+//import Cookies from 'js-cookie';
+import axios from 'axios'
+import { tsParameterProperty } from '@babel/types';
+import { useParams } from 'react-router';
 
-export default class Search extends Component {
-
-    constructor() {
-        super();
+export default class search extends Component {
+    constructor(props) {
+        super(props);
 
         this.state = {
-            SearchString: ''
+            searchText : '',
+            searchResults: ''
         }
-
-        this.SearchString= this.SearchString.bind(this);
-      
+        this.getResults = this.getResults.bind(this);
+        this.searchText = this.searchText.bind(this);
     }
 
-    SearchString(event) 
-    {
-        this.setState({ SearchString: event.target.value })
+
+    searchText(event) {
+        this.setState({ searchText: event.target.value })
     }
-    SendAdminSearch(event)
-    {
-        fetch('http://localhost:16648/api/DStudent/api/DStudent/SearchStudent', {
-            headers: {
+    getResults(){
+        let currentComponent = this;
+        var test = this.state.searchText;
+        // Passing parameter to Web API through address
+        fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {                
+
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'POST',
-            body: JSON.stringify({
-                SearchString: this.state.SearchString
-            })
-        }).then((Response) => Response.json())
-        .then((result) => {
-            if (result.status === "Invalid"){
-                // this.props.history.push('/LogIn')
+
+        }).then(res=>res.clone().json())
+        .then(function(res) {
+            console.log("hello " + res[0].username)
+            var loopData = ''
+            var i;
+            for (i = 0; i < res.length; i++)
+            {
+                console.log("Next User: " + res[i].username)
+                loopData += `<li>${res[i].username}</li>`
             }
-            
-                
+            currentComponent.setState({searchResults: loopData})
         })
-
     }
+    
     render() {
-
+        const {searchResults} = this.state
+        
         return (
 
             <div className="container-search">
                 <div >
                     <h1 id='heading'> Search A Student </h1>
                     <div>
+
                         <form>
                             <div >
 
@@ -68,10 +80,8 @@ export default class Search extends Component {
                         </form>
 
                     </div>
-
-
-
                 </div>
+
 
                 <div className="resultsBox">
                     <div className ="result-node"> 
@@ -82,20 +92,8 @@ export default class Search extends Component {
                     </div>
 
                 </div>
+
             </div>
         );
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-};
+    } 
+}
