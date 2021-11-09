@@ -57,38 +57,30 @@ export default class search extends Component {
         return (
 
             <div className="container-search">
-                <div >
-                    <h1 id='heading'> Search A Student </h1>
-                    <div>
-                    <div id = "wrapper">    
-                        <form>
-                            <input type= "text" id = "searchBar" onChange ={this.searchText} Placeholder="Please input a Students name or ID" />
-                            <button  onClick={this.getResults} id = "primary-button" className="primary-button" htmlType="submit" >Search </button>
-            
-                               
-
-                           
-
-
-                        </form>
-                     </div>
-
-                    </div>
+            <div >
+                <h1>Search</h1>
+                <div>
+                    <Form>
+                        <Form.Item>
+                            <Input type="text" onChange={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
+                        </Form.Item>
+                        <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
+                    </Form>
                 </div>
-
-
-                <div className="resultsBox">
-                    <div> 
-                   
-                            <ul>
-                                <Link className= "student-name" to={'/StudentProfile'}
-                                    dangerouslySetInnerHTML={{__html: searchResults}}>    
-                                </Link>   
-                            </ul>    
-                    </div>
-                </div>
-
             </div>
+
+            <section>  
+                <div>     
+                    <div className="resultsBox"> 
+                        <ul>
+                            <Link className= "student-name" to={'/home/StudentProfile'}
+                                dangerouslySetInnerHTML={{__html: searchResults}}>    
+                            </Link>   
+                        </ul>    
+                    </div>  
+                </div>  
+            </section> 
+        </div>
         );
     } 
 }
