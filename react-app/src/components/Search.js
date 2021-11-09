@@ -20,7 +20,6 @@ export default class search extends Component {
         this.searchText = this.searchText.bind(this);
     }
 
-
     searchText(event) {
         this.setState({ searchText: event.target.value })
     }
@@ -31,12 +30,10 @@ export default class search extends Component {
         fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {                
-
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'POST',
-
         }).then(res=>res.clone().json())
         .then(function(res) {
             console.log("hello " + res[0].username)
@@ -55,8 +52,8 @@ export default class search extends Component {
         const {searchResults} = this.state
         
         return (
-
             <div className="container-search">
+
             <div >
                 <h1>Search</h1>
                 <div>
@@ -67,6 +64,7 @@ export default class search extends Component {
                                <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
                     </form>
                 </div>
+
             </div>
 
             <section>  
