@@ -53,30 +53,32 @@ export default class search extends Component {
         
         return (
             <div className="container-search">
-                <div >
-                    <h1>Search</h1>
-                    <div>
-                        <Form>
-                            <Form.Item>
-                                <Input type="text" onChange={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
-                            </Form.Item>
-                            <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
-                        </Form>
-                    </div>
+
+            <div >
+                <h1>Search</h1>
+                <div>
+                    <Form>
+                        <Form.Item>
+                            <Input type="text" onChange={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
+                        </Form.Item>
+                        <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
+                    </Form>
                 </div>
 
-                <section>  
-                    <div>     
-                        <div className="resultsBox"> 
-                            <ul>
-                                <Link className= "student-name" to={'/StudentProfile'}
-                                    dangerouslySetInnerHTML={{__html: searchResults}}>    
-                                </Link>   
-                            </ul>    
-                        </div>  
-                    </div>  
-                </section> 
             </div>
+
+            <section>  
+                <div>     
+                    <div className="resultsBox"> 
+                        <ul>
+                            <Link className= "student-name" to={'/home/StudentProfile'}
+                                dangerouslySetInnerHTML={{__html: searchResults}}>    
+                            </Link>   
+                        </ul>    
+                    </div>  
+                </div>  
+            </section> 
+        </div>
         );
     } 
 }
