@@ -20,7 +20,6 @@ export default class search extends Component {
         this.searchText = this.searchText.bind(this);
     }
 
-
     searchText(event) {
         this.setState({ searchText: event.target.value })
     }
@@ -31,12 +30,10 @@ export default class search extends Component {
         fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {                
-
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'POST',
-
         }).then(res=>res.clone().json())
         .then(function(res) {
             console.log("hello " + res[0].username)
@@ -55,44 +52,30 @@ export default class search extends Component {
         const {searchResults} = this.state
         
         return (
-
             <div className="container-search">
                 <div >
-                    <h1 id='heading'> Search A Student </h1>
+                    <h1>Search</h1>
                     <div>
-
-                        <form>
-                            <div >
-
-                                <div id = "wrapper">
-                                    <div >
-                                     <input id = "searchBar" OnChange ={this.SearchString} Placeholder="Please input a Students name or ID" />
-                                     </div>
-                                   
-                                    <div >
-                                        <button id = "primary-button" OnClick={this.SendAdminSearch} ClassName="primary-button" htmlType="submit" >Search </button>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-                        </form>
-
+                        <Form>
+                            <Form.Item>
+                                <Input type="text" onChange={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
+                            </Form.Item>
+                            <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
+                        </Form>
                     </div>
                 </div>
 
-
-                <div className="resultsBox">
-                    <div className ="result-node"> 
-                   
-                    {/* <Link className = "student-name" to="/home/StudentProfile">Jason</Link> */}
-                   
-                    <a className='student-name' onClick ={()=>{ this.props.history.push('/home/StudentProfile')}}>Jason</a>
-                    </div>
-
-                </div>
-
+                <section>  
+                    <div>     
+                        <div className="resultsBox"> 
+                            <ul>
+                                <Link className= "student-name" to={'/StudentProfile'}
+                                    dangerouslySetInnerHTML={{__html: searchResults}}>    
+                                </Link>   
+                            </ul>    
+                        </div>  
+                    </div>  
+                </section> 
             </div>
         );
     } 
