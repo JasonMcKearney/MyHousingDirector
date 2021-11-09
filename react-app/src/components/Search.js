@@ -60,37 +60,32 @@ export default class search extends Component {
                 <div >
                     <h1 id='heading'> Search A Student </h1>
                     <div>
-
+                    <div id = "wrapper">    
                         <form>
-                            <div >
+                            <input type= "text" id = "searchBar" onChange ={this.searchText} Placeholder="Please input a Students name or ID" />
+                            <button  onClick={this.getResults} id = "primary-button" className="primary-button" htmlType="submit" >Search </button>
+            
+                               
 
-                                <div id = "wrapper">
-                                    <div >
-                                     <input id = "searchBar" OnChange ={this.SearchString} Placeholder="Please input a Students name or ID" />
-                                     </div>
-                                   
-                                    <div >
-                                        <button id = "primary-button" OnClick={this.SendAdminSearch} ClassName="primary-button" htmlType="submit" >Search </button>
-                                    </div>
-                                </div>
-
-                            </div>
+                           
 
 
                         </form>
+                     </div>
 
                     </div>
                 </div>
 
 
                 <div className="resultsBox">
-                    <div className ="result-node"> 
+                    <div> 
                    
-                    {/* <Link className = "student-name" to="/home/StudentProfile">Jason</Link> */}
-                   
-                    <a className='student-name' onClick ={()=>{ this.props.history.push('/home/StudentProfile')}}>Jason</a>
+                            <ul>
+                                <Link className= "student-name" to={'/StudentProfile'}
+                                    dangerouslySetInnerHTML={{__html: searchResults}}>    
+                                </Link>   
+                            </ul>    
                     </div>
-
                 </div>
 
             </div>

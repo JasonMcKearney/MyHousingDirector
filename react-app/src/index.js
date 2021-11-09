@@ -22,17 +22,6 @@ const rootElement = document.getElementById('root');
 
 ReactDOM.render(
 
-  <BrowserRouter basename={baseUrl}>
-    <div style={{
-      height: '100%'
-    }}>
-      <Route path='/' exact component={LogIn} />
-      <Route path='/LogIn' component={LogIn} />
-      <Route path='/home' component={Home} />
-      <Route path='/student' component={Student} />
-      
-
-
     <Provider store={store}>
   <CookiesProvider>
     <BrowserRouter basename={baseUrl}>

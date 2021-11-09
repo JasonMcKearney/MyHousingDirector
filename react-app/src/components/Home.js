@@ -9,6 +9,7 @@ import './Home.css';
 
 import Homepagelogo from '../img/logo.png';
 import  StudentProfile  from './StudentProfile';
+import Cookies from "js-cookie";
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -39,7 +40,7 @@ export class Home extends Component {
                     }}
                 >
                         <div className="Homepagelogo" >
-                            <img src={logo} className="Homepagelogo" />
+                            <img src={Homepagelogo} className="Homepagelogo" />
                         </div>
 
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
