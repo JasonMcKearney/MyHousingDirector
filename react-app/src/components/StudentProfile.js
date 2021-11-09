@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import defualt_Image from '../img/defualt_Image.jpg';
-import './StudentProfile.css'
 
-export default class StudentProfile extends Component {
+export class StudentProfile extends Component {
+
 
 
     render() {
@@ -23,6 +22,7 @@ export default class StudentProfile extends Component {
                     </div>
                 </div>
             </div>
+
         );
 
     }
