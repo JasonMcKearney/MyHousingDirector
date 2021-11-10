@@ -9,7 +9,7 @@ export class StudentProfile extends Component {
         return (
             <div>
                 <div>
-                    <img className="student-image" src={defualt_Image}></img>
+                    
 
                 </div>
                 <div className="grid-container">
