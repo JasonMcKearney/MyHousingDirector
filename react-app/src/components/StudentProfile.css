@@ -1,54 +1,55 @@
 
 .student-image{
 
-
-float: left;
-height: 30%;
-width: 10%;
+top:0;
+left: 0;
+height: 80%;
+width: 60%;
 background-color: black;
 
 }
 
-.grid-container{
-    display: grid;
-    margin-top: 3em;
-    margin-left: 15em;
-    width: 100%;
-    float: left;
-    grid-template-columns: auto auto auto;
-}
-.grid-item{
-
-  
-    border-width: 0px;
-    border-bottom-width: 3px;
-    
-    border-color: black;
-    border-style: solid;
-    width: 50%;
-    height:60%;
-
-}
-.information-titles{
-
-float: left;
-
-}
-h1{
-
-    float: left;
-    font-size:28px;
-    padding-top: 10px;
-}
-.student-information{
-
+.student-info-label{
 
     font-size: 24px;
-    float: left;
-    padding-top: 10px;
-    padding-left: 20px;
+    display: inline-block;
+    text-align:right;
+    width: 150px;
+    margin-right: 1em;
     font-family: frank ruhal ribre;
+  
 
 
 }
+form{
 
+
+    
+    top:100%;
+    transform: translateY(100%)
+}
+.student-container{
+
+    margin-bottom:10px;
+}
+.student-infor-input{
+
+  width:20em;
+  border: none;
+  border-bottom:solid;
+  font-size:18px;
+  font-family: frank ruhal ribre;
+
+}
+.student-infor-input:focus{
+
+   
+  outline:none;
+  
+  }
+  .student-image-container{
+
+    
+    position: absolute;
+    width:25em;
+  }

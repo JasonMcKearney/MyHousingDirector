@@ -71,7 +71,7 @@ export default class search extends Component {
                 <div>     
                     <div className="resultsBox"> 
                         
-                        <div className='student-name' dangerouslySetInnerHTML={{ __html: searchResults}} ></div>
+                        <a className='student-name' dangerouslySetInnerHTML={{ __html: searchResults}} onClick ={()=>{ this.props.history.push('/home/StudentProfile')}} ></a>
                           
                     </div>  
                 </div>  
