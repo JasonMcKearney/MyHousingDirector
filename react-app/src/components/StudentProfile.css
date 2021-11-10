@@ -1,0 +1,55 @@
+
+.student-image{
+
+top:0;
+left: 0;
+height: 80%;
+width: 60%;
+background-color: black;
+
+}
+
+.student-info-label{
+
+    font-size: 24px;
+    display: inline-block;
+    text-align:right;
+    width: 150px;
+    margin-right: 1em;
+    font-family: frank ruhal ribre;
+  
+
+
+}
+form{
+
+
+    
+    top:100%;
+    transform: translateY(100%)
+}
+.student-container{
+
+    margin-bottom:10px;
+}
+.student-infor-input{
+
+  width:20em;
+  border: none;
+  border-bottom:solid;
+  font-size:18px;
+  font-family: frank ruhal ribre;
+
+}
+.student-infor-input:focus{
+
+   
+  outline:none;
+  
+  }
+  .student-image-container{
+
+    
+    position: absolute;
+    width:25em;
+  }

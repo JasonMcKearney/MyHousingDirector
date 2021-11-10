@@ -6,7 +6,9 @@
 #searchBar{
 
     height: 5vh;
-    width: 95%;
+    width: 90%;
+    margin-left:5px;
+    padding-left:5px;
     float: left;
     border-radius:10px;
     border-width: 3px;
@@ -96,14 +98,54 @@
     font-family: frank ruhal ribre;
     font-size: 18px;
     color:white;
-    
-   
- 
-
-
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    transition: .2s transform ease-in-out;
+   will-change: transform;
+   z-index: 0;
 
   }
- 
+
+  #primary-button::after
+  {
+  background-color:rgb(107, 208, 255);
+  border-color: black;
+  border-style:solid;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-width: 1px;
+  content: '';
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-100%, 0) rotate(10deg);
+  transform-origin: top left;
+  transition: .2s transform ease-out;
+  will-change: transform;
+  z-index: -1;
+  
+  }
+  #primary-button:hover::after
+  {
+    border-color: black;
+  border-style:solid;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+    transform :translate(0, 0);
+  }
+
+  #primary-button:hover
+  {
+    border: 2px solid transparent;
+    color: indigo;
+    transform: scale(1.05);
+    will-change :transform;
+    cursor: pointer;
+  }
   .result-node{
 
     border-width: 2px;
@@ -118,8 +160,9 @@
     float: left;
     margin-top: 10px;
     margin-left:1%;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bolder;
+    color: black;
 
   }
   

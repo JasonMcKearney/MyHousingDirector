@@ -6,8 +6,13 @@ import { Link } from 'react-router-dom';
 import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
-import logo from '../img/logo.png'
-import Cookies from 'js-cookie';
+import { StudentProfile } from './StudentProfile';
+
+
+import Homepagelogo from '../img/logo.png';
+
+import Cookies from "js-cookie";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
@@ -37,7 +42,7 @@ export class Home extends Component {
                     }}
                 >
                         <div className="Homepagelogo" >
-                            <img src={logo} className="Homepagelogo" />
+                            <img src={Homepagelogo} className="Homepagelogo" />
                         </div>
 
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
@@ -51,8 +56,8 @@ export class Home extends Component {
                             
                         </Menu.Item>
                             <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
-                            
                                 <Link to="/home/Accountcreation">Create new user</Link>
+                                <Link to="/home/Accountcreation">Account creation</Link>
                         </Menu.Item>
 
                         <Menu.Item key="3" /*icon={<UploadOutlined />}*/>
@@ -86,9 +91,8 @@ export class Home extends Component {
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
-                                    <Route path='/home'  component = {Search} /> 
+                                    <Route path='/home/StudentProfile' component ={StudentProfile}/>
                                     <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />
-                               
                                 </Switch>
                             
                             
