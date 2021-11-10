@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom';
 import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
+import { StudentProfile } from './StudentProfile';
 
 
 import Homepagelogo from '../img/logo.png';
-import  StudentProfile  from './StudentProfile';
+
 import Cookies from "js-cookie";
 
 
@@ -90,9 +91,8 @@ export class Home extends Component {
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
-                                    <Route path='/home'  component = {Search} /> 
+                                    <Route path='/home/StudentProfile' component ={StudentProfile}/>
                                     <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />
-                               
                                 </Switch>
                             
                             

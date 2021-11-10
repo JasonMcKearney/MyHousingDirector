@@ -57,12 +57,12 @@ export default class search extends Component {
             <div >
                 <h1>Search</h1>
                 <div>
-                    <Form>
-                        <Form.Item>
-                            <Input type="text" onChange={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
-                        </Form.Item>
-                        <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
-                    </Form>
+                    <form>
+                        <input type="text" onChange ={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
+
+                    </form>
+                    <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
+
                 </div>
 
             </div>
@@ -70,11 +70,9 @@ export default class search extends Component {
             <section>  
                 <div>     
                     <div className="resultsBox"> 
-                        <ul>
-                            <Link className= "student-name" to={'/home/StudentProfile'}
-                                dangerouslySetInnerHTML={{__html: searchResults}}>    
-                            </Link>   
-                        </ul>    
+                        
+                        <a className='student-name' dangerouslySetInnerHTML={{ __html: searchResults}} onClick ={()=>{ this.props.history.push('/home/StudentProfile')}} ></a>
+                          
                     </div>  
                 </div>  
             </section> 
