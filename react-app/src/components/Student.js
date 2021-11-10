@@ -14,7 +14,7 @@ const { Header, Content, Footer, Sider } = Layout;
 class Student extends Component {
   constructor(props){
     super(props);
-    fetch('http://localhost:16648/api/DStudent/', {
+    fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -117,21 +117,27 @@ class Student extends Component {
                     </Modal>
                         <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
                             <Menu.Item key="1">
-                                <Link to="/student/home">home</Link>
+                                <Link to="/student/home">Home</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
-                                <Link to="/student/nav1">nav1</Link>
+                                <Link to="/student/nav1">Dorm Selection</Link>
                             </Menu.Item>
                             <Menu.Item key="3">
-                                <Link to="/student/nav2">nav2</Link>
+                                <Link to="/student/nav2">User Info</Link>
+                            </Menu.Item>
+                            <Menu.Item key="4">
+                              <Button onClick={() => {
+                                  Cookies.remove('ID')
+                                  Cookies.remove('username')
+                                  this.props.history.push('/LogIn');
+                              }} type="primary" htmlType="Logout">
+                                  Logout
+                              </Button>
                             </Menu.Item>
                         </Menu>
+                        
                         <div>
-                            <Button onClick={() => {
-                                this.props.history.push('/LogIn');
-                            }} type="primary" htmlType="Logout">
-                                Logout
-                            </Button>
+                            
 
                     </div>
                     </div>
@@ -143,10 +149,11 @@ class Student extends Component {
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
                                             <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
-                                            <Route path='/student/nav1' render={() => { return (<h1>nav1</h1>) }} />
-                                            <Route path='/student/nav2' render={() => { return (<h1>nav2</h1>) }} />
-                                            <Route path='/student' render={() => { return (<h1>Home</h1>) }} />
+                                            <Route path='/student/nav1' render={() => { return (<h1>Dorm Selection</h1>) }} />
+                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />
                                         </Switch>
+                                        <h2>Welcome, {Cookies.get("username")}</h2>
+                                        <h2>Your student ID is: {Cookies.get("ID")}</h2>
                                     </div>
 
                                 </Content>

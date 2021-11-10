@@ -51,7 +51,7 @@ class LogIn extends Component {
     }
     login(event) {
         // Student Login in...
-        fetch('http://localhost:16648/api/DStudent/api/DStudent/Login', {
+        fetch('http://localhost:16648/api/Student/api/DStudent/Login', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -89,7 +89,6 @@ class LogIn extends Component {
 
                                 //                                    Cookies.set('Username', this.username);
                                 this.props.history.push('/home')
-                                alert("Welcome Admin!");
                             }
                         })
                 }
@@ -100,8 +99,7 @@ class LogIn extends Component {
                         pwd: this.state.password
                     });
                     // Bring to student page
-                    this.props.history.push('/Student')
-                    alert("Welcome Student!");
+                    this.props.history.push('/Student/home')
                 }
             })
 
@@ -174,7 +172,6 @@ class LogIn extends Component {
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your password!' }]}
-                        //Input= {type="text"  this.state.Password}
                         >
                             <Input.Password type="text" onChange={this.password} placeholder="password" />
                         </Form.Item>
@@ -191,7 +188,7 @@ class LogIn extends Component {
                         </Form.Item>
 
                         <div>
-                            <a>Forget password</a>
+                            <a>Forgot password</a>
                         </div>
                     </Form>
                 </div>

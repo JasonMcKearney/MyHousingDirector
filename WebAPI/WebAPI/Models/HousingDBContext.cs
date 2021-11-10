@@ -14,6 +14,6 @@ namespace WebAPI.Models
 		}
 
 		public DbSet<StudentsViewModel> DBUserTbls { get; set; }
-		public DbSet<DAdmin> admin_tbl { get; set; }
+		public DbSet<Admin> admin_tbl { get; set; }
 	}
 }

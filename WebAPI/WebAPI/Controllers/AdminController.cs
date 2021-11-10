@@ -41,9 +41,6 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response AdminLogin(Login login)
         {
-            System.Diagnostics.Debug.WriteLine(login.username);
-            System.Diagnostics.Debug.WriteLine(login.password);
-
             var log = _context.admin_tbl.Where(x => x.username.Equals(login.username) &&
                       x.password.Equals(login.password)).FirstOrDefault();
 
