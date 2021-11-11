@@ -87,8 +87,10 @@ namespace WebAPI.Controllers
 
                         // Inserting data into fields of database
                         MySqlCommand Query = conn.CreateCommand();
-                        Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @email, @password, @confirmpassword, @gender, @year, @studentID)";
+                        Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
                         Query.Parameters.AddWithValue("@username", student.username);
+                        Query.Parameters.AddWithValue("@firstname", student.firstName);
+                        Query.Parameters.AddWithValue("@lastname", student.lastName);
                         Query.Parameters.AddWithValue("@email", student.email);
                         Query.Parameters.AddWithValue("@password", student.password);
                         Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);

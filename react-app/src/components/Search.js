@@ -14,18 +14,21 @@ export default class search extends Component {
 
         this.state = {
             searchText : '',
-            searchResults: ''
+            searchResults: '',
+            listitems: ["List Item 1", "List Item 2", "List Item 3"]
         }
         this.getResults = this.getResults.bind(this);
-        this.searchText = this.searchText.bind(this);
+        this.searchText = this.searchText.bind(this); 
     }
 
     searchText(event) {
         this.setState({ searchText: event.target.value })
     }
+
+    
+
     getResults(){
         let currentComponent = this;
-        var test = this.state.searchText;
         // Passing parameter to Web API through address
         fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
             mode: 'cors', // this cannot be 'no-cors'
@@ -70,9 +73,9 @@ export default class search extends Component {
             <section>  
                 <div>     
                     <div className="resultsBox"> 
-                        
-                        <a className='student-name' dangerouslySetInnerHTML={{ __html: searchResults}} onClick ={()=>{ this.props.history.push('/home/StudentProfile')}} ></a>
-                          
+                
+                        <a className='student-name' dangerouslySetInnerHTML={{ __html: searchResults}} ></a>
+                    
                     </div>  
                 </div>  
             </section> 
