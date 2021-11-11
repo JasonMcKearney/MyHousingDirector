@@ -153,23 +153,15 @@ export default class accountcreation extends Component {
                 <h1>Create New User</h1>
             <div>
                 <Form>
-                    <Form.Item
-                        name="email"
-                        label="E-mail"
-                        rules={[
-                            {
-                                type: 'email',
-                                message: 'The input is not valid E-mail!',
-                            },
-                            {
-                                required: true,
-                                message: 'Please input your E-mail!',
-                            },
-                        ]}
+                <Form.Item
+                        name="username"
+                        label = "Username"
+                        tooltip="What do you want others to call you?"
+                        rules={[{ required: true, message: 'Please input your username!', whitespace: true }]}  
                     >
-                        <Input type="text" onChange={this.email} />
+                        <Input type="text" onChange={this.username} />
                     </Form.Item>
-                    
+
                     <Form.Item
                         name="firstname"
                         label="First Name"
@@ -248,15 +240,6 @@ export default class accountcreation extends Component {
                         ]}
                     >
                         <Input.Password type="text" onChange={this.confirmpassword} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="nickname"
-                        label = "Nickname"
-                        tooltip="What do you want others to call you?"
-                        rules={[{ required: true, message: 'Please input your nickname!', whitespace: true }]}  
-                    >
-                        <Input type="text" onChange={this.username} />
                     </Form.Item>
 
                     <Form.Item

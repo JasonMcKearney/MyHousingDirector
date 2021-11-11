@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import { Link } from 'react-router-dom';
@@ -7,6 +8,9 @@ import './Search.css';
 import axios from 'axios'
 import { tsParameterProperty } from '@babel/types';
 import { useParams } from 'react-router';
+import Cookies from 'js-cookie';
+
+// Referenced https://www.cubui.com/blog/react/render-arrays-react-js/ for help using a list
 
 export default class search extends Component {
     constructor(props) {
@@ -14,15 +18,48 @@ export default class search extends Component {
 
         this.state = {
             searchText : '',
-            searchResults: ''
+            searchResults: '',
+            studentName:'',
+            items: [],
         }
+        // Gives access to use functions below... 
         this.getResults = this.getResults.bind(this);
         this.searchText = this.searchText.bind(this);
+        this.addItem = this.addItem.bind(this);
+        this.listItems = this.listItems.bind(this);
+        
     }
 
     searchText(event) {
         this.setState({ searchText: event.target.value })
     }
+
+    // Is called after studentName is set, adds the student to the list
+    addItem() {
+        let items = this.state.items;
+        items.push(this.state.studentName);
+        this.setState({
+          items
+        });
+      }
+
+      // Returns list of students in a list format and updates cookies for later use throughout the application
+      listItems() {
+        let items = this.state.items;
+        return (
+          <ul>
+            {
+              items.map((val, index) => {
+                return (
+                    <a onClick = {()=>{this.props.history.push('/home/StudentProfile'); Cookies.set("student", val)}}><li>{val}</li></a>
+                );
+              })
+            }
+          </ul>
+        );
+      }
+
+    // Find results if there are any in the database
     getResults(){
         let currentComponent = this;
         var test = this.state.searchText;
@@ -42,15 +79,21 @@ export default class search extends Component {
             for (i = 0; i < res.length; i++)
             {
                 console.log("Next User: " + res[i].username)
-                loopData += `<li>${res[i].username}</li>`
+                if(res[i].username != "")
+                {
+                    currentComponent.setState({studentName: res[i].username})
+                    // Add student to list
+                    currentComponent.addItem();
+                }
+                // Entries with characters entered do not match any usernames in the database
+                else
+                    alert("No entries match the character/characters entered.")
             }
             currentComponent.setState({searchResults: loopData})
         })
     }
     
     render() {
-        const {searchResults} = this.state
-        
         return (
             <div className="container-search">
 
@@ -66,16 +109,13 @@ export default class search extends Component {
                 </div>
 
             </div>
-
-            <section>  
-                <div>     
-                    <div className="resultsBox"> 
-                        
-                        <a className='student-name' dangerouslySetInnerHTML={{ __html: searchResults}} onClick ={()=>{ this.props.history.push('/home/StudentProfile')}} ></a>
-                          
+                <section>  
+                    <div>    
+                        <div className="resultsBox">
+                            { this.listItems() }
+                        </div>
                     </div>  
-                </div>  
-            </section> 
+                </section>
         </div>
         );
     } 
