@@ -169,49 +169,50 @@ export default class accountcreation extends Component {
                     >
                         <Input type="text" onChange={this.email} />
                     </Form.Item>
-            <Form>
-                <Form.Item
-                    name="firstname"
-                    label="First Name"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your first name!',
-                        },
-                    ]}
-                >
-                    <Input type="text" onChange={this.firstname} />
-                </Form.Item>
+                    
+                    <Form.Item
+                        name="firstname"
+                        label="First Name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your first name!',
+                            },
+                        ]}
+                    >
+                        <Input type="text" onChange={this.firstname} />
+                    </Form.Item>
 
-                <Form.Item
-                    name="lastname"
-                    label="Last Name"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your last name!',
-                        },
-                    ]}
-                >
-                    <Input type="text" onChange={this.lastname} />
-                </Form.Item>
+                    <Form.Item
+                        name="lastname"
+                        label="Last Name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your last name!',
+                            },
+                        ]}
+                    >
+                        <Input type="text" onChange={this.lastname} />
+                    </Form.Item>
 
-                <Form.Item
-                    name="email"
-                    label="E-mail"
-                    rules={[
-                        {
-                            type: 'email',
-                            message: 'The input is not valid E-mail!',
-                        },
-                        {
-                            required: true,
-                            message: 'Please input your E-mail!',
-                        },
-                    ]}
-                >
-                     <Input type="text" onChange={this.email} />
-                </Form.Item>
+                    <Form.Item
+                        name="email"
+                        label="E-mail"
+                        rules={[
+                            {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                            },
+                            {
+                                required: true,
+                                message: 'Please input your E-mail!',
+                            },
+                        ]}
+                    >
+                        <Input type="text" onChange={this.email} />
+                    </Form.Item>
+
                     <Form.Item
                         name="password"
                         label="Password"
@@ -308,12 +309,14 @@ export default class accountcreation extends Component {
                             I have read the <a href="">agreement</a>
                         </Checkbox>
                     </Form.Item>
+
                     <Form.Item {...tailFormItemLayout}>
                         <Button  onClick={this.AddStudent} type="primary" htmlType="submit">
                             Register
                         </Button>
                     </Form.Item>
-                </Form>
+                    
+                    </Form>
                 </div>
             </div>
 

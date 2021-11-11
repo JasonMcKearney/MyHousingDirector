@@ -17,7 +17,7 @@ class Student extends Component {
     fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                'Accept': 'application/json'
             },
             method: 'POST',
             body: JSON.stringify({
