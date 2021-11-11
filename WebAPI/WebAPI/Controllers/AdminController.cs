@@ -154,6 +154,13 @@ namespace WebAPI.Controllers
                     }
                     reader.Close();
                 }
+                else
+				{
+                    eventData.Add(new StudentsViewModel()
+                    {
+                        username = ""
+                    });
+                }
             }
             return eventData;
         }
