@@ -43,6 +43,39 @@ export class StudentProfile extends Component {
         this.fetchData();
     }
      
+    // Go to below function after clicking submit button
+    updateStudentFields()
+    {
+        fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {                
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+        }).then(res=>res.clone().json())
+        .then(function(res) {
+            console.log("hello " + res[0].username)
+            var loopData = ''
+            var i;
+            for (i = 0; i < res.length; i++)
+            {
+                console.log("Next User: " + res[i].username)
+                if(res[i].username != "")
+                {
+                    currentComponent.setState({studentName: res[i].username})
+                    // Add student to list
+                    currentComponent.addItem();
+                }
+                // Entries with characters entered do not match any usernames in the database
+                else
+                    alert("No entries match the character/characters entered.")
+            }
+            currentComponent.setState({searchResults: loopData})
+        })
+    }
+
+    
     render() {
         let firstName = this.state.firstName;
         let lastName = this.state.lastName;
@@ -91,19 +124,13 @@ export class StudentProfile extends Component {
                     <input className= "student-infor-input" type = "text" defaultValue = {password} autoComplete = "off"></input>
                     </div>
 
-                    <button type="submit">submit</button>
+
+                    <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
+
                     <button type="submit">Email Student Account Details</button>
-
                 </form>
-                   
-
             </div>
 
         );
-
     }
-
-
-
-
 }
