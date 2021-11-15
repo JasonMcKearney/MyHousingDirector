@@ -15,8 +15,37 @@ export class StudentProfile extends Component {
             year:'',
             password:'',
         }
+        this.firstName = this.firstName.bind(this);
+        this.lastName = this.lastName.bind(this);
+        this.username = this.username.bind(this);
+        this.email = this.email.bind(this);
+        this.year = this.year.bind(this);
+        this.password = this.password.bind(this);
+
     }
 
+    firstName(event) {
+        this.setState({ firstName: event.target.value })
+        console.log("firstName: " + event.target.value)
+    }
+    lastName(event) {
+        this.setState({ lastName: event.target.value })
+    }
+    username(event) {
+        this.setState({ username: event.target.value })
+    }
+    email(event) {
+        this.setState({ email: event.target.value })
+    }
+    year(event) {
+        this.setState({ year: event.target.value })
+    }
+
+    password(event) {
+        this.setState({ password: event.target.value })
+    }
+
+    // Get data from student table based upon searched student username
     fetchData(){
         let currentComponent = this;
         fetch('http://localhost:16648/api/Admin/FindStudentInfo/'+Cookies.get("student"), {
@@ -38,41 +67,45 @@ export class StudentProfile extends Component {
         })
     }
 
+    // Upon load of page, call fetchData()
     componentDidMount()
     {
         this.fetchData();
     }
      
-    // Go to below function after clicking submit button
+    // Go to below function after users clicks on the submit button
     updateStudentFields()
     {
-        fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {                
+        // Admin add student account...
+        fetch('http://localhost:16648/api/Admin/UpdateProfile', {
+            headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'POST',
-        }).then(res=>res.clone().json())
-        .then(function(res) {
-            console.log("hello " + res[0].username)
-            var loopData = ''
-            var i;
-            for (i = 0; i < res.length; i++)
-            {
-                console.log("Next User: " + res[i].username)
-                if(res[i].username != "")
+            body: JSON.stringify({
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                username: this.state.username,
+                email: this.state.email,
+                year: this.state.year,                
+                password: this.state.password,
+            })
+        }).then((Response) => Response.json())
+            .then((result) => {
+                if (result.status == "User Exists")
                 {
-                    currentComponent.setState({studentName: res[i].username})
-                    // Add student to list
-                    currentComponent.addItem();
+                    alert("Student with the same username already created.");   
                 }
-                // Entries with characters entered do not match any usernames in the database
+                else if(result.status == "Invalid")
+                {
+                    alert("Update Student info unsuccessful.");   
+                }
                 else
-                    alert("No entries match the character/characters entered.")
-            }
-            currentComponent.setState({searchResults: loopData})
-        })
+                {
+                    alert("Account details updated.");
+                }
+            })
     }
 
     
@@ -90,45 +123,46 @@ export class StudentProfile extends Component {
                  <div className = "student-image-container">
                     <img className="student-image" src={default_logo}></img>
                 </div> 
-                <form>
-
+                <div>
                     <div>
-                    <label className = "student-info-label">Firstname:</label>
+                        <label className = "student-info-label">Firstname:</label>
 
-                    <input className= "student-infor-input" type = "text" defaultValue= {firstName}></input>
+                        <input className= "student-infor-input" type = "text" defaultValue= {firstName} onChange={this.firstName}></input>
 
                     </div> 
 
                     <div>
-                    <label className = "student-info-label">Lastname:</label>
-                    <input className= "student-infor-input" type = "text" defaultValue={lastName}  ></input>
+                        <label className = "student-info-label">Lastname:</label>
+                        <input className= "student-infor-input" type = "text" defaultValue={lastName} onChange={this.lastName} ></input>
                     </div> 
                     
                     <div className = "student-container">
-                    <label className = "student-info-label">Email:</label>
-                    <input className= "student-infor-input" type = "text" defaultValue = {username} autoComplete = "off"></input>
+                        <label className = "student-info-label">Username:</label>
+                        <input className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
+                    </div>
+
+                    <div className = "student-container">
+                        <label className = "student-info-label">Email:</label>
+                        <input className= "student-infor-input" type = "text" defaultValue = {email} onChange={this.email}autoComplete = "off"></input>
                     </div>   
                     
                     <div className = "student-container">
-                    <label className = "student-info-label">Year:</label>
-                    <input className= "student-infor-input" type = "text" defaultValue = {email} autoComplete = "off"></input>
+                        <label className = "student-info-label">Year:</label>
+                        <input className= "student-infor-input" type = "text" defaultValue = {year} onChange={this.year} autoComplete = "off"></input>
                     </div>
                     
                     <div className = "student-container">
-                    <label className = "student-info-label" >Password:</label>
-                    <input className= "student-infor-input" type = "text" defaultValue = {year} autoComplete = "off"></input>
+                        <label className = "student-info-label" >Password:</label>
+                        <input className= "student-infor-input" type = "text" defaultValue = {password} onChange={this.password} autoComplete = "off"></input>
                     </div>
-                    
-                    <div className = "student-container">
-                    <label className = "student-info-label">Username:</label>
-                    <input className= "student-infor-input" type = "text" defaultValue = {password} autoComplete = "off"></input>
+
                     </div>
 
 
                     <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
 
                     <button type="submit">Email Student Account Details</button>
-                </form>
+ 
             </div>
 
         );

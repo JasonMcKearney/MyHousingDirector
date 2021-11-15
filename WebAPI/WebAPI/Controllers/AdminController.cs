@@ -153,7 +153,7 @@ namespace WebAPI.Controllers
 
                     // Pulls all students usernames like entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "select username, userid from housingdirector_schema.DBUserTbls where username like @username";
+                    FindUsersLike.CommandText = "select username from housingdirector_schema.DBUserTbls where username like @username";
 
                     FindUsersLike.ExecuteNonQuery();
 
