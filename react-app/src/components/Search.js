@@ -22,7 +22,7 @@ export default class search extends Component {
             studentName:'',
             items: [],
         }
-        // Gives access to use functions below... 
+        // Gives access to functions below... 
         this.getResults = this.getResults.bind(this);
         this.searchText = this.searchText.bind(this);
         this.addItem = this.addItem.bind(this);
