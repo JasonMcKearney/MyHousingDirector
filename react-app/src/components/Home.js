@@ -6,8 +6,13 @@ import { Link } from 'react-router-dom';
 import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
-import logo from '../img/logo.png'
-import Cookies from 'js-cookie';
+import { StudentProfile } from './StudentProfile';
+
+
+import Homepagelogo from '../img/logo.png';
+
+import Cookies from "js-cookie";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
@@ -37,30 +42,30 @@ export class Home extends Component {
                     }}
                 >
                         <div className="Homepagelogo" >
-                            <img src={logo} className="Homepagelogo" />
+                            <img src={Homepagelogo} className="Homepagelogo" />
                         </div>
 
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
-                            Welcome!
+                            Welcome, { Cookies.get("username") }
                         </div>
 
 
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
-                                <Link to="/home/Search">Homepage</Link>
+                                <Link to="/home/Search">Search for user</Link>
                             
                         </Menu.Item>
                             <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
-                            
-                                <Link to="/home/Accountcreation">Accountcreation</Link>
+                                <Link to="/home/Accountcreation">Create new user</Link>
+                                <Link to="/home/Accountcreation">Account creation</Link>
                         </Menu.Item>
 
                         <Menu.Item key="3" /*icon={<UploadOutlined />}*/>
-                                <Link to="/home/nav3">nav3</Link>
+                                <Link to="/home/nav3">Delete a user</Link>
                             </Menu.Item>
 
                         <Menu.Item key="4" /*icon={<UserOutlined />}*/>
-                                <Link to="/home/nav4">nav4</Link>
+                                <Link to="/home/nav4">Move a user</Link>
                             </Menu.Item>
 
                         </Menu>
@@ -68,8 +73,8 @@ export class Home extends Component {
 
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
-                                    this.props.history.push('/LogIn');
                                     Cookies.remove('username')
+                                    this.props.history.push('/LogIn');
                             }} type="primary" htmlType="Logout">
                                 Logout
                             </Button>
@@ -86,9 +91,8 @@ export class Home extends Component {
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
-                                    <Route path='/home'  component = {Search} /> 
+                                    <Route path='/home/StudentProfile' component ={StudentProfile}/>
                                     <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />
-                               
                                 </Switch>
                             
                             

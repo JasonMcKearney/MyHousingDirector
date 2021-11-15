@@ -16,7 +16,7 @@ namespace WebAPI.Controllers
     [Route("api/[controller]")]
     [EnableCors("AllowAll")]
     [ApiController]
-    public class DStudentController : ControllerBase
+    public class StudentController : ControllerBase
     {
         private readonly HousingDBContext _context;
 
@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
      //       throw new NotImplementedException();
         }
 
-        public DStudentController(HousingDBContext context, IConfiguration configuration)
+        public StudentController(HousingDBContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
@@ -57,7 +57,6 @@ namespace WebAPI.Controllers
         }
 
         // PUT: api/DStudent/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDStudents(int id, StudentsViewModel dStudents)
         {
@@ -90,7 +89,6 @@ namespace WebAPI.Controllers
         }
 
         // POST: api/DStudent
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public StudentsViewModel GetStudentInfo(StudentsViewModel check)
         {

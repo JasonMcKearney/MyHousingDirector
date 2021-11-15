@@ -41,9 +41,6 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response AdminLogin(Login login)
         {
-            System.Diagnostics.Debug.WriteLine(login.username);
-            System.Diagnostics.Debug.WriteLine(login.password);
-
             var log = _context.admin_tbl.Where(x => x.username.Equals(login.username) &&
                       x.password.Equals(login.password)).FirstOrDefault();
 
@@ -90,8 +87,10 @@ namespace WebAPI.Controllers
 
                         // Inserting data into fields of database
                         MySqlCommand Query = conn.CreateCommand();
-                        Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @email, @password, @confirmpassword, @gender, @year, @studentID)";
+                        Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
                         Query.Parameters.AddWithValue("@username", student.username);
+                        Query.Parameters.AddWithValue("@firstname", student.firstName);
+                        Query.Parameters.AddWithValue("@lastname", student.lastName);
                         Query.Parameters.AddWithValue("@email", student.email);
                         Query.Parameters.AddWithValue("@password", student.password);
                         Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
@@ -114,7 +113,6 @@ namespace WebAPI.Controllers
         }
 
         // Find Student Accounts that match a few characters (Search functionality on Admin page)
-        //[Route("FindStudents/{sUsernameToSearch}")]
         [Route("FindStudents/{sUsernameToSearch}")]
         [HttpPost]
         public List<StudentsViewModel> FindStudents(string sUsernameToSearch)
@@ -124,7 +122,7 @@ namespace WebAPI.Controllers
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                // Inserting data into fields of database
+                // Check if there are more than one student that matches the username entered
                 MySqlCommand FindTotalUsers = conn.CreateCommand();
                 FindTotalUsers.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
                 FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.DBUserTbls where username like @username";
@@ -155,51 +153,52 @@ namespace WebAPI.Controllers
                     }
                     reader.Close();
                 }
+                else
+				{
+                    eventData.Add(new StudentsViewModel()
+                    {
+                        username = ""
+                    });
+                }
             }
             return eventData;
         }
 
         // Find Student Accounts that match a few characters (Search functionality on Admin page)
-        [Route("FindStudents2")]
-        [HttpGet]
-        public List<StudentsViewModel> FindStudents2()
+        [Route("FindStudentInfo/{sUsernameToSearch}")]
+        [HttpPost]
+        public List<StudentsViewModel> FindStudentInfo(string sUsernameToSearch)
         {
             List<StudentsViewModel> eventData = new List<StudentsViewModel>();
 
             using (MySqlConnection conn = GetConnection())
             {
-                conn.Open();
-                // Inserting data into fields of database
-                MySqlCommand FindTotalUsers = conn.CreateCommand();
-                FindTotalUsers.Parameters.AddWithValue("@username", "Ja" + "%");
-                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.DBUserTbls where username like @username";
-                FindTotalUsers.ExecuteNonQuery();
+                conn.Open();   
+                MySqlCommand FindUsersInfo = conn.CreateCommand();
 
-                // If nNumStudents is 1 then there are at least one student account created to check
-                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+                // Pulls all students usernames like entered characters
+                FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
+                FindUsersInfo.CommandText = "select firstname, lastname, username, email, year, password from housingdirector_schema.DBUserTbls where username = @username";
 
-                if (nNumStudents >= 1)
+                FindUsersInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindUsersInfo.ExecuteReader();
+
+                while (reader.Read()) // Read returns false if the user does not exist!
                 {
-                    MySqlCommand FindUsersLike = conn.CreateCommand();
-
-                    // Pulls all students usernames like entered characters
-                    FindUsersLike.Parameters.AddWithValue("@username", "Ja" + "%");
-                    FindUsersLike.CommandText = "select username from housingdirector_schema.DBUserTbls where username like @username";
-
-                    FindUsersLike.ExecuteNonQuery();
-
-                    // Execute the SQL command against the DB:
-                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
-
-                    while (reader.Read()) // Read returns false if the user does not exist!
+                    eventData.Add(new StudentsViewModel()
                     {
-                        eventData.Add(new StudentsViewModel()
-                        {
-                            username = reader[0].ToString()
-                        });
-                    }
-                    reader.Close();
+                        firstName = reader[0].ToString(),
+                        lastName = reader[1].ToString(),
+                        username = reader[2].ToString(),
+                        email = reader[3].ToString(),
+                        year = reader[4].ToString(),
+                        password = reader[5].ToString(),
+                    });
+                   
                 }
+                reader.Close();
             }
             return eventData;
         }
