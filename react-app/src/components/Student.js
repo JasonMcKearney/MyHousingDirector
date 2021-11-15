@@ -39,17 +39,6 @@ class Student extends Component {
         showModal: false
     }
 
-    componentDidMount() {
-        console.log("this.props = ", this.props.userinfo)
-        let { username, pwd } = this.props.userinfo;
-        if (pwd == 'george') {
-            this.setState({
-                showModal: true
-            })
-        }
-    }
-
-
     render() {
         let { showModal } = this.state;
         return (
@@ -63,7 +52,7 @@ class Student extends Component {
                     }}>
                         <div>
                             <Form.Item
-                                name=" Old password"
+                                name="Old password"
                                 label="Old Password"
                                 rules={[
                                     {
@@ -148,7 +137,6 @@ class Student extends Component {
                                             <Route path='/student' render={() => { return (<h1>Home</h1>) }} />
                                         </Switch>
                                     </div>
-
                                 </Content>
                             </Layout>
                       </Content>
