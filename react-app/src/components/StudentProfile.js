@@ -8,6 +8,7 @@ export class StudentProfile extends Component {
         super(props);
 
         this.state = {
+            studentID: '',
             firstName:'',
             lastName:'',
             username:'',
@@ -15,33 +16,35 @@ export class StudentProfile extends Component {
             year:'',
             password:'',
         }
-        this.firstName = this.firstName.bind(this);
+/*        this.firstName = this.firstName.bind(this);
         this.lastName = this.lastName.bind(this);
         this.username = this.username.bind(this);
         this.email = this.email.bind(this);
         this.year = this.year.bind(this);
         this.password = this.password.bind(this);
-
+*/
+        // Allows me to do this.state.--, and access different state values in updateStudentFields() function
+        this.updateStudentFields = this.updateStudentFields.bind(this);
     }
 
-    firstName(event) {
+    firstName = (event) => {
         this.setState({ firstName: event.target.value })
-        console.log("firstName: " + event.target.value)
+        console.log("Firstname: " + this.state.firstName);
     }
-    lastName(event) {
+    lastName = (event) =>{
         this.setState({ lastName: event.target.value })
     }
-    username(event) {
+    username = (event) => {
         this.setState({ username: event.target.value })
     }
-    email(event) {
+    email = (event) => {
         this.setState({ email: event.target.value })
     }
-    year(event) {
+    year = (event) => {
         this.setState({ year: event.target.value })
     }
 
-    password(event) {
+    password = (event) => {
         this.setState({ password: event.target.value })
     }
 
@@ -58,6 +61,8 @@ export class StudentProfile extends Component {
         }).then(res=>res.clone().json())
         .then(function(res) 
         {
+            currentComponent.setState({studentID: res[0].user_id})
+            currentComponent.setState({firstName: res[0].firstName})
             currentComponent.setState({firstName: res[0].firstName})
             currentComponent.setState({lastName: res[0].lastName})
             currentComponent.setState({username: res[0].username})
@@ -72,7 +77,7 @@ export class StudentProfile extends Component {
     {
         this.fetchData();
     }
-     
+
     // Go to below function after users clicks on the submit button
     updateStudentFields()
     {
@@ -84,12 +89,13 @@ export class StudentProfile extends Component {
             },
             method: 'POST',
             body: JSON.stringify({
-                firstName: this.state.firstName,
+                user_id: this.state.studentID,
+                firstName: this.state.firstName,           
                 lastName: this.state.lastName,
                 username: this.state.username,
                 email: this.state.email,
                 year: this.state.year,                
-                password: this.state.password,
+                password: this.state.password
             })
         }).then((Response) => Response.json())
             .then((result) => {
@@ -103,7 +109,7 @@ export class StudentProfile extends Component {
                 }
                 else
                 {
-                    alert("Account details updated.");
+                    alert("Updated Student Info.");
                 }
             })
     }
@@ -116,7 +122,6 @@ export class StudentProfile extends Component {
         let email = this.state.email;
         let year = this.state.year;
         let password = this.state.password;
-
 
         return (
             <div>
