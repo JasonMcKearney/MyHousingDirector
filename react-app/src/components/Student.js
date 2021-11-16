@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import './Student.css';
 import Cookies from 'js-cookie';
+import DormSelection from './DormSelection'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -109,7 +110,7 @@ class Student extends Component {
                                 <Link to="/student/home">Home</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
-                                <Link to="/student/nav1">Dorm Selection</Link>
+                            <Link to="/student/DormSelect">Dorm Selection</Link>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <Link to="/student/nav2">User Info</Link>
@@ -138,11 +139,10 @@ class Student extends Component {
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
                                             <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
-                                            <Route path='/student/nav1' render={() => { return (<h1>Dorm Selection</h1>) }} />
+                                    <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />
                                         </Switch>
-                                        <h2>Welcome, {Cookies.get("username")}</h2>
-                                        <h2>Your student ID is: {Cookies.get("ID")}</h2>
+
                                     </div>
                                 </Content>
                             </Layout>
