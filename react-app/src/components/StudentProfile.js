@@ -25,6 +25,7 @@ export class StudentProfile extends Component {
 */
         // Allows me to do this.state.--, and access different state values in updateStudentFields() function
         this.updateStudentFields = this.updateStudentFields.bind(this);
+        this.deleteStudent = this.deleteStudent.bind(this);
     }
 
     firstName = (event) => {
@@ -98,22 +99,52 @@ export class StudentProfile extends Component {
                 password: this.state.password
             })
         }).then((Response) => Response.json())
-            .then((result) => {
-                if (result.status == "User Exists")
-                {
-                    alert("Student with the same username already created.");   
-                }
-                else if(result.status == "Invalid")
-                {
-                    alert("Update Student info unsuccessful.");   
-                }
-                else
-                {
-                    alert("Updated Student Info.");
-                }
-            })
+        .then((result) => {
+            if (result.status == "User Exists")
+            {
+                alert("Student with the same username already created.");   
+            }
+            else if(result.status == "Invalid")
+            {
+                alert(result.message);   
+            }
+            else
+            {
+                alert(result.message);
+            }
+        })
     }
 
+
+    deleteStudent()
+    {
+        console.log("StudentID: " + this.state.studentID);
+
+        // Admin add student account...
+        fetch('http://localhost:16648/api/Admin/DeleteStudentProfile/' + this.state.studentID, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+        }).then((Response) => Response.json())
+        .then((result) => {
+            if (result.status == "User Exists")
+            {
+                alert(result.message);   
+            }
+            else if(result.status == "Invalid")
+            {
+                alert(result.message);   
+            }
+            else
+            {
+                alert(result.message);
+                // Bring to accountcreation page
+                this.props.history.push('/home/search')
+            }
+        })
+    }
     
     render() {
         let firstName = this.state.firstName;
@@ -165,6 +196,8 @@ export class StudentProfile extends Component {
 
 
                     <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
+
+                    <button onClick={this.deleteStudent} id = "primary-button" htmlType="submit">Delete Student Profile</button>    
 
                     <button type="submit">Email Student Account Details</button>
  

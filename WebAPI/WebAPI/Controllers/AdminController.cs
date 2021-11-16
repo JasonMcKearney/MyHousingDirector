@@ -13,11 +13,11 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-	[Route("api/[controller]")]
-	[EnableCors("AllowAll")]
-	[ApiController]
-	public class AdminController : ControllerBase
-	{
+    [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
+    [ApiController]
+    public class AdminController : ControllerBase
+    {
         private readonly HousingDBContext _context;
 
         private IConfiguration _configuration;
@@ -53,7 +53,7 @@ namespace WebAPI.Controllers
         }
 
         bool CheckConditionsValidation(StudentsViewModel student, string functionName)
-		{
+        {
             bool bRet = false;
             // For AddStudent function
             if (functionName == "AddStudent")
@@ -67,15 +67,15 @@ namespace WebAPI.Controllers
             // For UpdateProfile function below
             else
             {
-                if (student.firstName.Length > 0 && student.lastName.Length > 0 && student.username.Length > 0 && student.email.Length > 0 
+                if (student.firstName.Length > 0 && student.lastName.Length > 0 && student.username.Length > 0 && student.email.Length > 0
                     && student.password.Length > 0 && student.year.Length > 0)
-				{
+                {
                     bRet = true;
-				}
+                }
             }
             return bRet;
         }
-            
+
         // Create student account
         [Route("AddStudent")]
         [HttpPost]
@@ -140,7 +140,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         public List<StudentsViewModel> FindStudents(string sUsernameToSearch)
         {
-            List <StudentsViewModel> eventData = new List<StudentsViewModel>();
+            List<StudentsViewModel> eventData = new List<StudentsViewModel>();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -177,7 +177,7 @@ namespace WebAPI.Controllers
                     reader.Close();
                 }
                 else
-				{
+                {
                     eventData.Add(new StudentsViewModel()
                     {
                         username = ""
@@ -196,7 +196,7 @@ namespace WebAPI.Controllers
 
             using (MySqlConnection conn = GetConnection())
             {
-                conn.Open();   
+                conn.Open();
                 MySqlCommand FindUsersInfo = conn.CreateCommand();
 
                 // Pulls all students usernames like entered characters
@@ -220,42 +220,42 @@ namespace WebAPI.Controllers
                         year = reader[5].ToString(),
                         password = reader[6].ToString(),
                     }); ;
-                   
+
                 }
                 reader.Close();
             }
             return eventData;
         }
 
-/*
-        // Find student id based upon a username
-        private int GetStudentID(string sUsername)
-        {
-            int userid = 0;
-
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                MySqlCommand FindUsersInfo = conn.CreateCommand();
-
-                // Pulls all students usernames like entered characters
-                FindUsersInfo.Parameters.AddWithValue("@username", sUsername);
-                FindUsersInfo.CommandText = "select user_id from housingdirector_schema.DBUserTbls where username = @username";
-
-                FindUsersInfo.ExecuteNonQuery();
-
-                // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindUsersInfo.ExecuteReader();
-
-                while (reader.Read()) // Read returns false if the user does not exist!
+        /*
+                // Find student id based upon a username
+                private int GetStudentID(string sUsername)
                 {
-                    userid = Int32.Parse(reader[0].ToString());
+                    int userid = 0;
+
+                    using (MySqlConnection conn = GetConnection())
+                    {
+                        conn.Open();
+                        MySqlCommand FindUsersInfo = conn.CreateCommand();
+
+                        // Pulls all students usernames like entered characters
+                        FindUsersInfo.Parameters.AddWithValue("@username", sUsername);
+                        FindUsersInfo.CommandText = "select user_id from housingdirector_schema.DBUserTbls where username = @username";
+
+                        FindUsersInfo.ExecuteNonQuery();
+
+                        // Execute the SQL command against the DB:
+                        MySqlDataReader reader = FindUsersInfo.ExecuteReader();
+
+                        while (reader.Read()) // Read returns false if the user does not exist!
+                        {
+                            userid = Int32.Parse(reader[0].ToString());
+                        }
+                        reader.Close();
+                    }
+                    return userid;
                 }
-                reader.Close();
-            }
-            return userid;
-        }
-*/
+        */
 
 
         // Create student account
@@ -265,7 +265,7 @@ namespace WebAPI.Controllers
         {
             bool bSuccessfull = false;
 
-            if(CheckConditionsValidation(student, "UpdateProfile"))
+            if (CheckConditionsValidation(student, "UpdateProfile"))
             {
                 using (MySqlConnection conn = GetConnection())
                 {
@@ -283,7 +283,7 @@ namespace WebAPI.Controllers
                     if (UserExist >= 1)
                     {
                         bSuccessfull = false;
-                        return new Response { Status = "User Exists", Message = "Cannot" };
+                        return new Response { Status = "User Exists", Message = "Student with the same username already created." };
                     }
                     else
                     { // select firstname, lastname, username, email, year, password
@@ -308,10 +308,92 @@ namespace WebAPI.Controllers
 
             if (!bSuccessfull)
             {
-                return new Response { Status = "Invalid", Message = "Cannot" };
+                return new Response { Status = "Invalid", Message = "Update Student info unsuccessful." };
             }
 
             return new Response { Status = "Success", Message = "Updated Student Info" };
+        }
+
+
+        [Route("DeleteStudentProfile/{user_id}")]
+        [HttpPost]
+        // Delete a student
+        public Response DeleteStudent(int user_id)
+        {
+            bool bSuccessfull = false;
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand CheckUser = conn.CreateCommand();
+
+                // Checks to see if there are duplicate usernames
+                CheckUser.Parameters.AddWithValue("@userid", user_id);
+                CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where user_id != @userid";
+
+                // if 1 then already exist
+                int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
+
+                if (UserExist >= 1)
+                {
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "delete from DBUserTbls where user_id = @userid";
+                    Query.Parameters.AddWithValue("@userid", user_id);
+
+                    Query.ExecuteNonQuery();
+                    bSuccessfull = true;
+                }
+            }
+
+            if (!bSuccessfull)
+            {
+                return new Response { Status = "Invalid", Message = "Could not find student data." };
+            }
+
+            return new Response { Status = "Success", Message = "Deleted student." };
+        }
+
+
+
+        // Send username, password to specific student email
+        [Route("DeleteStudentProfile/{user_id}")]
+        [HttpPost]
+        // Delete a student
+        public Response SendEmailToStudent(string username, string password)
+        {
+            bool bSuccessfull = false;
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand CheckUser = conn.CreateCommand();
+
+                // Checks to see if there are duplicate usernames
+                CheckUser.Parameters.AddWithValue("@userid", user_id);
+                CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where user_id != @userid";
+
+                // if 1 then already exist
+                int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
+
+                if (UserExist >= 1)
+                {
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "delete from DBUserTbls where user_id = @userid";
+                    Query.Parameters.AddWithValue("@userid", user_id);
+
+                    Query.ExecuteNonQuery();
+                    bSuccessfull = true;
+                }
+            }
+
+            if (!bSuccessfull)
+            {
+                return new Response { Status = "Invalid", Message = "Could not find student data." };
+            }
+
+            return new Response { Status = "Success", Message = "Deleted student." };
         }
     }
 }
