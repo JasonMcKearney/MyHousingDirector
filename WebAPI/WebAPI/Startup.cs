@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using WebAPI.Models;
 using MySql.Data;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Models.EmailServices;
+using WebAPI.Models.EmailSettings;
 
 namespace WebAPI
 {
@@ -29,6 +31,8 @@ namespace WebAPI
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddTransient<IMailService, MailService>();
+			services.Configure<MailSettings>(_configuration.GetSection("MailSettings"));
 			services.AddControllers();
 
 			// Replace with your connection string.

@@ -20,14 +20,13 @@ export default class search extends Component {
             searchText : '',
             searchResults: '',
             studentName:'',
-            items: [],
+            studentlist: [],
         }
         // Gives access to functions below... 
         this.getResults = this.getResults.bind(this);
         this.searchText = this.searchText.bind(this);
         this.addItem = this.addItem.bind(this);
-        this.listItems = this.listItems.bind(this);
-        
+        this.listItems = this.listItems.bind(this);      
     }
 
     searchText(event) {
@@ -36,20 +35,20 @@ export default class search extends Component {
 
     // Is called after studentName is set, adds the student to the list
     addItem() {
-        let items = this.state.items;
-        items.push(this.state.studentName);
+        let studentlist = this.state.studentlist;
+        studentlist.push(this.state.studentName);
         this.setState({
-          items
+            studentlist
         });
       }
 
       // Returns list of students in a list format and updates cookies for later use throughout the application
       listItems() {
-        let items = this.state.items;
+        let studentlist = this.state.studentlist;
         return (
           <ul>
             {
-              items.map((val, index) => {
+              studentlist.map((val, index) => {
                 return (
                     <a onClick = {()=>{this.props.history.push('/home/StudentProfile'); Cookies.set("student", val)}}><li>{val}</li></a>
                 );

@@ -11,6 +11,9 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using WebAPI.Models;
 
+using MailKit.Net.Smtp;
+using MimeKit;
+
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -356,44 +359,39 @@ namespace WebAPI.Controllers
 
 
 
-        // Send username, password to specific student email
-        [Route("DeleteStudentProfile/{user_id}")]
+     // Send username, password to specific student email
+        [Route("SendEmailToStudent/{email, username, password}")]
         [HttpPost]
         // Delete a student
-        public Response SendEmailToStudent(string username, string password)
+        public Response SendEmailToStudent(string email, string username, string password)
         {
-            bool bSuccessfull = false;
+            // Email 
+            MimeMessage message = new MimeMessage();
+            MailboxAddress from = new MailboxAddress("Productivity X",
+            "productivityx2021@gmail.com");
+            message.From.Add(from);
 
-            using (MySqlConnection conn = GetConnection())
+            MailboxAddress to = new MailboxAddress("User",
+            email);
+            message.To.Add(to);
+            message.Subject = "Housing Director Student Info";
+
+            message.Body = new TextPart("plain")
             {
-                conn.Open();
-                MySqlCommand CheckUser = conn.CreateCommand();
+                Text = @"Your username: " + username + "\n" + "Your password: " + password
+            };
 
-                // Checks to see if there are duplicate usernames
-                CheckUser.Parameters.AddWithValue("@userid", user_id);
-                CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where user_id != @userid";
+            // Connect and authenticate with SMTP server
+            SmtpClient client = new SmtpClient();
+            client.Connect("smtp.gmail.com", 465, true);
+            client.Authenticate("productivityx2021@gmail.com", "ProDucTIvityx#$2021");
 
-                // if 1 then already exist
-                int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
+            // Send email and then disconnect
+            client.Send(message);
+            client.Disconnect(true);
+            client.Dispose();
 
-                if (UserExist >= 1)
-                {
-                    // Inserting data into fields of database
-                    MySqlCommand Query = conn.CreateCommand();
-                    Query.CommandText = "delete from DBUserTbls where user_id = @userid";
-                    Query.Parameters.AddWithValue("@userid", user_id);
-
-                    Query.ExecuteNonQuery();
-                    bSuccessfull = true;
-                }
-            }
-
-            if (!bSuccessfull)
-            {
-                return new Response { Status = "Invalid", Message = "Could not find student data." };
-            }
-
-            return new Response { Status = "Success", Message = "Deleted student." };
+            return new Response { Status = "Success", Message = "Email has been sent." };
         }
     }
 }
