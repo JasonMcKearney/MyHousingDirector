@@ -1,5 +1,5 @@
 import react, { Component } from 'react';
-import { Steps, Button, message, Radio } from 'antd';
+import { Steps, Button, message, Radio, Modal, Form, Input } from 'antd';
 import './DormSelection.css';
 
 const { Step } = Steps;
@@ -19,7 +19,10 @@ const steps = [
     },
 ];
 
-export default class Nav1 extends Component {
+
+
+export default class DormSelection extends Component {
+
     state = {
         current: 0,
         dorm: '',
@@ -44,7 +47,9 @@ export default class Nav1 extends Component {
                 return;
             }
 
+
             if (dorm == 'dorm1') {
+
                 this.setState({
                     floorData: [{
                         label: 'dorm1 floor1',
@@ -77,7 +82,11 @@ export default class Nav1 extends Component {
                 }
             })
         }
-            if (current == 1) {
+        if (current == 1) {
+            if (!floor) {
+                message.error('You Must Select a floor!')
+                return;
+            }
                 if (floor == 'dorm1 floor1') {
                     this.setState({
                         roomData: [{
@@ -155,6 +164,7 @@ export default class Nav1 extends Component {
                 }
 
                 if (floor == 'dorm2 floor3') {
+
                     this.setState({
                         roomData: [{
                             label: 'room301',
@@ -175,7 +185,7 @@ export default class Nav1 extends Component {
                         current: preState.current + 1
                     }
                 })
-            }
+        }
     };
 
     prev = () => {
@@ -185,6 +195,78 @@ export default class Nav1 extends Component {
             }
         })
     };
+
+    done = () => {
+        let { room } = this.state;
+        let { showModal } = this.state;
+        if (!room) {
+            message.error('You Must Select a Room!')
+            return;
+        }
+/*        else {
+            <Modal title="Change Your password" visible={showModal} onOk={() => {
+            }} onCancel={() => {
+                this.setState({
+                    showModal: false
+                })
+            }}>
+                <div>
+                    <Form.Item
+                        name="Old password"
+                        label="Old Password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input type="text" onChange={this.password} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name=" New password"
+                        label="New Password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your new password!',
+                            },
+                        ]}
+                        hasFeedback
+                    >
+                        <Input type="text" onChange={this.password} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="confirm"
+                        label="Confirm New Password"
+                        dependencies={['password']}
+                        hasFeedback
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please confirm your new password!',
+                            },
+                            ({ getFieldValue }) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('New password') === value) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input type="text" onChange={this.confirmpassword} />
+                    </Form.Item>
+
+                </div>
+            </Modal>
+
+        }*/
+    }
 
     onChange = (e, stateKey) => {
         console.log("e = ", e.target.value)
@@ -260,7 +342,7 @@ export default class Nav1 extends Component {
                         </Button>
                     )}
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                        <Button type="primary" onClick={() => this.done()}>
                             Done
                         </Button>
                     )}

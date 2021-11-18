@@ -40,6 +40,17 @@ class Student extends Component {
         showModal: false
     }
 
+/*    componentDidMount() {
+        console.log("this.props = ", this.props.userinfo)
+        let { username, pwd } = this.props.userinfo;
+        if (pwd == 'george') {
+            this.setState({
+                showModal: true
+            })
+        }
+    }*/
+
+
     render() {
         let { showModal } = this.state;
         return (
@@ -139,7 +150,7 @@ class Student extends Component {
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
                                             <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
-                                    <Route path='/student/DormSelect' component={DormSelection} />
+                                            <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />
                                         </Switch>
 
