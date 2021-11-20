@@ -1,5 +1,5 @@
 import react, { Component } from 'react';
-import { Steps, Button, message, Radio, Modal, Form, Input } from 'antd';
+import { Steps, Button, message, Radio, Modal, Form, Input, Descriptions } from 'antd';
 import './DormSelection.css';
 
 const { Step } = Steps;
@@ -36,7 +36,8 @@ export default class DormSelection extends Component {
             value: 'dorm2'
         }],
         floorData: [],
-        roomData: []
+        roomData: [],
+        showModal: false,
     }
 
     next = () => {
@@ -52,11 +53,11 @@ export default class DormSelection extends Component {
 
                 this.setState({
                     floorData: [{
-                        label: 'dorm1 floor1',
-                        value: 'dorm1 floor1'
+                        label: 'floor1',
+                        value: 'floor1'
                     }, {
-                        label: 'dorm1 floor2',
-                        value: 'dorm1 floor2'
+                        label: 'floor2',
+                        value: 'floor2'
                     }]
                 })
             }
@@ -64,15 +65,15 @@ export default class DormSelection extends Component {
             if (dorm == 'dorm2') {
                 this.setState({
                     floorData: [{
-                        label: 'dorm2 floor1',
-                        value: 'dorm2 floor1'
+                        label: ' floor1',
+                        value: ' floor1'
                     }, {
-                        label: 'dorm2 floor2',
-                        value: 'dorm2 floor2'
+                        label: 'floor2',
+                        value: 'floor2'
                     },
                     {
-                        label: 'dorm2 floor3',
-                        value: 'dorm2 floor3'
+                        label: 'floor3',
+                        value: 'floor3'
                     },]
                 })
             }
@@ -87,104 +88,104 @@ export default class DormSelection extends Component {
                 message.error('You Must Select a floor!')
                 return;
             }
-                if (floor == 'dorm1 floor1') {
-                    this.setState({
-                        roomData: [{
-                            label: 'room101',
-                            value: '101'
-                        },
-                        {
-                            label: 'room102',
-                            value: '102'
-                        },
-                        {
-                            label: 'room103',
-                            value: '103'
-                        },
-                        {
-                            label: 'room104',
-                            value: '104'
-                        }]
-                    })
-                }
-
-                if (floor == 'dorm1 floor2') {
-                    this.setState({
-                        roomData: [{
-                            label: 'room201',
-                            value: '201'
-                        },
-                        {
-                            label: 'room202',
-                            value: '202'
-                        },
-                        {
-                            label: 'room203',
-                            value: '203'
-                        },
-                        {
-                            label: 'room204',
-                            value: '204'
-                        }]
-                    })
-                }
-
-                if (floor == 'dorm2 floor1') {
-                    this.setState({
-                        roomData: [{
-                            label: 'room101',
-                            value: '101'
-                        },
-                        {
-                            label: 'room102',
-                            value: '102'
-                        },
-                        {
-                            label: 'room103',
-                            value: '103'
-                        },]
-                    })
-                }
-
-                if (floor == 'dorm2 floor2') {
-                    this.setState({
-                        roomData: [{
-                            label: 'room201',
-                            value: '201'
-                        },
-                        {
-                            label: 'room202',
-                            value: '202'
-                        },
-                        {
-                            label: 'room203',
-                            value: '203'
-                        },]
-                    })
-                }
-
-                if (floor == 'dorm2 floor3') {
-
-                    this.setState({
-                        roomData: [{
-                            label: 'room301',
-                            value: '301'
-                        },
-                        {
-                            label: 'room302',
-                            value: '302'
-                        },
-                        {
-                            label: 'room303',
-                            value: '303'
-                        },]
-                    })
-                }
-                this.setState((preState) => {
-                    return {
-                        current: preState.current + 1
-                    }
+            if (floor == 'floor1') {
+                this.setState({
+                    roomData: [{
+                        label: 'room101',
+                        value: '101'
+                    },
+                    {
+                        label: 'room102',
+                        value: '102'
+                    },
+                    {
+                        label: 'room103',
+                        value: '103'
+                    },
+                    {
+                        label: 'room104',
+                        value: '104'
+                    }]
                 })
+            }
+
+            if (floor == 'floor2') {
+                this.setState({
+                    roomData: [{
+                        label: 'room201',
+                        value: '201'
+                    },
+                    {
+                        label: 'room202',
+                        value: '202'
+                    },
+                    {
+                        label: 'room203',
+                        value: '203'
+                    },
+                    {
+                        label: 'room204',
+                        value: '204'
+                    }]
+                })
+            }
+
+            if (floor == 'floor1') {
+                this.setState({
+                    roomData: [{
+                        label: 'room101',
+                        value: '101'
+                    },
+                    {
+                        label: 'room102',
+                        value: '102'
+                    },
+                    {
+                        label: 'room103',
+                        value: '103'
+                    },]
+                })
+            }
+
+            if (floor == 'floor2') {
+                this.setState({
+                    roomData: [{
+                        label: 'room201',
+                        value: '201'
+                    },
+                    {
+                        label: 'room202',
+                        value: '202'
+                    },
+                    {
+                        label: 'room203',
+                        value: '203'
+                    },]
+                })
+            }
+
+            if (floor == 'floor3') {
+
+                this.setState({
+                    roomData: [{
+                        label: 'room301',
+                        value: '301'
+                    },
+                    {
+                        label: 'room302',
+                        value: '302'
+                    },
+                    {
+                        label: 'room303',
+                        value: '303'
+                    },]
+                })
+            }
+            this.setState((preState) => {
+                return {
+                    current: preState.current + 1
+                }
+            })
         }
     };
 
@@ -203,69 +204,9 @@ export default class DormSelection extends Component {
             message.error('You Must Select a Room!')
             return;
         }
-/*        else {
-            <Modal title="Change Your password" visible={showModal} onOk={() => {
-            }} onCancel={() => {
-                this.setState({
-                    showModal: false
-                })
-            }}>
-                <div>
-                    <Form.Item
-                        name="Old password"
-                        label="Old Password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your password!',
-                            },
-                        ]}
-                        hasFeedback
-                    >
-                        <Input type="text" onChange={this.password} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name=" New password"
-                        label="New Password"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please input your new password!',
-                            },
-                        ]}
-                        hasFeedback
-                    >
-                        <Input type="text" onChange={this.password} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="confirm"
-                        label="Confirm New Password"
-                        dependencies={['password']}
-                        hasFeedback
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please confirm your new password!',
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('New password') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input type="text" onChange={this.confirmpassword} />
-                    </Form.Item>
-
-                </div>
-            </Modal>
-
-        }*/
+        this.setState({
+            showModal: true
+        })
     }
 
     onChange = (e, stateKey) => {
@@ -275,10 +216,95 @@ export default class DormSelection extends Component {
         })
     }
 
+    onFinish = (values) => {
+        // 校验成功
+        console.log('Success:', values);
+    };
+
+    onFinishFailed = (errorInfo) => {
+        // 校验失败
+        console.log('Failed:', errorInfo);
+    };
+
     render() {
-        let { current, dorm, floor, room, dormData, floorData, roomData } = this.state;
+        let { current, dorm, floor, room, dormData, floorData, roomData, showModal } = this.state;
         return (
-            <>
+            <div className="dormSelect">
+                <Modal footer={null} title="Confirm Your infomation" visible={showModal} onOk={() => {
+                }} onCancel={() => {
+                    this.setState({
+                        showModal: false
+                    })
+                }}>
+                    <>
+                        <Descriptions title="Room Info">
+                            <Descriptions.Item label="Dorm">{dorm}</Descriptions.Item>
+                            <Descriptions.Item label="Floor">{floor}</Descriptions.Item>
+                            <Descriptions.Item label="Room">{room}</Descriptions.Item>
+                        </Descriptions>
+                        <Descriptions title="User Info">
+                            <Descriptions.Item label="FirstName">First Name</Descriptions.Item>
+                            <Descriptions.Item label="LastName">FLast Name</Descriptions.Item>
+                            <Descriptions.Item label="Telephone">3123212132</Descriptions.Item>
+                            <Descriptions.Item label="StudentID">12345</Descriptions.Item>
+                        </Descriptions>
+
+                        {/* <Form
+                            style={{
+                                top: 0,
+                                transform: 'translateY(0%)'
+                            }}
+                            // labelCol={{ span: 8 }}
+                            // wrapperCol={{ span: 16 }}
+
+                            onFinish={this.onFinish}
+                            onFinishFailed={this.onFinishFailed}
+                            autoComplete="off"
+                        >
+                            <Form.Item
+                                name="first name"
+                                label="first name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your first name!',
+                                    },
+                                ]}
+                                hasFeedback
+                            >
+                                <Input type="text" />
+                            </Form.Item>
+                            <Form.Item
+                                name="last name"
+                                label="last name"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please input your last name!',
+                                    },
+                                ]}
+                                hasFeedback
+                            >
+                                <Input type="text" />
+                            </Form.Item>
+
+                            <Form.Item>
+                                <Button style={{
+                                    marginRight: 20
+                                }} type="primary" htmlType="submit">
+                                    Submit
+                                </Button>
+                                <Button onClick={() => {
+                                    this.setState({
+                                        showModal: false
+                                    })
+                                }} type="danger">
+                                    Cancel
+                                </Button>
+                            </Form.Item>
+                        </Form> */}
+                    </>
+                </Modal>
                 <Steps current={current}>
                     {steps.map(item => (
                         <Step key={item.title} title={item.title} />
@@ -330,10 +356,6 @@ export default class DormSelection extends Component {
                             </Radio.Group>
                         </div>
                     )}
-
-
-
-
                 </div>
                 <div className="steps-action">
                     {current < steps.length - 1 && (
@@ -352,7 +374,7 @@ export default class DormSelection extends Component {
                         </Button>
                     )}
                 </div>
-            </>
+            </div>
         );
     }
 

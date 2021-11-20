@@ -15,7 +15,7 @@ const { Header, Content, Footer, Sider } = Layout;
 class Student extends Component {
   constructor(props){
     super(props);
-    fetch('http://localhost:16648/api/Student/', {
+  /*  fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -33,7 +33,7 @@ class Student extends Component {
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
-            })
+            })*/
     }
 
     state = {
