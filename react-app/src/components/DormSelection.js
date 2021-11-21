@@ -244,7 +244,7 @@ export default class DormSelection extends Component {
                         </Descriptions>
                         <Descriptions title="User Info">
                             <Descriptions.Item label="FirstName">First Name</Descriptions.Item>
-                            <Descriptions.Item label="LastName">FLast Name</Descriptions.Item>
+                            <Descriptions.Item label="LastName">Last Name</Descriptions.Item>
                             <Descriptions.Item label="Telephone">3123212132</Descriptions.Item>
                             <Descriptions.Item label="StudentID">12345</Descriptions.Item>
                         </Descriptions>

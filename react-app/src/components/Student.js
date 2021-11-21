@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import './Student.css';
 import Cookies from 'js-cookie';
 import DormSelection from './DormSelection'
+import StudentHome from './StudentHome'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -149,7 +150,8 @@ class Student extends Component {
                                 <Content style={{ margin: '24px 16px 0' }}>
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
-                                            <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
+                                            <Route path='/student/Home' component={StudentHome} />
+                                            <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />
                                         </Switch>
