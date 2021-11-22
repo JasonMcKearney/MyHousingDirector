@@ -364,7 +364,7 @@ namespace WebAPI.Controllers
         [HttpPost]
         // Delete a student
         public Response SendEmailToStudent(string email, string username, string password)
-        {
+        {        
             // Email 
             MimeMessage message = new MimeMessage();
             MailboxAddress from = new MailboxAddress("Productivity X",
