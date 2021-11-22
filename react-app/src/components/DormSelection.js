@@ -19,7 +19,9 @@ const steps = [
     },
 ];
 
+/*submit(event){
 
+}*/
 
 export default class DormSelection extends Component {
 
@@ -65,8 +67,8 @@ export default class DormSelection extends Component {
             if (dorm == 'dorm2') {
                 this.setState({
                     floorData: [{
-                        label: ' floor1',
-                        value: ' floor1'
+                        label: 'floor1',
+                        value: 'floor1'
                     }, {
                         label: 'floor2',
                         value: 'floor2'
@@ -88,7 +90,7 @@ export default class DormSelection extends Component {
                 message.error('You Must Select a floor!')
                 return;
             }
-            if (floor == 'floor1') {
+            if (floor == 'floor1'&& dorm =='dorm1') {
                 this.setState({
                     roomData: [{
                         label: 'room101',
@@ -109,7 +111,7 @@ export default class DormSelection extends Component {
                 })
             }
 
-            if (floor == 'floor2') {
+            if (floor == 'floor2' && dorm == 'dorm1') {
                 this.setState({
                     roomData: [{
                         label: 'room201',
@@ -130,7 +132,7 @@ export default class DormSelection extends Component {
                 })
             }
 
-            if (floor == 'floor1') {
+            if (floor == 'floor1' && dorm == 'dorm2') {
                 this.setState({
                     roomData: [{
                         label: 'room101',
@@ -147,7 +149,7 @@ export default class DormSelection extends Component {
                 })
             }
 
-            if (floor == 'floor2') {
+            if (floor == 'floor2' && dorm =='dorm2') {
                 this.setState({
                     roomData: [{
                         label: 'room201',
@@ -164,7 +166,7 @@ export default class DormSelection extends Component {
                 })
             }
 
-            if (floor == 'floor3') {
+            if (floor == 'floor3' && dorm == 'dorm2') {
 
                 this.setState({
                     roomData: [{
@@ -248,6 +250,24 @@ export default class DormSelection extends Component {
                             <Descriptions.Item label="Telephone">3123212132</Descriptions.Item>
                             <Descriptions.Item label="StudentID">12345</Descriptions.Item>
                         </Descriptions>
+
+                        <Form.Item>
+                            <Button style={{
+                                marginRight: 20
+                            }} onClick={() => {
+                                this.props.history.push('/student/home');
+                            }}type="primary" htmlType="submit">
+
+                                Submit
+                            </Button>
+                            <Button onClick={() => {
+                                this.setState({
+                                    showModal: false
+                                })
+                            }} type="danger">
+                                Cancel
+                            </Button>
+                        </Form.Item>
 
                         {/* <Form
                             style={{
