@@ -12,7 +12,8 @@ export default class DormSelection extends Component {
                     
                 <div className="StudentHomeBox-left-upper">
                     <div className="Studentinfobox">
-                    <Card
+                        My Profile:
+                    <Card className="Card"
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
