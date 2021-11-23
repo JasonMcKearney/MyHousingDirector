@@ -1,5 +1,5 @@
 import react, { Component } from 'react';
-import { Steps, Button, message, Radio, Modal, Form, Input, Descriptions } from 'antd';
+import { Steps, Button, message, Radio, Modal, Option, Select, Input, Descriptions } from 'antd';
 import './DormSelection.css';
 
 const { Step } = Steps;
@@ -315,7 +315,15 @@ export default class DormSelection extends Component {
                 }} className="steps-content">
                     {current == 0 && (
                         <div>
-                            <Radio.Group onChange={(e) => {
+                                <Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
+      <Option value="jack">Jack</Option>
+      <Option value="lucy">Lucy</Option>
+      <Option value="disabled" disabled>
+                                    Disabled
+      </Option>
+      <Option value="Yiminghe">yiminghe</Option>
+    </Select>
+/*                            <Radio.Group onChange={(e) => {
                                 this.onChange(e, 'dorm')
                             }} value={dorm}>
                                 {dormData.map((v, i) => {
@@ -323,7 +331,7 @@ export default class DormSelection extends Component {
                                         <Radio key={i} value={v.value}>{v.label}</Radio>
                                     );
                                 })}
-                            </Radio.Group>
+                            </Radio.Group>*/
                         </div>
                     )}
 
