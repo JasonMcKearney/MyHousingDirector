@@ -26,6 +26,7 @@ export class StudentProfile extends Component {
         // Allows me to do this.state.--, and access different state values in updateStudentFields() function
         this.updateStudentFields = this.updateStudentFields.bind(this);
         this.deleteStudent = this.deleteStudent.bind(this);
+        this.emailStudent = this.emailStudent.bind(this);
     }
 
     firstName = (event) => {
@@ -145,6 +146,41 @@ export class StudentProfile extends Component {
             }
         })
     }
+
+    emailStudent()
+    {
+        console.log("Made it to emailStudent Function")
+        console.log("email" + this.state.email)
+        console.log("username" + this.state.username)
+        console.log("password" + this.state.password)
+
+
+        // Admin add student account...
+        fetch('http://localhost:16648/api/Admin/SendEmailToStudent', {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                email: this.state.email,
+                username: this.state.username,                
+                password: this.state.password
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("result: " + result.status)
+            if (result.status == "Sucesss")
+            {
+                alert(result.message);   
+            }
+            else if(result.status == "Invalid")
+            {
+                alert(result.message);   
+            }
+        })
+    }
     
     render() {
         let firstName = this.state.firstName;
@@ -199,8 +235,7 @@ export class StudentProfile extends Component {
 
                     <button onClick={this.deleteStudent} id = "primary-button" htmlType="submit">Delete Student Profile</button>    
 
-                    <button type="submit">Email Student Account Details</button>
- 
+                    <button onClick={this.emailStudent} id = "primary-button" htmlType="submit">Email Student Account Details</button>     
             </div>
 
         );

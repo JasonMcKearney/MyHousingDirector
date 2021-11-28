@@ -360,38 +360,46 @@ namespace WebAPI.Controllers
 
 
      // Send username, password to specific student email
-        [Route("SendEmailToStudent/{email, username, password}")]
+        [Route("SendEmailToStudent")]
         [HttpPost]
         // Delete a student
-        public Response SendEmailToStudent(string email, string username, string password)
-        {        
-            // Email 
-            MimeMessage message = new MimeMessage();
-            MailboxAddress from = new MailboxAddress("Productivity X",
-            "productivityx2021@gmail.com");
-            message.From.Add(from);
-
-            MailboxAddress to = new MailboxAddress("User",
-            email);
-            message.To.Add(to);
-            message.Subject = "Housing Director Student Info";
-
-            message.Body = new TextPart("plain")
+        public Response SendEmailToStudent(StudentsViewModel student)
+        {
+            try
             {
-                Text = @"Your username: " + username + "\n" + "Your password: " + password
-            };
+                // Email 
+                MimeMessage message = new MimeMessage();
+                MailboxAddress from = new MailboxAddress("Housing Director",
+                "productivityx2021@gmail.com");
+                message.From.Add(from);
 
-            // Connect and authenticate with SMTP server
-            SmtpClient client = new SmtpClient();
-            client.Connect("smtp.gmail.com", 465, true);
-            client.Authenticate("productivityx2021@gmail.com", "ProDucTIvityx#$2021");
+                MailboxAddress to = new MailboxAddress("User",
+                student.email);
+                message.To.Add(to);
+                message.Subject = "Housing Director Student Info";
 
-            // Send email and then disconnect
-            client.Send(message);
-            client.Disconnect(true);
-            client.Dispose();
+                message.Body = new TextPart("plain")
+                {
+                    Text = @"Your username: " + student.username + "\n" + "Your password: " + student.password
+                };
 
-            return new Response { Status = "Success", Message = "Email has been sent." };
+                // Connect and authenticate with SMTP server
+                SmtpClient client = new SmtpClient();
+                client.Connect("smtp.gmail.com", 465, true);
+                client.Authenticate("productivityx2021@gmail.com", "ProDucTIvityx#$2021");
+
+
+                // Send email and then disconnect
+                client.Send(message);
+                client.Disconnect(true);
+                client.Dispose();
+            }
+            catch(Exception e)
+			{
+                return new Response { Status = "Invalid", Message = e.Message /*"Error sending email."*/ };
+            }
+
+            return new Response { Status = "Success", Message = "Email has been sent to the student." };
         }
     }
 }
