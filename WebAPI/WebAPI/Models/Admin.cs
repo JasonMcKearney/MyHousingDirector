@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Models
 {
+    // Admin fields from admin_tbl in MySQL database
 	public class Admin
 	{
         [Key]

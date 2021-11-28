@@ -16,14 +16,8 @@ export class StudentProfile extends Component {
             year:'',
             password:'',
         }
-/*        this.firstName = this.firstName.bind(this);
-        this.lastName = this.lastName.bind(this);
-        this.username = this.username.bind(this);
-        this.email = this.email.bind(this);
-        this.year = this.year.bind(this);
-        this.password = this.password.bind(this);
-*/
-        // Allows me to do this.state.--, and access different state values in updateStudentFields() function
+
+        // Allows me to do this.state and access different state values in updateStudentFields() function
         this.updateStudentFields = this.updateStudentFields.bind(this);
         this.deleteStudent = this.deleteStudent.bind(this);
         this.emailStudent = this.emailStudent.bind(this);
@@ -192,7 +186,7 @@ export class StudentProfile extends Component {
 
         return (
             <div>
-                 <div className = "student-image-container">
+                <div className = "student-image-container">
                     <img className="student-image" src={default_logo}></img>
                 </div> 
                 <div>
@@ -228,8 +222,7 @@ export class StudentProfile extends Component {
                         <input className= "student-infor-input" type = "text" defaultValue = {password} onChange={this.password} autoComplete = "off"></input>
                     </div>
 
-                    </div>
-
+                </div>
 
                     <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
 

@@ -27,9 +27,8 @@ namespace WebAPI.Controllers
 
         private MySqlConnection GetConnection()
         {
-            string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
+            string myConnectionString = _configuration.GetConnectionString("DevConnection"); 
             return new MySqlConnection(myConnectionString);
-            //       throw new NotImplementedException();
         }
 
         public AdminController(HousingDBContext context, IConfiguration configuration)
@@ -55,7 +54,8 @@ namespace WebAPI.Controllers
                 return new Response { Status = "Success", Message = "Login Successfully" };
         }
 
-        bool CheckConditionsValidation(StudentsViewModel student, string functionName)
+        // Conditions checking length of a variable are checked here..
+        bool CheckConditionsValidation(studentTblFields student, string functionName)
         {
             bool bRet = false;
             // For AddStudent function
@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
         // Create student account
         [Route("AddStudent")]
         [HttpPost]
-        public Response AddStudent(StudentsViewModel student)
+        public Response AddStudent(studentTblFields student)
         {
             bool bSuccessfull = false;
 
@@ -95,7 +95,7 @@ namespace WebAPI.Controllers
 
                     // Checks to see if there are duplicate usernames
                     CheckUser.Parameters.AddWithValue("@username", student.username);
-                    CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where userName = @userName";
+                    CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where userName = @userName";
 
                     // if 1 then already exist
                     int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
@@ -107,13 +107,9 @@ namespace WebAPI.Controllers
                     }
                     else
                     {
-                        //   // Hash password
-                        //   uc.password = BCrypt.Net.BCrypt.HashPassword(uc.password);
-                        //   uc.confirmPassword = BCrypt.Net.BCrypt.HashPassword(uc.confirmPassword);
-
                         // Inserting data into fields of database
                         MySqlCommand Query = conn.CreateCommand();
-                        Query.CommandText = "insert into housingdirector_schema.DBUserTbls (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
+                        Query.CommandText = "insert into housingdirector_schema.student_tbl (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
                         Query.Parameters.AddWithValue("@username", student.username);
                         Query.Parameters.AddWithValue("@firstname", student.firstName);
                         Query.Parameters.AddWithValue("@lastname", student.lastName);
@@ -141,9 +137,9 @@ namespace WebAPI.Controllers
         // Find Student Accounts that match a few characters (Search functionality on Admin page)
         [Route("FindStudents/{sUsernameToSearch}")]
         [HttpPost]
-        public List<StudentsViewModel> FindStudents(string sUsernameToSearch)
+        public List<studentTblFields> FindStudents(string sUsernameToSearch)
         {
-            List<StudentsViewModel> eventData = new List<StudentsViewModel>();
+            List<studentTblFields> eventData = new List<studentTblFields>();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -151,7 +147,7 @@ namespace WebAPI.Controllers
                 // Check if there are more than one student that matches the username entered
                 MySqlCommand FindTotalUsers = conn.CreateCommand();
                 FindTotalUsers.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.DBUserTbls where username like @username";
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.student_tbl where username like @username";
                 FindTotalUsers.ExecuteNonQuery();
 
                 // If nNumStudents is 1 then there are at least one student account created to check
@@ -161,9 +157,9 @@ namespace WebAPI.Controllers
                 {
                     MySqlCommand FindUsersLike = conn.CreateCommand();
 
-                    // Pulls all students usernames like entered characters
+                    // Pulls all students usernames that match entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "select username from housingdirector_schema.DBUserTbls where username like @username";
+                    FindUsersLike.CommandText = "select username from housingdirector_schema.student_tbl where username like @username";
 
                     FindUsersLike.ExecuteNonQuery();
 
@@ -172,7 +168,7 @@ namespace WebAPI.Controllers
 
                     while (reader.Read()) // Read returns false if the user does not exist!
                     {
-                        eventData.Add(new StudentsViewModel()
+                        eventData.Add(new studentTblFields()
                         {
                             username = reader[0].ToString()
                         });
@@ -181,7 +177,7 @@ namespace WebAPI.Controllers
                 }
                 else
                 {
-                    eventData.Add(new StudentsViewModel()
+                    eventData.Add(new studentTblFields()
                     {
                         username = ""
                     });
@@ -193,9 +189,9 @@ namespace WebAPI.Controllers
         // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
         [Route("FindStudentInfo/{sUsernameToSearch}")]
         [HttpPost]
-        public List<StudentsViewModel> FindStudentInfo(string sUsernameToSearch)
+        public List<studentTblFields> FindStudentInfo(string sUsernameToSearch)
         {
-            List<StudentsViewModel> eventData = new List<StudentsViewModel>();
+            List<studentTblFields> eventData = new List<studentTblFields>();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -204,7 +200,7 @@ namespace WebAPI.Controllers
 
                 // Pulls all students usernames like entered characters
                 FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
-                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, email, year, password from housingdirector_schema.DBUserTbls where username = @username";
+                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, email, year, password from housingdirector_schema.student_tbl where username = @username";
 
                 FindUsersInfo.ExecuteNonQuery();
 
@@ -213,7 +209,7 @@ namespace WebAPI.Controllers
 
                 while (reader.Read()) // Read returns false if the user does not exist!
                 {
-                    eventData.Add(new StudentsViewModel()
+                    eventData.Add(new studentTblFields()
                     {
                         user_id = Int32.Parse(reader[0].ToString()),
                         firstName = reader[1].ToString(),
@@ -230,41 +226,10 @@ namespace WebAPI.Controllers
             return eventData;
         }
 
-        /*
-                // Find student id based upon a username
-                private int GetStudentID(string sUsername)
-                {
-                    int userid = 0;
-
-                    using (MySqlConnection conn = GetConnection())
-                    {
-                        conn.Open();
-                        MySqlCommand FindUsersInfo = conn.CreateCommand();
-
-                        // Pulls all students usernames like entered characters
-                        FindUsersInfo.Parameters.AddWithValue("@username", sUsername);
-                        FindUsersInfo.CommandText = "select user_id from housingdirector_schema.DBUserTbls where username = @username";
-
-                        FindUsersInfo.ExecuteNonQuery();
-
-                        // Execute the SQL command against the DB:
-                        MySqlDataReader reader = FindUsersInfo.ExecuteReader();
-
-                        while (reader.Read()) // Read returns false if the user does not exist!
-                        {
-                            userid = Int32.Parse(reader[0].ToString());
-                        }
-                        reader.Close();
-                    }
-                    return userid;
-                }
-        */
-
-
         // Create student account
         [Route("UpdateProfile")]
         [HttpPost]
-        public Response UpdateProfile(StudentsViewModel student)
+        public Response UpdateProfile(studentTblFields student)
         {
             bool bSuccessfull = false;
 
@@ -278,7 +243,7 @@ namespace WebAPI.Controllers
                     // Checks to see if there are duplicate usernames
                     CheckUser.Parameters.AddWithValue("@username", student.username);
                     CheckUser.Parameters.AddWithValue("@userid", student.user_id);
-                    CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where username = @username and user_id != @userid";
+                    CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where username = @username and user_id != @userid";
 
                     // if 1 then already exist
                     int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
@@ -293,7 +258,7 @@ namespace WebAPI.Controllers
 
                         // Inserting data into fields of database
                         MySqlCommand Query = conn.CreateCommand();
-                        Query.CommandText = "update housingdirector_schema.DBUserTbls set firstName=@firstname, lastName=@lastname, username=@username, " +
+                        Query.CommandText = "update housingdirector_schema.student_tbl set firstName=@firstname, lastName=@lastname, username=@username, " +
                             "email=@email, year=@year, password=@password where user_id=@userid";
                         Query.Parameters.AddWithValue("@firstname", student.firstName);
                         Query.Parameters.AddWithValue("@lastname", student.lastName);
@@ -332,7 +297,7 @@ namespace WebAPI.Controllers
 
                 // Checks to see if there are duplicate usernames
                 CheckUser.Parameters.AddWithValue("@userid", user_id);
-                CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where user_id != @userid";
+                CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where user_id != @userid";
 
                 // if 1 then already exist
                 int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
@@ -341,7 +306,7 @@ namespace WebAPI.Controllers
                 {
                     // Inserting data into fields of database
                     MySqlCommand Query = conn.CreateCommand();
-                    Query.CommandText = "delete from DBUserTbls where user_id = @userid";
+                    Query.CommandText = "delete from student_tbl where user_id = @userid";
                     Query.Parameters.AddWithValue("@userid", user_id);
 
                     Query.ExecuteNonQuery();
@@ -363,7 +328,7 @@ namespace WebAPI.Controllers
         [Route("SendEmailToStudent")]
         [HttpPost]
         // Delete a student
-        public Response SendEmailToStudent(StudentsViewModel student)
+        public Response SendEmailToStudent(studentTblFields student)
         {
             try
             {

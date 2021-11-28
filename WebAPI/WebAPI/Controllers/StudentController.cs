@@ -18,75 +18,27 @@ namespace WebAPI.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        // HousingDBContext holds onto name of database tables
         private readonly HousingDBContext _context;
 
         private IConfiguration _configuration;
 
+        // Finds MySQL connection so can access database tables
         private MySqlConnection GetConnection()
         {
-              string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
+            string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
-     //       throw new NotImplementedException();
         }
 
         public StudentController(HousingDBContext context, IConfiguration configuration)
         {
+            // Object to HousingDBContext class
             _context = context;
             _configuration = configuration;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentsViewModel>>> GetDBUserTbls()
-        {
-            return await _context.DBUserTbls.ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StudentsViewModel>> GetDStudents(int id)
-        {
-            var dStudents = await _context.DBUserTbls.FindAsync(id);
-
-            if (dStudents == null)
-            {
-                return NotFound();
-            }
-
-            return dStudents;
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDStudents(int id, StudentsViewModel dStudents)
-        {
-            /* if (id != dStudents.user_id)
-             {
-                 return BadRequest();
-             }
-            */
-            dStudents.user_id = id;
-
-            _context.Entry(dStudents).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DStudentsExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         [HttpPost]
-        public StudentsViewModel GetStudentInfo(StudentsViewModel check)
+        public studentTblFields GetStudentInfo(studentTblFields check)
         {
             System.Diagnostics.Debug.WriteLine(check.username);
             string usernameResult = null;
@@ -98,7 +50,7 @@ namespace WebAPI.Controllers
                 MySqlCommand getID = conn.CreateCommand();
 
                 getID.Parameters.AddWithValue("@username", check.username);
-                getID.CommandText = "select studentID, username from housingdirector_schema.DBUserTbls where username = @username";
+                getID.CommandText = "select studentID, username from housingdirector_schema.student_tbl where username = @username";
                 
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
@@ -110,19 +62,19 @@ namespace WebAPI.Controllers
                 ReturnedInfo.Close();
 
             }
-            return new StudentsViewModel { studentID = studentIDResult, username = usernameResult };
+            return new studentTblFields { studentID = studentIDResult, username = usernameResult };
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDStudents(int id)
         {
-            var dStudents = await _context.DBUserTbls.FindAsync(id);
+            var dStudents = await _context.student_tbl.FindAsync(id);
             if (dStudents == null)
             {
                 return NotFound();
             }
 
-            _context.DBUserTbls.Remove(dStudents);
+            _context.student_tbl.Remove(dStudents);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -130,15 +82,16 @@ namespace WebAPI.Controllers
 
         private bool DStudentsExists(int id)
         {
-            return _context.DBUserTbls.Any(e => e.user_id == id);
+            return _context.student_tbl.Any(e => e.user_id == id);
         }
 
+        // Logs student into their account, will only allow them to access student pages
         [Route("api/DStudent/Login")]
         [HttpPost]
         public Response StudentLogin(Login login)
         {
 
-            var log = _context.DBUserTbls.Where(x => x.username.Equals(login.username) &&
+            var log = _context.student_tbl.Where(x => x.username.Equals(login.username) &&
                       x.password.Equals(login.password)).FirstOrDefault();
 
             if (log == null)
