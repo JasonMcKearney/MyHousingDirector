@@ -11,6 +11,9 @@ using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
 using WebAPI.Models;
 
+using MailKit.Net.Smtp;
+using MimeKit;
+
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -356,44 +359,47 @@ namespace WebAPI.Controllers
 
 
 
-        // Send username, password to specific student email
-        [Route("DeleteStudentProfile/{user_id}")]
+     // Send username, password to specific student email
+        [Route("SendEmailToStudent")]
         [HttpPost]
         // Delete a student
-        public Response SendEmailToStudent(string username, string password)
+        public Response SendEmailToStudent(StudentsViewModel student)
         {
-            bool bSuccessfull = false;
-
-            using (MySqlConnection conn = GetConnection())
+            try
             {
-                conn.Open();
-                MySqlCommand CheckUser = conn.CreateCommand();
+                // Email 
+                MimeMessage message = new MimeMessage();
+                MailboxAddress from = new MailboxAddress("Housing Director",
+                "productivityx2021@gmail.com");
+                message.From.Add(from);
 
-                // Checks to see if there are duplicate usernames
-                CheckUser.Parameters.AddWithValue("@userid", user_id);
-                CheckUser.CommandText = "select count(*) from housingdirector_schema.DBUserTbls where user_id != @userid";
+                MailboxAddress to = new MailboxAddress("User",
+                student.email);
+                message.To.Add(to);
+                message.Subject = "Housing Director Student Info";
 
-                // if 1 then already exist
-                int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
-
-                if (UserExist >= 1)
+                message.Body = new TextPart("plain")
                 {
-                    // Inserting data into fields of database
-                    MySqlCommand Query = conn.CreateCommand();
-                    Query.CommandText = "delete from DBUserTbls where user_id = @userid";
-                    Query.Parameters.AddWithValue("@userid", user_id);
+                    Text = @"Your username: " + student.username + "\n" + "Your password: " + student.password
+                };
 
-                    Query.ExecuteNonQuery();
-                    bSuccessfull = true;
-                }
+                // Connect and authenticate with SMTP server
+                SmtpClient client = new SmtpClient();
+                client.Connect("smtp.gmail.com", 465, true);
+                client.Authenticate("productivityx2021@gmail.com", "ProDucTIvityx#$2021");
+
+
+                // Send email and then disconnect
+                client.Send(message);
+                client.Disconnect(true);
+                client.Dispose();
+            }
+            catch(Exception e)
+			{
+                return new Response { Status = "Invalid", Message = e.Message /*"Error sending email."*/ };
             }
 
-            if (!bSuccessfull)
-            {
-                return new Response { Status = "Invalid", Message = "Could not find student data." };
-            }
-
-            return new Response { Status = "Success", Message = "Deleted student." };
+            return new Response { Status = "Success", Message = "Email has been sent to the student." };
         }
     }
 }
