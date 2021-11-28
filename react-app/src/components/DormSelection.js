@@ -1,8 +1,9 @@
-import react, { Component } from 'react';
-import { Steps, Button, message, Radio, Modal, Option, Select, Input, Descriptions } from 'antd';
+锘縤mport react, { Component } from 'react';
+import { Steps, Button, message, Radio, Modal, Form, Select, Input, Descriptions } from 'antd';
 import './DormSelection.css';
 
 const { Step } = Steps;
+
 
 const steps = [
     {
@@ -19,11 +20,22 @@ const steps = [
     },
 ];
 
-/*submit(event){
+const { Option } = Select;
 
-}*/
 
 export default class DormSelection extends Component {
+
+    handleDorm = (val) => {
+        this.setState({ dorm: val });
+    }
+
+    handleFloor = (val) => {
+        this.setState({ floor: val });
+    }
+
+    handleRoom = (val) => {
+        this.setState({ room: val });
+    }
 
     state = {
         current: 0,
@@ -211,20 +223,20 @@ export default class DormSelection extends Component {
         })
     }
 
-    onChange = (e, stateKey) => {
-        console.log("e = ", e.target.value)
+    onChange = (val, stateKey) => {
         this.setState({
-            [stateKey]: e.target.value
+            [stateKey]: val
         })
     }
 
+
     onFinish = (values) => {
-        // 校验成功
+        // 鏍￠獙鎴愬姛
         console.log('Success:', values);
     };
 
     onFinishFailed = (errorInfo) => {
-        // 校验失败
+        // 鏍￠獙澶辫触
         console.log('Failed:', errorInfo);
     };
 
@@ -335,53 +347,43 @@ export default class DormSelection extends Component {
                 }} className="steps-content">
                     {current == 0 && (
                         <div>
-                                <Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
-      <Option value="jack">Jack</Option>
-      <Option value="lucy">Lucy</Option>
-      <Option value="disabled" disabled>
-                                    Disabled
-      </Option>
-      <Option value="Yiminghe">yiminghe</Option>
-    </Select>
-/*                            <Radio.Group onChange={(e) => {
-                                this.onChange(e, 'dorm')
-                            }} value={dorm}>
+                            <Select style={{ width: 120 }} onChange={(val) => {
+                                this.onChange(val, 'dorm')
+                            }}>
                                 {dormData.map((v, i) => {
                                     return (
-                                        <Radio key={i} value={v.value}>{v.label}</Radio>
+                                        <Option key={i} value={v.value}>{v.label}</Option>
                                     );
                                 })}
-                            </Radio.Group>*/
+                            </Select>
                         </div>
                     )}
 
                     {current == 1 && (
                         <div>
-                            <Radio.Group onChange={(e) => {
-                                this.onChange(e, 'floor')
-                            }} value={floor}>
-
+                            <Select defaultValue="floor1" style={{ width: 120 }} onChange={(val) => {
+                                this.onChange(val, 'floor')
+                            }}>
                                 {floorData.map((v, i) => {
                                     return (
-                                        <Radio key={i} value={v.value}>{v.label}</Radio>
+                                        <Option key={i} value={v.value}>{v.label}</Option>
                                     );
                                 })}
-                            </Radio.Group>
+                            </Select>
                         </div>
                     )}
 
                     {current == 2 && (
                         <div>
-                            <Radio.Group onChange={(e) => {
-                                this.onChange(e, 'room')
-                            }} value={room}>
-
+                            <Select style={{ width: 120 }} onChange={(val) => {
+                                this.onChange(val, 'room')
+                            }}>
                                 {roomData.map((v, i) => {
                                     return (
-                                        <Radio key={i} value={v.value}>{v.label}</Radio>
+                                        <Option key={i} value={v.value}>{v.label}</Option>
                                     );
                                 })}
-                            </Radio.Group>
+                            </Select>
                         </div>
                     )}
                 </div>
