@@ -1,0 +1,45 @@
+﻿.StudentHomeBox {
+    width: 100%;
+    height: 100%;
+/*    border: 1px solid red; */
+}
+
+/*.StudentHomeBox-right {
+    display: flex;
+    width: 50%;
+    height: 50%;
+    background: skyblue;
+    width: 50%;
+    height: 100%;
+    background: blue;
+}*/
+
+.StudentHomeBox-left-upper {
+    display: flex;
+    width: 50%;
+    height: 47%;
+/*    background: skyblue;*/
+}
+
+.StudentHomeBox-left-bottom {
+    display: flex;
+    align-content:flex-end;
+    width: 50%;
+    height: 47%;
+/*    background: red;*/
+}
+
+.Studentinfobox {
+    width: 50%;
+    height: 50%;
+    align-items: flex-end;
+}
+
+.Card {
+/*    width: 70%;
+    height: 70%;
+*/
+/*    display:flex;
+    justify-content:center*/
+}
+

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
 import './Student.css';
 import Cookies from 'js-cookie';
+import DormSelection from './DormSelection'
+import StudentHome from './StudentHome'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -14,7 +16,7 @@ const { Header, Content, Footer, Sider } = Layout;
 class Student extends Component {
   constructor(props){
     super(props);
-    fetch('http://localhost:16648/api/Student/', {
+  /*  fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -32,14 +34,14 @@ class Student extends Component {
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
-            })
+            })*/
     }
 
     state = {
         showModal: false
     }
 
-    componentDidMount() {
+/*    componentDidMount() {
         console.log("this.props = ", this.props.userinfo)
         let { username, pwd } = this.props.userinfo;
         if (pwd == 'george') {
@@ -47,7 +49,7 @@ class Student extends Component {
                 showModal: true
             })
         }
-    }
+    }*/
 
 
     render() {
@@ -63,7 +65,7 @@ class Student extends Component {
                     }}>
                         <div>
                             <Form.Item
-                                name=" Old password"
+                                name="Old password"
                                 label="Old Password"
                                 rules={[
                                     {
@@ -120,7 +122,7 @@ class Student extends Component {
                                 <Link to="/student/home">Home</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
-                                <Link to="/student/nav1">Dorm Selection</Link>
+                            <Link to="/student/DormSelect">Dorm Selection</Link>
                             </Menu.Item>
                             <Menu.Item key="3">
                                 <Link to="/student/nav2">User Info</Link>
@@ -148,14 +150,13 @@ class Student extends Component {
                                 <Content style={{ margin: '24px 16px 0' }}>
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
-                                            <Route path='/student/Home' render={() => { return (<h1>Home</h1>) }} />
-                                            <Route path='/student/nav1' render={() => { return (<h1>Dorm Selection</h1>) }} />
+                                            <Route path='/student/Home' component={StudentHome} />
+                                            <Route path='/student/Home' component={StudentHome} />
+                                            <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />
                                         </Switch>
-                                        <h2>Welcome, {Cookies.get("username")}</h2>
-                                        <h2>Your student ID is: {Cookies.get("ID")}</h2>
-                                    </div>
 
+                                    </div>
                                 </Content>
                             </Layout>
                       </Content>

@@ -35,14 +35,12 @@ namespace WebAPI.Controllers
             _configuration = configuration;
         }
 
-        // GET: api/DStudent
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StudentsViewModel>>> GetDBUserTbls()
         {
             return await _context.DBUserTbls.ToListAsync();
         }
 
-        // GET: api/DStudent/5
         [HttpGet("{id}")]
         public async Task<ActionResult<StudentsViewModel>> GetDStudents(int id)
         {
@@ -56,7 +54,6 @@ namespace WebAPI.Controllers
             return dStudents;
         }
 
-        // PUT: api/DStudent/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDStudents(int id, StudentsViewModel dStudents)
         {
@@ -88,7 +85,6 @@ namespace WebAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/DStudent
         [HttpPost]
         public StudentsViewModel GetStudentInfo(StudentsViewModel check)
         {
@@ -117,7 +113,6 @@ namespace WebAPI.Controllers
             return new StudentsViewModel { studentID = studentIDResult, username = usernameResult };
         }
 
-        // DELETE: api/DStudent/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDStudents(int id)
         {
