@@ -21,9 +21,6 @@ import Password from 'antd/lib/input/Password';
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-// Import Cookies
-//import Cookies from 'js-cookie'
-
 // install Swiper modules
 SwiperCore.use([Pagination, Autoplay]);
 
@@ -87,7 +84,6 @@ class LogIn extends Component {
                                     pwd: this.state.password
                                 });
 
-                                //                                    Cookies.set('Username', this.username);
                                 this.props.history.push('/home')
                             }
                         })

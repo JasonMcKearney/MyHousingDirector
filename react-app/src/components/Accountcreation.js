@@ -88,6 +88,7 @@ export default class accountcreation extends Component {
         this.setState({ studentID: event.target.value })
     }
 
+    // Takes data entered by the user and inserts data into student_tbl by being routed to WebAPI for connection to database server
     AddStudent(event) {
         // Admin add student account...
         fetch('http://localhost:16648/api/Admin/AddStudent', {
@@ -119,7 +120,7 @@ export default class accountcreation extends Component {
                 }
                 else
                 {
-                    // Bring to accountcreation page
+                    // Bring to Account Creation page
                     this.props.history.push('/home')
                     alert("Student Created");
                 }
@@ -135,10 +136,6 @@ export default class accountcreation extends Component {
         console.log('Failed:', errorInfo);
     };
       
-   /* handleDropdownChange(e) {
-        this.setState({ year: e.target.value });
-    }
-*/
     handleGenderDropdownChange = (e) =>{
         this.setState({gender: e});
     }
@@ -247,7 +244,7 @@ export default class accountcreation extends Component {
                         label="Gender"
                         rules={[{ required: true, message: 'Please select gender!' }]}
                     >
-                        <Select placeholder="select your gender" /*value={this.state.gender}*/ onChange={this.handleGenderDropdownChange}>
+                        <Select placeholder="select your gender" onChange={this.handleGenderDropdownChange}>
                             <Option value="male">Male</Option>
                             <Option value="female">Female</Option>
                             <Option value="other">Other</Option>
@@ -260,7 +257,7 @@ export default class accountcreation extends Component {
                         label="Year:"
                         rules={[{ required: true, message: 'Please select the users Year' }]}
                     >
-                        <Select placeholder="select the users year" /*value={this.state.year}*/ onChange={this.handleYearDropdownChange}>
+                        <Select placeholder="select the users year" onChange={this.handleYearDropdownChange}>
                             <Option value="Freshman">Freshman</Option>
                             <Option value="Sophomore">Sophomore</Option>
                             <Option value="Junior">Junior</Option>
@@ -283,7 +280,7 @@ export default class accountcreation extends Component {
                         rules={[
                             {
                                 validator: (_, value) =>
-                                    value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+                                    value ? Promise.resolve() : Promise.reject(new Error('Agreement needs to be accepted to continue.')),
                             },
                         ]}
                         {...tailFormItemLayout}
@@ -302,11 +299,6 @@ export default class accountcreation extends Component {
                     </Form>
                 </div>
             </div>
-
-
-
-
-            );
+        );
     }
-
 }

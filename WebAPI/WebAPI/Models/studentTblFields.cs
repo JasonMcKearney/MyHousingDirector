@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-	public class StudentsViewModel
+    // Keeps track of student_tbl fields
+	public class studentTblFields
 	{
         [Key]
         public int user_id { get; set; }

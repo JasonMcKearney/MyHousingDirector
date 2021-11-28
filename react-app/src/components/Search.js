@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import { Form, Input, Button, Checkbox, Carousel } from 'antd';
 import { Link } from 'react-router-dom';
@@ -22,15 +21,28 @@ export default class search extends Component {
             studentName:'',
             studentlist: [],
         }
+
+/*        //Student Object to store all the student data
+        this.studentObj = {
+            firstname: '',
+            lastName:'',
+            username:'',
+            email:'',
+            idNumber: '',
+        };
+*/
+
         // Gives access to functions below... 
         this.getResults = this.getResults.bind(this);
         this.searchText = this.searchText.bind(this);
         this.addItem = this.addItem.bind(this);
         this.listItems = this.listItems.bind(this);      
+        //  this.studentObj = this.studentObj.bind(this);
     }
 
     searchText(event) {
-        this.setState({ searchText: event.target.value })
+        this.setState({ searchText: event.target.value });
+        this.setState({ studentlist: [] })
     }
 
     // Is called after studentName is set, adds the student to the list
@@ -61,35 +73,42 @@ export default class search extends Component {
     // Find results if there are any in the database
     getResults(){
         let currentComponent = this;
-        var test = this.state.searchText;
-        // Passing parameter to Web API through address
-        fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {                
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'POST',
-        }).then(res=>res.clone().json())
-        .then(function(res) {
-            console.log("hello " + res[0].username)
-            var loopData = ''
-            var i;
-            for (i = 0; i < res.length; i++)
-            {
-                console.log("Next User: " + res[i].username)
-                if(res[i].username != "")
+        let studentListLength = this.state.studentlist;
+
+        console.log("Length: " + studentListLength.length)
+
+        // Does not allow for multiple strings to be displayed if the input has not changed by the user
+        if(studentListLength == 0)
+        {
+            // Passing parameter to Web API through address
+            fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
+                mode: 'cors', // this cannot be 'no-cors'
+                headers: {                
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+            }).then(res=>res.clone().json())
+            .then(function(res) {
+                console.log("hello " + res[0].username)
+                var loopData = ''
+                var i;
+                for (i = 0; i < res.length; i++)
                 {
-                    currentComponent.setState({studentName: res[i].username})
-                    // Add student to list
-                    currentComponent.addItem();
+                    console.log("Next User: " + res[i].username)
+                    if(res[i].username != "")
+                    {
+                        currentComponent.setState({studentName: res[i].username})
+                        // Add student to list
+                        currentComponent.addItem();
+                    }
+                    // Entries with characters entered do not match any usernames in the database
+                    else
+                        alert("No entries match the character/characters entered.")
                 }
-                // Entries with characters entered do not match any usernames in the database
-                else
-                    alert("No entries match the character/characters entered.")
-            }
-            currentComponent.setState({searchResults: loopData})
-        })
+                currentComponent.setState({searchResults: loopData})
+            })
+        }
     }
     
     render() {
