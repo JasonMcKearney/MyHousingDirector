@@ -1,5 +1,6 @@
 ﻿import react, { Component } from 'react';
 import { Steps, Button, message, Radio, Modal, Form, Select, Input, Descriptions } from 'antd';
+import Cookies from 'js-cookie';
 import './DormSelection.css';
 
 const { Step } = Steps;
@@ -24,6 +25,29 @@ const { Option } = Select;
 
 
 export default class DormSelection extends Component {
+
+    constructor(props) {
+        super(props);
+    fetch('http://localhost:16648/api/Student/', {
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+            },
+        method: 'POST',
+        body: JSON.stringify({
+            username: Cookies.get("username")
+        })
+          }).then((Response) => Response.json())
+    .then((result) => {
+        var ID = result.studentID;
+        var firstName = result.firstName;
+        var lastName = result.lastName;
+
+        Cookies.set("ID", ID);
+        Cookies.set("FN", firstName);
+        Cookies.set("LN", lastName);
+    })
+    }
 
     handleDorm = (val) => {
         this.setState({ dorm: val });
@@ -257,10 +281,10 @@ export default class DormSelection extends Component {
                             <Descriptions.Item label="Room">{room}</Descriptions.Item>
                         </Descriptions>
                         <Descriptions title="User Info">
-                            <Descriptions.Item label="FirstName">First Name</Descriptions.Item>
-                            <Descriptions.Item label="LastName">Last Name</Descriptions.Item>
+                            <Descriptions.Item label="FirstName">{Cookies.get("FN")}</Descriptions.Item>
+                            <Descriptions.Item label="LastName">{Cookies.get("LN")}</Descriptions.Item>
                             <Descriptions.Item label="Telephone">3123212132</Descriptions.Item>
-                            <Descriptions.Item label="StudentID">12345</Descriptions.Item>
+                            <Descriptions.Item label="StudentID">{Cookies.get("ID")}</Descriptions.Item>
                         </Descriptions>
 
                         <Form.Item>
@@ -361,7 +385,7 @@ export default class DormSelection extends Component {
 
                     {current == 1 && (
                         <div>
-                            <Select defaultValue="floor1" style={{ width: 120 }} onChange={(val) => {
+                            <Select style={{ width: 120 }} onChange={(val) => {
                                 this.onChange(val, 'floor')
                             }}>
                                 {floorData.map((v, i) => {
