@@ -16,7 +16,7 @@ const { Header, Content, Footer, Sider } = Layout;
 class Student extends Component {
   constructor(props){
     super(props);
-  /*  fetch('http://localhost:16648/api/Student/', {
+    fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -34,14 +34,14 @@ class Student extends Component {
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
-            })*/
+            })
     }
 
     state = {
         showModal: false
     }
 
-/*    componentDidMount() {
+    componentDidMount() {
         console.log("this.props = ", this.props.userinfo)
         let { username, pwd } = this.props.userinfo;
         if (pwd == 'george') {
@@ -49,7 +49,7 @@ class Student extends Component {
                 showModal: true
             })
         }
-    }*/
+    }
 
 
     render() {
@@ -124,9 +124,9 @@ class Student extends Component {
                             <Menu.Item key="2">
                             <Link to="/student/DormSelect">Dorm Selection</Link>
                             </Menu.Item>
-                            <Menu.Item key="3">
+{/*                            <Menu.Item key="3">
                                 <Link to="/student/nav2">User Info</Link>
-                            </Menu.Item>
+                            </Menu.Item>*/}
                             <Menu.Item key="4">
                               <Button onClick={() => {
                                   Cookies.remove('ID')
@@ -153,7 +153,7 @@ class Student extends Component {
                                             <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/DormSelect' component={DormSelection} />
-                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />
+{/*                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />*/}
                                         </Switch>
 
                                     </div>
