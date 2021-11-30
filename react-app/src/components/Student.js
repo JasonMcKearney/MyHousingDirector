@@ -14,7 +14,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 
 class Student extends Component {
-/*  constructor(props){
+  constructor(props){
     super(props);
     fetch('http://localhost:16648/api/Student/', {
             headers: {
@@ -35,13 +35,13 @@ class Student extends Component {
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
             })
-    }*/
+    }
 
     state = {
         showModal: false
     }
 
-/*    componentDidMount() {
+    componentDidMount() {
         console.log("this.props = ", this.props.userinfo)
         let { username, pwd } = this.props.userinfo;
         if (pwd == 'george') {
@@ -49,7 +49,7 @@ class Student extends Component {
                 showModal: true
             })
         }
-    }*/
+    }
 
 
     render() {

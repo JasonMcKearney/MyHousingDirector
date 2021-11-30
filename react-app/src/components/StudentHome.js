@@ -7,7 +7,7 @@ const { Meta } = Card;
 
 export default class DormSelection extends Component {
 
-   /* constructor(props) {
+    constructor(props) {
         super(props);
         fetch('http://localhost:16648/api/Student/', {
             headers: {
@@ -30,7 +30,7 @@ export default class DormSelection extends Component {
                 Cookies.set("LN", lastName);
                 Cookies.set("EM", email);
             })
-    }*/
+    }
 
     render() {
         return (
@@ -44,10 +44,9 @@ export default class DormSelection extends Component {
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
-                            <p>{Cookies.get("FN")}</p>
-                            <p>{Cookies.get("LN")}</p>
-                            <p>{Cookies.get("ID")}</p>
-                            <p>{Cookies.get("EM")}</p>
+                            <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                            <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
+
                         </Card>,
                         </div>
                     </div>
@@ -58,26 +57,22 @@ export default class DormSelection extends Component {
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
-                        <p>{Cookies.get("FN")}</p>
-                        <p>{Cookies.get("LN")}</p>
-                        <p>{Cookies.get("ID")}</p>
-                        <p>{Cookies.get("EM")}</p>
+                        <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                        <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
+
                     </Card>,<Card className="Roommate2"
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
-                        <p>{Cookies.get("FN")}</p>
-                        <p>{Cookies.get("LN")}</p>
-                        <p>{Cookies.get("ID")}</p>
-                        <p>{Cookies.get("EM")}</p>
+                        <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                        <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
+
                     </Card>,<Card className="Roommate3"
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
-                        <p>{Cookies.get("FN")}</p>
-                        <p>{Cookies.get("LN")}</p>
-                        <p>{Cookies.get("ID")}</p>
-                        <p>{Cookies.get("EM")}</p>
+                        <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                        <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
                     </Card>,
                 </div>
 
