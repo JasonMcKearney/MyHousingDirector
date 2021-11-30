@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
 
                 getID.Parameters.AddWithValue("@username", check.username);
                 getID.CommandText = "select studentID, username from housingdirector_schema.student_tbl where username = @username";
-                
+
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
                 while (ReturnedInfo.Read())
@@ -100,6 +100,23 @@ namespace WebAPI.Controllers
             }
             else
                 return new Response { Status = "Success", Message = "Login Successfully" };
+        }
+
+        [Route("FindStudentInfo/{sFirstNameToSearch}")]
+        [HttpPost]
+        public List<studentTblFields> FindStudentInfo(string sUsernameToSearch)
+        {
+            List<studentTblFields> eventData = new List<studentTblFields>();
+
+            eventData.Add(new studentTblFields()
+            {
+               
+                firstName ="Nick",
+               
+            }) ; 
+
+
+            return eventData;
         }
     }
 }
