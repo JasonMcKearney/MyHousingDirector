@@ -44,21 +44,36 @@ export default class DormSelection extends Component {
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
-                            <p>{Cookies.get("FN")}</p>
-                            <p>{Cookies.get("LN")}</p>
-                            <p>{Cookies.get("ID")}</p>
-                            <p>{Cookies.get("EM")}</p>
+                            <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                            <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
+
                         </Card>,
                         </div>
                     </div>
 
-                    <div className="StudentHomeBox-left-bottom">
-                        
-                    </div>
-
 
                 <div className="StudentHomeBox-right">
+                    <Card className="Roommate1"
+                        hoverable
+                        cover={<img alt="example" src={defaultlogo} />}
+                    >
+                        <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                        <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
 
+                    </Card>,<Card className="Roommate2"
+                        hoverable
+                        cover={<img alt="example" src={defaultlogo} />}
+                    >
+                        <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                        <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
+
+                    </Card>,<Card className="Roommate3"
+                        hoverable
+                        cover={<img alt="example" src={defaultlogo} />}
+                    >
+                        <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                        <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
+                    </Card>,
                 </div>
 
 
