@@ -1,45 +1,61 @@
 ﻿.StudentHomeBox {
     width: 100%;
     height: 100%;
+    display:flex;
+
 /*    border: 1px solid red; */
 }
 
-/*.StudentHomeBox-right {
+.StudentHomeBox-right {
+    flex: 1;
+    /*   display: flex;
+    width: 50%;
+    height: 50%;*/
+    /*    width: 50%;
+    height: 100%;
+    background: blue;*/
+    /*    display: flex;*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.StudentHomeBox-left-upper {
+
     display: flex;
     width: 50%;
     height: 50%;
-    background: skyblue;
-    width: 50%;
-    height: 100%;
-    background: blue;
-}*/
-
-.StudentHomeBox-left-upper {
-    display: flex;
-    width: 50%;
-    height: 47%;
-/*    background: skyblue;*/
+    /*    background: skyblue;*/
 }
 
-.StudentHomeBox-left-bottom {
-    display: flex;
-    align-content:flex-end;
-    width: 50%;
-    height: 47%;
-/*    background: red;*/
-}
 
 .Studentinfobox {
+    flex:1;
     width: 50%;
     height: 50%;
     align-items: flex-end;
 }
 
-.Card {
-/*    width: 70%;
-    height: 70%;
-*/
-/*    display:flex;
-    justify-content:center*/
+.Roommate1 {
+    width: 30%;
+    height: 30%;
+/*    display:flex;*/
+/*    justify-content:flex-end*/
 }
+
+.Roommate2 {
+    width: 30%;
+    height: 30%;
+/*    display: flex;*/
+    justify-content: flex-end
+}
+
+.Roommate3 {
+    width: 30%;
+    height: 30%;
+/*    display: flex;*/
+    justify-content: flex-end
+}
+
 
