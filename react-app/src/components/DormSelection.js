@@ -36,25 +36,19 @@ export default class DormSelection extends Component {
    constructor(props) {
        super(props);
 
-   fetch('http://localhost:16648/api/Student/', {
-       headers: {
-           'Content-Type': 'application/json',
-           'Accept': 'application/json'
-           },
-       method: 'POST',
-       body: JSON.stringify({
-           username: Cookies.get("username")
-       })
-         }).then((Response) => Response.json())
-   .then((result) => {
-       var ID = result.studentID;
-       var firstName = result.firstName;
-       var lastName = result.lastName;
-
-       Cookies.set("ID", ID);
-       Cookies.set("FN", firstName);
-       Cookies.set("LN", lastName);
-   })
+       this.state = {
+        current: 0,
+        // 空白处内容展示
+        currentDescriptions: {},
+        dorm: "",
+        floor: "",
+        room: "",
+        dormData: [],
+        floorData: [],
+        roomData: [],
+        showModal: false,
+      }
+      this.componentDidMount = this.componentDidMount.bind(this);
    }
 
   handleDorm = (val) => {
@@ -69,27 +63,50 @@ export default class DormSelection extends Component {
     this.setState({ room: val });
   };
 
-  state = {
-    current: 0,
-    // 空白处内容展示
-    currentDescriptions: {},
-    dorm: "",
-    floor: "",
-    room: "",
-    dormData: [
-      {
-        label: "dorm1",
-        value: "dorm1",
-      },
-      {
-        label: "dorm2",
-        value: "dorm2",
-      },
-    ],
-    floorData: [],
-    roomData: [],
-    showModal: false,
-  };
+  
+  // Get dorm info from Database
+  componentDidMount()
+  {
+    fetch('http://localhost:16648/api/Student/FindDormInfo/', {
+        mode: 'cors', // this cannot be 'no-cors'
+        headers: {                
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+        method: 'GET',
+    }).then(res=>res.clone().json())
+    .then(function(res) 
+    {
+        let dormData = [...this.state.dormData];
+        console.log(dormData.value);
+        var loopData = '';
+        var i;
+ //       for (i = 0; i < res.length; i++)
+ //       {
+      /*      if(res[i].username != "")
+            {
+                currentComponent.setState({studentName: res[i].username})
+                // Add student to list
+                currentComponent.addItem();
+            }
+            // Entries with characters entered do not match any usernames in the database
+            else
+                alert("No entries match the character/characters entered.")
+        }
+        */
+       let data = {
+         label: 'test',
+         value: 'test',
+         description: 'test',
+         url: 'tsetsdd'
+       }
+       dormData.unshift(data);
+        this.setState({ dormData })
+        console.log("label: " + this.state.dormData.label + " url: " + this.state.dormData.url + " description: " + this.state.dormData.description);
+     //  }
+        //currentComponent.setState({searchResults: loopData})
+    })
+  }
 
   next = () => {
     let { current, dorm, floor } = this.state;

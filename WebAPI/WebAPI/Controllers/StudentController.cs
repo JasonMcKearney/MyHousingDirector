@@ -101,5 +101,39 @@ namespace WebAPI.Controllers
             else
                 return new Response { Status = "Success", Message = "Login Successfully" };
         }
+
+        // DormSelection Page..
+        // Need to get dorm info
+        // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
+        [Route("FindDormInfo")]
+        [HttpGet]
+        public List<DormInfo> FindDormInfo()
+        {
+            List<DormInfo> dormData = new List<DormInfo>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindUsersInfo = conn.CreateCommand();
+
+                FindUsersInfo.CommandText = "select name, description, url from housingdirector_schema.dorm_tbl";
+                FindUsersInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindUsersInfo.ExecuteReader();
+
+                while (reader.Read()) // Read returns false if the user does not exist!
+                {
+                    dormData.Add(new DormInfo()
+                    {
+                        name = reader[0].ToString(),
+                        description = reader[1].ToString(),
+                        url = reader[2].ToString(),
+                    });
+                }
+                reader.Close();
+            }
+            return dormData;
+        }
     }
 }
