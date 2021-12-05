@@ -1,5 +1,5 @@
-﻿import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb, Button, Form, Modal, Input } from 'antd';
+﻿import React, { Component} from 'react';
+import { Layout, Menu, Breadcrumb, Button, Form, Modal, Input, TimePicker } from 'antd';
 import { Route, Switch } from 'react-router';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux'
@@ -7,16 +7,22 @@ import './Student.css';
 import Cookies from 'js-cookie';
 import DormSelection from './DormSelection'
 import StudentHome from './StudentHome'
+import UserInfo from './StudentInfo'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
+const onChange = (time, timeString) => {
+    console.log(time, timeString);
+}
+
+
 
 class Student extends Component {
   constructor(props){
     super(props);
-    fetch('http://localhost:16648/api/Student/', {
+/*    fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -34,14 +40,14 @@ class Student extends Component {
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
-            })
+            })*/
     }
 
     state = {
-        showModal: false
+        showModal: true
     }
 
-    componentDidMount() {
+/*    componentDidMount() {
         console.log("this.props = ", this.props.userinfo)
         let { username, pwd } = this.props.userinfo;
         if (pwd == 'george') {
@@ -49,14 +55,27 @@ class Student extends Component {
                 showModal: true
             })
         }
+    }*/
+
+    onChange = (time, timeString) => {
+        console.log(time, timeString);
     }
 
+    handleCancel = () => {
+        this.setState({ visible: false });
+    };
+
+    handleOK = () => {
+        this.setState({ visible: false });
+    };
 
     render() {
+
+
         let { showModal } = this.state;
         return (
             <Layout style={{ height: '100%' }}>
-                <div>
+                <div className= "student">
                     <Modal title="Change Your password" visible={showModal} onOk={() => {
                     }} onCancel={() => {
                         this.setState({
@@ -115,6 +134,32 @@ class Student extends Component {
                                 <Input type="text" onChange={this.confirmpassword} />
                             </Form.Item>
 
+                            <Form.Item
+                                name="Sleepstarttime"
+                                label="When you start sleeping?"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please Select a time!',
+                                    },
+                                ]}
+                                hasFeedback>
+                            <TimePicker use12Hours format="h:mm a" onChange={onChange} />
+                            </Form.Item>
+
+                            <Form.Item
+                                name="Wakeuptime"
+                                label="When you wake up?"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please Select a time!',
+                                    },
+                                ]}
+                                hasFeedback>
+                                <TimePicker use12Hours format="h:mm a" onChange={onChange} />
+                            </Form.Item>
+
                         </div>
                     </Modal>
                         <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
@@ -124,9 +169,9 @@ class Student extends Component {
                             <Menu.Item key="2">
                             <Link to="/student/DormSelect">Dorm Selection</Link>
                             </Menu.Item>
-{/*                            <Menu.Item key="3">
-                                <Link to="/student/nav2">User Info</Link>
-                            </Menu.Item>*/}
+{                            <Menu.Item key="3">
+                                <Link to="/student/UserInfo">User Info</Link>
+                            </Menu.Item>}
                             <Menu.Item key="4">
                               <Button onClick={() => {
                                   Cookies.remove('ID')
@@ -153,7 +198,7 @@ class Student extends Component {
                                             <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/DormSelect' component={DormSelection} />
-{/*                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />*/}
+                                            <Route path='/student/UserInfo' component={UserInfo}/>
                                         </Switch>
 
                                     </div>
