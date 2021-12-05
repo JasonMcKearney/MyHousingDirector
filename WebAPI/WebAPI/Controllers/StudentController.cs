@@ -105,24 +105,24 @@ namespace WebAPI.Controllers
         // DormSelection Page..
         // Need to get dorm info
         // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
-        [Route("FindDormInfo")]
+        [Route("FindBuildingInfo")]
         [HttpGet]
-        public List<DormInfo> FindDormInfo()
+        public List<DormInfo> FindBuildingInfo()
         {
             List<DormInfo> dormData = new List<DormInfo>();
 
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand FindUsersInfo = conn.CreateCommand();
+                MySqlCommand FindBuildingInfo = conn.CreateCommand();
 
-                FindUsersInfo.CommandText = "select * from housingdirector_schema.dorm_tbl";
-                FindUsersInfo.ExecuteNonQuery();
+                FindBuildingInfo.CommandText = "select * from housingdirector_schema.dorm_tbl";
+                FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindUsersInfo.ExecuteReader();
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
 
-                while (reader.Read()) // Read returns false if the user does not exist!
+                while (reader.Read())
                 {
                     dormData.Add(new DormInfo()
                     {
@@ -137,36 +137,31 @@ namespace WebAPI.Controllers
             return dormData;
         }
 
-        [Route("FindFloorInfo")]
+        // Find the floor numbers that have rooms available
+        [Route("FindFloorInfo/{dorm_id}")]
         [HttpGet]
-        public List<DormInfo> FindFloorInfo()
+        public List<string> FindFloorInfo(string dorm_id)
         {
-            List<DormInfo> dormData = new List<DormInfo>();
-
+            List<string> floorNumsForBuilding = new List<string>();
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                MySqlCommand FindUsersInfo = conn.CreateCommand();
+                MySqlCommand FindFloorInfo = conn.CreateCommand();
 
-                FindUsersInfo.CommandText = "select * from housingdirector_schema.dorm_tbl";
-                FindUsersInfo.ExecuteNonQuery();
+                FindFloorInfo.Parameters.AddWithValue("@dorm_id", dorm_id);
+                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
+                FindFloorInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindUsersInfo.ExecuteReader();
+                MySqlDataReader reader = FindFloorInfo.ExecuteReader();
 
-                while (reader.Read()) // Read returns false if the user does not exist!
+                while (reader.Read())
                 {
-                    dormData.Add(new DormInfo()
-                    {
-                        dorm_id = reader[0].ToString(),
-                        name = reader[1].ToString(),
-                        description = reader[2].ToString(),
-                        url = reader[3].ToString(),
-                    });
+					floorNumsForBuilding.Add(reader[0].ToString());
                 }
                 reader.Close();
             }
-            return dormData;
+            return floorNumsForBuilding;
         }
     }
 }

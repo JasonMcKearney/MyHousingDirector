@@ -42,22 +42,22 @@ export default class DormSelection extends Component {
         current: 0,
         // 空白处内容展示
         currentDescriptions: {},
-//        dorm: '',
+        dorm: '',
         floor: '',
         room: '',
-        dormData: [],
+        buildingData: [],
         floorData: [],
         roomData: [],
         showModal: false,
       }
     }
 
-    // Find Dorm info 
+    // Find Building that dorm will be in 
 // https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
-    findDormInfo()
+    findBuildingInfo()
     {
         let currentComponent = this;
-        fetch('http://localhost:16648/api/Student/FindDormInfo/', {
+        fetch('http://localhost:16648/api/Student/FindBuildingInfo/', {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {                
                 'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export default class DormSelection extends Component {
         }).then(res=>res.clone().json())
         .then(function(res) 
         {
-            const newArray = currentComponent.state.dormData.slice(); // Create a copy of the array in state
+            const newArray = currentComponent.state.buildingData.slice(); // Create a copy of the array in state
             var loopData = ''
             var i;
             // Loop through each object taht is in JSON
@@ -82,31 +82,32 @@ export default class DormSelection extends Component {
                 }
                 newArray.push(obj)  // Push the object
             }
-            // Update the dormData Object array
-            currentComponent.setState({dormData: newArray})
+            // Update the buildingData Object array
+            currentComponent.setState({buildingData: newArray})
             console.log("obj label: " + newArray[0].label)
             console.log("obj value: " + newArray[0].value)
             console.log("obj description: " + newArray[0].description)
             console.log("obj url: " + newArray[0].url)
          /*   currentComponent.setState({
-                dormData: currentComponent.state.dormData.concat([newArray]) 
+                buildingData: currentComponent.state.buildingData.concat([newArray]) 
             })
 */
-            console.log("Dorm " + currentComponent.state.dormData[0].label + " ID: " + currentComponent.state.dormData[0].dormID)
-            console.log("Dorm info: " + currentComponent.state.dormData[1].value)
+            console.log("Dorm " + currentComponent.state.buildingData[0].label + " ID: " + currentComponent.state.buildingData[0].dormID)
+            console.log("Dorm info: " + currentComponent.state.buildingData[1].value)
         })
     }
 
     // Get dorm info from Database when the component is rendered
     componentDidMount()
     {
-        this.findDormInfo();
+        this.findBuildingInfo();
     }
 
 
   handleDorm = (val) => {
     this.setState({ dorm: val });
   };
+
 
   handleFloor = (val) => {
     this.setState({ floor: val });
@@ -123,7 +124,7 @@ export default class DormSelection extends Component {
   findFloorInfo()
   {
       let currentComponent = this;
-      fetch('http://localhost:16648/api/Student/FindDormInfo/', {
+      fetch('http://localhost:16648/api/Student/findFloorInfo/'+this.state.dorm, {
           mode: 'cors', // this cannot be 'no-cors'
           headers: {                
               'Content-Type': 'application/json',
@@ -133,7 +134,7 @@ export default class DormSelection extends Component {
       }).then(res=>res.clone().json())
       .then(function(res) 
       {
-          const newArray = currentComponent.state.dormData.slice(); // Create a copy of the array in state
+          const newArray = currentComponent.state.buildingData.slice(); // Create a copy of the array in state
           var loopData = ''
           var i;
           // Loop through each object taht is in JSON
@@ -148,71 +149,69 @@ export default class DormSelection extends Component {
               }
               newArray.push(obj)  // Push the object
           }
-          // Update the dormData Object array
-          currentComponent.setState({dormData: newArray})
+          // Update the buildingData Object array
+          currentComponent.setState({buildingData: newArray})
           console.log("obj label: " + newArray[0].label)
           console.log("obj value: " + newArray[0].value)
           console.log("obj description: " + newArray[0].description)
           console.log("obj url: " + newArray[0].url)
        /*   currentComponent.setState({
-              dormData: currentComponent.state.dormData.concat([newArray]) 
+              buildingData: currentComponent.state.buildingData.concat([newArray]) 
           })
 */
-          console.log("Dorm " + currentComponent.state.dormData[0].label + " ID: " + currentComponent.state.dormData[0].dormID)
-          console.log("Dorm info: " + currentComponent.state.dormData[1].value)
+          console.log("Dorm " + currentComponent.state.buildingData[0].label + " ID: " + currentComponent.state.dormData[0].dormID)
+          console.log("Dorm info: " + currentComponent.state.buildingData[1].value)
       })
   }
 
+  
 
-  next = () => {
-    let { current, dorm, floor } = this.state;
+
+next = () => {
+    let { current, dorm, floor, buildingData, findFloorInfo} = this.state;
+    console.log("current " + current)
     if (current == 0) {
       if (!dorm) {
         message.error("You Must Select a Dorm!");
         return;
       }
+      // User already selected the dorm
+      else
+      {
+        console.log("dorm state: " + this.state.dorm)
 
-      // Check if the user can select the floor
-      if (dorm == "dorm1") {
-        this.setState({
-          floorData: [
+        var counter = 0;
+        var bLoop = true;
+        console.log("dormData: " + buildingData[0].value)
+        while(bLoop)
+        {
+            // Check if the user can select the floor
+            if (buildingData[counter].value == dorm) 
             {
-              label: "floor1",
-              value: "floor1",
-            },
+                this.setState({dorm: buildingData[counter].dormID});
+                bLoop = false;
+                break;                 
+            }
+            else
             {
-              label: "floor2",
-              value: "floor2",
-            },
-          ],
-        });
+                counter++;    
+            }
+        }
+        this.setState((preState) => {
+            return {
+              current: preState.current + 1,
+            };
+          });
       }
-
-      if (dorm == "dorm2") {
-        this.setState({
-          floorData: [
-            {
-              label: "floor1",
-              value: "floor1",
-            },
-            {
-              label: "floor2",
-              value: "floor2",
-            },
-            {
-              label: "floor3",
-              value: "floor3",
-            },
-          ],
-        });
-      }
-      this.setState((preState) => {
-        return {
-          current: preState.current + 1,
-        };
-      });
+      
     }
+    
+    
     if (current == 1) {
+        console.log("current " + current);
+    // Find floor
+    findFloorInfo();  
+
       if (!floor) {
         message.error("You Must Select a floor!");
         return;
@@ -327,6 +326,8 @@ export default class DormSelection extends Component {
     }
   };
 
+
+  
   prev = () => {
     this.setState((preState) => {
       return {
@@ -388,7 +389,7 @@ export default class DormSelection extends Component {
         dorm,
         floor,
         room,
-        dormData,
+        buildingData,
         floorData,
         roomData,
         showModal,
@@ -529,7 +530,7 @@ export default class DormSelection extends Component {
                     this.onChange(val, "dorm");
                     }}
                 >
-                    {dormData.map((v, i) => {
+                    {buildingData.map((v, i) => {
                     return (
                         <Option key={i} value={v.value}>
                         {v.label}
