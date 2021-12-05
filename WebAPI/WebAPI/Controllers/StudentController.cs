@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
             string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
         }
-
+        
         public StudentController(HousingDBContext context, IConfiguration configuration)
         {
             // Object to HousingDBContext class
