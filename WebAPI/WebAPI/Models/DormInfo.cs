@@ -7,7 +7,7 @@ namespace WebAPI.Models
 {
 	public class DormInfo
 	{
-        public int dorm_id { get; set; }
+        public string dorm_id { get; set; }
 
         public string name { get; set; }
 

@@ -15,6 +15,7 @@ import "./DormSelection.css";
 
 const { Step } = Steps;
 
+// What section the user is at currently
 const steps = [
   {
     title: "Dorm",
@@ -32,7 +33,6 @@ const steps = [
 
 const { Option } = Select;
 
-
 export default class DormSelection extends Component {
    constructor(props) {
        super(props);
@@ -42,7 +42,7 @@ export default class DormSelection extends Component {
         current: 0,
         // 空白处内容展示
         currentDescriptions: {},
-        dorm: '',
+//        dorm: '',
         floor: '',
         room: '',
         dormData: [],
@@ -52,6 +52,7 @@ export default class DormSelection extends Component {
       }
     }
 
+    // Find Dorm info 
 // https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
     findDormInfo()
     {
@@ -77,11 +78,11 @@ export default class DormSelection extends Component {
                     value: res[i].name,
                     description: res[i].description,
                     url: res[i].url,
+                    dormID: res[i].dorm_id,
                 }
                 newArray.push(obj)  // Push the object
             }
-            currentComponent.setState({searchResults: loopData})
-
+            // Update the dormData Object array
             currentComponent.setState({dormData: newArray})
             console.log("obj label: " + newArray[0].label)
             console.log("obj value: " + newArray[0].value)
@@ -91,11 +92,8 @@ export default class DormSelection extends Component {
                 dormData: currentComponent.state.dormData.concat([newArray]) 
             })
 */
-            console.log("Dorm info: " + currentComponent.state.dormData[0].value)
+            console.log("Dorm " + currentComponent.state.dormData[0].label + " ID: " + currentComponent.state.dormData[0].dormID)
             console.log("Dorm info: " + currentComponent.state.dormData[1].value)
-
-            //this.setState({dormdata: dorminfo})
-           // console.log("label: " + this.state.dormData.label + " url: " + this.state.dormData.url + " description: " + this.state.dormData.description);
         })
     }
 
@@ -105,51 +103,6 @@ export default class DormSelection extends Component {
         this.findDormInfo();
     }
 
-    
-
- /*   function FindDormInfo()
-    {
-        fetch('http://localhost:16648/api/Student/FindDormInfo/', {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {                
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'GET',
-        }).then(res=>res.clone().json())
-        .then(function(res) 
-        {
-            let data = {
-                label: 'test',
-                value: 'test',
-                description: 'test',
-                url: 'tsetsdd'
-            }
-            
-            var loopData = '';
-            var i;
-     //       for (i = 0; i < res.length; i++)
-     //       {
-          /*      if(res[i].username != "")
-                {
-                    currentComponent.setState({studentName: res[i].username})
-                    // Add student to list
-                    currentComponent.addItem();
-                }
-                // Entries with characters entered do not match any usernames in the database
-                else
-                    alert("No entries match the character/characters entered.")
-            }
-            
-           
-            dormData.unshift(data);
-            this.setState({ dormData })
-            console.log("label: " + this.state.dormData.label + " url: " + this.state.dormData.url + " description: " + this.state.dormData.description);
-         //  }
-            //currentComponent.setState({searchResults: loopData})
-        })
-    }
-*/
 
   handleDorm = (val) => {
     this.setState({ dorm: val });
@@ -167,6 +120,50 @@ export default class DormSelection extends Component {
   
 
 
+  findFloorInfo()
+  {
+      let currentComponent = this;
+      fetch('http://localhost:16648/api/Student/FindDormInfo/', {
+          mode: 'cors', // this cannot be 'no-cors'
+          headers: {                
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          method: 'GET',
+      }).then(res=>res.clone().json())
+      .then(function(res) 
+      {
+          const newArray = currentComponent.state.dormData.slice(); // Create a copy of the array in state
+          var loopData = ''
+          var i;
+          // Loop through each object taht is in JSON
+          for (i = 0; i < res.length; i++)
+          {
+              let obj = {
+                  label: res[i].name,
+                  value: res[i].name,
+                  description: res[i].description,
+                  url: res[i].url,
+                  dormID: res[i].dorm_id,
+              }
+              newArray.push(obj)  // Push the object
+          }
+          // Update the dormData Object array
+          currentComponent.setState({dormData: newArray})
+          console.log("obj label: " + newArray[0].label)
+          console.log("obj value: " + newArray[0].value)
+          console.log("obj description: " + newArray[0].description)
+          console.log("obj url: " + newArray[0].url)
+       /*   currentComponent.setState({
+              dormData: currentComponent.state.dormData.concat([newArray]) 
+          })
+*/
+          console.log("Dorm " + currentComponent.state.dormData[0].label + " ID: " + currentComponent.state.dormData[0].dormID)
+          console.log("Dorm info: " + currentComponent.state.dormData[1].value)
+      })
+  }
+
+
   next = () => {
     let { current, dorm, floor } = this.state;
     if (current == 0) {
@@ -175,6 +172,7 @@ export default class DormSelection extends Component {
         return;
       }
 
+      // Check if the user can select the floor
       if (dorm == "dorm1") {
         this.setState({
           floorData: [

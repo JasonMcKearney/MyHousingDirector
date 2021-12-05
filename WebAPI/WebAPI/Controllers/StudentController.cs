@@ -116,7 +116,7 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand FindUsersInfo = conn.CreateCommand();
 
-                FindUsersInfo.CommandText = "select name, description, url from housingdirector_schema.dorm_tbl";
+                FindUsersInfo.CommandText = "select * from housingdirector_schema.dorm_tbl";
                 FindUsersInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -126,9 +126,42 @@ namespace WebAPI.Controllers
                 {
                     dormData.Add(new DormInfo()
                     {
-                        name = reader[0].ToString(),
-                        description = reader[1].ToString(),
-                        url = reader[2].ToString(),
+                        dorm_id = reader[0].ToString(),
+                        name = reader[1].ToString(),
+                        description = reader[2].ToString(),
+                        url = reader[3].ToString(),
+                    });
+                }
+                reader.Close();
+            }
+            return dormData;
+        }
+
+        [Route("FindFloorInfo")]
+        [HttpGet]
+        public List<DormInfo> FindFloorInfo()
+        {
+            List<DormInfo> dormData = new List<DormInfo>();
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindUsersInfo = conn.CreateCommand();
+
+                FindUsersInfo.CommandText = "select * from housingdirector_schema.dorm_tbl";
+                FindUsersInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindUsersInfo.ExecuteReader();
+
+                while (reader.Read()) // Read returns false if the user does not exist!
+                {
+                    dormData.Add(new DormInfo()
+                    {
+                        dorm_id = reader[0].ToString(),
+                        name = reader[1].ToString(),
+                        description = reader[2].ToString(),
+                        url = reader[3].ToString(),
                     });
                 }
                 reader.Close();
