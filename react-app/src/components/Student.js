@@ -30,10 +30,12 @@ class Student extends Component {
               var ID = result.studentID;
               var firstName = result.firstName;
               var lastName = result.lastName;
+              var email = result.email
 
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
+              Cookies.set("EM", email);
             })
     }
 
@@ -42,13 +44,13 @@ class Student extends Component {
     }
 
     componentDidMount() {
-        console.log("this.props = ", this.props.userinfo)
-        let { username, pwd } = this.props.userinfo;
-        if (pwd == 'george') {
-            this.setState({
-                showModal: true
-            })
-        }
+        // console.log("this.props = ", this.props.userinfo)
+        // let { username, pwd } = this.props.userinfo;
+        // if (pwd == 'george') {
+        //     this.setState({
+        //         showModal: true
+        //     })
+        // }
     }
 
 
@@ -130,6 +132,9 @@ class Student extends Component {
                             <Menu.Item key="4">
                               <Button onClick={() => {
                                   Cookies.remove('ID')
+                                  Cookies.remove('FN')
+                                  Cookies.remove('LN')
+                                  Cookies.remove('EM')
                                   Cookies.remove('username')
                                   this.props.history.push('/LogIn');
                               }} type="primary" htmlType="Logout">

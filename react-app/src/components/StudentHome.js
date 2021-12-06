@@ -35,8 +35,6 @@ export default class DormSelection extends Component {
     render() {
         return (
             <div className="StudentHomeBox">
-                
-                    
                 <div className="StudentHomeBox-left-upper">
                     <div className="Studentinfobox">
                         My Profile:

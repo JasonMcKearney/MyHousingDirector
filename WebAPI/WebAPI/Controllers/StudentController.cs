@@ -43,6 +43,9 @@ namespace WebAPI.Controllers
             System.Diagnostics.Debug.WriteLine(check.username);
             string usernameResult = null;
             string studentIDResult = null;
+            string firstNameResult = null;
+            string lastNameResult = null;
+            string emailResult = null;
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -50,19 +53,22 @@ namespace WebAPI.Controllers
                 MySqlCommand getID = conn.CreateCommand();
 
                 getID.Parameters.AddWithValue("@username", check.username);
-                getID.CommandText = "select studentID, username from housingdirector_schema.student_tbl where username = @username";
+                getID.CommandText = "select studentID, username, firstName, lastName, email from housingdirector_schema.student_tbl where username = @username";
                 
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
                 while (ReturnedInfo.Read())
                 {
-                    usernameResult = ReturnedInfo.GetString(1);
                     studentIDResult = ReturnedInfo.GetString(0);
+                    usernameResult = ReturnedInfo.GetString(1);
+                    firstNameResult = ReturnedInfo.GetString(2);
+                    lastNameResult = ReturnedInfo.GetString(3);
+                    emailResult = ReturnedInfo.GetString(4);
                 }
                 ReturnedInfo.Close();
 
             }
-            return new studentTblFields { studentID = studentIDResult, username = usernameResult };
+            return new studentTblFields { studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult };
         }
 
         [HttpDelete("{id}")]
