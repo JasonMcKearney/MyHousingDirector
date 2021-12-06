@@ -84,16 +84,6 @@ export default class DormSelection extends Component {
             }
             // Update the buildingData Object array
             currentComponent.setState({buildingData: newArray})
-            console.log("obj label: " + newArray[0].label)
-            console.log("obj value: " + newArray[0].value)
-            console.log("obj description: " + newArray[0].description)
-            console.log("obj url: " + newArray[0].url)
-         /*   currentComponent.setState({
-                buildingData: currentComponent.state.buildingData.concat([newArray]) 
-            })
-*/
-            console.log("Dorm " + currentComponent.state.buildingData[0].label + " ID: " + currentComponent.state.buildingData[0].dormID)
-            console.log("Dorm info: " + currentComponent.state.buildingData[1].value)
         })
     }
 
@@ -117,14 +107,11 @@ export default class DormSelection extends Component {
     this.setState({ room: val });
   };
 
-  
-  
-
 
   findFloorInfo()
   {
       let currentComponent = this;
-      fetch('http://localhost:16648/api/Student/findFloorInfo/'+this.state.dorm, {
+      fetch('http://localhost:16648/api/Student/findFloorInfo/'+Cookies.get("buildingID"), {
           mode: 'cors', // this cannot be 'no-cors'
           headers: {                
               'Content-Type': 'application/json',
@@ -134,42 +121,64 @@ export default class DormSelection extends Component {
       }).then(res=>res.clone().json())
       .then(function(res) 
       {
-          const newArray = currentComponent.state.buildingData.slice(); // Create a copy of the array in state
+          const newArray = currentComponent.state.floorData.slice(); // Create a copy of the array in state
           var loopData = ''
           var i;
-          // Loop through each object taht is in JSON
+          // Loop through each object that is in JSON
           for (i = 0; i < res.length; i++)
           {
-              let obj = {
-                  label: res[i].name,
-                  value: res[i].name,
-                  description: res[i].description,
-                  url: res[i].url,
-                  dormID: res[i].dorm_id,
+              let obj2 = {
+                  label: res[i].floorNumber,
+                  value: res[i].floorNumber,
+                  dormID: currentComponent.state.dorm,
               }
-              newArray.push(obj)  // Push the object
+              newArray.push(obj2)  // Push the object
           }
-          // Update the buildingData Object array
-          currentComponent.setState({buildingData: newArray})
-          console.log("obj label: " + newArray[0].label)
-          console.log("obj value: " + newArray[0].value)
-          console.log("obj description: " + newArray[0].description)
-          console.log("obj url: " + newArray[0].url)
-       /*   currentComponent.setState({
-              buildingData: currentComponent.state.buildingData.concat([newArray]) 
-          })
-*/
-          console.log("Dorm " + currentComponent.state.buildingData[0].label + " ID: " + currentComponent.state.dormData[0].dormID)
-          console.log("Dorm info: " + currentComponent.state.buildingData[1].value)
+          // Update the floorData Object array
+          currentComponent.setState({floorData: newArray})   
       })
   }
 
-  
+  findRoomInfo()
+  {
+      let currentComponent = this;
+      fetch('http://localhost:16648/api/Student/FindRoomInfo', {
+          mode: 'cors', // this cannot be 'no-cors'
+          headers: {                
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            dorm_id: Cookies.get("buildingID"),
+            floorNumber: this.state.floor
+        })
+      }).then(res=>res.clone().json())
+      .then(function(res) 
+      {
+          const newArray = currentComponent.state.roomData.slice(); // Create a copy of the array in state
+          var loopData = ''
+          var i;
+          // Loop through each object that is in JSON
+          console.log(res.length)
+          for (i = 0; i < res.length; i++)
+          {
+              let obj2 = {
+                  label: res[i].room_id,
+                  value: res[i].roomNumber,
+                  maxOccupants: res[i].maxOccupants,
+              }
+              newArray.push(obj2)  // Push the object
+              console.log("newarray:" + newArray[0].label)
+          }
+          // Update the roomData Object array
+          currentComponent.setState({roomData: newArray})  
+      })
+  }
 
 
 next = () => {
-    let { current, dorm, floor, buildingData, findFloorInfo} = this.state;
-    console.log("current " + current)
+    let { current, dorm, floor, buildingData, floorData, room, roomData} = this.state;
     if (current == 0) {
       if (!dorm) {
         message.error("You Must Select a Dorm!");
@@ -178,145 +187,38 @@ next = () => {
       // User already selected the dorm
       else
       {
-        console.log("dorm state: " + this.state.dorm)
-
         var counter = 0;
         var bLoop = true;
-        console.log("dormData: " + buildingData[0].value)
         while(bLoop)
         {
+            console.log(dorm);
             // Check if the user can select the floor
             if (buildingData[counter].value == dorm) 
             {
-                this.setState({dorm: buildingData[counter].dormID});
-                bLoop = false;
-                break;                 
+                var id = buildingData[counter].dormID;
+                bLoop = false;                
             }
             else
             {
                 counter++;    
             }
         }
+
+        Cookies.set("buildingID", buildingData[counter].dormID)
         this.setState((preState) => {
             return {
               current: preState.current + 1,
             };
           });
       }
-      
     }
-    
-    
-    if (current == 1) {
-        console.log("current " + current);
-    // Find floor
-    findFloorInfo();  
+
+    this.findFloorInfo();
+    if (current == 1 || Cookies.get("buildingID") != '') {
 
       if (!floor) {
-        message.error("You Must Select a floor!");
+        message.error("You Must Select a Floor!");
         return;
-      }
-      if (floor == "floor1" && dorm == "dorm1") {
-        this.setState({
-          roomData: [
-            {
-              label: "room101",
-              value: "101",
-            },
-            {
-              label: "room102",
-              value: "102",
-            },
-            {
-              label: "room103",
-              value: "103",
-            },
-            {
-              label: "room104",
-              value: "104",
-            },
-          ],
-        });
-      }
-
-      if (floor == "floor2" && dorm == "dorm1") {
-        this.setState({
-          roomData: [
-            {
-              label: "room201",
-              value: "201",
-            },
-            {
-              label: "room202",
-              value: "202",
-            },
-            {
-              label: "room203",
-              value: "203",
-            },
-            {
-              label: "room204",
-              value: "204",
-            },
-          ],
-        });
-      }
-
-      if (floor == "floor1" && dorm == "dorm2") {
-        this.setState({
-          roomData: [
-            {
-              label: "room101",
-              value: "101",
-            },
-            {
-              label: "room102",
-              value: "102",
-            },
-            {
-              label: "room103",
-              value: "103",
-            },
-          ],
-        });
-      }
-
-      if (floor == "floor2" && dorm == "dorm2") {
-        this.setState({
-          roomData: [
-            {
-              label: "room201",
-              value: "201",
-            },
-            {
-              label: "room202",
-              value: "202",
-            },
-            {
-              label: "room203",
-              value: "203",
-            },
-          ],
-        });
-      }
-
-      if (floor == "floor3" && dorm == "dorm2") {
-        this.setState({
-          roomData: [
-            {
-              label: "room301",
-              value: "301",
-            },
-            {
-              label: "room302",
-              value: "302",
-            },
-            {
-              label: "room303",
-              value: "303",
-            },
-          ],
-        });
       }
       this.setState((preState) => {
         return {
@@ -324,10 +226,21 @@ next = () => {
         };
       });
     }
+
+    this.findRoomInfo();
+    if (current == 2 || floorData.length > 0) {
+        if (!room) {
+          message.error("You Must Select a Room to Continue!");
+          return;
+        }
+        this.setState((preState) => {
+          return {
+            current: preState.current + 1,
+          };
+        });
+      }
   };
 
-
-  
   prev = () => {
     this.setState((preState) => {
       return {
@@ -340,7 +253,7 @@ next = () => {
     let { room } = this.state;
     let { showModal } = this.state;
     if (!room) {
-      message.error("You Must Select a Room!");
+      message.error("You Must Select a Room to Submit!");
       return;
     }
     this.setState({
@@ -350,9 +263,25 @@ next = () => {
 
   // 请求接口
   getData = ({ id, name }) => {
-    return {
-      desc: `${name}: ${id} some info...`,
-    };
+      console.log(name)
+    if(name == "Dorm")
+    {
+        return{
+            desc: `${name}: ${id} This is where the text would go for dorm...`,
+        };
+    }
+    else if(name == "floor")
+    {
+        return{
+            desc: `${name}: ${id} This is where the text would go for floor...`,
+        };
+    }
+    else
+    {
+         return {
+            desc: `${name}: ${id} This is where the text would go...`,
+        };
+    }
   };
 
   onChange = (val, stateKey) => {
@@ -376,12 +305,6 @@ next = () => {
     // 校验失败
     console.log("Failed:", errorInfo);
   };
-
-  //---------------------------------------------------------------------------
-  static getDerivedStateFromProps(props, state) {
-    return {fullName: props.name };
-  }
-  //---------------------------------------------------------------------------
 
     render() {
         let {

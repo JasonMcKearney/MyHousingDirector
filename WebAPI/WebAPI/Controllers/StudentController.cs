@@ -140,9 +140,9 @@ namespace WebAPI.Controllers
         // Find the floor numbers that have rooms available
         [Route("FindFloorInfo/{dorm_id}")]
         [HttpGet]
-        public List<string> FindFloorInfo(string dorm_id)
+        public List<FloorInfo> FindFloorInfo(string dorm_id)
         {
-            List<string> floorNumsForBuilding = new List<string>();
+            List<FloorInfo> floorNumsForBuilding = new List<FloorInfo>();
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
@@ -157,11 +157,48 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-					floorNumsForBuilding.Add(reader[0].ToString());
+                    floorNumsForBuilding.Add(new FloorInfo()
+                    {
+                        floorNumber = reader[0].ToString(),
+                    });
                 }
                 reader.Close();
             }
             return floorNumsForBuilding;
+        }
+
+        // Find the floor numbers that have rooms available
+        [Route("FindRoomInfo")]
+        [HttpPost]
+        public List<RoomTblFields> FindRoomInfo(GetRoomInfoParams paramsObj)
+        {
+            List<RoomTblFields> roomList = new List<RoomTblFields>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindRoomInfo = conn.CreateCommand();
+
+                FindRoomInfo.Parameters.AddWithValue("@dorm_id", paramsObj.dorm_id);
+                FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
+
+                FindRoomInfo.CommandText = "select room_id, roomNumber, maxOccupants from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber";
+                FindRoomInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    roomList.Add(new RoomTblFields()
+                    {
+                        room_id = reader[0].ToString(),
+                        roomNumber = reader[1].ToString(),
+                        maxOccupants = reader[2].ToString(),
+                    });
+                }
+                reader.Close();
+            }
+            return roomList;
         }
     }
 }
