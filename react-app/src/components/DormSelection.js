@@ -164,8 +164,9 @@ export default class DormSelection extends Component {
           for (i = 0; i < res.length; i++)
           {
               let obj2 = {
-                  label: res[i].room_id,
+                  label: res[i].roomNumber,
                   value: res[i].roomNumber,
+                  roomID: res[i].room_id,
                   maxOccupants: res[i].maxOccupants,
               }
               newArray.push(obj2)  // Push the object
@@ -264,7 +265,7 @@ next = () => {
   // 请求接口
   getData = ({ id, name }) => {
       console.log(name)
-    if(name == "Dorm")
+    if(name == "dorm")
     {
         return{
             desc: `${name}: ${id} This is where the text would go for dorm...`,
@@ -321,7 +322,7 @@ next = () => {
         <div className="dormSelect">
             <Modal
             footer={null}
-            title="Confirm Your infomation"
+            title="Confirm Your Information"
             visible={showModal}
             onOk={() => {}}
             onCancel={() => {
