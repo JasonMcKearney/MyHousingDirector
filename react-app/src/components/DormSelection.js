@@ -1,569 +1,535 @@
-﻿import react, { Component } from "react";
+﻿import React, { Component } from 'react';
 import {
-    Steps,
-    Button,
-    message,
-    Radio,
-    Modal,
-    Form,
-    Select,
-    Input,
-    Descriptions,
+  Steps,
+  Button,
+  message,
+  Radio,
+  Modal,
+  Form,
+  Select,
+  Input,
+  Descriptions,
 } from "antd";
 import Cookies from "js-cookie";
-import dorm1 from '../img/loginpic1.png';
-import dorm2 from '../img/loginpic2.JPG';
-import floor1 from '../img/logo.png';
-import floor2 from '../img/logo.png';
-import room1 from '../img/logo.png';
-import room2 from '../img/logo.png';
 import "./DormSelection.css";
 
 const { Step } = Steps;
 
+// What section the user is at currently
 const steps = [
-    {
-        title: "Dorm",
-        content: "First-content",
-    },
-    {
-        title: "Floor",
-        content: "Second-content",
-    },
-    {
-        title: "Room",
-        content: "Last-content",
-    },
+  {
+    title: "Dorm",
+    content: "First-content",
+  },
+  {
+    title: "Floor",
+    content: "Second-content",
+  },
+  {
+    title: "Room",
+    content: "Last-content",
+  },
 ];
 
 const { Option } = Select;
 
 export default class DormSelection extends Component {
-    constructor(props) {
-        super(props);
+   constructor(props) {
+       super(props);
 
-        //  fetch('http://localhost:16648/api/Student/', {
-        //      headers: {
-        //          'Content-Type': 'application/json',
-        //          'Accept': 'application/json'
-        //          },
-        //      method: 'POST',
-        //      body: JSON.stringify({
-        //          username: Cookies.get("username")
-        //      })
-        //        }).then((Response) => Response.json())
-        //  .then((result) => {
-        //      var ID = result.studentID;
-        //      var firstName = result.firstName;
-        //      var lastName = result.lastName;
-
-        //      Cookies.set("ID", ID);
-        //      Cookies.set("FN", firstName);
-        //      Cookies.set("LN", lastName);
-        //  })
-    }
-
-    handleDorm = (val) => {
-        this.setState({ dorm: val });
-    };
-
-    handleFloor = (val) => {
-        this.setState({ floor: val });
-    };
-
-    handleRoom = (val) => {
-        this.setState({ room: val });
-    };
-
-    state = {
+       // Initializing the state
+       this.state = {
         current: 0,
         // 空白处内容展示
         currentDescriptions: {},
-        currentImg: '',
-        dorm: "",
-        floor: "",
-        room: "",
-        dormData: [
-            {
-                label: "dorm1",
-                value: "dorm1",
-                url: dorm1
-            },
-            {
-                label: "dorm2",
-                value: "dorm2",
-                url: dorm2
-            },
-        ],
+        dorm: '',
+        floor: '',
+        room: '',
+        buildingData: [],
         floorData: [],
         roomData: [],
         showModal: false,
-    };
+      }
+    }
 
-    next = () => {
-        let { current, dorm, floor } = this.state;
-        if (current == 0) {
-            if (!dorm) {
-                message.error("You Must Select a Dorm!");
-                return;
+    // Find Building that dorm will be in 
+// https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
+    findBuildingInfo()
+    {
+        let currentComponent = this;
+        fetch('http://localhost:16648/api/Student/FindBuildingInfo/', {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {                
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'GET',
+        }).then(res=>res.clone().json())
+        .then(function(res) 
+        {
+            const newArray = currentComponent.state.buildingData.slice(); // Create a copy of the array in state
+            var loopData = ''
+            var i;
+            // Loop through each object taht is in JSON
+            for (i = 0; i < res.length; i++)
+            {
+                let obj = {
+                    label: res[i].name,
+                    value: res[i].name,
+                    description: res[i].description,
+                    url: res[i].url,
+                    dormID: res[i].dorm_id,
+                }
+                newArray.push(obj)  // Push the object
             }
+            // Update the buildingData Object array
+            currentComponent.setState({buildingData: newArray})
+        })
+    }
 
-            if (dorm == "dorm1") {
-                this.setState({
-                    floorData: [
-                        {
-                            label: "floor1",
-                            value: "floor1",
-                            url: floor1
-                        },
-                        {
-                            label: "floor2",
-                            value: "floor2",
-                            url: floor2
-                        },
-                    ],
-                });
-            }
+    // Get dorm info from Database when the component is rendered
+    componentDidMount()
+    {
+        this.findBuildingInfo();
+    }
 
-            if (dorm == "dorm2") {
-                this.setState({
-                    floorData: [
-                        {
-                            label: "floor1",
-                            value: "floor1",
-                            url: floor1
-                        },
-                        {
-                            label: "floor2",
-                            value: "floor2",
-                            url: floor2
-                        },
-                        {
-                            label: "floor3",
-                            value: "floor3",
-                            url: floor1
-                        },
-                    ],
-                });
+
+  handleDorm = (val) => {
+    this.setState({ dorm: val });
+  };
+
+
+  handleFloor = (val) => {
+    this.setState({ floor: val });
+  };
+
+  handleRoom = (val) => {
+    this.setState({ room: val });
+  };
+
+
+  findFloorInfo()
+  {
+      let currentComponent = this;
+      fetch('http://localhost:16648/api/Student/findFloorInfo/'+Cookies.get("buildingID"), {
+          mode: 'cors', // this cannot be 'no-cors'
+          headers: {                
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          method: 'GET',
+      }).then(res=>res.clone().json())
+      .then(function(res) 
+      {
+          const newArray = currentComponent.state.floorData.slice(); // Create a copy of the array in state
+          var loopData = ''
+          var i;
+          // Loop through each object that is in JSON
+          for (i = 0; i < res.length; i++)
+          {
+              let obj2 = {
+                  label: res[i].floorNumber,
+                  value: res[i].floorNumber,
+                  dormID: currentComponent.state.dorm,
+              }
+              newArray.push(obj2)  // Push the object
+          }
+          // Update the floorData Object array
+          currentComponent.setState({floorData: newArray})   
+      })
+  }
+
+  findRoomInfo()
+  {
+      let currentComponent = this;
+      fetch('http://localhost:16648/api/Student/FindRoomInfo', {
+          mode: 'cors', // this cannot be 'no-cors'
+          headers: {                
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            dorm_id: Cookies.get("buildingID"),
+            floorNumber: this.state.floor
+        })
+      }).then(res=>res.clone().json())
+      .then(function(res) 
+      {
+          const newArray = currentComponent.state.roomData.slice(); // Create a copy of the array in state
+          var loopData = ''
+          var i;
+          // Loop through each object that is in JSON
+          console.log(res.length)
+          for (i = 0; i < res.length; i++)
+          {
+              let obj2 = {
+                  label: res[i].roomNumber,
+                  value: res[i].roomNumber,
+                  roomID: res[i].room_id,
+                  maxOccupants: res[i].maxOccupants,
+              }
+              newArray.push(obj2)  // Push the object
+              console.log("newarray:" + newArray[0].label)
+          }
+          // Update the roomData Object array
+          currentComponent.setState({roomData: newArray})  
+      })
+  }
+
+
+next = () => {
+    let { current, dorm, floor, buildingData, floorData, room, roomData} = this.state;
+    if (current == 0) {
+      if (!dorm) {
+        message.error("You Must Select a Dorm!");
+        return;
+      }
+      // User already selected the dorm
+      else
+      {
+        var counter = 0;
+        var bLoop = true;
+        while(bLoop)
+        {
+            console.log(dorm);
+            // Check if the user can select the floor
+            if (buildingData[counter].value == dorm) 
+            {
+                var id = buildingData[counter].dormID;
+                bLoop = false;                
             }
-            this.setState((preState) => {
-                return {
-                    current: preState.current + 1,
-                };
-            });
+            else
+            {
+                counter++;    
+            }
         }
-        if (current == 1) {
-            if (!floor) {
-                message.error("You Must Select a floor!");
-                return;
-            }
-            if (floor == "floor1" && dorm == "dorm1") {
-                this.setState({
-                    roomData: [
-                        {
-                            label: "room101",
-                            value: "101",
-                            url: room1
-                        },
-                        {
-                            label: "room102",
-                            value: "102",
-                            url: room2
-                        },
-                        {
-                            label: "room103",
-                            value: "103",
-                            url: room1
-                        },
-                        {
-                            label: "room104",
-                            value: "104",
-                            url: room2
-                        },
-                    ],
-                });
-            }
 
-            if (floor == "floor2" && dorm == "dorm1") {
-                this.setState({
-                    roomData: [
-                        {
-                            label: "room201",
-                            value: "201",
-                            url: room1
-                        },
-                        {
-                            label: "room202",
-                            value: "202",
-                            url: room2
-                        },
-                        {
-                            label: "room203",
-                            value: "203",
-                            url: room1
-                        },
-                        {
-                            label: "room204",
-                            value: "204",
-                            url: room2
-                        },
-                    ],
-                });
-            }
-
-            if (floor == "floor1" && dorm == "dorm2") {
-                this.setState({
-                    roomData: [
-                        {
-                            label: "room101",
-                            value: "101",
-                            url: room1
-                        },
-                        {
-                            label: "room102",
-                            value: "102",
-                            url: room1
-                        },
-                        {
-                            label: "room103",
-                            value: "103",
-                            url: room1
-                        },
-                    ],
-                });
-            }
-
-            if (floor == "floor2" && dorm == "dorm2") {
-                this.setState({
-                    roomData: [
-                        {
-                            label: "room201",
-                            value: "201",
-                            url: room2
-                        },
-                        {
-                            label: "room202",
-                            value: "202",
-                            url: room1
-                        },
-                        {
-                            label: "room203",
-                            value: "203",
-                            url: room1
-                        },
-                    ],
-                });
-            }
-
-            if (floor == "floor3" && dorm == "dorm2") {
-                this.setState({
-                    roomData: [
-                        {
-                            label: "room301",
-                            value: "301",
-                            url: room1
-                        },
-                        {
-                            label: "room302",
-                            value: "302",
-                            url: room1
-                        },
-                        {
-                            label: "room303",
-                            value: "303",
-                            url: room1
-                        },
-                    ],
-                });
-            }
-            this.setState((preState) => {
-                return {
-                    current: preState.current + 1,
-                };
-            });
-        }
-    };
-
-    prev = () => {
+        Cookies.set("buildingID", buildingData[counter].dormID)
         this.setState((preState) => {
             return {
-                current: preState.current - 1,
+              current: preState.current + 1,
             };
-        });
-    };
+          });
+      }
+    }
 
-    done = () => {
-        let { room } = this.state;
-        let { showModal } = this.state;
-        if (!room) {
-            message.error("You Must Select a Room!");
-            return;
-        }
-        this.setState({
-            showModal: true,
-        });
-    };
+    this.findFloorInfo();
+    if (current == 1 || Cookies.get("buildingID") != '') {
 
-    // 请求接口
-    getData = ({ id, name }) => {
+      if (!floor) {
+        message.error("You Must Select a Floor!");
+        return;
+      }
+      this.setState((preState) => {
         return {
-            desc: `${name}: ${id} some info...`,
+          current: preState.current + 1,
         };
-    };
+      });
+    }
 
-    onChange = (val, stateKey) => {
-        this.setState({
-            [stateKey]: val.split('-')[0],
+    this.findRoomInfo();
+    if (current == 2 || floorData.length > 0) {
+        if (!room) {
+          message.error("You Must Select a Room to Continue!");
+          return;
+        }
+        this.setState((preState) => {
+          return {
+            current: preState.current + 1,
+          };
         });
+      }
+  };
 
-        // 请求接口，以渲染右侧空白处
-        const res = this.getData({ id: val.split('-')[0], name: stateKey });
-        this.setState({
-            currentDescriptions: res,
-            currentImg: val.split('-')[1]
-        });
-    };
+  prev = () => {
+    this.setState((preState) => {
+      return {
+        current: preState.current - 1,
+      };
+    });
+  };
 
-    onFinish = (values) => {
-        // 校验成功
-        console.log("Success:", values);
-    };
+  done = () => {
+    let { room } = this.state;
+    let { showModal } = this.state;
+    if (!room) {
+      message.error("You Must Select a Room to Submit!");
+      return;
+    }
+    this.setState({
+      showModal: true,
+    });
+  };
 
-    onFinishFailed = (errorInfo) => {
-        // 校验失败
-        console.log("Failed:", errorInfo);
-    };
+  // 请求接口
+  getData = ({ id, name }) => {
+      console.log(name)
+    if(name == "dorm")
+    {
+        return{
+            desc: `${name}: ${id} This is where the text would go for dorm...`,
+        };
+    }
+    else if(name == "floor")
+    {
+        return{
+            desc: `${name}: ${id} This is where the text would go for floor...`,
+        };
+    }
+    else
+    {
+         return {
+            desc: `${name}: ${id} This is where the text would go...`,
+        };
+    }
+  };
+
+  onChange = (val, stateKey) => {
+    this.setState({
+      [stateKey]: val,
+    });
+
+    // 请求接口，以渲染右侧空白处
+    const res = this.getData({ id: val, name: stateKey });
+    this.setState({
+      currentDescriptions: res,
+    });
+  };
+
+  onFinish = (values) => {
+    // 校验成功
+    console.log("Success:", values);
+  };
+
+  onFinishFailed = (errorInfo) => {
+    // 校验失败
+    console.log("Failed:", errorInfo);
+  };
 
     render() {
         let {
-            current,
-            dorm,
-            floor,
-            room,
-            dormData,
-            floorData,
-            roomData,
-            showModal,
+        current,
+        dorm,
+        floor,
+        room,
+        buildingData,
+        floorData,
+        roomData,
+        showModal,
         } = this.state;
         return (
-            <div className="dormSelect">
-                <Modal
-                    footer={null}
-                    title="Confirm Your infomation"
-                    visible={showModal}
-                    onOk={() => { }}
-                    onCancel={() => {
-                        this.setState({
-                            showModal: false,
-                        });
-                    }}
-                >
-                    <>
-                        <Descriptions title="Room Info">
-                            <Descriptions.Item label="Dorm">{dorm}</Descriptions.Item>
-                            <Descriptions.Item label="Floor">{floor}</Descriptions.Item>
-                            <Descriptions.Item label="Room">{room}</Descriptions.Item>
-                        </Descriptions>
-                        <Descriptions title="User Info">
-                            <Descriptions.Item label="FirstName">
-                                {Cookies.get("FN")}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="LastName">
-                                {Cookies.get("LN")}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Telephone">
-                                3123212132
-              </Descriptions.Item>
-                            <Descriptions.Item label="StudentID">
-                                {Cookies.get("ID")}
-                            </Descriptions.Item>
-                        </Descriptions>
+        <div className="dormSelect">
+            <Modal
+            footer={null}
+            title="Confirm Your Information"
+            visible={showModal}
+            onOk={() => {}}
+            onCancel={() => {
+                this.setState({
+                showModal: false,
+                });
+            }}
+            >
+            <>
+                <Descriptions title="Room Info">
+                <Descriptions.Item label="Dorm">{dorm}</Descriptions.Item>
+                <Descriptions.Item label="Floor">{floor}</Descriptions.Item>
+                <Descriptions.Item label="Room">{room}</Descriptions.Item>
+                </Descriptions>
+                <Descriptions title="User Info">
+                <Descriptions.Item label="FirstName">
+                    {Cookies.get("FN")}
+                </Descriptions.Item>
+                <Descriptions.Item label="LastName">
+                    {Cookies.get("LN")}
+                </Descriptions.Item>
+                <Descriptions.Item label="Telephone">
+                    3123212132
+                </Descriptions.Item>
+                <Descriptions.Item label="StudentID">
+                    {Cookies.get("ID")}
+                </Descriptions.Item>
+                </Descriptions>
 
-                        <Form.Item>
-                            <Button
-                                style={{
-                                    marginRight: 20,
-                                }}
-                                onClick={() => {
-                                    this.props.history.push("/student/home");
-                                }}
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Submit
-              </Button>
-                            <Button
-                                onClick={() => {
-                                    this.setState({
-                                        showModal: false,
-                                    });
-                                }}
-                                type="danger"
-                            >
-                                Cancel
-              </Button>
-                        </Form.Item>
-
-                        {/* <Form
-                            style={{
-                                top: 0,
-                                transform: 'translateY(0%)'
-                            }}
-                            // labelCol={{ span: 8 }}
-                            // wrapperCol={{ span: 16 }}
-
-                            onFinish={this.onFinish}
-                            onFinishFailed={this.onFinishFailed}
-                            autoComplete="off"
-                        >
-                            <Form.Item
-                                name="first name"
-                                label="first name"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your first name!',
-                                    },
-                                ]}
-                                hasFeedback
-                            >
-                                <Input type="text" />
-                            </Form.Item>
-                            <Form.Item
-                                name="last name"
-                                label="last name"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input your last name!',
-                                    },
-                                ]}
-                                hasFeedback
-                            >
-                                <Input type="text" />
-                            </Form.Item>
-
-                            <Form.Item>
-                                <Button style={{
-                                    marginRight: 20
-                                }} type="primary" htmlType="submit">
-                                    Submit
-                                </Button>
-                                <Button onClick={() => {
-                                    this.setState({
-                                        showModal: false
-                                    })
-                                }} type="danger">
-                                    Cancel
-                                </Button>
-                            </Form.Item>
-                        </Form> */}
-                    </>
-                </Modal>
-                <Steps current={current}>
-                    {steps.map((item) => (
-                        <Step key={item.title} title={item.title} />
-                    ))}
-                </Steps>
-                <div
+                <Form.Item>
+                <Button
                     style={{
-                        flex: 1,
-                        display: "flex",
-                        minHeight: 600,
+                    marginRight: 20,
                     }}
-                    className="steps-content"
+                    onClick={() => {
+                    this.props.history.push("/student/home");
+                    }}
+                    type="primary"
+                    htmlType="submit"
                 >
-                    {current == 0 && (
-                        <div>
-                            <Select
-                                style={{ width: 120 }}
-                                onChange={(val) => {
-                                    console.log("val = ", val)
-                                    this.onChange(val, "dorm");
-                                }}
-                            >
-                                {dormData.map((v, i) => {
-                                    return (
-                                        <Option key={i} value={`${v.value}-${v.url}`}>
-                                            {v.label}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                    )}
+                    Submit
+                </Button>
+                <Button
+                    onClick={() => {
+                    this.setState({
+                        showModal: false,
+                    });
+                    }}
+                    type="danger"
+                >
+                    Cancel
+                </Button>
+                </Form.Item>
 
-                    {current == 1 && (
-                        <div>
-                            <Select
-                                style={{ width: 120 }}
-                                onChange={(val) => {
-                                    this.onChange(val, "floor");
+                {/* <Form
+                                style={{
+                                    top: 0,
+                                    transform: 'translateY(0%)'
                                 }}
-                            >
-                                {floorData.map((v, i) => {
-                                    return (
-                                        <Option key={i} value={`${v.value}-${v.url}`}>
-                                            {v.label}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                    )}
+                                // labelCol={{ span: 8 }}
+                                // wrapperCol={{ span: 16 }}
 
-                    {current == 2 && (
-                        <div>
-                            <Select
-                                style={{ width: 120 }}
-                                onChange={(val) => {
-                                    this.onChange(val, "room");
-                                }}
+                                onFinish={this.onFinish}
+                                onFinishFailed={this.onFinishFailed}
+                                autoComplete="off"
                             >
-                                {roomData.map((v, i) => {
-                                    return (
-                                        <Option key={i} value={`${v.value}-${v.url}`}>
-                                            {v.label}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                    )}
-                    <div
-                        className="steps-content-info"
-                        style={{
-                            margin: "20px 0 10px 50px",
-                            flex: 1,
-                        }}
-                    >
-                        {this.state.currentDescriptions.desc}
-                        <div>
-                            <img style={{
-                                width: 300,
+                                <Form.Item
+                                    name="first name"
+                                    label="first name"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input your first name!',
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
+                                    <Input type="text" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="last name"
+                                    label="last name"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please input your last name!',
+                                        },
+                                    ]}
+                                    hasFeedback
+                                >
+                                    <Input type="text" />
+                                </Form.Item>
 
-                            }} src={this.state.currentImg} />
-                        </div>
-                    </div>
+                                <Form.Item>
+                                    <Button style={{
+                                        marginRight: 20
+                                    }} type="primary" htmlType="submit">
+                                        Submit
+                                    </Button>
+                                    <Button onClick={() => {
+                                        this.setState({
+                                            showModal: false
+                                        })
+                                    }} type="danger">
+                                        Cancel
+                                    </Button>
+                                </Form.Item>
+                            </Form> */}
+            </>
+            </Modal>
+            <Steps current={current}>
+            {steps.map((item) => (
+                <Step key={item.title} title={item.title} />
+            ))}
+            </Steps>
+            <div
+            style={{
+                flex: 1,
+                display: "flex",
+                minHeight: 1000,
+            }}
+            className="steps-content"
+            >
+            {current == 0 && (
+                <div>
+                <Select
+                    style={{ width: 120 }}
+                    onChange={(val) => {
+                    this.onChange(val, "dorm");
+                    }}
+                >
+                    {buildingData.map((v, i) => {
+                    return (
+                        <Option key={i} value={v.value}>
+                        {v.label}
+                        </Option>
+                    );
+                    })}
+                </Select>
                 </div>
-                <div className="steps-action">
-                    {current < steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.next()}>
-                            Next
-                        </Button>
-                    )}
-                    {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.done()}>
-                            Done
-                        </Button>
-                    )}
-                    {current > 0 && (
-                        <Button style={{ margin: "0 8px" }} onClick={() => this.prev()}>
-                            Previous
-                        </Button>
-                    )}
+            )}
+
+            {current == 1 && (
+                <div>
+                <Select
+                    style={{ width: 120 }}
+                    onChange={(val) => {
+                    this.onChange(val, "floor");
+                    }}
+                >
+                    {floorData.map((v, i) => {
+                    return (
+                        <Option key={i} value={v.value}>
+                        {v.label}
+                        </Option>
+                    );
+                    })}
+                </Select>
                 </div>
+            )}
+
+            {current == 2 && (
+                <div>
+                <Select
+                    style={{ width: 120 }}
+                    onChange={(val) => {
+                    this.onChange(val, "room");
+                    }}
+                >
+                    {roomData.map((v, i) => {
+                    return (
+                        <Option key={i} value={v.value}>
+                        {v.label}
+                        </Option>
+                    );
+                    })}
+                </Select>
+                </div>
+            )}
+            <div
+                className="steps-content-info"
+                style={{
+                margin: "20px 0 10px 50px",
+                flex: 1,
+                }}
+            >
+                {this.state.currentDescriptions.desc}
             </div>
+            </div>
+            <div className="steps-action">
+            {current < steps.length - 1 && (
+                <Button type="primary" onClick={() => this.next()}>
+                Next
+                </Button>
+            )}
+            {current === steps.length - 1 && (
+                <Button type="primary" onClick={() => this.done()}>
+                Done
+                </Button>
+            )}
+            {current > 0 && (
+                <Button style={{ margin: "0 8px" }} onClick={() => this.prev()}>
+                Previous
+                </Button>
+            )}
+            </div>
+        </div>
         );
     }
 }
