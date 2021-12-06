@@ -469,7 +469,7 @@ export default class DormSelection extends Component {
                     style={{
                         flex: 1,
                         display: "flex",
-                        minHeight: 1000,
+                        minHeight: 600,
                     }}
                     className="steps-content"
                 >
