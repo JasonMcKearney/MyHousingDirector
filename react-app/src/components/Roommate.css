@@ -1,0 +1,15 @@
+.container-results{
+
+
+    border-radius: 3px;
+    border-width: 2px;
+    border-style: solid;
+    margin-top: 5%;
+    height: 100%;
+    width: 100%;
+}
+.results{
+    height: 100%;
+    width: 100%;
+
+}

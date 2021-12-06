@@ -102,9 +102,9 @@ namespace WebAPI.Controllers
                 return new Response { Status = "Success", Message = "Login Successfully" };
         }
 
-        [Route("FindStudentInfo/{sFirstNameToSearch}")]
+        [Route("FindRoommateInfo/{sFirstNameToSearch}")]
         [HttpPost]
-        public List<studentTblFields> FindStudentInfo(string sUsernameToSearch)
+        public List<studentTblFields> FindRoommateInfo(string sFirstNameToSearch)
         {
             List<studentTblFields> eventData = new List<studentTblFields>();
 

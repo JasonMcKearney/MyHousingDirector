@@ -42,15 +42,15 @@ class Student extends Component {
         showModal: false
     }
 
-    componentDidMount() {
-        console.log("this.props = ", this.props.userinfo)
-        let { username, pwd } = this.props.userinfo;
-        if (pwd == 'george') {
-            this.setState({
-                showModal: true
-            })
-        }
-    }
+    // componentDidMount() {
+    //     console.log("this.props = ", this.props.userinfo)
+    //     let { username, pwd } = this.props.userinfo;
+    //     if (pwd == 'george') {
+    //         this.setState({
+    //             showModal: true
+    //         })
+    //     }
+    // }
 
 
     render() {
