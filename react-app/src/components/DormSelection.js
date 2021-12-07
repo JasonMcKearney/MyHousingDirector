@@ -139,6 +139,7 @@ export default class DormSelection extends Component {
 
     findRoomInfo() {
         let currentComponent = this;
+        currentComponent.state.roomData.length = 0;
         fetch('http://localhost:16648/api/Student/FindRoomInfo', {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {
