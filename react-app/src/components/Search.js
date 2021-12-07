@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button, Checkbox, Carousel } from 'antd';
+
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './Search.css';
