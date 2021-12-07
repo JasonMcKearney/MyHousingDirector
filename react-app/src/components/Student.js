@@ -7,6 +7,7 @@ import './Student.css';
 import Cookies from 'js-cookie';
 import DormSelection from './DormSelection'
 import StudentHome from './StudentHome'
+import Roommate from './Roommate';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -43,15 +44,16 @@ class Student extends Component {
         showModal: false
     }
 
-    componentDidMount() {
-        // console.log("this.props = ", this.props.userinfo)
-        // let { username, pwd } = this.props.userinfo;
-        // if (pwd == 'george') {
-        //     this.setState({
-        //         showModal: true
-        //     })
-        // }
-    }
+    // componentDidMount() {
+    //     console.log("this.props = ", this.props.userinfo)
+    //     let { username, pwd } = this.props.userinfo;
+    //     if (pwd == 'george') {
+    //         this.setState({
+    //             showModal: true
+    //         })
+    //     }
+    // }
+
 
 
     render() {
@@ -126,9 +128,9 @@ class Student extends Component {
                             <Menu.Item key="2">
                             <Link to="/student/DormSelect">Dorm Selection</Link>
                             </Menu.Item>
-{/*                            <Menu.Item key="3">
-                                <Link to="/student/nav2">User Info</Link>
-                            </Menu.Item>*/}
+                          <Menu.Item key="3">
+                                <Link to="/student/Roommate">Roommate Selection</Link>
+                            </Menu.Item>
                             <Menu.Item key="4">
                               <Button onClick={() => {
                                   Cookies.remove('ID')
@@ -156,8 +158,9 @@ class Student extends Component {
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
                                             <Route path='/student/Home' component={StudentHome} />
-                                            <Route path='/student/Home' component={StudentHome} />
+                                            <Route path='/student/Roommate' component={Roommate} />
                                             <Route path='/student/DormSelect' component={DormSelection} />
+                                          
 {/*                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />*/}
                                         </Switch>
 

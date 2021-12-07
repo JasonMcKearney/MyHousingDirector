@@ -53,6 +53,7 @@ namespace WebAPI.Controllers
                 MySqlCommand getID = conn.CreateCommand();
 
                 getID.Parameters.AddWithValue("@username", check.username);
+
                 getID.CommandText = "select studentID, username, firstName, lastName, email from housingdirector_schema.student_tbl where username = @username";
                 
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
@@ -107,6 +108,23 @@ namespace WebAPI.Controllers
             else
                 return new Response { Status = "Success", Message = "Login Successfully" };
         }
+
+
+        [Route("FindRoommateInfo/{sFirstNameToSearch}")]
+        [HttpPost]
+        public List<studentTblFields> FindRoommateInfo(string sFirstNameToSearch)
+        {
+            List<studentTblFields> eventData = new List<studentTblFields>();
+
+            eventData.Add(new studentTblFields()
+            {
+               
+                firstName ="Nick",
+               
+            }) ; 
+
+
+            return eventData;
 
         // DormSelection Page..
         // Need to get dorm info
@@ -205,6 +223,7 @@ namespace WebAPI.Controllers
                 reader.Close();
             }
             return roomList;
+
         }
     }
 }
