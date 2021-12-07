@@ -10,21 +10,54 @@ export default class Roommate extends Component {
 
         this.state = {
             userSearchString : '',
-
+            results : '',
+            resultsList : [],
         }
            
             this.setSearchText = this.setSearchText.bind(this);
             this.submitSearchText = this.submitSearchText.bind(this);
+            this.printResults = this.printResults.bind(this);
+            this.addItemResults = this.addItemResults.bind(this);
     }
 
+    
     setSearchText(event)
     {
          this.setState({ userSearchString: event.target.value });
          console.log(this.state.userSearchString)
     }
+    addItemResults()
+    {
+            let tempResultList = this.state.resultsList;
+            tempResultList.push(this.state.results);
+            this.setState({
+                tempResultList
+            });
+
+            console.log("item added to the list")
+    }
+    printResults(){
+        
+        let tempResultList = this.state.resultsList;
+        return (
+            <ul>
+              {
+                tempResultList.map((val, index) => {
+                  
+                  {console.log(index + " " + val);}
+                    return (
+                      <a onClick = {()=>{this.props.history.push('/home/StudentProfile'); Cookies.set("student", val)}}><li>{val}</li></a>
+                  );
+                })
+              }
+            </ul>
+          );
+
+    }
 
     submitSearchText()
     {
+        let currentComponent = this;
         fetch('http://localhost:16648/api/Student/FindRoommateInfo/' + this.state.userSearchString, {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {                
@@ -34,23 +67,19 @@ export default class Roommate extends Component {
             method: 'POST',
         }).then(res=>res.clone().json())
         .then(function(res) {
-            console.log("hello " + res[0].username)
-            // var loopData = ''
-            // var i;
-            // for (i = 0; i < res.length; i++)
-            // {
-            //     console.log("Next User: " + res[i].username)
-            //     if(res[i].username != "")
-            //     {
-            //         currentComponent.setState({studentName: res[i].username})
-                 // Add student to list
-            //         currentComponent.addItem();
-            //     }
-               // Entries with characters entered do not match any usernames in the database
-            //     else
-            //         alert("No entries match the character/characters entered.")
-            // }
-            // currentComponent.setState({searchResults: loopData})
+            console.log("hello " + res[0].firstName)
+            var loopData = ''
+            var i;
+            for (i = 0; i < res.length; i++)
+            {
+                let testVariable = res[i].firstName;
+                console.log("Next User: " + res[i].firstName)
+                currentComponent.setState({ results: testVariable })
+                console.log("Name:" + currentComponent.state.results)
+                currentComponent.addItemResults();
+            }
+            
+        
         })
 
        
@@ -70,16 +99,13 @@ export default class Roommate extends Component {
                 <button type ="submit" onClick ={this.submitSearchText}>search</button>
                 
 
-                
-            <section>
-                <div className="container-results">
-                    <div className="results">
-
-                    </div>
-
-                </div>
-    
-            </section>
+                <section>  
+                    <div>    
+                        <div className="container-results">
+                            { this.printResults() }
+                        </div>
+                    </div>  
+                </section>
            
              </div>
         
