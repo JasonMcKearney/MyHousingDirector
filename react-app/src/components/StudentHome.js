@@ -9,6 +9,10 @@ export default class DormSelection extends Component {
 
     constructor(props) {
         super(props);
+    
+    }
+    componentDidMount()
+    {
         fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
