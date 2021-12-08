@@ -37,6 +37,7 @@ namespace WebAPI.Controllers
             _configuration = configuration;
         }
 
+
         [HttpPost]
         public studentTblFields GetStudentInfo(studentTblFields check)
         {
@@ -118,13 +119,14 @@ namespace WebAPI.Controllers
 
             eventData.Add(new studentTblFields()
             {
-               
-                firstName ="Nick",
-               
-            }) ; 
+
+                firstName = "Nick",
+
+            });
 
 
             return eventData;
+        }
 
         // DormSelection Page..
         // Need to get dorm info
@@ -224,7 +226,63 @@ namespace WebAPI.Controllers
                 reader.Close();
             }
             return roomList;
-
         }
+
+        // INSERT INTO housingdirector_schema.occupants_tbl (dorm_id, room_id, roomNumber, residentID) VALUES ();
+        // Create student account
+        [Route("SubmitDormApproval/{bValid}")]
+        [HttpGet]
+        public Response SubmitDormForm(bool bValid)
+        {
+
+            // For later use in order to update MySQL database
+            /*     if (CheckConditionsValidation(student, "AddStudent"))
+                 {
+                     using (MySqlConnection conn = GetConnection())
+                     {
+                         conn.Open();
+                         MySqlCommand CheckUser = conn.CreateCommand();
+
+                         // Checks to see if there are duplicate usernames
+                         CheckUser.Parameters.AddWithValue("@username", student.username);
+                         CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where userName = @userName";
+
+                         // if 1 then already exist
+                         int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
+
+                         if (UserExist >= 1)
+                         {
+                             bSuccessfull = false;
+                             return new Response { Status = "User Exists", Message = "Cannot" };
+                         }
+                         else
+                         {
+                             // Inserting data into fields of database
+                             MySqlCommand Query = conn.CreateCommand();
+                             Query.CommandText = "insert into housingdirector_schema.student_tbl (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
+                             Query.Parameters.AddWithValue("@username", student.username);
+                             Query.Parameters.AddWithValue("@firstname", student.firstName);
+                             Query.Parameters.AddWithValue("@lastname", student.lastName);
+                             Query.Parameters.AddWithValue("@email", student.email);
+                             Query.Parameters.AddWithValue("@password", student.password);
+                             Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
+                             Query.Parameters.AddWithValue("@gender", student.gender);
+                             Query.Parameters.AddWithValue("@year", student.year);
+                             Query.Parameters.AddWithValue("@studentID", student.studentID);
+
+                             Query.ExecuteNonQuery();
+                             bSuccessfull = true;
+                         }
+                     }
+                 }
+            */
+            if (!bValid)
+            {
+                return new Response { Status = "Invalid", Message = "Cannot" };
+            }
+
+            return new Response { Status = "Success", Message = "Form submitted Successfully. An administrator will be in touch with you." };
+        }
+
     }
 }

@@ -254,6 +254,31 @@ export default class DormSelection extends Component {
         console.log("State of current - 1 : " + this.state.current)
     };
 
+
+    // User will be able to submit their form for approval by an administrator
+    submitForm()
+    {
+        fetch('http://localhost:16648/api/Student/SubmitDormApproval/true', {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'GET',
+        }).then((Response) => Response.json())
+        .then((result) => {
+            if (result.status == "Invalid")
+            {
+                alert(result.message);   
+            }
+            else 
+            {
+                alert(result.message);   
+            }
+            
+            })
+    }
+
     done = () => {
         let { room } = this.state;
         let { showModal } = this.state;
@@ -279,33 +304,13 @@ export default class DormSelection extends Component {
                        if(this.state.buildingData[nCounter].value === id)
                        {   
                            bEnd = false;
-                           sToPrint = `${this.state.buildingData[nCounter].description}: ${name} This is where the text would go for dorm...`
+                           sToPrint = `${this.state.buildingData[nCounter].description}`
                        }
                        nCounter++;                
                    }
                    return{
                       desc: sToPrint
                     };
-                    /* if(this.state.buildingData[counter] == id)
-                       {
-                           
-                           console.log("Building Description: " + this.state.buildingData[counter].description)
-                           test = false;
-                           console.log("Counter Value: " + counter);
-           
-                           return{
-                               desc: `${this.state.buildingData[counter].description}: ${name} This is where the text would go for dorm...`,
-                           };
-                       }
-                       else
-                           counter++
-                   
-                  */
-        //    return {
-//
-//                desc: `${name}: ${id} This is where the text would go for dorm...`,
-//            };
-
         }
         else if (name == "floor") {
             return{
@@ -323,7 +328,7 @@ export default class DormSelection extends Component {
                 if(this.state.roomData[nCounter].value === id)
                 {   
                     bEnd = false;
-                    sToPrint = `${this.state.roomData[nCounter].description}: ${name} This is where the text would go for dorm...`
+                    sToPrint = `${this.state.roomData[nCounter].description}`
                 }
                 nCounter++;                
             }
@@ -393,7 +398,7 @@ export default class DormSelection extends Component {
                                 {Cookies.get("LN")}
                             </Descriptions.Item>
                             <Descriptions.Item label="Telephone">
-                                3123212132
+                                Telephone number not saved
                             </Descriptions.Item>
                             <Descriptions.Item label="StudentID">
                                 {Cookies.get("ID")}
@@ -407,6 +412,7 @@ export default class DormSelection extends Component {
                                 }}
                                 onClick={() => {
                                     this.props.history.push("/student/home");
+                                    this.submitForm()
                                 }}
                                 type="primary"
                                 htmlType="submit"
