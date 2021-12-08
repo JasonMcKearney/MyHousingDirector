@@ -118,13 +118,14 @@ namespace WebAPI.Controllers
 
             eventData.Add(new studentTblFields()
             {
-               
-                firstName ="Nick",
-               
-            }) ; 
+
+                firstName = "Nick",
+
+            });
 
 
             return eventData;
+        }
 
         // DormSelection Page..
         // Need to get dorm info
