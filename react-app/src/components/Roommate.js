@@ -15,15 +15,19 @@ export default class Roommate extends Component {
             results : '',
             resultsList : [],
             studentList : [],
+            user_id: '',
+
         }
 
             this.setSearchText = this.setSearchText.bind(this);
             this.submitSearchText = this.submitSearchText.bind(this);
             this.printResults = this.printResults.bind(this);
             this.addItemResults = this.addItemResults.bind(this);
+            this.setRoommateChoice = this.setRoommateChoice.bind(this);
     }
 
 
+    
     setSearchText(event)
     {
          this.setState({ userSearchString: event.target.value });
@@ -55,7 +59,7 @@ export default class Roommate extends Component {
                                   <span className="result-word" key={index}> {val.firstName}</span>
                                   <span className="result-word" key={index}> {val.lastName}</span>
                                   <span className="result-word" key={index}> {val.year}</span>
-                                  <a className="add-icon" ><FontAwesomeIcon icon={faUserPlus} size = "3x" color="green" /> </a>
+                                   <a className="add-icon"><FontAwesomeIcon type ="submit" icon={faUserPlus} size = "3x" color="green" /> </a>
                               </p> 
                               
                               
@@ -106,9 +110,6 @@ export default class Roommate extends Component {
            console.log("studentArray before filling: " + studentArray)
 
            var i;
-
-            
-
             for( i = 0; i < res.length; i++)
 
              {
@@ -122,21 +123,16 @@ export default class Roommate extends Component {
             
 
               let obj = {
-
-                firstName: res[0].firstName,
-
-                lastName: res[0].lastName,
-
-                year : res[0].year,
+               
+                user_id: res[i].user_id,
+                firstName: res[i].firstName,
+                lastName: res[i].lastName,
+                year : res[i].year,
 
                 }
 
                 studentArray.push(obj)
-
            console.log(studentArray)
-
-
-
             }
 
             console.log(currentComponent.state.studentList)
@@ -148,7 +144,37 @@ export default class Roommate extends Component {
         });
 
     }
+    AddStudent(){
 
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/AddRoommate', {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                user_id: this.state.user_id
+            
+            })
+
+            
+
+        }).then((res) => Response.json())
+        .then((res) => {
+
+
+        })
+
+    }
+
+    setRoommateChoice(event)
+    {
+        console.log("test");
+        this.setState({user_id: event})
+       
+
+    }
     render() {
         return (
 

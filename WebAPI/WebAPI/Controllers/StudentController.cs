@@ -138,7 +138,7 @@ namespace WebAPI.Controllers
 
                     eventData.Add(new studentTblFields()
                     {
-
+                        user_id = Convert.ToInt32(reader[0]),
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
                         year = reader[3].ToString(),
