@@ -153,6 +153,15 @@ namespace WebAPI.Controllers
 
             return eventData;
         }
+        [Route("AddRoommate")]
+        [HttpPost]
+        public Response AddRoommate(studentTblFields roommate)
+        {
+
+
+            return new Response { Status = "Invalid", Message = "Cannot" };
+        }
+
         // DormSelection Page..
         // Need to get dorm info
         // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
@@ -187,6 +196,8 @@ namespace WebAPI.Controllers
             }
             return dormData;
         }
+        
+
 
         // Find the floor numbers that have rooms available
         [Route("FindFloorInfo/{dorm_id}")]

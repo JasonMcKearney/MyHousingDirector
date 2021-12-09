@@ -1,3 +1,6 @@
+.roomate-container{
+    margin:0 auto;
+}
 .container-results{
 
 
@@ -5,11 +8,93 @@
     border-width: 2px;
     border-style: solid;
     margin-top: 5%;
-    height: 100%;
-    width: 100%;
+    height: 500px;
+    width: 85%;
 }
+
+.container-results::-webkit-scrollbar {
+    width: 20px;
+    border-radius: 10px;
+    border-width: 5px;
+  }
+  
+
+.container-results::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+
+.container-results::-webkit-scrollbar-thumb {
+    background: #888; 
+     border-radius: 5px
+  }
+  
+ 
+.container-results::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+.container-results::-webkit-scrollbar-track {
+
+    border-radius: 5px;
+
+  } 
 .results{
     height: 100%;
     width: 100%;
 
+}
+.search-container{
+
+
+    display: flex;
+
+}
+.container-object{
+
+float:left;
+
+}
+.search-bar{
+
+    padding-left: 10px;
+    padding-top:1px;
+    padding-bottom: 1px;
+    width:75%;
+    height:3em;
+    font-size: 18px;
+    font-family: 'Lucida Bright';
+}
+.search-button{
+
+    float: left;
+    width: 10%;
+    margin-left:10px;
+    height:3em;
+   
+    font-size:18px;
+}
+.wrapper{
+    width:100%;
+    display:inline-block;
+}
+.add-icon{
+
+    float: right;
+    padding-right:10px;
+    padding-top:5px;
+
+}
+.result-word{
+
+    font-size: 30px;
+    padding-left:10px;
+    font-family: 'Lucida Bright';
+}
+ul{
+
+
+    list-style-type:none;
+}
+.word-wrapper{
+    
+    padding-left:10px;
 }
