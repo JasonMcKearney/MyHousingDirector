@@ -114,24 +114,51 @@ namespace WebAPI.Controllers
         [HttpPost]
         public List<studentTblFields> FindRoommateInfo(string sFirstNameToSearch)
         {
+
+
             List<studentTblFields> eventData = new List<studentTblFields>();
 
-            eventData.Add(new studentTblFields()
+            using (MySqlConnection conn = GetConnection())
             {
-               
-                firstName ="Nick",
-               
-            }) ; 
 
+                conn.Open();
+                MySqlCommand getUsersInfo = conn.CreateCommand();
+
+                getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch);
+                getUsersInfo.CommandText = "select user_id, firstname, lastname, year from housingdirector_schema.student_tbl where username = @username";
+
+
+                getUsersInfo.ExecuteNonQuery();
+
+                MySqlDataReader reader = getUsersInfo.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+
+                    eventData.Add(new studentTblFields()
+                    {
+
+                        firstName = reader[1].ToString(),
+                        lastName = reader[2].ToString(),
+                        year = reader[3].ToString(),
+                      
+
+                    });
+                 
+                    
+                }
+                reader.Close();
+            }
 
             return eventData;
-
+        }
         // DormSelection Page..
         // Need to get dorm info
         // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
         [Route("FindBuildingInfo")]
         [HttpGet]
-        public List<DormInfo> FindBuildingInfo()
+            public List<DormInfo> FindBuildingInfo()
         {
             List<DormInfo> dormData = new List<DormInfo>();
 

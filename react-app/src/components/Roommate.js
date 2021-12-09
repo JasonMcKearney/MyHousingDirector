@@ -12,6 +12,7 @@ export default class Roommate extends Component {
             userSearchString : '',
             results : '',
             resultsList : [],
+            studentList : [],
         }
            
             this.setSearchText = this.setSearchText.bind(this);
@@ -38,15 +39,13 @@ export default class Roommate extends Component {
     }
     printResults(){
         
-        let tempResultList = this.state.resultsList;
+        let {studentList} = this.state;
         return (
             <ul>
               {
-                tempResultList.map((val, index) => {
-                  
-                  {console.log(index + " " + val);}
+                studentList.map((val, index) => {
                     return (
-                      <a onClick = {()=>{this.props.history.push('/home/StudentProfile'); Cookies.set("student", val)}}><li>{val}</li></a>
+                      <a onClick = {()=>{this.props.history.push('/home/StudentProfile'); Cookies.set("student", val.firstName)}}><li>{val}</li></a>
                   );
                 })
               }
@@ -64,22 +63,24 @@ export default class Roommate extends Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            method: 'POST',
+            method: 'Post',
         }).then(res=>res.clone().json())
         .then(function(res) {
-            console.log("hello " + res[0].firstName)
-            var loopData = ''
-            var i;
-            for (i = 0; i < res.length; i++)
-            {
-                let testVariable = res[i].firstName;
-                console.log("Next User: " + res[i].firstName)
-                currentComponent.setState({ results: testVariable })
-                console.log("Name:" + currentComponent.state.results)
-                currentComponent.addItemResults();
-            }
+           
+           const studentArray = currentComponent.state.studentList.slice();
+           var i;
             
-        
+            for( i = 0; i < res.length; i++)
+             {
+                 console.log(res[i].year)
+              let obj = {
+                firstName: res[0].firstName,
+                lastName: res[0].lastName,
+                year : res[0].year,
+                }
+                studentArray.push(obj)
+            }
+            currentComponent.setState({studentList: studentArray})
         })
 
        
