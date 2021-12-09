@@ -38,6 +38,7 @@ class Student extends Component {
               Cookies.set("LN", lastName);
               Cookies.set("EM", email);
             })
+            
     }
 
     state = {
@@ -138,6 +139,9 @@ class Student extends Component {
                                   Cookies.remove('LN')
                                   Cookies.remove('EM')
                                   Cookies.remove('username')
+                                  Cookies.remove('student')
+                                  Cookies.remove('buildingID')
+
                                   this.props.history.push('/LogIn');
                               }} type="primary" htmlType="Logout">
                                   Logout
