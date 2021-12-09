@@ -17,5 +17,7 @@ namespace WebAPI.Models
 
 		public string floorNumber { get; set; }
 
+		public string roomDescription { get; set; }
+
 	}
 }

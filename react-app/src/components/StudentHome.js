@@ -9,6 +9,10 @@ export default class DormSelection extends Component {
 
     constructor(props) {
         super(props);
+    
+    }
+    componentDidMount()
+    {
         fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
@@ -35,8 +39,6 @@ export default class DormSelection extends Component {
     render() {
         return (
             <div className="StudentHomeBox">
-                
-                    
                 <div className="StudentHomeBox-left-upper">
                     <div className="Studentinfobox">
                         My Profile:
