@@ -154,7 +154,6 @@ export default class DormSelection extends Component {
         }).then(res => res.clone().json())
             .then(function (res) {
                 const newArray = currentComponent.state.roomData.slice(); // Create a copy of the array in state
-                var loopData = ''
                 var i;
                 for (i = 0; i < res.length; i++) {
                     let obj2 = {
@@ -304,7 +303,7 @@ export default class DormSelection extends Component {
                        if(this.state.buildingData[nCounter].value === id)
                        {   
                            bEnd = false;
-                           sToPrint = `${this.state.buildingData[nCounter].description}`
+                           sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
                        }
                        nCounter++;                
                    }
