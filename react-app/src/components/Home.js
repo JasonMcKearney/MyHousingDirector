@@ -60,13 +60,7 @@ export class Home extends Component {
                                 <Link to="/home/Accountcreation">Account creation</Link>
                         </Menu.Item>
 
-                        <Menu.Item key="3" /*icon={<UploadOutlined />}*/>
-                                <Link to="/home/nav3">Delete a user</Link>
-                            </Menu.Item>
 
-                        <Menu.Item key="4" /*icon={<UserOutlined />}*/>
-                                <Link to="/home/nav4">Move a user</Link>
-                            </Menu.Item>
 
                         </Menu>
 
@@ -111,6 +105,12 @@ export class Home extends Component {
 
 
 
+/*                      <Menu.Item key="3" icon={<UploadOutlined />}>
+                               <Link to="/home/nav3">Delete a user</Link>
+                          </Menu.Item>
 
+                        <Menu.Item key="4" icon={<UserOutlined />}>
+                                <Link to="/home/nav4">Move a user</Link>
+                            </Menu.Item>*/
 
     
