@@ -20,7 +20,6 @@ export class StudentProfile extends Component {
         // Allows me to do this.state and access different state values in updateStudentFields() function
         this.updateStudentFields = this.updateStudentFields.bind(this);
         this.deleteStudent = this.deleteStudent.bind(this);
-        this.emailStudent = this.emailStudent.bind(this);
     }
 
     firstName = (event) => {
@@ -57,6 +56,7 @@ export class StudentProfile extends Component {
         }).then(res=>res.clone().json())
         .then(function(res) 
         {
+            console.log("userid: " + res[0].user_id)
             currentComponent.setState({studentID: res[0].user_id})
             currentComponent.setState({firstName: res[0].firstName})
             currentComponent.setState({firstName: res[0].firstName})
@@ -88,18 +88,13 @@ export class StudentProfile extends Component {
                 user_id: this.state.studentID,
                 firstName: this.state.firstName,           
                 lastName: this.state.lastName,
-                username: this.state.username,
                 email: this.state.email,
                 year: this.state.year,                
                 password: this.state.password
             })
         }).then((Response) => Response.json())
         .then((result) => {
-            if (result.status == "User Exists")
-            {
-                alert("Student with the same username already created.");   
-            }
-            else if(result.status == "Invalid")
+            if(result.status == "Invalid")
             {
                 alert(result.message);   
             }
@@ -109,7 +104,6 @@ export class StudentProfile extends Component {
             }
         })
     }
-
 
     deleteStudent()
     {
@@ -141,41 +135,6 @@ export class StudentProfile extends Component {
         })
     }
 
-    emailStudent()
-    {
-        console.log("Made it to emailStudent Function")
-        console.log("email" + this.state.email)
-        console.log("username" + this.state.username)
-        console.log("password" + this.state.password)
-
-
-        // Admin add student account...
-        fetch('http://localhost:16648/api/Admin/SendEmailToStudent', {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                email: this.state.email,
-                username: this.state.username,                
-                password: this.state.password
-            })
-        }).then((Response) => Response.json())
-        .then((result) => {
-            console.log("result: " + result.status)
-            if (result.status == "Sucesss")
-            {
-                alert(result.message);   
-            }
-            else if(result.status == "Invalid")
-            {
-                alert(result.message);   
-            }
-        })
-    }
-    
     render() {
         let firstName = this.state.firstName;
         let lastName = this.state.lastName;
@@ -204,7 +163,7 @@ export class StudentProfile extends Component {
                     
                     <div className = "student-container">
                         <label className = "student-info-label">Username:</label>
-                        <input className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
+                        <input disabled = {true} className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
                     </div>
 
                     <div className = "student-container">
@@ -227,8 +186,6 @@ export class StudentProfile extends Component {
                     <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
 
                     <button onClick={this.deleteStudent} id = "primary-button" htmlType="submit">Delete Student Profile</button>    
-
-                    <button onClick={this.emailStudent} id = "primary-button" htmlType="submit">Email Student Account Details</button>     
             </div>
 
         );

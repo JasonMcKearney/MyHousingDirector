@@ -9,10 +9,16 @@ export default class DormSelection extends Component {
 
     constructor(props) {
         super(props);
-    
+        this.state = {
+            studentID: '',
+            firstName: '',
+            lastName: '',
+            email: '',
+        }
     }
     componentDidMount()
     {
+        var currentComponent = this; 
         fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
@@ -24,15 +30,28 @@ export default class DormSelection extends Component {
             })
         }).then((Response) => Response.json())
             .then((result) => {
-                var ID = result.studentID;
-                var firstName = result.firstName;
-                var lastName = result.lastName;
-                var email = result.email;
+//                var ID = result.studentID;
+//                var firstName = result.firstName;
+//                var lastName = result.lastName;
+//                var email = result.email;
+//
+                console.log("StudentID: " + result.studentID)
+                currentComponent.setState({studentID: result.studentID})
+                console.log(currentComponent.studentID)
+                
+                currentComponent.setState({firstName: result.firstName})
 
-                Cookies.set("ID", ID);
-                Cookies.set("FN", firstName);
-                Cookies.set("LN", lastName);
-                Cookies.set("EM", email);
+                
+                
+                this.state.lastName = result.lastName;
+                this.state.email = result.email;
+
+                console.log("StudentID: " + this.state.studentID)
+
+                Cookies.set("ID", result.studentID);
+                Cookies.set("FN", result.firstName);
+                Cookies.set("LN", result.lastName);
+                Cookies.set("EM", result.email);
             })
     }
 
@@ -46,7 +65,7 @@ export default class DormSelection extends Component {
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
-                            <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
+                            <p>{this.state.firstName} {this.state.lastName}</p>
                             <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
 
                         </Card>,
