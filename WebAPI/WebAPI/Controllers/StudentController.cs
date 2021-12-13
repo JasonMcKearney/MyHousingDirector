@@ -115,25 +115,18 @@ namespace WebAPI.Controllers
         [HttpPost]
         public List<studentTblFields> FindRoommateInfo(string sFirstNameToSearch)
         {
-
-
             List<studentTblFields> eventData = new List<studentTblFields>();
 
             using (MySqlConnection conn = GetConnection())
             {
-
-
                 conn.Open();
                 MySqlCommand getUsersInfo = conn.CreateCommand();
 
                 getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch);
                 getUsersInfo.CommandText = "select user_id, firstname, lastname, year from housingdirector_schema.student_tbl where username = @username";
-
-
                 getUsersInfo.ExecuteNonQuery();
 
                 MySqlDataReader reader = getUsersInfo.ExecuteReader();
-
 
                 while (reader.Read())
                 {
@@ -143,12 +136,8 @@ namespace WebAPI.Controllers
                         user_id = Convert.ToInt32(reader[0]),
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
-                        year = reader[3].ToString(),
-                      
-
-                    });
-                 
-                    
+                        year = reader[3].ToString(),                 
+                    });                                    
                 }
                 reader.Close();
             }
@@ -160,7 +149,6 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response AddRoommate(studentTblFields roommate)
         {
-
 
             return new Response { Status = "Invalid", Message = "Cannot" };
         }

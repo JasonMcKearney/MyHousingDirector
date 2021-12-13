@@ -274,22 +274,6 @@ export default class accountcreation extends Component {
                         <Input type="text" onChange={this.studentID} />
                     </Form.Item>
 
-                    <Form.Item
-                        name="agreement"
-                        valuePropName="checked"
-                        rules={[
-                            {
-                                validator: (_, value) =>
-                                    value ? Promise.resolve() : Promise.reject(new Error('Agreement needs to be accepted to continue.')),
-                            },
-                        ]}
-                        {...tailFormItemLayout}
-                    >
-                        <Checkbox>
-                            I have read the <a href="">agreement</a>
-                        </Checkbox>
-                    </Form.Item>
-
                     <Form.Item {...tailFormItemLayout}>
                         <Button  onClick={this.AddStudent} type="primary" htmlType="submit">
                             Register

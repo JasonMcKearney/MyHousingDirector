@@ -211,7 +211,7 @@ namespace WebAPI.Controllers
                 {
                     eventData.Add(new studentTblFields()
                     {
-                      
+                        user_id = Int32.Parse(reader[0].ToString()),
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
                         username = reader[3].ToString(),
@@ -231,57 +231,34 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response UpdateProfile(studentTblFields student)
         {
-            bool bSuccessfull = false;
-
-            if (CheckConditionsValidation(student, "UpdateProfile"))
+            try
             {
                 using (MySqlConnection conn = GetConnection())
                 {
                     conn.Open();
                     MySqlCommand CheckUser = conn.CreateCommand();
 
-                    // Checks to see if there are duplicate usernames
-                    CheckUser.Parameters.AddWithValue("@username", student.username);
-                    CheckUser.Parameters.AddWithValue("@userid", student.user_id);
-                    CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where username = @username and user_id != @userid";
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "update housingdirector_schema.student_tbl set firstName=@firstname, lastName=@lastname, " +
+                        "email=@email, year=@year, password=@password where user_id=@userid";
+                    Query.Parameters.AddWithValue("@firstname", student.firstName);
+                    Query.Parameters.AddWithValue("@lastname", student.lastName);
+                    Query.Parameters.AddWithValue("@email", student.email);
+                    Query.Parameters.AddWithValue("@year", student.year);
+                    Query.Parameters.AddWithValue("@password", student.password);
+                    Query.Parameters.AddWithValue("@userid", student.user_id);
 
-                    // if 1 then already exist
-                    int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
-
-                    if (UserExist >= 1)
-                    {
-                        bSuccessfull = false;
-                        return new Response { Status = "User Exists", Message = "Student with the same username already created." };
-                    }
-                    else
-                    { // select firstname, lastname, username, email, year, password
-
-                        // Inserting data into fields of database
-                        MySqlCommand Query = conn.CreateCommand();
-                        Query.CommandText = "update housingdirector_schema.student_tbl set firstName=@firstname, lastName=@lastname, username=@username, " +
-                            "email=@email, year=@year, password=@password where user_id=@userid";
-                        Query.Parameters.AddWithValue("@firstname", student.firstName);
-                        Query.Parameters.AddWithValue("@lastname", student.lastName);
-                        Query.Parameters.AddWithValue("@username", student.username);
-                        Query.Parameters.AddWithValue("@email", student.email);
-                        Query.Parameters.AddWithValue("@year", student.year);
-                        Query.Parameters.AddWithValue("@password", student.password);
-                        Query.Parameters.AddWithValue("@userid", student.user_id);
-
-                        Query.ExecuteNonQuery();
-                        bSuccessfull = true;
-                    }
+                    Query.ExecuteNonQuery();
                 }
             }
-
-            if (!bSuccessfull)
-            {
+            catch (Exception)
+			{
                 return new Response { Status = "Invalid", Message = "Update Student info unsuccessful." };
-            }
-
+            }            
+            
             return new Response { Status = "Success", Message = "Updated Student Info" };
         }
-
 
         [Route("DeleteStudentProfile/{user_id}")]
         [HttpPost]
@@ -322,49 +299,5 @@ namespace WebAPI.Controllers
             return new Response { Status = "Success", Message = "Deleted student." };
         }
 
-
-
-     // Send username, password to specific student email
-        [Route("SendEmailToStudent")]
-        [HttpPost]
-        // Delete a student
-        public Response SendEmailToStudent(studentTblFields student)
-        {
-            try
-            {
-                // Email 
-                MimeMessage message = new MimeMessage();
-                MailboxAddress from = new MailboxAddress("Housing Director",
-                "productivityx2021@gmail.com");
-                message.From.Add(from);
-
-                MailboxAddress to = new MailboxAddress("User",
-                student.email);
-                message.To.Add(to);
-                message.Subject = "Housing Director Student Info";
-
-                message.Body = new TextPart("plain")
-                {
-                    Text = @"Your username: " + student.username + "\n" + "Your password: " + student.password
-                };
-
-                // Connect and authenticate with SMTP server
-                SmtpClient client = new SmtpClient();
-                client.Connect("smtp.gmail.com", 465, true);
-                client.Authenticate("productivityx2021@gmail.com", "ProDucTIvityx#$2021");
-
-
-                // Send email and then disconnect
-                client.Send(message);
-                client.Disconnect(true);
-                client.Dispose();
-            }
-            catch(Exception e)
-			{
-                return new Response { Status = "Invalid", Message = e.Message /*"Error sending email."*/ };
-            }
-
-            return new Response { Status = "Success", Message = "Email has been sent to the student." };
-        }
     }
 }
