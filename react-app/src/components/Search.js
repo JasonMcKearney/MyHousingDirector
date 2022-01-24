@@ -10,6 +10,7 @@ import { useParams } from 'react-router';
 import Cookies from 'js-cookie';
 
 
+
 // Referenced https://www.cubui.com/blog/react/render-arrays-react-js/ for help using a list
 
 export default class search extends Component {
@@ -19,40 +20,65 @@ export default class search extends Component {
         this.state = {
             searchText : '',
             searchResults: '',
+            user_id: 0,
             studentName:'',
             studentlist: [],
+            studentObj: {username:'', user_id:''},
+            studentCounter: 0,
         }
 
-/*        //Student Object to store all the student data
-        this.studentObj = {
-            firstname: '',
-            lastName:'',
-            username:'',
-            email:'',
-            idNumber: '',
-        };
-*/
-
+     
+        //Student Object to store all the student data
+        
+        
+    
         // Gives access to functions below... 
         this.getResults = this.getResults.bind(this);
         this.searchText = this.searchText.bind(this);
         this.addItem = this.addItem.bind(this);
         this.listItems = this.listItems.bind(this);      
-        //  this.studentObj = this.studentObj.bind(this);
+       
     }
 
     searchText(event) {
         this.setState({ searchText: event.target.value });
-        this.setState({ studentlist: [] })
+       // this.setState({ studentlist: [] })
     }
 
     // Is called after studentName is set, adds the student to the list
     addItem() {
-        let studentlist = this.state.studentlist;
-        studentlist.push(this.state.studentName);
-        this.setState({
-            studentlist
-        });
+
+        const newstudentObj = { username: this.state.studentName, user_id: this.state.user_id}
+      
+        //this.setState({studentObj: newstudentObj} )
+
+        console.log("New-Object " + newstudentObj.username)
+       
+        let newStudentlist = this.state.studentlist;
+
+       for (var i = 0; i < newStudentlist.length; i++)
+       {
+          console.log('New Student List');
+           console.log('-----------------------------');
+           console.log(newStudentlist[i].username);
+           console.log('-----------------------------\n');
+       }
+        console.log( newStudentlist.push(newstudentObj))
+       
+        for (var i = 0; i < this.state.studentlist.length; i++)
+        {
+            console.log('The State List');
+            console.log('-----------------------------');
+            console.log(this.state.studentlist[i].username);
+            console.log('-----------------------------');
+        }
+
+           
+         this.setState({
+             studentlist: newStudentlist
+          });
+          
+
       }
 
       // Returns list of students in a list format and updates cookies for later use throughout the application
@@ -63,7 +89,8 @@ export default class search extends Component {
             <Table>
                     <thead>
                         <tr>
-                            <th>Username</th>
+                            <th className="search-Head">Username</th>
+                            <th className="search-Head">ID</th>
                         </tr>
                     </thead>
             <tbody>
@@ -72,7 +99,8 @@ export default class search extends Component {
                 return (
                  
                  <tr>
-                      <td className='result-node'> <a onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val); } } className='student-name'>{val}</a></td>
+                      <td className='result-node'> <a onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val); } } className='student-name'>{val.username}</a></td>
+                      <td> {val.user_id}</td>
                  </tr>
                 );
               })
@@ -104,15 +132,18 @@ export default class search extends Component {
                 method: 'POST',
             }).then(res=>res.clone().json())
             .then(function(res) {
-                console.log("hello " + res[0].username)
+               console.log("hello " + res[0].username)
                 var loopData = ''
                 var i;
                 for (i = 0; i < res.length; i++)
                 {
-                    console.log("Next User: " + res[i].username)
+                   // console.log("Next User: " + res[i].username)
+                    console.log("Next User_id: " + res[i].user_id)
                     if(res[i].username != "")
                     {
                         currentComponent.setState({studentName: res[i].username})
+                        currentComponent.setState({user_id: res[i].user_id})
+                        
                         // Add student to list
                         currentComponent.addItem();
                     }
