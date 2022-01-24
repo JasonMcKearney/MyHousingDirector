@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
             string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
         }
-        
+
         public StudentController(HousingDBContext context, IConfiguration configuration)
         {
             // Object to HousingDBContext class
@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
                 getID.Parameters.AddWithValue("@username", check.username);
 
                 getID.CommandText = "select studentID, username, firstName, lastName, email from housingdirector_schema.student_tbl where username = @username";
-                
+
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
                 while (ReturnedInfo.Read())
@@ -136,8 +136,8 @@ namespace WebAPI.Controllers
                         user_id = Convert.ToInt32(reader[0]),
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
-                        year = reader[3].ToString(),                 
-                    });                                    
+                        year = reader[3].ToString(),
+                    });
                 }
                 reader.Close();
             }
@@ -145,7 +145,7 @@ namespace WebAPI.Controllers
             return eventData;
         }
 
-        [Route("AddRoommate")]
+        [Route("AddRoommate/{roommateToAdd}")]
         [HttpPost]
         public Response AddRoommate(studentTblFields roommate)
         {
