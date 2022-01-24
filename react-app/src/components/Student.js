@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 import DormSelection from './DormSelection'
 import StudentHome from './StudentHome'
 import Roommate from './Roommate';
+import StudentInfo from './StudentInfo'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -131,8 +132,11 @@ class Student extends Component {
                             </Menu.Item>
                           <Menu.Item key="3">
                                 <Link to="/student/Roommate">Roommate Selection</Link>
-                            </Menu.Item>
-                            <Menu.Item key="4">
+                        </Menu.Item>
+                        <Menu.Item key="4">
+                            <Link to="/student/StudentInfo">Profile</Link>
+                        </Menu.Item>
+                            <Menu.Item key="5">
                               <Button onClick={() => {
                                   Cookies.remove('ID')
                                   Cookies.remove('FN')
@@ -163,7 +167,8 @@ class Student extends Component {
                                         <Switch>
                                             <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/Roommate' component={Roommate} />
-                                            <Route path='/student/DormSelect' component={DormSelection} />
+                                    <Route path='/student/DormSelect' component={DormSelection} />
+                                    <Route path='/student/StudentInfo' component={StudentInfo} />
                                           
 {/*                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />*/}
                                         </Switch>
