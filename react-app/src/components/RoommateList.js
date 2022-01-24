@@ -59,14 +59,23 @@ export default class RoommateList extends Component {
                     >
                         <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
                         <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
-
+                        <p><Button danger onClick={() => {
+                              }} type="primary" htmlType="Delete">
+                                  Delete
+                              </Button></p>
                     </Card>,<Card className="Roommate2"
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
                     >
                         <p>{Cookies.get("FN")} {Cookies.get("LN")}</p>
                         <p>{Cookies.get("ID")} {Cookies.get("EM")}</p>
-
+                        <p><Button disabled onClick={() => {
+                              }} type="primary" htmlType="Delete">
+                                  Request Pending
+                              </Button><Button onClick={() => {
+                              }} type="primary" htmlType="Delete">
+                                  Message
+                              </Button></p>
                     </Card>,<Card className="Roommate3"
                         hoverable
                         cover={<img alt="example" src={defaultlogo} />}
