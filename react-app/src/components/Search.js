@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import {Table} from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './Search.css';
@@ -8,6 +8,7 @@ import axios from 'axios'
 import { tsParameterProperty } from '@babel/types';
 import { useParams } from 'react-router';
 import Cookies from 'js-cookie';
+
 
 // Referenced https://www.cubui.com/blog/react/render-arrays-react-js/ for help using a list
 
@@ -58,15 +59,28 @@ export default class search extends Component {
       listItems() {
         let studentlist = this.state.studentlist;
         return (
-          <ul>
+          
+            <Table>
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+            <tbody>
             {
               studentlist.map((val, index) => {
                 return (
-                    <a onClick = {()=>{this.props.history.push('/home/StudentProfile'); Cookies.set("student", val)}}><li>{val}</li></a>
+                 
+                 <tr>
+                      <td className='result-node'> <a onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val); } } className='student-name'>{val}</a></td>
+                 </tr>
                 );
               })
             }
-          </ul>
+            </tbody>
+                            
+        </Table>
+        
         );
       }
 
