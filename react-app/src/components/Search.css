@@ -148,21 +148,31 @@
   }
   .result-node{
 
-    border-width: 2px;
+    float: left;
+    width:100%;
+    
+
+    /*border-width: 2px;
     border-style: solid;
     border-color: black;
     border-radius: 10px;
     width: 100%;
     height: 10%;
-    font-size: 10px;
+    font-size: 10px;*/
   }
   .student-name{
-    float: left;
+     float: left;
+  
     margin-top: 10px;
     margin-left:1%;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bolder;
     color: black;
+    clear:left;
+    
+  }
+  .search-Head{
+    float:left;
+    
 
   }
-  
