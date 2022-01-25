@@ -84,30 +84,34 @@ export default class search extends Component {
       // Returns list of students in a list format and updates cookies for later use throughout the application
       listItems() {
         let studentlist = this.state.studentlist;
+       
         return (
           
-            <Table>
+            <table>
                     <thead>
                         <tr>
-                            <th className="search-Head">Username</th>
                             <th className="search-Head">ID</th>
+                            <th className="search-Head">Username</th>
+                            <th></th>
                         </tr>
                     </thead>
             <tbody>
             {
               studentlist.map((val, index) => {
                 return (
-                 
-                 <tr>
-                      <td className='result-node'> <a onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val); } } className='student-name'>{val.username}</a></td>
-                      <td> {val.user_id}</td>
+                
+                 <tr className='result-node' >
+                      
+                      <td className='student-info'> {val.user_id}</td>
+                      <td className='student-info'> {val.username}</td>
+                      <td className='result-button'><button onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val); } } id ='primary-button' >View</button></td>
                  </tr>
                 );
               })
             }
             </tbody>
                             
-        </Table>
+        </table>
         
         );
       }
