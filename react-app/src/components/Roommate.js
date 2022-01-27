@@ -16,6 +16,10 @@ export default class Roommate extends Component {
             resultsList : [],
             studentList : [],
             user_id: '',
+            firstName: '',
+            lastName: '',
+            year:'',
+            
 
         }
 
@@ -35,44 +39,59 @@ export default class Roommate extends Component {
     }
     addItemResults()
     {
-            let tempResultList = this.state.resultsList;
-            tempResultList.push(this.state.results);
-            this.setState({
-                tempResultList
-            });
 
-            console.log("item added to the list")
+        const newstudentObj = {firstName: this.state.firstName, lastName: this.state.lastName, year: this.state.year}
+        let newStudentlist = this.state.studentList;
+        newStudentlist.push(newstudentObj)
+
+        this.setState({
+            studentList: newStudentlist
+        })
+
+         console.log("item added to the list")
     }
     printResults(){
 
         let {studentList} = this.state;
         console.log(this.state.studentList);
         return (
-            <ul>
+
+            <table>
+                <thead>
+                    <tr>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>year</td>
+                        <td></td>
+                    </tr>
+                </thead>
+           
+            <tbody>
               {
                 this.state.studentList.map((val, index) => {
                     return (
-                     <div>
-                          <li>  
+                   
+                          <tr>  
                               
-                              <p className = "word-wrapper"> 
-                                  <span className="result-word" key={index}> {val.firstName}</span>
-                                  <span className="result-word" key={index}> {val.lastName}</span>
-                                  <span className="result-word" key={index}> {val.year}</span>
-                                   <a className="add-icon"><FontAwesomeIcon type ="submit" icon={faUserPlus} size = "3x" color="green" /> </a>
-                              </p> 
+                              
+                                  <td className="result-word" key={index}> {val.firstName}</td>
+                                  <td className="result-word" key={index}> {val.lastName}</td>
+                                  <td className="result-word" key={index}> {val.year}</td>
+                                  <td><a className="add-icon"><FontAwesomeIcon type ="submit" icon={faUserPlus} size = "3x" color="green" /> </a></td> 
+                             
                               
                               
                            
                               
-                          </li>
+                          </tr>
                           
-                    </div>
+                  
                           
                   );
                 })
               }
-            </ul>
+            </tbody>
+            </table>
           );
         
     }
@@ -119,27 +138,12 @@ export default class Roommate extends Component {
                  console.log("lastname: " + res[0].lastName)
 
                  console.log("year: " + res[0].year)
+                 currentComponent.setState({firstName: res[i].firstName})
+                 currentComponent.setState({lastName: res[i].lastName})
+                 currentComponent.setState({year: res[i].year})
 
-            
-
-              let obj = {
-               
-                user_id: res[i].user_id,
-                firstName: res[i].firstName,
-                lastName: res[i].lastName,
-                year : res[i].year,
-
-                }
-
-                studentArray.push(obj)
-           console.log(studentArray)
+                 currentComponent.addItemResults();
             }
-
-            console.log(currentComponent.state.studentList)
-
-            currentComponent.setState({studentList: studentArray})
-
-            console.log(currentComponent.state.studentList)
 
         });
 
@@ -187,7 +191,7 @@ export default class Roommate extends Component {
 
 
                     </form>
-                        <button className ="container-object search-button" type ="submit" onClick ={this.submitSearchText}>search</button>
+                        <button className ="container-object" id = "primary-button"type ="submit" onClick ={this.submitSearchText}>search</button>
 
                         </div>
                 
