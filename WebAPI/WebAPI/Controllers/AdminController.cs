@@ -159,7 +159,7 @@ namespace WebAPI.Controllers
 
                     // Pulls all students usernames that match entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "select username from housingdirector_schema.student_tbl where username like @username";
+                    FindUsersLike.CommandText = "select username,user_id from housingdirector_schema.student_tbl where username like @username";
 
                     FindUsersLike.ExecuteNonQuery();
 
@@ -170,8 +170,9 @@ namespace WebAPI.Controllers
                     {
                         eventData.Add(new studentTblFields()
                         {
-                            username = reader[0].ToString()
-                        });
+                            username = reader[0].ToString(),
+                            user_id = reader.GetInt32(1)
+                        }) ;
                     }
                     reader.Close();
                 }
@@ -179,8 +180,9 @@ namespace WebAPI.Controllers
                 {
                     eventData.Add(new studentTblFields()
                     {
-                        username = ""
-                    });
+                        username = "",
+                        user_id = 0
+                    }) ;
                 }
             }
             return eventData;

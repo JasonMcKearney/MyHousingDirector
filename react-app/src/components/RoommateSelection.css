@@ -1,4 +1,4 @@
-.roomate-container{
+.roommate-container{
     margin:0 auto;
 }
 .container-results{
@@ -98,3 +98,69 @@ ul{
     
     padding-left:10px;
 }
+
+
+#primary-button{
+
+    height: 5vh;
+    width: 4vw;
+    background-color: #011528;
+
+    border-width: 3px;
+    border-color:rgb(0, 0, 0);
+    border-top-right-radius:10%;
+    border-bottom-right-radius:10%;
+    animation-name:button;
+
+    font-family: frank ruhal ribre;
+    font-size: 18px;
+    color:white;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    transition: .2s transform ease-in-out;
+   will-change: transform;
+   z-index: 0;
+   padding-bottom:1px;
+
+  }
+
+  #primary-button::after
+  {
+  background-color:rgb(107, 208, 255);
+  border-color: black;
+  border-style:solid;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-width: 1px;
+  content: '';
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-100%, 0) rotate(10deg);
+  transform-origin: top left;
+  transition: .2s transform ease-out;
+  will-change: transform;
+  z-index: -1;
+  
+  }
+  #primary-button:hover::after
+  {
+    border-color: black;
+  border-style:solid;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+    transform :translate(0, 0);
+  }
+
+  #primary-button:hover
+  {
+    border: 2px solid transparent;
+    color: white;
+    transform: scale(1.05);
+    will-change :transform;
+    cursor: pointer;
+  }

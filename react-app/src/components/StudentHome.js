@@ -71,6 +71,31 @@ export default class DormSelection extends Component {
                         </Card>,
                         </div>
                     </div>
+
+
+                <div className="StudentHomeBox-right">
+                    <Card className="Roommate1"
+                        hoverable
+                        
+                    >
+
+                    </Card>,<Card className="Roommate2"
+                        hoverable
+                        
+                    >
+                        
+
+                    </Card>,<Card className="Roommate3"
+                        hoverable
+                        
+                    >
+                        
+                    </Card>,
+                </div>
+
+
+
+
             </div>
        )
     }
