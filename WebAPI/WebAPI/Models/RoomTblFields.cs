@@ -19,5 +19,7 @@ namespace WebAPI.Models
 
 		public string roomDescription { get; set; }
 
+		public string currentOccupants { get; set; }
+
 	}
 }
