@@ -104,7 +104,7 @@ export default class search extends Component {
                       
                       <td className='student-info'> {val.user_id}</td>
                       <td className='student-info'> {val.username}</td>
-                      <td className='result-button'><button onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val); } } id ='primary-button' >View</button></td>
+                      <td className='result-button'><button onClick={() => { this.props.history.push('/home/StudentProfile'); Cookies.set("student", val.username); } } id ='primary-button' >View</button></td>
                  </tr>
                 );
               })
