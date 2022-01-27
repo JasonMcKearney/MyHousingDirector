@@ -6,7 +6,7 @@
 #searchBar{
 
     height: 5vh;
-    width: 90%;
+    width: 93.7%;
     margin-left:5px;
     padding-left:5px;
     float: left;
@@ -104,6 +104,7 @@
     transition: .2s transform ease-in-out;
    will-change: transform;
    z-index: 0;
+   padding-bottom:1px;
 
   }
 
@@ -146,23 +147,45 @@
     will-change :transform;
     cursor: pointer;
   }
+  .result-button{
+
+   padding-bottom:10px;
+   padding-right: 10px;
+   text-align: right;
+  }
+  table{
+    width:100%;
+    border-bottom: 1px solid black;
+    border-collapse: collapse;
+  }
   .result-node{
 
+    /*float: left;*/
+   
+    width:100%;
+    text-align: justify;
+    text-align:justify;
     border-width: 2px;
-    border-style: solid;
-    border-color: black;
-    border-radius: 10px;
-    width: 100%;
-    height: 10%;
-    font-size: 10px;
+    border-bottom: 1px solid black;
+    border-left: none;
+    border-right: none;
+    border-top: none;
   }
-  .student-name{
-    float: left;
-    margin-top: 10px;
-    margin-left:1%;
-    font-size: 20px;
+  .student-info{
+    font-size: 30px;
+    text-align: left;
+    margin-right:100px;
+    font-size: 24px;
     font-weight: bolder;
     color: black;
+    padding-right:20%;
+    padding-left:10px;
 
   }
-  
+  .search-Head{
+    padding-right:20%;
+    padding-left:10px;
+   text-align: left;
+    margin-right:100px;
+
+  }

@@ -123,7 +123,7 @@ namespace WebAPI.Controllers
                 MySqlCommand getUsersInfo = conn.CreateCommand();
 
                 getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch);
-                getUsersInfo.CommandText = "select user_id, firstname, lastname, year from housingdirector_schema.student_tbl where username = @username";
+                getUsersInfo.CommandText = "select user_id, firstname, lastname, year from housingdirector_schema.student_tbl where username like @username";
                 getUsersInfo.ExecuteNonQuery();
 
                 MySqlDataReader reader = getUsersInfo.ExecuteReader();
