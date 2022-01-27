@@ -161,8 +161,12 @@ export default class DormSelection extends Component {
                         value: res[i].roomNumber,
                         roomID: res[i].room_id,
                         maxOccupants: res[i].maxOccupants,
-                        description: res[i].roomDescription
+                        description: res[i].roomDescription,
+
+                        occupants: res[i].currentOccupants
                     }
+
+                    console.log("RoomNumber: " + res[i].roomNumber + " Current occupants include " + res[i].currentOccupants);
                     newArray.push(obj2)  // Push the object
                 }
                 // Update the roomData Object array

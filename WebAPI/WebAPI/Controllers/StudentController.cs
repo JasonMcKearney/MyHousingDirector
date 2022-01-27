@@ -235,7 +235,7 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@dorm_id", paramsObj.dorm_id);
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, maxOccupants, roomDescription from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber";
+                FindRoomInfo.CommandText = "select room_id, roomNumber, maxOccupants, roomDescription, currentOccupants from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -243,13 +243,18 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    roomList.Add(new RoomTblFields()
+                    // true if maxOccupants != currurrentOccupants
+                    if (reader[2] != reader[4])
                     {
-                        room_id = reader[0].ToString(),
-                        roomNumber = reader[1].ToString(),
-                        maxOccupants = reader[2].ToString(),
-                        roomDescription = reader[3].ToString()
-                    }); 
+                        roomList.Add(new RoomTblFields()
+                        {
+                            room_id = reader[0].ToString(),
+                            roomNumber = reader[1].ToString(),
+                            maxOccupants = reader[2].ToString(),
+                            roomDescription = reader[3].ToString(),
+                            currentOccupants = reader[4].ToString()
+                        });
+                    }
                 }
                 reader.Close();
             }
@@ -258,10 +263,11 @@ namespace WebAPI.Controllers
 
         // INSERT INTO housingdirector_schema.occupants_tbl (dorm_id, room_id, roomNumber, residentID) VALUES ();
         // Create student account
-        [Route("SubmitDormApproval/{bValid}")]
+        [Route("SubmitDormApproval/{studentID}")]
         [HttpGet]
-        public Response SubmitDormForm(bool bValid)
+        public Response SubmitDormForm(DormOccupantsTblFields dormOccupantsTBL)
         {
+            // ***************Update studentsSoFar field in room_tbl*****************
 
             // For later use in order to update MySQL database
             /*     if (CheckConditionsValidation(student, "AddStudent"))
@@ -304,10 +310,10 @@ namespace WebAPI.Controllers
                      }
                  }
             */
-            if (!bValid)
-            {
-                return new Response { Status = "Invalid", Message = "Cannot" };
-            }
+//            if (!bValid)
+ //           {
+ //               return new Response { Status = "Invalid", Message = "Cannot" };
+ //           }
 
             return new Response { Status = "Success", Message = "Form submitted Successfully. An administrator will be in touch with you." };
         }
