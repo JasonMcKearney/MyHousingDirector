@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-	public class DormInfo
+	public class DormBuilding
 	{
         public string dorm_id { get; set; }
 

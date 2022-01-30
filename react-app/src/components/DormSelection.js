@@ -110,13 +110,18 @@ export default class DormSelection extends Component {
         console.log("this.state.floorData.length: " + this.state.floorData.length)
         this.state.floorData.length = 0;
 
-        fetch('http://localhost:16648/api/Student/findFloorInfo/' + Cookies.get("buildingID"), {
+        fetch('http://localhost:16648/api/Student/findFloorInfo/', {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            method: 'GET',
+            method: 'POST',
+            body: JSON.stringify({
+                dorm_id: Cookies.get("buildingID"),
+                // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
+                numRoommates: 2
+            })
         }).then(res => res.clone().json())
             .then(function (res) {
                 const newArray = currentComponent.state.floorData.slice(); // Create a copy of the array in state
@@ -149,7 +154,9 @@ export default class DormSelection extends Component {
             method: 'POST',
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
-                floorNumber: this.state.floor
+                floorNumber: this.state.floor,
+                // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
+                numRoommates: 2
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -161,12 +168,10 @@ export default class DormSelection extends Component {
                         value: res[i].roomNumber,
                         roomID: res[i].room_id,
                         maxOccupants: res[i].maxOccupants,
-                        description: res[i].roomDescription,
-
-                        occupants: res[i].currentOccupants
+                        description: res[i].roomDescription
                     }
 
-                    console.log("RoomNumber: " + res[i].roomNumber + " Current occupants include " + res[i].currentOccupants);
+                    console.log("RoomNumber: " + res[i].roomNumber);
                     newArray.push(obj2)  // Push the object
                 }
                 // Update the roomData Object array

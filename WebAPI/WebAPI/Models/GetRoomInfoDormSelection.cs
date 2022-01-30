@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Models
 {
-	public class GetRoomInfoParams
+	public class GetRoomInfoDormSelection
 	{
 		public string dorm_id { get; set; }
 
-		public string floorNumber { get; set; }
+		public int floorNumber { get; set; }
+		public int numRoommates { get; set; }
 	}
 }

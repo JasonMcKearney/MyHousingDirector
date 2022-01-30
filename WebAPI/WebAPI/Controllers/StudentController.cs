@@ -159,16 +159,16 @@ namespace WebAPI.Controllers
         // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
         [Route("FindBuildingInfo")]
         [HttpGet]
-            public List<DormInfo> FindBuildingInfo()
+        public List<DormBuilding> FindBuildingInfo()
         {
-            List<DormInfo> dormData = new List<DormInfo>();
+            List<DormBuilding> buildingData = new List<DormBuilding>();
 
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
 
-                FindBuildingInfo.CommandText = "select * from housingdirector_schema.dorm_tbl";
+                FindBuildingInfo.CommandText = "select * from housingdirector_schema.dormBuilding_tbl";
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -176,7 +176,7 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    dormData.Add(new DormInfo()
+                    buildingData.Add(new DormBuilding()
                     {
                         dorm_id = reader[0].ToString(),
                         name = reader[1].ToString(),
@@ -186,24 +186,30 @@ namespace WebAPI.Controllers
                 }
                 reader.Close();
             }
-            return dormData;
+            return buildingData;
         }
         
 
 
         // Find the floor numbers that have rooms available
-        [Route("FindFloorInfo/{dorm_id}")]
-        [HttpGet]
-        public List<FloorInfo> FindFloorInfo(string dorm_id)
+        [Route("FindFloorInfo")]
+        [HttpPost]
+        public List<FloorInfoDormSelection> FindFloorInfo(FloorInfoDormSelection floorDetails)
         {
-            List<FloorInfo> floorNumsForBuilding = new List<FloorInfo>();
+            List<FloorInfoDormSelection> floorNumsForBuilding = new List<FloorInfoDormSelection>();
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
                 MySqlCommand FindFloorInfo = conn.CreateCommand();
 
-                FindFloorInfo.Parameters.AddWithValue("@dorm_id", dorm_id);
-                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
+                FindFloorInfo.Parameters.AddWithValue("@dorm_id", floorDetails.dorm_id);
+                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates);
+
+                //FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
+
+                // Select the floor number based upon the building, room size, maxOccupants = num_roommates + 1
+                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id and maxOccupants >= @numRoommates and currentOccupants = 0";
+
                 FindFloorInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -211,7 +217,7 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    floorNumsForBuilding.Add(new FloorInfo()
+                    floorNumsForBuilding.Add(new FloorInfoDormSelection()
                     {
                         floorNumber = reader[0].ToString(),
                     });
@@ -224,7 +230,7 @@ namespace WebAPI.Controllers
         // Find the floor numbers that have rooms available
         [Route("FindRoomInfo")]
         [HttpPost]
-        public List<RoomTblFields> FindRoomInfo(GetRoomInfoParams paramsObj)
+        public List<RoomTblFields> FindRoomInfo(GetRoomInfoDormSelection paramsObj)
         {
             List<RoomTblFields> roomList = new List<RoomTblFields>();
             using (MySqlConnection conn = GetConnection())
@@ -234,8 +240,9 @@ namespace WebAPI.Controllers
 
                 FindRoomInfo.Parameters.AddWithValue("@dorm_id", paramsObj.dorm_id);
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
+                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, maxOccupants, roomDescription, currentOccupants from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber";
+                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and currentOccupants = 0";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -243,18 +250,14 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    // true if maxOccupants != currurrentOccupants
-                    if (reader[2] != reader[4])
+                    roomList.Add(new RoomTblFields()
                     {
-                        roomList.Add(new RoomTblFields()
-                        {
-                            room_id = reader[0].ToString(),
-                            roomNumber = reader[1].ToString(),
-                            maxOccupants = reader[2].ToString(),
-                            roomDescription = reader[3].ToString(),
-                            currentOccupants = reader[4].ToString()
-                        });
-                    }
+                        room_id = reader[0].ToString(),
+                        roomNumber = reader[1].ToString(),
+                        roomDescription = reader[2].ToString(),
+                        maxOccupants = reader[3].ToString()
+                    });
+                    
                 }
                 reader.Close();
             }
