@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import "./Roommate.css"
+import "./RoommateSelection.css"
 import Cookies from  'js-cookie'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
-export default class Roommate extends Component {
+export default class RoommateSelection extends Component {
 
     constructor(props)
     {
@@ -159,7 +159,6 @@ export default class Roommate extends Component {
             method: 'POST',
             body: JSON.stringify({
                 user_id: this.state.user_id
-            
             })
 
             
@@ -205,12 +204,5 @@ export default class Roommate extends Component {
          </div>
             
             );
-
-
     }
-
-
-
-
-
 }
