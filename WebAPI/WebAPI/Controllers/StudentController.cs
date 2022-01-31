@@ -323,7 +323,7 @@ namespace WebAPI.Controllers
         public List<studentTblFields> GetDormOccupants(int roomID)
         {
             List<studentTblFields> occupants = new List<studentTblFields>();
-            using (MySqlConnection conn = GetConnection())
+            using (MySqlConnection conn = GetConnection())  
             {
                 conn.Open();
                 MySqlCommand FindRoomInfo = conn.CreateCommand();
@@ -332,7 +332,7 @@ namespace WebAPI.Controllers
 
                 FindRoomInfo.CommandText =
                     "USE housingdirector_schema;" +
-                "SELECT dormOccupants_tbl.resident_ID, student_tbl.firstName, student_tbl.lastName, dormOccupants_tbl.room_ID, student_tbl.studentID" +
+                "SELECT dormOccupants_tbl.resident_ID, student_tbl.firstName, student_tbl.lastName, student_tbl.username, dormOccupants_tbl.room_ID, student_tbl.studentID" +
                 " FROM dormOccupants_tbl" +
                 " INNER JOIN student_tbl ON student_tbl.user_id = dormOccupants_tbl.resident_ID" +
                 " WHERE room_ID = @room_id;";
@@ -349,10 +349,11 @@ namespace WebAPI.Controllers
                     //{
                     occupants.Add(new studentTblFields()
                     {
-                        studentID = reader.GetString(4),
+                        studentID = reader.GetString(5),
                         //usernameResult = ReturnedInfo.GetString(1);
                         firstName = reader.GetString(1),
                         lastName = reader.GetString(2),
+                        username = reader.GetString(3),
                         //emailResult = ReturnedInfo.GetString(4);
                     });
                 }
