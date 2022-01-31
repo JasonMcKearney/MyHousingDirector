@@ -271,54 +271,96 @@ namespace WebAPI.Controllers
         public Response SubmitDormForm(DormOccupantsTblFields dormOccupantsTBL)
         {
             // ***************Update studentsSoFar field in room_tbl*****************
+            //TODO.......********* Will be needing to save 
 
-            // For later use in order to update MySQL database
-            /*     if (CheckConditionsValidation(student, "AddStudent"))
-                 {
-                     using (MySqlConnection conn = GetConnection())
+            /*            insert into dormOccupants_tbl(dorm_id, room_ID, roomNumber, resident_ID, studentName)
+            values(@dormID, @roomID, @roomNumber, @residentID, @studentName);
+
+                        select dorm_id from housingdirector_schema.dormBuilding_tbl where name = NameOfBuilding;
+                        select floorNumber, roomNumber where room_id = roomID and dorm_di = dormID;
+            */
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand GetIDs = conn.CreateCommand();
+
+                GetIDs.CommandText = "select dorm_id from housingdirector_schema.dormBuilding_tbl where name = NameOfBuilding";
+                GetIDs.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    buildingData.Add(new DormBuilding()
+                    {
+                        dorm_id = reader[0].ToString(),
+                        name = reader[1].ToString(),
+                        description = reader[2].ToString(),
+                        url = reader[3].ToString(),
+                    });
+                }
+                reader.Close();
+            }
+
+
+            select dorm_id where name = NameOfBuilding;
+                select floorNumber, roomNumber where room_id = roomID and dorm_di = dormID;
+
+
+
+            }
+
+
+
+                // For later use in order to update MySQL database
+                /*     if (CheckConditionsValidation(student, "AddStudent"))
                      {
-                         conn.Open();
-                         MySqlCommand CheckUser = conn.CreateCommand();
-
-                         // Checks to see if there are duplicate usernames
-                         CheckUser.Parameters.AddWithValue("@username", student.username);
-                         CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where userName = @userName";
-
-                         // if 1 then already exist
-                         int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
-
-                         if (UserExist >= 1)
+                         using (MySqlConnection conn = GetConnection())
                          {
-                             bSuccessfull = false;
-                             return new Response { Status = "User Exists", Message = "Cannot" };
-                         }
-                         else
-                         {
-                             // Inserting data into fields of database
-                             MySqlCommand Query = conn.CreateCommand();
-                             Query.CommandText = "insert into housingdirector_schema.student_tbl (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
-                             Query.Parameters.AddWithValue("@username", student.username);
-                             Query.Parameters.AddWithValue("@firstname", student.firstName);
-                             Query.Parameters.AddWithValue("@lastname", student.lastName);
-                             Query.Parameters.AddWithValue("@email", student.email);
-                             Query.Parameters.AddWithValue("@password", student.password);
-                             Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
-                             Query.Parameters.AddWithValue("@gender", student.gender);
-                             Query.Parameters.AddWithValue("@year", student.year);
-                             Query.Parameters.AddWithValue("@studentID", student.studentID);
+                             conn.Open();
+                             MySqlCommand CheckUser = conn.CreateCommand();
 
-                             Query.ExecuteNonQuery();
-                             bSuccessfull = true;
+                             // Checks to see if there are duplicate usernames
+                             CheckUser.Parameters.AddWithValue("@username", student.username);
+                             CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where userName = @userName";
+
+                             // if 1 then already exist
+                             int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
+
+                             if (UserExist >= 1)
+                             {
+                                 bSuccessfull = false;
+                                 return new Response { Status = "User Exists", Message = "Cannot" };
+                             }
+                             else
+                             {
+                                 // Inserting data into fields of database
+                                 MySqlCommand Query = conn.CreateCommand();
+                                 Query.CommandText = "insert into housingdirector_schema.student_tbl (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
+                                 Query.Parameters.AddWithValue("@username", student.username);
+                                 Query.Parameters.AddWithValue("@firstname", student.firstName);
+                                 Query.Parameters.AddWithValue("@lastname", student.lastName);
+                                 Query.Parameters.AddWithValue("@email", student.email);
+                                 Query.Parameters.AddWithValue("@password", student.password);
+                                 Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
+                                 Query.Parameters.AddWithValue("@gender", student.gender);
+                                 Query.Parameters.AddWithValue("@year", student.year);
+                                 Query.Parameters.AddWithValue("@studentID", student.studentID);
+
+                                 Query.ExecuteNonQuery();
+                                 bSuccessfull = true;
+                             }
                          }
                      }
-                 }
-            */
-//            if (!bValid)
- //           {
- //               return new Response { Status = "Invalid", Message = "Cannot" };
- //           }
+                */
+                //            if (!bValid)
+                //           {
+                //               return new Response { Status = "Invalid", Message = "Cannot" };
+                //           }
 
-            return new Response { Status = "Success", Message = "Form submitted Successfully. An administrator will be in touch with you." };
+                return new Response { Status = "Success", Message = "Form submitted Successfully. An administrator will be in touch with you." };
         }
 
     }
