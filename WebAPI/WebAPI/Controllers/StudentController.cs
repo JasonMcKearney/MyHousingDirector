@@ -122,7 +122,7 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand getUsersInfo = conn.CreateCommand();
 
-                getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch);
+                getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch + '%');
                 getUsersInfo.CommandText = "select user_id, firstname, lastname, year from housingdirector_schema.student_tbl where username like @username";
                 getUsersInfo.ExecuteNonQuery();
 
@@ -147,10 +147,49 @@ namespace WebAPI.Controllers
 
         [Route("AddRoommate")]
         [HttpPost]
-        public Response AddRoommate(studentTblFields roommate)
+        public Response AddRoommate(RoomRequestIds ids)
         {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
 
-            return new Response { Status = "Invalid", Message = "Cannot" };
+                MySqlCommand FindRequestorID = conn.CreateCommand();
+                FindRequestorID.Parameters.AddWithValue("@studentID", ids.uid);
+                FindRequestorID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
+
+                int requestor_id = Convert.ToInt32(FindRequestorID.ExecuteScalar());
+
+
+                MySqlCommand CheckRequest = conn.CreateCommand();
+                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
+                CheckRequest.Parameters.AddWithValue("@recieverID", ids.reciever_id);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+
+                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+
+                if (requestExsits >= 1)
+                {
+                    return new Response { Status = "Request Exsists", Message = "Cannot" };
+                }
+                else
+                {
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "insert into housingdirector_schema.roommates_table (roommate_ID,Requestor_ID,RequestState) VALUES (@roommateID, @requestorID, @pending)";
+                    Query.Parameters.AddWithValue("@roommateID", ids.reciever_id );
+                    Query.Parameters.AddWithValue("@requestorID", requestor_id);
+                    Query.Parameters.AddWithValue("@pending", "pending");
+
+                    Query.ExecuteNonQuery();
+
+                    return new Response { Status = "Request Sent", Message = "function has been reached" };
+                }
+
+            }
+
+
+            
+
+            
         }
 
 
