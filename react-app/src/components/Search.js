@@ -24,7 +24,6 @@ export default class search extends Component {
             studentName:'',
             studentlist: [],
             studentObj: {username:'', user_id:''},
-            studentCounter: 0,
         }
 
      
