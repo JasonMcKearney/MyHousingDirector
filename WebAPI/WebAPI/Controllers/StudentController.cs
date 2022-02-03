@@ -145,7 +145,7 @@ namespace WebAPI.Controllers
             return eventData;
         }
 
-        [Route("AddRoommate/{roommateToAdd}")]
+        [Route("AddRoommate")]
         [HttpPost]
         public Response AddRoommate(RoomRequestIds ids)
         {
@@ -169,7 +169,7 @@ namespace WebAPI.Controllers
 
                 if (requestExsits >= 1)
                 {
-                    return new Response { Status = "Request Exsists", Message = "Cannot" };
+                    return new Response { Status = "Request Exsists", Message = "Already requested that student" };
                 }
                 else
                 {
@@ -181,7 +181,7 @@ namespace WebAPI.Controllers
 
                     Query.ExecuteNonQuery();
 
-                    return new Response { Status = "Request Sent", Message = "function has been reached" };
+                    return new Response { Status = "Request Sent", Message = "Request is successfully sent" };
                 }
 
             }

@@ -26,4 +26,8 @@
       width: 200px;
       height: 96%;
   }
+  .ant-menu-horizontal > .ant-menu-item a {
+  
+    color: white;
+}
  

@@ -169,6 +169,7 @@ export default class RoommateSelection extends Component {
         }).then((Response) => Response.json())
         .then((result) => {
             console.log("response: " + result.status)
+            alert(result.message);
 
         })
 

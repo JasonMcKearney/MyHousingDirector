@@ -10,6 +10,7 @@ import StudentHome from './StudentHome'
 import RoommateSelection from './RoommateSelection'
 import StudentInfo from './StudentInfo'
 import RoommateList from './RoommateList'
+
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -126,7 +127,7 @@ class Student extends Component {
                     </Modal>
                         <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
                             <Menu.Item key="1">
-                                <Link to="/student/home">Home</Link>
+                                <Link className='nav-bar-label' to="/student/home">Home</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
                             <Link to="/student/DormSelect">Dorm Selection</Link>
