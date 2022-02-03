@@ -164,3 +164,14 @@ ul{
     will-change :transform;
     cursor: pointer;
   }
+
+  .add-icon:hover{
+
+    background-color: chartreuse;
+
+  }
+  .add-icon:after{
+
+
+    background-color:black;
+  }

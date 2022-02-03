@@ -28,6 +28,7 @@ export default class RoommateSelection extends Component {
             this.printResults = this.printResults.bind(this);
             this.addItemResults = this.addItemResults.bind(this);
             this.setRoommateChoice = this.setRoommateChoice.bind(this);
+            
     }
 
 
@@ -40,7 +41,7 @@ export default class RoommateSelection extends Component {
     addItemResults()
     {
 
-        const newstudentObj = {firstName: this.state.firstName, lastName: this.state.lastName, year: this.state.year}
+        const newstudentObj = {user_id: this.state.user_id,firstName: this.state.firstName, lastName: this.state.lastName, year: this.state.year}
         let newStudentlist = this.state.studentList;
         newStudentlist.push(newstudentObj)
 
@@ -52,7 +53,7 @@ export default class RoommateSelection extends Component {
     }
     printResults(){
 
-        let {studentList} = this.state;
+        
         console.log(this.state.studentList);
         return (
 
@@ -77,8 +78,8 @@ export default class RoommateSelection extends Component {
                                   <td className="result-word" key={index}> {val.firstName}</td>
                                   <td className="result-word" key={index}> {val.lastName}</td>
                                   <td className="result-word" key={index}> {val.year}</td>
-                                  <td><a className="add-icon"><FontAwesomeIcon type ="submit" icon={faUserPlus} size = "3x" color="green" /> </a></td> 
-                             
+                                  <td><button  className="add-icon"><FontAwesomeIcon onClick = {() => {this.AddStudent(val.user_id)}} type ="submit" icon={faUserPlus} size = "3x" color="green" /> </button></td> 
+                                  
                               
                               
                            
@@ -138,6 +139,7 @@ export default class RoommateSelection extends Component {
                  console.log("lastname: " + res[0].lastName)
 
                  console.log("year: " + res[0].year)
+                 currentComponent.setState({user_id: res[i].user_id})
                  currentComponent.setState({firstName: res[i].firstName})
                  currentComponent.setState({lastName: res[i].lastName})
                  currentComponent.setState({year: res[i].year})
@@ -148,8 +150,10 @@ export default class RoommateSelection extends Component {
         });
 
     }
-    AddStudent(){
+    AddStudent(user_id){
 
+       
+        console.log(user_id)
         console.log("funciton reached")
         fetch('http://localhost:16648/api/Student/AddRoommate', {
             headers:{
@@ -158,14 +162,14 @@ export default class RoommateSelection extends Component {
             },
             method: 'POST',
             body: JSON.stringify({
-                user_id: this.state.user_id
+
+                uid: Cookies.get("ID"),
+                reciever_id: user_id
             })
-
-            
-
-        }).then((res) => Response.json())
-        .then((res) => {
-
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
 
         })
 
