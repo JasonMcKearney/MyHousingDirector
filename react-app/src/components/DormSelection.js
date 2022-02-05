@@ -164,6 +164,7 @@ export default class DormSelection extends Component {
                 var i;
                 for (i = 0; i < res.length; i++) {
                     let obj2 = {
+                        // Below represent an object that contains most of the fields in the room_tbl in a list. Can access roomNumber by doing "this.state.roomData[0].value"
                         label: res[i].roomNumber,
                         value: res[i].roomNumber,
                         roomID: res[i].room_id,
@@ -266,13 +267,22 @@ export default class DormSelection extends Component {
     // User will be able to submit their form for approval by an administrator
     submitForm()
     {
-        fetch('http://localhost:16648/api/Student/SubmitDormApproval/true', {
+        fetch('http://localhost:16648/api/Student/SubmitDormApproval', {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            method: 'GET',
+            method: 'POST',
+            body: JSON.stringify({
+                // Dorm_id is the building id
+                dorm_id: Cookies.get("buildingID"),
+                // Value represents the room_id
+                roomNumber: this.state.room,     
+                floorNumber: this.state.floor,           
+                studentName: Cookies.get("username"),
+                student_id: Cookies.get("ID")
+            })
         }).then((Response) => Response.json())
         .then((result) => {
             if (result.status == "Invalid")
@@ -281,10 +291,10 @@ export default class DormSelection extends Component {
             }
             else 
             {
+                this.props.history.push('/Student/home')
                 alert(result.message);   
-            }
-            
-            })
+            }  
+        })
     }
 
     done = () => {

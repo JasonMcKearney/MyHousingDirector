@@ -264,104 +264,115 @@ namespace WebAPI.Controllers
             return roomList;
         }
 
-        // INSERT INTO housingdirector_schema.occupants_tbl (dorm_id, room_id, roomNumber, residentID) VALUES ();
-        // Create student account
-        [Route("SubmitDormApproval/{studentID}")]
-        [HttpGet]
+        // Insert data after student selection
+        // Parameters passed from react to Rest api: dorm_id (building ID), roomNumber, student_ID, studentName, floorNumber
+        
+        [Route("SubmitDormApproval")]
+        [HttpPost]
         public Response SubmitDormForm(DormOccupantsTblFields dormOccupantsTBL)
         {
-            // ***************Update studentsSoFar field in room_tbl*****************
-            //TODO.......********* Will be needing to save 
-
-            /*            insert into dormOccupants_tbl(dorm_id, room_ID, roomNumber, resident_ID, studentName)
-            values(@dormID, @roomID, @roomNumber, @residentID, @studentName);
-
-                        select dorm_id from housingdirector_schema.dormBuilding_tbl where name = NameOfBuilding;
-                        select floorNumber, roomNumber where room_id = roomID and dorm_di = dormID;
-            */
-
+            // Search for dorm_id, room_id in database tables
             using (MySqlConnection conn = GetConnection())
             {
-                conn.Open();
-                MySqlCommand GetIDs = conn.CreateCommand();
-
-                GetIDs.CommandText = "select dorm_id from housingdirector_schema.dormBuilding_tbl where name = NameOfBuilding";
-                GetIDs.ExecuteNonQuery();
-
-                // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
-
-                while (reader.Read())
+                try
                 {
-                    buildingData.Add(new DormBuilding()
+                    conn.Open();
+                    MySqlCommand GetIDs = conn.CreateCommand();
+
+                    GetIDs.CommandText = "select room_tbl.room_id from room_tbl where floorNumber = @floorNumber and roomNumber = @roomNumber";
+                    GetIDs.Parameters.AddWithValue("@floorNumber", dormOccupantsTBL.floorNumber);
+                    GetIDs.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
+                    GetIDs.ExecuteNonQuery();
+
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = GetIDs.ExecuteReader();
+
+                    while (reader.Read())
                     {
-                        dorm_id = reader[0].ToString(),
-                        name = reader[1].ToString(),
-                        description = reader[2].ToString(),
-                        url = reader[3].ToString(),
-                    });
+                        dormOccupantsTBL.room_ID = (int)reader[0];
+                    }
+                    reader.Close();
                 }
-                reader.Close();
+                catch (Exception e)
+                {
+                    return new Response { Status = "Invalid Response", Message = e.Message };
+                }
+            }
+        
+            // Insert data into the DormOccupants_tbl
+            using (MySqlConnection conn2 = GetConnection())
+            {
+                try
+                {
+                    conn2.Open();
+                    MySqlCommand InsertDataDormOcupnts = conn2.CreateCommand();
+                    InsertDataDormOcupnts.CommandText = "insert into dormOccupants_tbl (dorm_id, room_id, roomNumber, student_id, studentName) " +
+                         "values(@dormID, @roomID, @roomNumber, @student_id, @studentName)";
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@dormID", dormOccupantsTBL.dorm_ID);
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@roomID", dormOccupantsTBL.room_ID);
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@student_id", dormOccupantsTBL.student_id);
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@studentName", dormOccupantsTBL.studentName);
+                    InsertDataDormOcupnts.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    return new Response { Status = "Invalid Response", Message = e.Message };
+                }
             }
 
+            //  Get currentOccupants value in room_tbl
 
-            select dorm_id where name = NameOfBuilding;
-                select floorNumber, roomNumber where room_id = roomID and dorm_di = dormID;
+            using (MySqlConnection conn3 = GetConnection())
+            {
+                int nCurrentOccupants = 0;
+                try
+                {
+                    conn3.Open();
+                    MySqlCommand FndCurrentOcupntsInRm = conn3.CreateCommand();
+                    FndCurrentOcupntsInRm.CommandText = "select currentOccupants from room_tbl where dorm_id = @dormid and room_id = @roomid and roomNumber = @roomNumber";
+                    FndCurrentOcupntsInRm.Parameters.AddWithValue("dormid", dormOccupantsTBL.dorm_ID);
+                    FndCurrentOcupntsInRm.Parameters.AddWithValue("roomid", dormOccupantsTBL.room_ID);
+                    FndCurrentOcupntsInRm.Parameters.AddWithValue("roomNumber", dormOccupantsTBL.roomNumber);
 
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FndCurrentOcupntsInRm.ExecuteReader();
 
+                    while (reader.Read())
+                    {
+                        nCurrentOccupants = (int)reader[0];
+                    }
+                    reader.Close();
+                }
+                catch(Exception e)
+                {
+                    return new Response { Status = "Invalid Response", Message = e.Message };
+                }
 
+                // Update the currentOccupants field in room_tbl
+                using (MySqlConnection conn2 = GetConnection())
+                {
+                    try
+                    {
+                        conn2.Open();
+                        MySqlCommand UpdateRoomOccupntsField = conn2.CreateCommand();
+                        UpdateRoomOccupntsField.CommandText = "update room_tbl set currentOccupants = @currentOccupants " +
+                            "where room_id = @roomid and dorm_id = @dormid and roomNumber = @roomNumber";
+                        UpdateRoomOccupntsField.Parameters.AddWithValue("@currentOccupants", nCurrentOccupants + 1);
+                        UpdateRoomOccupntsField.Parameters.AddWithValue("@dormid", dormOccupantsTBL.dorm_ID);
+                        UpdateRoomOccupntsField.Parameters.AddWithValue("@roomid", dormOccupantsTBL.room_ID);
+                        UpdateRoomOccupntsField.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
+
+                        UpdateRoomOccupntsField.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        return new Response { Status = "Invalid Response", Message = e.Message };
+                    }
+                }
             }
 
-
-
-                // For later use in order to update MySQL database
-                /*     if (CheckConditionsValidation(student, "AddStudent"))
-                     {
-                         using (MySqlConnection conn = GetConnection())
-                         {
-                             conn.Open();
-                             MySqlCommand CheckUser = conn.CreateCommand();
-
-                             // Checks to see if there are duplicate usernames
-                             CheckUser.Parameters.AddWithValue("@username", student.username);
-                             CheckUser.CommandText = "select count(*) from housingdirector_schema.student_tbl where userName = @userName";
-
-                             // if 1 then already exist
-                             int UserExist = Convert.ToInt32(CheckUser.ExecuteScalar());
-
-                             if (UserExist >= 1)
-                             {
-                                 bSuccessfull = false;
-                                 return new Response { Status = "User Exists", Message = "Cannot" };
-                             }
-                             else
-                             {
-                                 // Inserting data into fields of database
-                                 MySqlCommand Query = conn.CreateCommand();
-                                 Query.CommandText = "insert into housingdirector_schema.student_tbl (username, firstname, lastname, email, password, confirmpassword, gender, year, studentID) VALUES (@username, @firstname, @lastname, @email, @password, @confirmpassword, @gender, @year, @studentID)";
-                                 Query.Parameters.AddWithValue("@username", student.username);
-                                 Query.Parameters.AddWithValue("@firstname", student.firstName);
-                                 Query.Parameters.AddWithValue("@lastname", student.lastName);
-                                 Query.Parameters.AddWithValue("@email", student.email);
-                                 Query.Parameters.AddWithValue("@password", student.password);
-                                 Query.Parameters.AddWithValue("@confirmpassword", student.confirmpassword);
-                                 Query.Parameters.AddWithValue("@gender", student.gender);
-                                 Query.Parameters.AddWithValue("@year", student.year);
-                                 Query.Parameters.AddWithValue("@studentID", student.studentID);
-
-                                 Query.ExecuteNonQuery();
-                                 bSuccessfull = true;
-                             }
-                         }
-                     }
-                */
-                //            if (!bValid)
-                //           {
-                //               return new Response { Status = "Invalid", Message = "Cannot" };
-                //           }
-
-                return new Response { Status = "Success", Message = "Form submitted Successfully. An administrator will be in touch with you." };
+            return new Response { Status = "Successful", Message = "Your selection has been saved. Please stick around for the next steps." };
         }
-
     }
 }
