@@ -262,11 +262,52 @@ namespace WebAPI.Controllers
                 reader.Close();
             }
             return roomList;
+        }     
+
+        [Route("GetDormOccupants")]
+        [HttpPost]
+        public List<studentTblFields> GetDormOccupants(int roomID)
+        {
+            List<studentTblFields> occupants = new List<studentTblFields>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindRoomInfo = conn.CreateCommand();
+
+                FindRoomInfo.Parameters.AddWithValue("@room_id", roomID);
+
+                FindRoomInfo.CommandText =
+                    "USE housingdirector_schema;" +
+                "SELECT dormOccupants_tbl.resident_ID, student_tbl.firstName, student_tbl.lastName, student_tbl.username, dormOccupants_tbl.room_ID, student_tbl.studentID" +
+                " FROM dormOccupants_tbl" +
+                " INNER JOIN student_tbl ON student_tbl.user_id = dormOccupants_tbl.resident_ID" +
+                " WHERE room_ID = @room_id;";
+
+                FindRoomInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    // true if maxOccupants != currurrentOccupants
+                    //if (reader[2] != reader[4])
+                    //{
+                    occupants.Add(new studentTblFields()
+                    {
+                        studentID = reader.GetString(5),
+                        //usernameResult = ReturnedInfo.GetString(1);
+                        firstName = reader.GetString(1),
+                        lastName = reader.GetString(2),
+                        username = reader.GetString(3),
+                        //emailResult = ReturnedInfo.GetString(4);
+                    });
+                }
+                reader.Close();
+            }
+            return occupants;
         }
 
-        // Insert data after student selection
-        // Parameters passed from react to Rest api: dorm_id (building ID), roomNumber, student_ID, studentName, floorNumber
-        
         [Route("SubmitDormApproval")]
         [HttpPost]
         public Response SubmitDormForm(DormOccupantsTblFields dormOccupantsTBL)
@@ -298,7 +339,7 @@ namespace WebAPI.Controllers
                     return new Response { Status = "Invalid Response", Message = e.Message };
                 }
             }
-        
+
             // Insert data into the DormOccupants_tbl
             using (MySqlConnection conn2 = GetConnection())
             {
@@ -344,7 +385,7 @@ namespace WebAPI.Controllers
                     }
                     reader.Close();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return new Response { Status = "Invalid Response", Message = e.Message };
                 }
@@ -373,50 +414,6 @@ namespace WebAPI.Controllers
             }
 
             return new Response { Status = "Successful", Message = "Your selection has been saved. Please stick around for the next steps." };
-        }
-
-        [Route("GetDormOccupants")]
-        [HttpPost]
-        public List<studentTblFields> GetDormOccupants(int roomID)
-        {
-            List<studentTblFields> occupants = new List<studentTblFields>();
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                MySqlCommand FindRoomInfo = conn.CreateCommand();
-
-                FindRoomInfo.Parameters.AddWithValue("@room_id", roomID);
-
-                FindRoomInfo.CommandText =
-                    "USE housingdirector_schema;" +
-                "SELECT dormOccupants_tbl.resident_ID, student_tbl.firstName, student_tbl.lastName, student_tbl.username, dormOccupants_tbl.room_ID, student_tbl.studentID" +
-                " FROM dormOccupants_tbl" +
-                " INNER JOIN student_tbl ON student_tbl.user_id = dormOccupants_tbl.resident_ID" +
-                " WHERE room_ID = @room_id;";
-
-                FindRoomInfo.ExecuteNonQuery();
-
-                // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    // true if maxOccupants != currurrentOccupants
-                    //if (reader[2] != reader[4])
-                    //{
-                    occupants.Add(new studentTblFields()
-                    {
-                        studentID = reader.GetString(5),
-                        //usernameResult = ReturnedInfo.GetString(1);
-                        firstName = reader.GetString(1),
-                        lastName = reader.GetString(2),
-                        username = reader.GetString(3),
-                        //emailResult = ReturnedInfo.GetString(4);
-                    });
-                }
-                reader.Close();
-            }
-            return occupants;
         }
     }
 }
