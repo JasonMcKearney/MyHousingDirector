@@ -95,10 +95,8 @@ export default class DormSelection extends Component {
 
 
 
+
             </div>
-
-
-
        )
     }
 }
