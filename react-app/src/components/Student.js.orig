@@ -171,11 +171,18 @@ class Student extends Component {
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
                                             <Route path='/student/Home' component={StudentHome} />
+<<<<<<< HEAD
+                                            <Route path='/student/Roommate' component={Roommate} />
+                                            <Route path='/student/DormSelect' component={DormSelection} />
+                                            <Route path='/student/StudentInfo' component={StudentInfo} />
+                                          
+{/*                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />*/}
+=======
                                             <Route path='/student/RoommateSelect' component={RoommateSelection} />
                                             <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/StudentInfo' component={StudentInfo} />
                                             <Route path='/student/RoommateList' component={RoommateList} />
-                                            <Route path='/student/Roommate' component={Roommate} />
+>>>>>>> 12b06598792e5bbe47bb95974a0f65b6fafc0748
                                         </Switch>
 
                                     </div>

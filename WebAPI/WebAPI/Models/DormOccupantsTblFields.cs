@@ -7,15 +7,16 @@ namespace WebAPI.Models
 {
     public class DormOccupantsTblFields
     {
-        public string record_ID { get; set; }
+        public int dorm_ID { get; set; }
 
-        public string dorm_ID { get; set; }
-
-        public string room_ID { get; set; }
+        public int room_ID { get; set; }
 
         public string roomNumber { get; set; }
 
-        public string resident_ID { get; set; }
+        public int student_id { get; set; }
+        public string studentName { get; set; }
 
+        // Below are not related to the table, but are needed to get the ids above and to fill this table
+        public int floorNumber { get; set; }
     }
 }
