@@ -167,8 +167,8 @@ class Student extends Component {
                                         <Switch>
                                             <Route path='/student/Home' component={StudentHome} />
                                             <Route path='/student/Roommate' component={Roommate} />
-                                    <Route path='/student/DormSelect' component={DormSelection} />
-                                    <Route path='/student/StudentInfo' component={StudentInfo} />
+                                            <Route path='/student/DormSelect' component={DormSelection} />
+                                            <Route path='/student/StudentInfo' component={StudentInfo} />
                                           
 {/*                                            <Route path='/student/nav2' render={() => { return (<h1>User Info</h1>) }} />*/}
                                         </Switch>
