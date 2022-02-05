@@ -175,7 +175,6 @@ class Student extends Component {
                                             <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/StudentInfo' component={StudentInfo} />
                                             <Route path='/student/RoommateList' component={RoommateList} />
-                                            <Route path='/student/Roommate' component={Roommate} />
                                         </Switch>
 
                                     </div>
