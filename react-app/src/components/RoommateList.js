@@ -27,7 +27,7 @@ export default class RoommateList extends Component {
         studentID: 0,
         studentName:'',
         studentlist: [],
-        studentObj: {username:'', studentID:'', firstname:'', lastname:''}
+        studentObj: {username:'', studentID:'', firstname:'', lastname:'', userID:''}
     }
 }
     getResults(){
@@ -36,7 +36,6 @@ export default class RoommateList extends Component {
 
         console.log("Length: " + studentListLength.length)
 
-        // Does not allow for multiple strings to be displayed if the input has not changed by the user
         if(studentListLength == 0)
         {
             // Passing parameter to Web API through address
@@ -51,9 +50,9 @@ export default class RoommateList extends Component {
             .then(function(res) {
                 var loopData = ''
                 var i;
-                for (i = 0; i < res.length; i++)
+                for (i = 0; i < res.length; i++) //Iterate through each result returned by the REST API. Skips a matched ID (no self in the roommates list)
                 {
-                    if(res[i].studentID == Cookies.get("ID")){
+                    if(res[i].studentID == Cookies.get("ID")){ 
                         continue;
                     }
                    console.log("Next User: " + res[i].username)
@@ -64,7 +63,7 @@ export default class RoommateList extends Component {
                         currentComponent.setState({studentID: res[i].studentID})
                         currentComponent.setState({firstname: res[i].firstName})
                         currentComponent.setState({lastname: res[i].lastName})
-                        
+                        currentComponent.setState({userID: res[i].user_id})
                         // Add student to list
                         currentComponent.addItem();
                     }
@@ -81,8 +80,6 @@ export default class RoommateList extends Component {
 
         const newstudentObj = { username: this.state.studentName, studentID: this.state.studentID, firstname: this.state.firstname, lastname: this.state.lastname }
       
-        //this.setState({studentObj: newstudentObj} )
-
         console.log("New-Object " + newstudentObj.username)
        
         let newStudentlist = this.state.studentlist;
@@ -116,7 +113,7 @@ export default class RoommateList extends Component {
         showModal: false
     }
     
-    listItems() {
+    listPendingItems() {
         let studentlist = this.state.studentlist;
        
         return (
@@ -124,15 +121,17 @@ export default class RoommateList extends Component {
             {
               studentlist.map((val, index) => {
                 return (
-                
-                    <Card className="Roommate1"
+                    <Card className="Roommate1" //Create a card for each roommate with the appropriate information
                     hoverable
-                    cover={<img alt="example" src={defaultlogo} />}
-                >   
+                    title="PENDING"
+                    cover={<img alt="example" src={defaultlogo}/> }>   
                     <p>{val.firstname} {val.lastname}</p>
                     <p>{val.username}</p>
                     <p>{val.studentID}</p>
                     <p><Button danger onClick={() => {
+
+                        this.DeletePending(val.studentID);
+
                           }} type="primary" htmlType="Delete">
                               Delete
                           </Button></p>
@@ -145,6 +144,30 @@ export default class RoommateList extends Component {
         
     }
 
+    DeletePending(user_id){
+
+       
+        console.log(user_id)
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/DeleteRoommate', {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+
+                uid: Cookies.get("UD"),
+                reciever_id: user_id
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
+
+        })
+    }
+
     componentDidMount(){
         this.getResults();
     }
@@ -152,8 +175,8 @@ export default class RoommateList extends Component {
   render() {
     return (
       <div className="StudentHomeBox-right">
-          <div className="resultsBox">
-                            { this.listItems() }
+          <div className="pendingResultsList">
+                            { this.listPendingItems() }
                         </div>
                 </div>
     );
