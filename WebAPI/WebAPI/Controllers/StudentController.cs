@@ -46,6 +46,7 @@ namespace WebAPI.Controllers
             string firstNameResult = null;
             string lastNameResult = null;
             string emailResult = null;
+            string useridResult = null;
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -54,7 +55,7 @@ namespace WebAPI.Controllers
 
                 getID.Parameters.AddWithValue("@username", check.username);
 
-                getID.CommandText = "select studentID, username, firstName, lastName, email from housingdirector_schema.student_tbl where username = @username";
+                getID.CommandText = "select studentID, username, firstName, lastName, email, user_id from housingdirector_schema.student_tbl where username = @username";
 
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
@@ -65,11 +66,12 @@ namespace WebAPI.Controllers
                     firstNameResult = ReturnedInfo.GetString(2);
                     lastNameResult = ReturnedInfo.GetString(3);
                     emailResult = ReturnedInfo.GetString(4);
+                    useridResult = ReturnedInfo.GetString(5);
                 }
                 ReturnedInfo.Close();
 
             }
-            return new studentTblFields { studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult };
+            return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult, };
         }
 
         [HttpDelete("{id}")]
@@ -405,9 +407,9 @@ namespace WebAPI.Controllers
             return new Response { Status = "Successful", Message = "Your selection has been saved. Please stick around for the next steps." };
         }
 
-        [Route("GetDormOccupants")]
+        [Route("GetPendingOutboundRequests/{studentID}")]
         [HttpPost]
-        public List<studentTblFields> GetDormOccupants(int roomID)
+        public List<studentTblFields> GetDormOccupants(int studentID)
         {
             List<studentTblFields> occupants = new List<studentTblFields>();
             using (MySqlConnection conn = GetConnection())
@@ -415,14 +417,14 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand FindRoomInfo = conn.CreateCommand();
 
-                FindRoomInfo.Parameters.AddWithValue("@room_id", roomID);
+                FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
 
                 FindRoomInfo.CommandText =
-                    "USE housingdirector_schema;" +
-                "SELECT dormOccupants_tbl.resident_ID, student_tbl.firstName, student_tbl.lastName, student_tbl.username, dormOccupants_tbl.room_ID, student_tbl.studentID" +
-                " FROM dormOccupants_tbl" +
-                " INNER JOIN student_tbl ON student_tbl.user_id = dormOccupants_tbl.resident_ID" +
-                " WHERE room_ID = @room_id;";
+                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName,"+
+                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState "+
+                    " FROM roommates_table"+
+                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.roommate_ID"+
+                    " WHERE Requestor_ID = @studentID AND RequestState = \"pending\";";
 
                 FindRoomInfo.ExecuteNonQuery();
 
@@ -436,11 +438,11 @@ namespace WebAPI.Controllers
                     //{
                     occupants.Add(new studentTblFields()
                     {
-                        studentID = reader.GetString(5),
+                        studentID = reader.GetString(3),
                         //usernameResult = ReturnedInfo.GetString(1);
-                        firstName = reader.GetString(1),
-                        lastName = reader.GetString(2),
-                        username = reader.GetString(3),
+                        firstName = reader.GetString(0),
+                        lastName = reader.GetString(1),
+                        username = reader.GetString(2),
                         //emailResult = ReturnedInfo.GetString(4);
                     });
                 }
