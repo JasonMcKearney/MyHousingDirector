@@ -29,14 +29,13 @@ namespace WebAPI.Controllers
             string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
         }
-        
+
         public StudentController(HousingDBContext context, IConfiguration configuration)
         {
             // Object to HousingDBContext class
             _context = context;
             _configuration = configuration;
         }
-
 
         [HttpPost]
         public studentTblFields GetStudentInfo(studentTblFields check)
@@ -47,6 +46,7 @@ namespace WebAPI.Controllers
             string firstNameResult = null;
             string lastNameResult = null;
             string emailResult = null;
+            string useridResult = null;
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -55,8 +55,8 @@ namespace WebAPI.Controllers
 
                 getID.Parameters.AddWithValue("@username", check.username);
 
-                getID.CommandText = "select studentID, username, firstName, lastName, email from housingdirector_schema.student_tbl where username = @username";
-                
+                getID.CommandText = "select studentID, username, firstName, lastName, email, user_id from housingdirector_schema.student_tbl where username = @username";
+
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
                 while (ReturnedInfo.Read())
@@ -66,11 +66,12 @@ namespace WebAPI.Controllers
                     firstNameResult = ReturnedInfo.GetString(2);
                     lastNameResult = ReturnedInfo.GetString(3);
                     emailResult = ReturnedInfo.GetString(4);
+                    useridResult = ReturnedInfo.GetString(5);
                 }
                 ReturnedInfo.Close();
 
             }
-            return new studentTblFields { studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult };
+            return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult, };
         }
 
         [HttpDelete("{id}")]
@@ -122,7 +123,7 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand getUsersInfo = conn.CreateCommand();
 
-                getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch);
+                getUsersInfo.Parameters.AddWithValue("@username", sFirstNameToSearch + '%');
                 getUsersInfo.CommandText = "select user_id, firstname, lastname, year from housingdirector_schema.student_tbl where username like @username";
                 getUsersInfo.ExecuteNonQuery();
 
@@ -136,8 +137,8 @@ namespace WebAPI.Controllers
                         user_id = Convert.ToInt32(reader[0]),
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
-                        year = reader[3].ToString(),                 
-                    });                                    
+                        year = reader[3].ToString(),
+                    });
                 }
                 reader.Close();
             }
@@ -147,12 +148,45 @@ namespace WebAPI.Controllers
 
         [Route("AddRoommate")]
         [HttpPost]
-        public Response AddRoommate(studentTblFields roommate)
+        public Response AddRoommate(RoomRequestIds ids)
         {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
 
-            return new Response { Status = "Invalid", Message = "Cannot" };
+                MySqlCommand FindRequestorID = conn.CreateCommand();
+                FindRequestorID.Parameters.AddWithValue("@studentID", ids.uid);
+                FindRequestorID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
+
+                int requestor_id = Convert.ToInt32(FindRequestorID.ExecuteScalar());
+
+
+                MySqlCommand CheckRequest = conn.CreateCommand();
+                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
+                CheckRequest.Parameters.AddWithValue("@recieverID", ids.reciever_id);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+
+                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+
+                if (requestExsits >= 1)
+                {
+                    return new Response { Status = "Request Exsists", Message = "Already requested that student" };
+                }
+                else
+                {
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "insert into housingdirector_schema.roommates_table (roommate_ID,Requestor_ID,RequestState) VALUES (@roommateID, @requestorID, @pending)";
+                    Query.Parameters.AddWithValue("@roommateID", ids.reciever_id );
+                    Query.Parameters.AddWithValue("@requestorID", requestor_id);
+                    Query.Parameters.AddWithValue("@pending", "pending");
+
+                    Query.ExecuteNonQuery();
+
+                    return new Response { Status = "Request Sent", Message = "Request is successfully sent" };
+                }
+
+            }
         }
-
 
         // DormSelection Page..
         // Need to get dorm info
@@ -189,8 +223,6 @@ namespace WebAPI.Controllers
             return buildingData;
         }
         
-
-
         // Find the floor numbers that have rooms available
         [Route("FindFloorInfo")]
         [HttpPost]
@@ -414,6 +446,50 @@ namespace WebAPI.Controllers
             }
 
             return new Response { Status = "Successful", Message = "Your selection has been saved. Please stick around for the next steps." };
+        }
+
+        [Route("GetDormOccupants")]
+        [HttpPost]
+        public List<studentTblFields> GetDormOccupants(int roomID)
+        {
+            List<studentTblFields> occupants = new List<studentTblFields>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindRoomInfo = conn.CreateCommand();
+
+                FindRoomInfo.Parameters.AddWithValue("@room_id", roomID);
+
+                FindRoomInfo.CommandText =
+                    "USE housingdirector_schema;" +
+                "SELECT dormOccupants_tbl.resident_ID, student_tbl.firstName, student_tbl.lastName, student_tbl.username, dormOccupants_tbl.room_ID, student_tbl.studentID" +
+                " FROM dormOccupants_tbl" +
+                " INNER JOIN student_tbl ON student_tbl.user_id = dormOccupants_tbl.resident_ID" +
+                " WHERE room_ID = @room_id;";
+
+                FindRoomInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    // true if maxOccupants != currurrentOccupants
+                    //if (reader[2] != reader[4])
+                    //{
+                    occupants.Add(new studentTblFields()
+                    {
+                        studentID = reader.GetString(5),
+                        //usernameResult = ReturnedInfo.GetString(1);
+                        firstName = reader.GetString(1),
+                        lastName = reader.GetString(2),
+                        username = reader.GetString(3),
+                        //emailResult = ReturnedInfo.GetString(4);
+                    });
+                }
+                reader.Close();
+            }
+            return occupants;
         }
     }
 }

@@ -7,8 +7,10 @@ import './Student.css';
 import Cookies from 'js-cookie';
 import DormSelection from './DormSelection'
 import StudentHome from './StudentHome'
-import Roommate from './Roommate';
+import RoommateSelection from './RoommateSelection'
 import StudentInfo from './StudentInfo'
+import RoommateList from './RoommateList'
+
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 
 const { SubMenu } = Menu;
@@ -33,11 +35,13 @@ class Student extends Component {
               var firstName = result.firstName;
               var lastName = result.lastName;
               var email = result.email
+              var user_id = result.user_id;
 
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
               Cookies.set("EM", email);
+              Cookies.set("UD", user_id);
             })
             
     }
@@ -125,18 +129,21 @@ class Student extends Component {
                     </Modal>
                         <Menu className="Student-nav-bar" mode="horizontal" defaultSelectedKeys={['1']}>
                             <Menu.Item key="1">
-                                <Link to="/student/home">Home</Link>
+                                <Link className='nav-bar-label' to="/student/home">Home</Link>
                             </Menu.Item>
                             <Menu.Item key="2">
                             <Link to="/student/DormSelect">Dorm Selection</Link>
                             </Menu.Item>
                           <Menu.Item key="3">
-                                <Link to="/student/Roommate">Roommate Selection</Link>
+                                <Link to="/student/RoommateSelect">Roommate Selection</Link>
                         </Menu.Item>
                         <Menu.Item key="4">
                             <Link to="/student/StudentInfo">Profile</Link>
                         </Menu.Item>
-                            <Menu.Item key="5">
+                        <Menu.Item key="5">
+                            <Link to="/student/RoommateList">Roommate List</Link>
+                        </Menu.Item>
+                            <Menu.Item key="6">
                               <Button onClick={() => {
                                   Cookies.remove('ID')
                                   Cookies.remove('FN')
@@ -166,13 +173,10 @@ class Student extends Component {
                                     <div className="Student-content-background" style={{ padding: 24, height: '100%' }}>
                                         <Switch>
                                             <Route path='/student/Home' component={StudentHome} />
-                                            <Route path='/student/Roommate' component={Roommate} />
-                                            <Route path='/student/DormSelect' component={DormSelection} />
-
                                             <Route path='/student/RoommateSelect' component={RoommateSelection} />
+                                            <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/StudentInfo' component={StudentInfo} />
                                             <Route path='/student/RoommateList' component={RoommateList} />
-
                                         </Switch>
 
                                     </div>
