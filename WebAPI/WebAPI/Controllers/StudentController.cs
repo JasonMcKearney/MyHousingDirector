@@ -166,9 +166,9 @@ namespace WebAPI.Controllers
                 CheckRequest.Parameters.AddWithValue("@recieverID", recipient_id);
                 CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
 
-                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
 
-                if (requestExsits >= 1)
+                if (requestExists >= 1)
                 {
                     MySqlCommand DeleteEntry = conn.CreateCommand();
                     DeleteEntry.Parameters.AddWithValue("@requestorID", requestor_id);
@@ -206,11 +206,11 @@ namespace WebAPI.Controllers
                 CheckRequest.Parameters.AddWithValue("@recieverID", ids.reciever_id);
                 CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
 
-                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
 
-                if (requestExsits >= 1)
+                if (requestExists >= 1)
                 {
-                    return new Response { Status = "Request Exsists", Message = "Already requested that student" };
+                    return new Response { Status = "Request exists", Message = "Already requested that student" };
                 }
                 else
                 {
@@ -473,9 +473,6 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    // true if maxOccupants != currurrentOccupants
-                    //if (reader[2] != reader[4])
-                    //{
                     occupants.Add(new studentTblFields()
                     {
                         studentID = reader.GetString(3),
