@@ -53,6 +53,9 @@ export default class RoommateList extends Component {
                 var i;
                 for (i = 0; i < res.length; i++)
                 {
+                    if(res[i].studentID == Cookies.get("ID")){
+                        continue;
+                    }
                    console.log("Next User: " + res[i].username)
                     console.log("Next studentID: " + res[i].studentID)
                     if(res[i].username != "")
