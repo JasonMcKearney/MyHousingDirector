@@ -78,7 +78,7 @@ export default class RoommateSelection extends Component {
                                   <td className="result-word" key={index}> {val.firstName}</td>
                                   <td className="result-word" key={index}> {val.lastName}</td>
                                   <td className="result-word" key={index}> {val.year}</td>
-                                  <td className="result-icon"><button  ><FontAwesomeIcon className= "icon"onClick = {() => {this.AddStudent(val.user_id)}} type ="submit" icon={faUserPlus} size = "3x" color="green" /> </button></td> 
+                                  <td className="result-icon"><button className='add-icon' ><FontAwesomeIcon className= "icon"onClick = {() => {this.AddStudent(val.user_id)}} type ="submit" icon={faUserPlus} size = "3x" color="green" /> </button></td> 
                                   
                               
                               
