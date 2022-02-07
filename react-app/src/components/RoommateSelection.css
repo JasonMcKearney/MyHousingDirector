@@ -7,9 +7,15 @@
     border-radius: 3px;
     border-width: 2px;
     border-style: solid;
-    margin-top: 5%;
+    margin-top: 2%;
     height: 500px;
     width: 85%;
+}
+.table-header{
+
+  font-size: 24px;
+  border-style: solid;
+  border-bottom-width: 2px;
 }
 
 .container-results::-webkit-scrollbar {
@@ -40,6 +46,7 @@
 .results{
     height: 100%;
     width: 100%;
+    
 
 }
 .search-container{
@@ -60,8 +67,13 @@ float:left;
     padding-bottom: 1px;
     width:75%;
     height:3em;
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Lucida Bright';
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    padding-right:5%;
 }
 .search-button{
 
@@ -69,12 +81,13 @@ float:left;
     width: 10%;
     margin-left:10px;
     height:3em;
-   
     font-size:18px;
+    margin-left:10px
 }
 .wrapper{
     width:100%;
     display:inline-block;
+    padding-right: 10px;
 }
 .add-icon{
 
@@ -88,6 +101,14 @@ float:left;
     font-size: 30px;
     padding-left:10px;
     font-family: 'Lucida Bright';
+    border-style: solid;
+    border-bottom-width:2px;
+    border-color:black;
+}
+.result-icon{
+  border-style: solid;
+  border-bottom-width:2px;
+  border-color:black;
 }
 ul{
 
@@ -102,19 +123,16 @@ ul{
 
 #primary-button{
 
-    height: 5vh;
-    width: 4vw;
+    height: 5.5vh;
+    width: 5vw;
     background-color: #011528;
-
     border-width: 3px;
     border-color:rgb(0, 0, 0);
-    border-top-right-radius:10%;
-    border-bottom-right-radius:10%;
+    border-radius: 10%;
     animation-name:button;
-
     font-family: frank ruhal ribre;
-    font-size: 18px;
-    color:white;
+    font-size: 20px;
+    color: white;
     overflow: hidden;
     position: relative;
     text-decoration: none;
@@ -122,12 +140,14 @@ ul{
    will-change: transform;
    z-index: 0;
    padding-bottom:1px;
-
+   padding-top:1px;
+   margin-left:20px;
+   margin-top: 2px;
   }
 
   #primary-button::after
   {
-  background-color:rgb(107, 208, 255);
+  background-color:rgb(18, 189, 241);
   border-color: black;
   border-style:solid;
   border-top-right-radius: 3px;
@@ -145,7 +165,7 @@ ul{
   transition: .2s transform ease-out;
   will-change: transform;
   z-index: -1;
-  
+ 
   }
   #primary-button:hover::after
   {
@@ -165,13 +185,8 @@ ul{
     cursor: pointer;
   }
 
-  .add-icon:hover{
+  
+  .icon:hover{
 
-    background-color: chartreuse;
-
-  }
-  .add-icon:after{
-
-
-    background-color:black;
+      color:red;
   }
