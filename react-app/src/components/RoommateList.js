@@ -40,7 +40,7 @@ export default class RoommateList extends Component {
         if(studentListLength == 0)
         {
             // Passing parameter to Web API through address
-            fetch('http://localhost:16648/api/Student/GetDormOccupants?roomID=2', {
+            fetch('http://localhost:16648/api/Student/GetPendingOutboundRequests/'+ Cookies.get("UD"), {
                 mode: 'cors', // this cannot be 'no-cors'
                 headers: {                
                     'Content-Type': 'application/json',
@@ -53,6 +53,9 @@ export default class RoommateList extends Component {
                 var i;
                 for (i = 0; i < res.length; i++)
                 {
+                    if(res[i].studentID == Cookies.get("ID")){
+                        continue;
+                    }
                    console.log("Next User: " + res[i].username)
                     console.log("Next studentID: " + res[i].studentID)
                     if(res[i].username != "")

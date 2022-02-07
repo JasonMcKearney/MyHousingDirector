@@ -14,6 +14,7 @@ export default class DormSelection extends Component {
             firstName: '',
             lastName: '',
             email: '',
+            user_id: '',
         }
     }
     componentDidMount()
@@ -30,28 +31,25 @@ export default class DormSelection extends Component {
             })
         }).then((Response) => Response.json())
             .then((result) => {
-//                var ID = result.studentID;
-//                var firstName = result.firstName;
-//                var lastName = result.lastName;
-//                var email = result.email;
-//
-                console.log("StudentID: " + result.studentID)
-                currentComponent.setState({studentID: result.studentID})
-                console.log(currentComponent.studentID)
                 
-                currentComponent.setState({firstName: result.firstName})
+                // console.log("StudentID: " + result.studentID)
+                // currentComponent.setState({studentID: result.studentID})
+                // console.log(currentComponent.studentID)
+                
+                // currentComponent.setState({firstName: result.firstName})
 
                 
                 
-                this.state.lastName = result.lastName;
-                this.state.email = result.email;
+                // this.state.lastName = result.lastName;
+                // this.state.email = result.email;
 
-                console.log("StudentID: " + this.state.studentID)
+                // console.log("StudentID: " + this.state.studentID)
 
                 Cookies.set("ID", result.studentID);
                 Cookies.set("FN", result.firstName);
                 Cookies.set("LN", result.lastName);
                 Cookies.set("EM", result.email);
+                Cookies.set("UD", result.user_id);
             })
     }
 

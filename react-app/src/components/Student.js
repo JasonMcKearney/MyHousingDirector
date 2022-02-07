@@ -35,11 +35,13 @@ class Student extends Component {
               var firstName = result.firstName;
               var lastName = result.lastName;
               var email = result.email
+              var user_id = result.user_id;
 
               Cookies.set("ID", ID);
               Cookies.set("FN", firstName);
               Cookies.set("LN", lastName);
               Cookies.set("EM", email);
+              Cookies.set("UD", user_id);
             })
             
     }
@@ -175,7 +177,6 @@ class Student extends Component {
                                             <Route path='/student/DormSelect' component={DormSelection} />
                                             <Route path='/student/StudentInfo' component={StudentInfo} />
                                             <Route path='/student/RoommateList' component={RoommateList} />
-                                            <Route path='/student/Roommate' component={Roommate} />
                                         </Switch>
 
                                     </div>
