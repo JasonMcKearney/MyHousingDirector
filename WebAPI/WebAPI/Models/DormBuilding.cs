@@ -14,5 +14,10 @@ namespace WebAPI.Models
         public string description { get; set; }
         
         public string url { get; set; }
+
+        public string image1 { get; set; }
+        
+        public string image2 { get; set; }
+
     }
 }

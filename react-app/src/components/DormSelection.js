@@ -43,6 +43,8 @@ export default class DormSelection extends Component {
             // 空白处内容展示
             currentDescriptions: {},
             dorm: '',
+            image1: '',
+            image2: '',
             floor: '',
             room: '',
             buildingData: [],
@@ -77,6 +79,8 @@ export default class DormSelection extends Component {
                         description: res[i].description,
                         url: res[i].url,
                         dormID: res[i].dorm_id,
+                        buildingImage1: res[i].image1,
+                        buildingImage2: res[i].image2
                     }
                     newArray.push(obj)  // Push the object
                 }
@@ -90,8 +94,13 @@ export default class DormSelection extends Component {
         this.findBuildingInfo();
     }
 
-    handleDorm = (val) => {
+    //-----------------------TRYING TO GET IMAGES TO SET AND DISPLAY--------------
+    handleDorm = (val, buildingImage1) => {        
+        console.log("HandleDorm method:  " + val)
         this.setState({ dorm: val });
+        console.log("HandleDorm method: " + buildingImage1)
+        this.setState({ image1: buildingImage1 });
+        this.setState({ image2: val });
     };
 
 
@@ -311,24 +320,27 @@ export default class DormSelection extends Component {
 
     // 请求接口
     getData = ({ id, name }) => {
-        
+        console.log(name)
         if (name == "dorm") {
-                   var bEnd = true;
-                   var nCounter = 0;
-                   var sToPrint
-                   while(bEnd)
-                   {
-                       // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
-                       if(this.state.buildingData[nCounter].value === id)
-                       {   
-                           bEnd = false;
-                           sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
-                       }
-                       nCounter++;                
-                   }
-                   return{
-                      desc: sToPrint
-                    };
+            var bEnd = true;
+            var nCounter = 0;
+            var sToPrint
+            var imagePath1
+            while(bEnd)
+            {
+                // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
+                if(this.state.buildingData[nCounter].value === id)
+                {   
+                    bEnd = false;
+                    sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
+                    imagePath1 = `${this.state.buildingData[nCounter].buildingImage1 }`
+                }
+                nCounter++;                
+            }
+            return{                    
+                desc: sToPrint,
+                imagePath1
+            };
         }
         else if (name == "floor") {
             return{
@@ -357,15 +369,29 @@ export default class DormSelection extends Component {
     };
 
     onChange = (val, stateKey) => {
+        console.log("Line 369, Value in onchange: " + val + " statekey: " + stateKey)
+        // statekey represents what value is being changed, dorm when switching dropdown box
         this.setState({
-            [stateKey]: val,
+            // Returns the state hash for the root node of the wrapper. 
+            // Optionally pass in a prop name and it will return just that value.
+            [stateKey]: val
         });
 
-        // 请求接口，以渲染右侧空白处
+        // 请求接口，以渲染右侧空白处 or Request interface to render right margin
+        // getData is a function above return an object in JSON
         const res = this.getData({ id: val, name: stateKey });
+
+
+        // Check value of res, without JSON.stringify will write [object object] you are alerting instance of an object
+        console.log("Line 386, res in onChange: " + JSON.stringify(res.desc))
+        console.log("Line 387, imagePath1 in onChange: " + res.imagePath1)
+
         this.setState({
             currentDescriptions: res,
-        });
+        })
+
+
+        console.log("currentDescriptions: " + this.state.currentDescriptions)
     };
 
     onFinish = (values) => {
@@ -382,6 +408,8 @@ export default class DormSelection extends Component {
         let {
             current,
             dorm,
+            image1,
+            image2,
             floor,
             room,
             buildingData,
@@ -582,6 +610,7 @@ export default class DormSelection extends Component {
                         }}
                     >
                         {this.state.currentDescriptions.desc}
+                        <img src={this.state.currentDescriptions.imagePath1} className="defaultlogo" style={{ width: '70%' }} />
                     </div>
                 </div>
                 <div className="steps-action">
