@@ -19,7 +19,7 @@ export default class DormSelection extends Component {
     }
     componentDidMount()
     {
-        var currentComponent = this; 
+        /*var currentComponent = this; 
         fetch('http://localhost:16648/api/Student/', {
             headers: {
                 'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export default class DormSelection extends Component {
                 Cookies.set("LN", result.lastName);
                 Cookies.set("EM", result.email);
                 Cookies.set("UD", result.user_id);
-            })
+            })*/
     }
 
     render() {
