@@ -99,7 +99,96 @@ export default class RoommateSelection extends Component {
   submitSearchText() {
     let currentComponent = this;
 
+<<<<<<< HEAD
     console.log(this.state.userSearchString);
+=======
+            <table>
+                <thead>
+                    <tr>
+                        <td>First Name</td>
+                        <td>Last Name</td>
+                        <td>year</td>
+                        <td></td>
+                    </tr>
+                </thead>
+           
+            <tbody>
+              {
+                this.state.studentList.map((val, index) => {
+                    return (
+                   
+                          <tr>  
+                              
+                              
+                                  <td className="result-word" key={index}> {val.firstName}</td>
+                                  <td className="result-word" key={index}> {val.lastName}</td>
+                                  <td className="result-word" key={index}> {val.year}</td>
+                                  <td><button  className="add-icon"><FontAwesomeIcon onClick = {() => {this.AddStudent(val.user_id)}} type ="submit" icon={faUserPlus} size = "3x" color="green" /> </button></td> 
+                                  
+                              
+                              
+                           
+                              
+                          </tr>
+                          
+                  
+                          
+                  );
+                })
+              }
+            </tbody>
+            </table>
+          );
+        
+    }
+
+    submitSearchText()
+
+    {
+
+        let currentComponent = this;
+
+        console.log(this.state.userSearchString)
+
+        fetch('http://localhost:16648/api/Student/FindRoommateInfo/' + this.state.userSearchString, {
+
+            mode: 'cors', // this cannot be 'no-cors'
+
+            headers: {                
+
+                'Content-Type': 'application/json',
+
+                'Accept': 'application/json',
+
+            },
+
+            method: 'POST',
+
+        }).then(res=>res.clone().json())
+
+        .then(function(res) {
+
+           
+
+           const studentArray = currentComponent.state.studentList.slice();
+
+           console.log("studentArray before filling: " + studentArray)
+
+           var i;
+            for( i = 0; i < res.length; i++)
+
+             {
+
+                 console.log("firstname: " + res[0].firstName)
+
+                 console.log("lastname: " + res[0].lastName)
+
+                 console.log("year: " + res[0].year)
+                 currentComponent.setState({user_id: res[i].user_id})
+                 currentComponent.setState({firstName: res[i].firstName})
+                 currentComponent.setState({lastName: res[i].lastName})
+                 currentComponent.setState({year: res[i].year})
+>>>>>>> parent of 0044783 (Merge branch 'master' into Jack)
 
     fetch(
       "http://localhost:16648/api/Student/FindRoommateInfo/" +

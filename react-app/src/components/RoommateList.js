@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { Component } from "react";
 import {
   Layout,
@@ -26,6 +27,23 @@ import {
 
 //TODO import "./StudentHome.css"
 import defaultlogo from "../img/default_logo.png";
+=======
+import React, { Component } from 'react';
+import { Layout, Menu, Breadcrumb, Button, Form, Modal, Input, Card } from 'antd';
+import { Route, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux'
+import './Student.css';
+import Cookies from 'js-cookie';
+import DormSelection from './DormSelection'
+import StudentHome from './StudentHome'
+import RoommateSelection from './RoommateSelection'
+import StudentInfo from './StudentInfo'
+import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+
+//TODO import "./StudentHome.css"
+import defaultlogo from '../img/default_logo.png'
+>>>>>>> parent of 0044783 (Merge branch 'master' into Jack)
 const { Meta } = Card;
 
 const { SubMenu } = Menu;
@@ -84,6 +102,7 @@ export default class RoommateList extends Component {
     }
   }
 
+<<<<<<< HEAD
   addItem() {
     const newstudentObj = {
       username: this.state.studentName,
@@ -97,6 +116,75 @@ export default class RoommateList extends Component {
     console.log("New-Object " + newstudentObj.username);
 
     let newStudentlist = this.state.studentlist;
+=======
+    addItem() {
+
+        const newstudentObj = { username: this.state.studentName, studentID: this.state.studentID, firstname: this.state.firstname, lastname: this.state.lastname }
+      
+        console.log("New-Object " + newstudentObj.username)
+       
+        let newStudentlist = this.state.studentlist;
+
+       for (var i = 0; i < newStudentlist.length; i++)
+       {
+          console.log('New Student List');
+           console.log('-----------------------------');
+           console.log(newStudentlist[i].username);
+           console.log('-----------------------------\n');
+       }
+        console.log( newStudentlist.push(newstudentObj))
+       
+        for (var i = 0; i < this.state.studentlist.length; i++)
+        {
+            console.log('The State List');
+            console.log('-----------------------------');
+            console.log(this.state.studentlist[i].username);
+            console.log('-----------------------------');
+        }
+
+           
+         this.setState({
+             studentlist: newStudentlist
+          });
+          
+
+      }
+
+    state = {
+        showModal: false
+    }
+    
+    listPendingItems() {
+        let studentlist = this.state.studentlist;
+       
+        return (
+            <div>
+            {
+              studentlist.map((val, index) => {
+                return (
+                    <Card className="Roommate1" //Create a card for each roommate with the appropriate information
+                    hoverable
+                    title="PENDING"
+                    cover={<img alt="example" src={defaultlogo}/> }>   
+                    <p>{val.firstname} {val.lastname}</p>
+                    <p>{val.username}</p>
+                    <p>{val.studentID}</p>
+                    <p><Button danger onClick={() => {
+
+                        this.DeletePending(val.studentID);
+
+                          }} type="primary" htmlType="Delete">
+                              Delete
+                          </Button></p>
+                </Card>
+                );
+              })
+            }   
+            </div>    
+        );
+        
+    }
+>>>>>>> parent of 0044783 (Merge branch 'master' into Jack)
 
     for (var i = 0; i < newStudentlist.length; i++) {
       console.log("New Student List");
@@ -126,6 +214,7 @@ export default class RoommateList extends Component {
     let studentlist = this.state.studentlist;
 
     return (
+<<<<<<< HEAD
       <div>
         {studentlist.map((val, index) => {
           return (
@@ -167,6 +256,13 @@ export default class RoommateList extends Component {
           <div className="resultsBox">{this.listItems()}</div>
         </div>
       </div>
+=======
+      <div className="StudentHomeBox-right">
+          <div className="pendingResultsList">
+                            { this.listPendingItems() }
+                        </div>
+                </div>
+>>>>>>> parent of 0044783 (Merge branch 'master' into Jack)
     );
   }
 }
