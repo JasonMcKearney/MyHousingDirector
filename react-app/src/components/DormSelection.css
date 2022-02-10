@@ -49,7 +49,6 @@
 }
 
 .dormSelect .ant-btn:active {
-<<<<<<< HEAD
   color: #47f84e;
   border-color: #47f84e;
 }
@@ -71,7 +70,6 @@
 .steps-content-info img {
   display: block;
   width: 100%;
-=======
     color: #47F84E;
     border-color: #47F84E;
 }
@@ -80,5 +78,5 @@
     color: #47F84E;
     border-color: #47F84E;
     background: #fff;
->>>>>>> parent of 0044783 (Merge branch 'master' into Jack)
+
 }
