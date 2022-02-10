@@ -11,6 +11,7 @@ import {
     Descriptions,
 } from "antd";
 import Cookies from "js-cookie";
+import dormpic from "../img/dorm.png";
 import "./DormSelection.css";
 
 const { Step } = Steps;
@@ -41,7 +42,10 @@ export default class DormSelection extends Component {
         this.state = {
             current: 0,
             // 空白处内容展示
-            currentDescriptions: '',
+            currentDescriptions: {
+                desc: "description",
+                imgSrc: dormpic,
+            },
             hyperlink: '',
             dorm: '',
             image1: '',
@@ -61,7 +65,7 @@ export default class DormSelection extends Component {
         let currentComponent = this;
         // Empty the array, if user goes back to select floor, will not show duplicates
 
-        fetch('http://localhost:16648/api/Student/FindBuildingInfo/', {
+        /*fetch('http://localhost:16648/api/Student/FindBuildingInfo/', {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {
                 'Content-Type': 'application/json',
@@ -87,7 +91,7 @@ export default class DormSelection extends Component {
                 }
                 // Update the buildingData Object array
                 currentComponent.setState({ buildingData: newArray })
-            })
+            })*/
     }
 
     // Get dorm info from Database when the component is rendered
@@ -431,6 +435,7 @@ export default class DormSelection extends Component {
             showModal,
         } = this.state;
         return (
+            <div className="Student-page-background">
             <div className="dormSelect">
                 <Modal
                     footer={null}
@@ -622,11 +627,11 @@ export default class DormSelection extends Component {
                             flex: 1,
                         }}
                     >
-                        <div className='.divSpacing'>{currentDescriptions}</div>
-                        <div classname='.divSpacing'>{hyperlink}</div>
-                        <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
-
-                    </div>
+                            <div className="steps-content-info-words">
+                                {this.state.currentDescriptions.desc}
+                            </div>
+                            <img src={this.state.currentDescriptions.imgSrc} />
+                        </div>
                 </div>
                 <div className="steps-action">
                     {current < steps.length - 1 && (
@@ -646,7 +651,8 @@ export default class DormSelection extends Component {
                         </Button>
                     )}
                 </div>
-            </div>
+                </div>
+                </div>
         );
     }
 }
