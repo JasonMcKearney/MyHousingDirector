@@ -95,7 +95,7 @@ class LogIn extends Component {
                         pwd: this.state.password
                     });
                     // Bring to student page
-                    this.props.history.push('/Student')
+                    this.props.history.push('/Student/home')
                 }
             })
 

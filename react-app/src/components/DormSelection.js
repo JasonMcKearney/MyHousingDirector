@@ -1,496 +1,454 @@
-﻿import React, { Component } from 'react';
+﻿import React, { Component } from "react";
 import {
-    Steps,
-    Button,
-    message,
-    Radio,
-    Modal,
-    Form,
-    Select,
-    Input,
-    Descriptions,
+  Steps,
+  Button,
+  message,
+  Radio,
+  Modal,
+  Form,
+  Select,
+  Input,
+  Descriptions,
 } from "antd";
 import Cookies from "js-cookie";
+
+import dormpic from "../img/dorm.png";
 import "./DormSelection.css";
 
 const { Step } = Steps;
 
 // What section the user is at currently
 const steps = [
-    {
-        title: "Dorm",
-        content: "First-content",
-    },
-    {
-        title: "Floor",
-        content: "Second-content",
-    },
-    {
-        title: "Room",
-        content: "Last-content",
-    },
+  {
+    title: "Dorm",
+    content: "First-content",
+  },
+  {
+    title: "Floor",
+    content: "Second-content",
+  },
+  {
+    title: "Room",
+    content: "Last-content",
+  },
 ];
 
 const { Option } = Select;
 
 export default class DormSelection extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        // Initializing the state
-        this.state = {
-            current: 0,
-            // 空白处内容展示
-            currentDescriptions: '',
-            hyperlink: '',
-            dorm: '',
-            image1: '',
-            image2: '',
-            floor: '',
-            room: '',
-            buildingData: [],
-            floorData: [],
-            roomData: [],
-            showModal: false,
+    // Initializing the state
+    this.state = {
+      current: 0,
+      // 空白处内容展示
+      currentDescriptions: {
+        desc: "description",
+        imgSrc: dormpic,
+      },
+      dorm: "",
+      floor: "",
+      room: "",
+      buildingData: [],
+      floorData: [],
+      roomData: [],
+      showModal: false,
+    };
+  }
+
+  // Find Building that dorm will be in
+  // https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
+  findBuildingInfo() {
+    let currentComponent = this;
+    // Empty the array, if user goes back to select floor, will not show duplicates
+
+    // fetch('http://localhost:16648/api/Student/FindBuildingInfo/', {
+    //     mode: 'cors', // this cannot be 'no-cors'
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Accept': 'application/json',
+    //     },
+    //     method: 'GET',
+    // }).then(res => res.clone().json())
+    //     .then(function (res) {
+    //         const newArray = currentComponent.state.buildingData.slice(); // Create a copy of the array in state
+    //         var i;
+    //         // Loop through each object taht is in JSON
+    //         for (i = 0; i < res.length; i++) {
+    //             let obj = {
+    //                 label: res[i].name,
+    //                 value: res[i].name,
+    //                 description: res[i].description,
+    //                 url: res[i].url,
+    //                 dormID: res[i].dorm_id,
+    //             }
+    //             newArray.push(obj)  // Push the object
+    //         }
+    //         // Update the buildingData Object array
+    //         currentComponent.setState({ buildingData: newArray })
+    //     })
+  }
+
+  // Get dorm info from Database when the component is rendered
+  componentDidMount() {
+    this.findBuildingInfo();
+  }
+
+  handleDorm = (val) => {
+    this.setState({ dorm: val });
+  };
+
+  handleFloor = (val) => {
+    this.setState({ floor: val });
+  };
+
+  handleRoom = (val) => {
+    this.setState({ room: val });
+  };
+
+  findFloorInfo() {
+    let currentComponent = this;
+
+    console.log("this.state.floorData.length: " + this.state.floorData.length);
+    this.state.floorData.length = 0;
+
+    fetch("http://localhost:16648/api/Student/findFloorInfo/", {
+      mode: "cors", // this cannot be 'no-cors'
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        dorm_id: Cookies.get("buildingID"),
+        // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
+        numRoommates: 2,
+      }),
+    })
+      .then((res) => res.clone().json())
+      .then(function (res) {
+        const newArray = currentComponent.state.floorData.slice(); // Create a copy of the array in state
+        var loopData = "";
+        var i;
+        // Loop through each object that is in JSON
+        for (i = 0; i < res.length; i++) {
+          let obj2 = {
+            label: res[i].floorNumber,
+            value: res[i].floorNumber,
+            dormID: currentComponent.state.dorm,
+          };
+          newArray.push(obj2); // Push the object
         }
-    }
+        // Update the floorData Object array
+        currentComponent.setState({ floorData: newArray });
+      });
+    console.log("this.state.floorData.length: " + this.state.floorData.length);
+  }
 
-    // Reference: https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
-    // Find Building that dorm will be in 
-    findBuildingInfo() {
-        let currentComponent = this;
-        // Empty the array, if user goes back to select floor, will not show duplicates
+  findRoomInfo() {
+    let currentComponent = this;
+    currentComponent.state.roomData.length = 0;
+    fetch("http://localhost:16648/api/Student/FindRoomInfo", {
+      mode: "cors", // this cannot be 'no-cors'
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        dorm_id: Cookies.get("buildingID"),
+        floorNumber: this.state.floor,
+        // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
+        numRoommates: 2,
+      }),
+    })
+      .then((res) => res.clone().json())
+      .then(function (res) {
+        const newArray = currentComponent.state.roomData.slice(); // Create a copy of the array in state
+        var i;
+        for (i = 0; i < res.length; i++) {
+          let obj2 = {
+            // Below represent an object that contains most of the fields in the room_tbl in a list. Can access roomNumber by doing "this.state.roomData[0].value"
+            label: res[i].roomNumber,
+            value: res[i].roomNumber,
+            roomID: res[i].room_id,
+            maxOccupants: res[i].maxOccupants,
+            description: res[i].roomDescription,
+          };
 
-        fetch('http://localhost:16648/api/Student/FindBuildingInfo/', {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'GET',
-        }).then(res => res.clone().json())
-            .then(function (res) {
-                const newArray = currentComponent.state.buildingData.slice(); // Create a copy of the array in state
-                var i;
-                // Loop through each object taht is in JSON
-                for (i = 0; i < res.length; i++) {
-                    let obj = {
-                        label: res[i].name,
-                        value: res[i].name,
-                        description: res[i].description,
-                        url: res[i].url,
-                        dormID: res[i].dorm_id,
-                        buildingImage1: res[i].image1,
-                        buildingImage2: res[i].image2
-                    }
-                    newArray.push(obj)  // Push the object
-                }
-                // Update the buildingData Object array
-                currentComponent.setState({ buildingData: newArray })
-            })
-    }
+          console.log("RoomNumber: " + res[i].roomNumber);
+          newArray.push(obj2); // Push the object
+        }
+        // Update the roomData Object array
+        currentComponent.setState({ roomData: newArray });
+      });
+  }
 
-    // Get dorm info from Database when the component is rendered
-    componentDidMount() {
-        this.findBuildingInfo();
-    }
+  next = () => {
+    let { current, dorm, floor, buildingData, floorData, room, roomData } =
+      this.state;
 
-    handleDorm = (val) => {        
-        console.log("HandleDorm method:  " + val)
-        this.setState({ dorm: val });
-    };
+    if (current == 0) {
+      if (!dorm) {
+        message.error("You Must Select a Dorm!");
+        return;
+      }
+      // User already selected the dorm
+      else {
+        var counter = 0;
+        var bLoop = true;
+        while (bLoop) {
+          // Check if the user can select the floor
+          if (buildingData[counter].value == dorm) {
+            var id = buildingData[counter].dormID;
+            bLoop = false;
+          } else {
+            counter++;
+          }
+        }
+        Cookies.set("buildingID", buildingData[counter].dormID);
 
-
-    handleFloor = (val) => {
-        this.setState({ floor: val });
-    };
-
-    handleRoom = (val) => {
-        this.setState({ room: val });
-    };
-
-
-    findFloorInfo() {
-        let currentComponent = this;    
-
-        console.log("this.state.floorData.length: " + this.state.floorData.length)
-        this.state.floorData.length = 0;
-
-        fetch('http://localhost:16648/api/Student/findFloorInfo/', {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                dorm_id: Cookies.get("buildingID"),
-                // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
-                numRoommates: 1
-            })
-        }).then(res => res.clone().json())
-            .then(function (res) {
-                const newArray = currentComponent.state.floorData.slice(); // Create a copy of the array in state
-                var loopData = ''
-                var i;
-                // Loop through each object that is in JSON
-                for (i = 0; i < res.length; i++) {
-                    let obj2 = {
-                        label: res[i].floorNumber,
-                        value: res[i].floorNumber,
-                        dormID: currentComponent.state.dorm,
-                    }
-                    newArray.push(obj2)  // Push the object
-                }
-                // Update the floorData Object array
-                currentComponent.setState({ floorData: newArray })
-            })
-            console.log("this.state.floorData.length: " + this.state.floorData.length)
-    }
-
-    findRoomInfo() {
-        let currentComponent = this;
-        currentComponent.state.roomData.length = 0;
-        fetch('http://localhost:16648/api/Student/FindRoomInfo', {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                dorm_id: Cookies.get("buildingID"),
-                floorNumber: this.state.floor,
-// ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
-                numRoommates: 1
-            })
-        }).then(res => res.clone().json())
-            .then(function (res) {
-                const newArray = currentComponent.state.roomData.slice(); // Create a copy of the array in state
-                var i;
-                for (i = 0; i < res.length; i++) {
-                    let obj2 = {
-                        // Below represent an object that contains most of the fields in the room_tbl in a list. Can access roomNumber by doing "this.state.roomData[0].value"
-                        label: res[i].roomNumber,
-                        value: res[i].roomNumber,
-                        roomID: res[i].room_id,
-                        maxOccupants: res[i].maxOccupants,
-                        description: res[i].roomDescription,
-                        roomImage1: res[i].image1,
-                        roomImage2: res[i].image2
-                    }
-
-                    console.log("RoomNumber: " + res[i].roomNumber);
-                    newArray.push(obj2)  // Push the object
-                }
-                // Update the roomData Object array
-                currentComponent.setState({ roomData: newArray })
-            })
-    }
-
-    next = () => {
-        let { current, dorm, floor, buildingData, floorData, room, roomData } = this.state;
-        
-        if (current == 0) {
-            if (!dorm) {
-                message.error("You Must Select a Dorm!");
-                return;
-            }
-            // User already selected the dorm
-            else {
-                var counter = 0;
-                var bLoop = true;
-                while (bLoop) {
-                    // Check if the user can select the floor
-                    if (buildingData[counter].value == dorm) {
-                        var id = buildingData[counter].dormID;
-                        bLoop = false;
-                    }
-                    else {
-                        counter++;
-                    }
-                }
-                Cookies.set("buildingID", buildingData[counter].dormID)
-                
-/*                this.setState((preState) => {
+        /*                this.setState((preState) => {
                     return {
                         current: preState.current + 1,
                     };
                 });
-*/                
-                this.setState({ current: this.state.current + 1 }, () => {
-                    console.log(this.state.current, 'in next(): current: ');
-                });            
-            }
-        }
+*/
+        this.setState({ current: this.state.current + 1 }, () => {
+          console.log(this.state.current, "in next(): current: ");
+        });
+      }
+    }
 
-        this.findFloorInfo();
-        if (current == 1 || Cookies.get("buildingID") != '') {
-            if (!floor) {
-                this.state.description = "";
-                message.error("You Must Select a Floor!");
-                return;
-            }
-/*            this.setState((preState) => {
+    this.findFloorInfo();
+    if (current == 1 || Cookies.get("buildingID") != "") {
+      if (!floor) {
+        message.error("You Must Select a Floor!");
+        return;
+      }
+      /*            this.setState((preState) => {
                 return {
                     current: preState.current + 1,
                 };
             });
 */
-            this.setState({ current: this.state.current + 1 }, () => {
-                console.log(this.state.current, 'in next(): current: ');
-            });                        
-        }
+      this.setState({ current: this.state.current + 1 }, () => {
+        console.log(this.state.current, "in next(): current: ");
+      });
+    }
 
-        this.findRoomInfo();
-        if (current == 2 || floorData.length > 0) {
-            if (!room) {
-                message.error("You Must Select a Room to Continue!");
-                return;
-            }
-/*            this.setState((preState) => {
+    this.findRoomInfo();
+    if (current == 2 || floorData.length > 0) {
+      if (!room) {
+        message.error("You Must Select a Room to Continue!");
+        return;
+      }
+      /*            this.setState((preState) => {
                 return {
                     current: preState.current + 1,
                 };
             });
-*/        
-        }
-    };
+*/
+    }
+  };
 
-    prev = () => {
-        console.log("State of Current in prev: " + this.state.current)
-/*        this.setState((preState) => {
+  prev = () => {
+    console.log("State of Current in prev: " + this.state.current);
+    /*        this.setState((preState) => {
             return {
                 current: preState.current - 1,
             };
         });
 */
-        this.setState({ current: this.state.current - 1 }, () => {
-            console.log(this.state.current, 'dealersOverallTotal1');
-          }); 
+    this.setState({ current: this.state.current - 1 }, () => {
+      console.log(this.state.current, "dealersOverallTotal1");
+    });
 
-        console.log("State of current - 1 : " + this.state.current)
-    };
+    console.log("State of current - 1 : " + this.state.current);
+  };
 
+  // User will be able to submit their form for approval by an administrator
+  submitForm() {
+    fetch("http://localhost:16648/api/Student/SubmitDormApproval", {
+      mode: "cors", // this cannot be 'no-cors'
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        // Dorm_id is the building id
+        dorm_id: Cookies.get("buildingID"),
+        // Value represents the room_id
+        roomNumber: this.state.room,
+        floorNumber: this.state.floor,
+        studentName: Cookies.get("username"),
+        student_id: Cookies.get("ID"),
+      }),
+    })
+      .then((Response) => Response.json())
+      .then((result) => {
+        if (result.status == "Invalid") {
+          alert(result.message);
+        } else {
+          this.props.history.push("/Student/home");
+          alert(result.message);
+        }
+      });
+  }
 
-    // User will be able to submit their form for approval by an administrator
-    submitForm()
-    {
-        fetch('http://localhost:16648/api/Student/SubmitDormApproval', {
-            mode: 'cors', // this cannot be 'no-cors'
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                // Dorm_id is the building id
-                dorm_id: Cookies.get("buildingID"),
-                // Value represents the room_id
-                roomNumber: this.state.room,     
-                floorNumber: this.state.floor,           
-                studentName: Cookies.get("username"),
-                student_id: Cookies.get("ID"),
-                 // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
-                 numRoommates: 1
-            })
-        }).then((Response) => Response.json())
-        .then((result) => {
-            if (result.status == "Invalid")
-            {
-                alert(result.message);   
-            }
-            else 
-            {
-                this.props.history.push('/Student/home')
-                alert(result.message);   
-            }  
-        })
+  done = () => {
+    let { room } = this.state;
+    let { showModal } = this.state;
+    if (!room) {
+      message.error("You Must Select a Room to Submit!");
+      return;
     }
+    this.setState({
+      showModal: true,
+    });
+  };
 
-    done = () => {
-        let { room } = this.state;
-        let { showModal } = this.state;
-        if (!room) {
-            message.error("You Must Select a Room to Submit!");
-            return;
+  // 请求接口
+  getData = ({ id, name }) => {
+    if (name == "dorm") {
+      var bEnd = true;
+      var nCounter = 0;
+      var sToPrint;
+      while (bEnd) {
+        // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
+        if (this.state.buildingData[nCounter].value === id) {
+          bEnd = false;
+          sToPrint = `${
+            this.state.buildingData[nCounter].description +
+            "\nURL: " +
+            this.state.buildingData[nCounter].url
+          }`;
         }
-        this.setState({
-            showModal: true,
-        });
-    };
-
-    // 请求接口
-    getData = ({ id, name }) => {
-        console.log(name)
-        if (name == "dorm") {
-            var bEnd = true;
-            var nCounter = 0;
-            var sToPrint = ''
-            var url = ''
-            var imagePath1 = ''
-            while(bEnd)
-            {
-                // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
-                if(this.state.buildingData[nCounter].value === id)
-                {   
-                    bEnd = false;
-                    //sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
-                    sToPrint = `${this.state.buildingData[nCounter].description}`;
-                    url = `Hyperlink: ${this.state.buildingData[nCounter].url}`
-                    console.log("getData line 335: " + url)
-                    // imagePath is images/...  created Images folder in public folder, so do not need to import every image
-                    imagePath1 = `${this.state.buildingData[nCounter].buildingImage1 }`
-                    //imagePath1 = `${buildingImage1 }`
-
-                }
-                nCounter++;                
-            }
-            return{                    
-                desc: sToPrint,
-                url,
-                imagePath1
-            };
+        nCounter++;
+      }
+      return {
+        desc: sToPrint,
+      };
+    } else if (name == "floor") {
+      return {
+        desc: "Nothing to show as of now...",
+      };
+    } else {
+      var bEnd = true;
+      var nCounter = 0;
+      var sToPrint;
+      while (bEnd) {
+        // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
+        console.log(this.state.roomData[nCounter].value + " id: " + id);
+        if (this.state.roomData[nCounter].value === id) {
+          bEnd = false;
+          sToPrint = `${this.state.roomData[nCounter].description}`;
         }
-        else if (name == "floor") {
-            return{
-               desc: 'Nothing to show as of now...'
-             };
-        }
-        // Get room data
-        else {
-            var bEnd = true;
-            var nCounter = 0;
-            var sToPrint
-            while(bEnd)
-            {
-                // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
-                console.log(this.state.roomData[nCounter].value + " id: " + id)
-                if(this.state.roomData[nCounter].value === id)
-                {   
-                    bEnd = false;
-                    sToPrint = `${this.state.roomData[nCounter].description}`
-                    imagePath1 = `${this.state.roomData[nCounter].roomImage1 }`
-                }
-                nCounter++;                
-            }
-            return{
-               desc: sToPrint,
-               imagePath1
-            };
-        }
-    };
+        nCounter++;
+      }
+      return {
+        desc: sToPrint,
+      };
+    }
+  };
 
-    onChange = (val, stateKey) => {
-        console.log("Line 372, Value in onchange: " + val + " statekey: " + stateKey)
-        // statekey represents what value is being changed, dorm when switching dropdown box
-        this.setState({
-            // Returns the state hash for the root node of the wrapper. 
-            // Optionally pass in a prop name and it will return just that value.
-            [stateKey]: val
-        });
+  onChange = (val, stateKey) => {
+    this.setState({
+      [stateKey]: val,
+    });
 
-        // 请求接口，以渲染右侧空白处 or Request interface to render right margin
-        // getData is a function on line 322. Return an object in JSON
-        const res = this.getData({ id: val, name: stateKey });
+    // 请求接口，以渲染右侧空白处
+    const res = this.getData({ id: val, name: stateKey });
+    this.setState({
+      currentDescriptions: res,
+    });
+  };
 
-        // Check value of res, without JSON.stringify will write [object object] you are alerting instance of an object
-        console.log("Line 385, res in onChange: " + JSON.stringify(res.desc))
-        console.log("Line 386, imagePath1 in onChange: " + res.imagePath1)
+  onFinish = (values) => {
+    // 校验成功
+    console.log("Success:", values);
+  };
 
-        this.setState({
-            currentDescriptions: res.desc,
-            hyperlink: res.url,
-            image1: res.imagePath1
-        })
-    };
+  onFinishFailed = (errorInfo) => {
+    // 校验失败
+    console.log("Failed:", errorInfo);
+  };
 
-    onFinish = (values) => {
-        // 校验成功
-        console.log("Success:", values);
-    };
+  render() {
+    let {
+      current,
+      dorm,
+      floor,
+      room,
+      buildingData,
+      floorData,
+      roomData,
+      showModal,
+    } = this.state;
+    return (
+      <div className="Student-page-background">
+        <div className="dormSelect">
+          <Modal
+            footer={null}
+            title="Confirm Your Information"
+            visible={showModal}
+            onOk={() => {}}
+            onCancel={() => {
+              this.setState({
+                showModal: false,
+              });
+            }}
+          >
+            <>
+              <Descriptions title="Room Info">
+                <Descriptions.Item label="Dorm">{dorm}</Descriptions.Item>
+                <Descriptions.Item label="Floor">{floor}</Descriptions.Item>
+                <Descriptions.Item label="Room">{room}</Descriptions.Item>
+              </Descriptions>
+              <Descriptions title="User Info">
+                <Descriptions.Item label="FirstName">
+                  {Cookies.get("FN")}
+                </Descriptions.Item>
+                <Descriptions.Item label="LastName">
+                  {Cookies.get("LN")}
+                </Descriptions.Item>
+                <Descriptions.Item label="Telephone">
+                  Telephone number not saved
+                </Descriptions.Item>
+                <Descriptions.Item label="StudentID">
+                  {Cookies.get("ID")}
+                </Descriptions.Item>
+              </Descriptions>
 
-    onFinishFailed = (errorInfo) => {
-        // 校验失败
-        console.log("Failed:", errorInfo);
-    };
-
-    render() {
-        let {
-            current,
-            currentDescriptions,
-            hyperlink,
-            dorm,
-            image1,
-            image2,
-            floor,
-            room,
-            buildingData,
-            floorData,
-            roomData,
-            showModal,
-        } = this.state;
-        return (
-            <div className="dormSelect">
-                <Modal
-                    footer={null}
-                    title="Confirm Your Information"
-                    visible={showModal}
-                    onOk={() => { }}
-                    onCancel={() => {
-                        this.setState({
-                            showModal: false,
-                        });
-                    }}
+              <Form.Item>
+                <Button
+                  style={{
+                    marginRight: 20,
+                  }}
+                  onClick={() => {
+                    this.props.history.push("/student/home");
+                    this.submitForm();
+                  }}
+                  type="primary"
+                  htmlType="submit"
                 >
-                    <>
-                        <Descriptions title="Room Info">
-                            <Descriptions.Item label="Dorm">{dorm}</Descriptions.Item>
-                            <Descriptions.Item label="Floor">{floor}</Descriptions.Item>
-                            <Descriptions.Item label="Room">{room}</Descriptions.Item>
-                        </Descriptions>
-                        <Descriptions title="User Info">
-                            <Descriptions.Item label="FirstName">
-                                {Cookies.get("FN")}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="LastName">
-                                {Cookies.get("LN")}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Telephone">
-                                Telephone number not saved
-                            </Descriptions.Item>
-                            <Descriptions.Item label="StudentID">
-                                {Cookies.get("ID")}
-                            </Descriptions.Item>
-                        </Descriptions>
+                  Submit
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.setState({
+                      showModal: false,
+                    });
+                  }}
+                  type="danger"
+                >
+                  Cancel
+                </Button>
+              </Form.Item>
 
-                        <Form.Item>
-                            <Button
-                                style={{
-                                    marginRight: 20,
-                                }}
-                                onClick={() => {
-                                    this.props.history.push("/student/home");
-                                    this.submitForm()
-                                }}
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                Submit
-                            </Button>
-                            <Button
-                                onClick={() => {
-                                    this.setState({
-                                        showModal: false,
-                                    });
-                                }}
-                                type="danger"
-                            >
-                                Cancel
-                            </Button>
-                        </Form.Item>
-
-                        {/* <Form
+              {/* <Form
                                 style={{
                                     top: 0,
                                     transform: 'translateY(0%)'
@@ -544,109 +502,109 @@ export default class DormSelection extends Component {
                                     </Button>
                                 </Form.Item>
                             </Form> */}
-                    </>
-                </Modal>
-                <Steps current={current}>
-                    {steps.map((item) => (
-                        <Step key={item.title} title={item.title} />
-                    ))}
-                </Steps>
-                <div
-                    style={{
-                        flex: 1,
-                        display: "flex",
-                        minHeight: 270,
-                    }}
-                    className="steps-content"
+            </>
+          </Modal>
+          <Steps current={current}>
+            {steps.map((item) => (
+              <Step key={item.title} title={item.title} />
+            ))}
+          </Steps>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              minHeight: 270,
+            }}
+            className="steps-content"
+          >
+            {current == 0 && (
+              <div>
+                <Select
+                  style={{ width: 120 }}
+                  onChange={(val) => {
+                    this.onChange(val, "dorm");
+                  }}
                 >
-                    {current == 0 && (
-                        <div>
-                            <Select
-                                style={{ width: 120 }}
-                                onChange={(val) => {
-                                    this.onChange(val, "dorm");
-                                }}
-                            >
-                                {buildingData.map((v, i) => {
-                                    return (
-                                        <Option key={i} value={v.value}>
-                                            {v.label}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>                        
-                    )}
+                  {buildingData.map((v, i) => {
+                    return (
+                      <Option key={i} value={v.value}>
+                        {v.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+            )}
 
-                    {current == 1 && (
-                        <div>
-                            <Select
-                                style={{ width: 120 }}
-                                onChange={(val) => {
-                                    this.onChange(val, "floor");
-                                }}
-                            >
-                                {floorData.map((v, i) => {
-                                    return (
-                                        <Option key={i} value={v.value}>
-                                            {v.label}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                    )}
+            {current == 1 && (
+              <div>
+                <Select
+                  style={{ width: 120 }}
+                  onChange={(val) => {
+                    this.onChange(val, "floor");
+                  }}
+                >
+                  {floorData.map((v, i) => {
+                    return (
+                      <Option key={i} value={v.value}>
+                        {v.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+            )}
 
-                    {current == 2 && (
-                        <div>
-                            <Select
-                                style={{ width: 120 }}
-                                onChange={(val) => {
-                                    this.onChange(val, "room");
-                                }}
-                            >
-                                {roomData.map((v, i) => {
-                                    return (
-                                        <Option key={i} value={v.value}>
-                                            {v.label}
-                                        </Option>
-                                    );
-                                })}
-                            </Select>
-                        </div>
-                    )}
-                    <div
-                        className="steps-content-info"
-                        style={{
-                            margin: "20px 0 10px 50px",
-                            flex: 1,
-                        }}
-                    >
-                        <div className='.divSpacing'>{currentDescriptions}</div>
-                        <div classname='.divSpacing'>{hyperlink}</div>
-                        <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
-
-                    </div>
-                </div>
-                <div className="steps-action">
-                    {current < steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.next()}>
-                            Next
-                        </Button>
-                    )}
-
-                    {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.done()}>
-                            Done
-                        </Button>
-                    )}
-                    {current > 0 && (
-                        <Button style={{ margin: "0 8px" }} onClick={() => this.prev()}>
-                            Previous
-                        </Button>
-                    )}
-                </div>
+            {current == 2 && (
+              <div>
+                <Select
+                  style={{ width: 120 }}
+                  onChange={(val) => {
+                    this.onChange(val, "room");
+                  }}
+                >
+                  {roomData.map((v, i) => {
+                    return (
+                      <Option key={i} value={v.value}>
+                        {v.label}
+                      </Option>
+                    );
+                  })}
+                </Select>
+              </div>
+            )}
+            <div
+              className="steps-content-info"
+              style={{
+                margin: "20px 0 10px 50px",
+                flex: 1,
+              }}
+            >
+              <div className="steps-content-info-words">
+                {this.state.currentDescriptions.desc}
+              </div>
+              <img src={this.state.currentDescriptions.imgSrc} />
             </div>
-        );
-    }
+          </div>
+          <div className="steps-action">
+            {current < steps.length - 1 && (
+              <Button type="primary" onClick={() => this.next()}>
+                Next
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button type="primary" onClick={() => this.done()}>
+                Done
+              </Button>
+            )}
+            {current > 0 && (
+              <Button style={{ margin: "0 8px" }} onClick={() => this.prev()}>
+                Previous
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }

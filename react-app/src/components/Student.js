@@ -139,11 +139,11 @@ class Student extends Component {
             </Form.Item>
           </div>
         </Modal>
-        <div className="Student-desc1">Southern New Hampshire University</div>
+        {/* <div className="Student-desc1">Southern New Hampshire University</div>
         <div className="Student-desc2">
           Hi User! <br />
           Welcome to Dly House Director!
-        </div>
+        </div> */}
         <Button
           onClick={() => {
             Cookies.remove("ID");
@@ -165,14 +165,7 @@ class Student extends Component {
         {/* <Content style={{ padding: "0 50px" }}> */}
         {/* <Breadcrumb style={{ margin: "40px 0" }}></Breadcrumb> */}
         {/* <Layout */}
-        <div
-          className="Student-page-background"
-          // style={{ height: "100%" }}
-        >
-          {/* <div
-                className="Student-content-background"
-                style={{ padding: 24, height: "100%" }}
-              > */}
+        {/* <div className="Student-page-background"> */}
           <Switch>
             <Route path="/student/Home" component={StudentHome} />
             <Route
@@ -183,9 +176,7 @@ class Student extends Component {
             <Route path="/student/StudentInfo" component={StudentInfo} />
             <Route path="/student/RoommateList" component={RoommateList} />
           </Switch>
-          {/* </div> */}
-        </div>
-        {/* </Content> */}
+        {/* </div> */}
         <Menu
           className="Student-nav-bar"
           mode="horizontal"
