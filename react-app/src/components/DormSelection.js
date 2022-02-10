@@ -41,7 +41,8 @@ export default class DormSelection extends Component {
         this.state = {
             current: 0,
             // 空白处内容展示
-            currentDescriptions: {},
+            currentDescriptions: '',
+            hyperlink: '',
             dorm: '',
             image1: '',
             image2: '',
@@ -54,8 +55,8 @@ export default class DormSelection extends Component {
         }
     }
 
+    // Reference: https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
     // Find Building that dorm will be in 
-    // https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
     findBuildingInfo() {
         let currentComponent = this;
         // Empty the array, if user goes back to select floor, will not show duplicates
@@ -94,13 +95,9 @@ export default class DormSelection extends Component {
         this.findBuildingInfo();
     }
 
-    //-----------------------TRYING TO GET IMAGES TO SET AND DISPLAY--------------
-    handleDorm = (val, buildingImage1) => {        
+    handleDorm = (val) => {        
         console.log("HandleDorm method:  " + val)
         this.setState({ dorm: val });
-        console.log("HandleDorm method: " + buildingImage1)
-        this.setState({ image1: buildingImage1 });
-        this.setState({ image2: val });
     };
 
 
@@ -325,6 +322,7 @@ export default class DormSelection extends Component {
             var bEnd = true;
             var nCounter = 0;
             var sToPrint
+            var url
             var imagePath1
             while(bEnd)
             {
@@ -332,13 +330,20 @@ export default class DormSelection extends Component {
                 if(this.state.buildingData[nCounter].value === id)
                 {   
                     bEnd = false;
-                    sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
+                    //sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
+                    sToPrint = `${this.state.buildingData[nCounter].description}`;
+                    url = `Hyperlink: ${this.state.buildingData[nCounter].url}`
+                    console.log("getData line 335: " + url)
+                    // imagePath is images/...  created Images folder in public folder, so do not need to import every image
                     imagePath1 = `${this.state.buildingData[nCounter].buildingImage1 }`
+                    //imagePath1 = `${buildingImage1 }`
+
                 }
                 nCounter++;                
             }
             return{                    
                 desc: sToPrint,
+                url,
                 imagePath1
             };
         }
@@ -369,7 +374,7 @@ export default class DormSelection extends Component {
     };
 
     onChange = (val, stateKey) => {
-        console.log("Line 369, Value in onchange: " + val + " statekey: " + stateKey)
+        console.log("Line 372, Value in onchange: " + val + " statekey: " + stateKey)
         // statekey represents what value is being changed, dorm when switching dropdown box
         this.setState({
             // Returns the state hash for the root node of the wrapper. 
@@ -378,20 +383,18 @@ export default class DormSelection extends Component {
         });
 
         // 请求接口，以渲染右侧空白处 or Request interface to render right margin
-        // getData is a function above return an object in JSON
+        // getData is a function on line 322. Return an object in JSON
         const res = this.getData({ id: val, name: stateKey });
 
-
         // Check value of res, without JSON.stringify will write [object object] you are alerting instance of an object
-        console.log("Line 386, res in onChange: " + JSON.stringify(res.desc))
-        console.log("Line 387, imagePath1 in onChange: " + res.imagePath1)
+        console.log("Line 385, res in onChange: " + JSON.stringify(res.desc))
+        console.log("Line 386, imagePath1 in onChange: " + res.imagePath1)
 
         this.setState({
-            currentDescriptions: res,
+            currentDescriptions: res.desc,
+            hyperlink: res.url,
+            image1: res.imagePath1
         })
-
-
-        console.log("currentDescriptions: " + this.state.currentDescriptions)
     };
 
     onFinish = (values) => {
@@ -407,6 +410,8 @@ export default class DormSelection extends Component {
     render() {
         let {
             current,
+            currentDescriptions,
+            hyperlink,
             dorm,
             image1,
             image2,
@@ -609,8 +614,16 @@ export default class DormSelection extends Component {
                             flex: 1,
                         }}
                     >
+                        <div className='divSpacing'>{currentDescriptions}</div>
+                        
+                        <div classname='divSpacing'>{hyperlink}</div>
+                        <img src={image1} classname="buildingImgProps" style={{ width: '60%', height: '60%' }} />
+                     {/*   
                         {this.state.currentDescriptions.desc}
-                        <img src={this.state.currentDescriptions.imagePath1} className="defaultlogo" style={{ width: '70%' }} />
+                        {this.state.hyperlink}
+                        <img src={(this.state.currentDescriptions.imagePath1)} classname=".buildingImgProps" style={{ width: '60%', height: '60%' }} />
+                    */}
+
                     </div>
                 </div>
                 <div className="steps-action">

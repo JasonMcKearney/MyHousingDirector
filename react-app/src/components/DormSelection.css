@@ -49,3 +49,14 @@
     border-color: #47F84E;
     background: #fff;
 }
+
+.buildingImgProps { 
+    border: none;
+    margin-top: 30%;
+    width: '60%';
+    height: '60%' 
+ }
+ 
+ .divSpacing {
+    padding-bottom: 4%;
+ }
