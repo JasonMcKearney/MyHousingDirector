@@ -175,7 +175,9 @@ export default class DormSelection extends Component {
                         value: res[i].roomNumber,
                         roomID: res[i].room_id,
                         maxOccupants: res[i].maxOccupants,
-                        description: res[i].roomDescription
+                        description: res[i].roomDescription,
+                        roomImage1: res[i].image1,
+                        roomImage2: res[i].image2
                     }
 
                     console.log("RoomNumber: " + res[i].roomNumber);
@@ -225,6 +227,7 @@ export default class DormSelection extends Component {
         this.findFloorInfo();
         if (current == 1 || Cookies.get("buildingID") != '') {
             if (!floor) {
+                this.state.description = "";
                 message.error("You Must Select a Floor!");
                 return;
             }
@@ -321,9 +324,9 @@ export default class DormSelection extends Component {
         if (name == "dorm") {
             var bEnd = true;
             var nCounter = 0;
-            var sToPrint
-            var url
-            var imagePath1
+            var sToPrint = ''
+            var url = ''
+            var imagePath1 = ''
             while(bEnd)
             {
                 // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
@@ -352,6 +355,7 @@ export default class DormSelection extends Component {
                desc: 'Nothing to show as of now...'
              };
         }
+        // Get room data
         else {
             var bEnd = true;
             var nCounter = 0;
@@ -364,11 +368,13 @@ export default class DormSelection extends Component {
                 {   
                     bEnd = false;
                     sToPrint = `${this.state.roomData[nCounter].description}`
+                    imagePath1 = `${this.state.roomData[nCounter].roomImage1 }`
                 }
                 nCounter++;                
             }
             return{
-               desc: sToPrint
+               desc: sToPrint,
+               imagePath1
             };
         }
     };
@@ -567,7 +573,7 @@ export default class DormSelection extends Component {
                                     );
                                 })}
                             </Select>
-                        </div>
+                        </div>                        
                     )}
 
                     {current == 1 && (
@@ -614,15 +620,9 @@ export default class DormSelection extends Component {
                             flex: 1,
                         }}
                     >
-                        <div className='divSpacing'>{currentDescriptions}</div>
-                        
-                        <div classname='divSpacing'>{hyperlink}</div>
-                        <img src={image1} classname="buildingImgProps" style={{ width: '60%', height: '60%' }} />
-                     {/*   
-                        {this.state.currentDescriptions.desc}
-                        {this.state.hyperlink}
-                        <img src={(this.state.currentDescriptions.imagePath1)} classname=".buildingImgProps" style={{ width: '60%', height: '60%' }} />
-                    */}
+                        <div className='.divSpacing'>{currentDescriptions}</div>
+                        <div classname='.divSpacing'>{hyperlink}</div>
+                        <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
 
                     </div>
                 </div>
@@ -632,6 +632,7 @@ export default class DormSelection extends Component {
                             Next
                         </Button>
                     )}
+
                     {current === steps.length - 1 && (
                         <Button type="primary" onClick={() => this.done()}>
                             Done

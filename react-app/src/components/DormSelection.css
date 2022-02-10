@@ -53,8 +53,8 @@
 .buildingImgProps { 
     border: none;
     margin-top: 30%;
-    width: '60%';
-    height: '60%' 
+    width: '30';
+    height: '30'; 
  }
  
  .divSpacing {

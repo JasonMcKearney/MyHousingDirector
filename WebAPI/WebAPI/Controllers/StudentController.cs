@@ -316,7 +316,7 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
                 FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and currentOccupants = 0";
+                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and currentOccupants = 0";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -329,7 +329,9 @@ namespace WebAPI.Controllers
                         room_id = reader[0].ToString(),
                         roomNumber = reader[1].ToString(),
                         roomDescription = reader[2].ToString(),
-                        maxOccupants = reader[3].ToString()
+                        maxOccupants = reader[3].ToString(),
+                        image1 = reader[4].ToString(),
+                        image2 = reader[5].ToString()
                     });
                     
                 }
