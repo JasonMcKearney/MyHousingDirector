@@ -146,6 +146,46 @@ namespace WebAPI.Controllers
             return eventData;
         }
 
+        [Route("DeleteRoommate")]
+        [HttpPost]
+        public Response DeleteRoommate(RoomRequestIds ids)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                int requestor_id = Convert.ToInt32(ids.uid);
+
+                MySqlCommand FindRecipientID = conn.CreateCommand();
+                FindRecipientID.Parameters.AddWithValue("@studentID", ids.reciever_id);
+                FindRecipientID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
+                int recipient_id = Convert.ToInt32(FindRecipientID.ExecuteScalar());
+
+
+                MySqlCommand CheckRequest = conn.CreateCommand();
+                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
+                CheckRequest.Parameters.AddWithValue("@recieverID", recipient_id);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+
+                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+
+                if (requestExsits >= 1)
+                {
+                    MySqlCommand DeleteEntry = conn.CreateCommand();
+                    DeleteEntry.Parameters.AddWithValue("@requestorID", requestor_id);
+                    DeleteEntry.Parameters.AddWithValue("@recieverID", recipient_id);
+                    DeleteEntry.CommandText = "DELETE from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+                    DeleteEntry.ExecuteNonQuery();
+                    return new Response { Status = "Delete successful", Message = "Deleted matching entry" };
+
+                }
+                else
+                {
+                    return new Response { Status = "No matching entry", Message = "There is no entry matching the parameters" };
+                }
+                   
+            }
+        }
+
         [Route("AddRoommate")]
         [HttpPost]
         public Response AddRoommate(RoomRequestIds ids)
@@ -176,7 +216,7 @@ namespace WebAPI.Controllers
                 {
                     MySqlCommand Query = conn.CreateCommand();
                     Query.CommandText = "insert into housingdirector_schema.roommates_table (roommate_ID,Requestor_ID,RequestState) VALUES (@roommateID, @requestorID, @pending)";
-                    Query.Parameters.AddWithValue("@roommateID", ids.reciever_id );
+                    Query.Parameters.AddWithValue("@roommateID", ids.reciever_id);
                     Query.Parameters.AddWithValue("@requestorID", requestor_id);
                     Query.Parameters.AddWithValue("@pending", "pending");
 
