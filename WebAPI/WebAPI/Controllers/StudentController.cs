@@ -314,9 +314,9 @@ namespace WebAPI.Controllers
 
                 FindRoomInfo.Parameters.AddWithValue("@dorm_id", paramsObj.dorm_id);
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
-                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates);
+                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates + 1);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and currentOccupants = 0";
+                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and @numRoommates <= maxOccupants and currentOccupants >= 0";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -475,7 +475,7 @@ namespace WebAPI.Controllers
                         MySqlCommand UpdateRoomOccupntsField = conn2.CreateCommand();
                         UpdateRoomOccupntsField.CommandText = "update room_tbl set currentOccupants = @currentOccupants " +
                             "where room_id = @roomid and dorm_id = @dormid and roomNumber = @roomNumber";
-                        UpdateRoomOccupntsField.Parameters.AddWithValue("@currentOccupants", nCurrentOccupants + 1);
+                        UpdateRoomOccupntsField.Parameters.AddWithValue("@currentOccupants", nCurrentOccupants + 1 + dormOccupantsTBL.numRoommates);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@dormid", dormOccupantsTBL.dorm_ID);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@roomid", dormOccupantsTBL.room_ID);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
