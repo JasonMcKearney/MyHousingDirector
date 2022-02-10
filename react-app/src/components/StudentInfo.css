@@ -1,0 +1,5 @@
+﻿.UserInfo-img {
+    display:flex;
+    width: 5px;
+    flex-direction:column;
+}
