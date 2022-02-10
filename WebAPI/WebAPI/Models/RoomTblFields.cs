@@ -21,5 +21,9 @@ namespace WebAPI.Models
 
 		public string currentOccupants { get; set; }
 
+		public string image1 { get; set; }
+
+		public string image2 { get; set; }
+
 	}
 }
