@@ -10,9 +10,8 @@ import StudentHome from './StudentHome'
 import RoommateSelection from './RoommateSelection'
 import StudentInfo from './StudentInfo'
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
-
-//TODO import "./StudentHome.css"
 import defaultlogo from '../img/default_logo.png'
+import Grid from 'antd/lib/card/Grid';
 const { Meta } = Card;
 
 const { SubMenu } = Menu;
@@ -117,29 +116,33 @@ export default class RoommateList extends Component {
         let studentlist = this.state.studentlist;
        
         return (
-            <div>
-            {
-              studentlist.map((val, index) => {
-                return (
-                    <Card className="Roommate1" //Create a card for each roommate with the appropriate information
-                    hoverable
-                    title="PENDING"
-                    cover={<img alt="example" src={defaultlogo}/> }>   
-                    <p>{val.firstname} {val.lastname}</p>
-                    <p>{val.username}</p>
-                    <p>{val.studentID}</p>
-                    <p><Button danger onClick={() => {
+
+            <div className="card-grid">
+                {
+                    
+                studentlist.map((val, index) => {
+                    return (
+                    
+                        <div className="roommate-card"
+                        
+                    >   
+                        <p>{val.firstname} {val.lastname}</p>
+                        <p>{val.username}</p>
+                        <p>{val.studentID}</p>
+                       <p><Button danger onClick={() => {
 
                         this.DeletePending(val.studentID);
 
                           }} type="primary" htmlType="Delete">
                               Delete
                           </Button></p>
-                </Card>
-                );
-              })
-            }   
-            </div>    
+                    </div>
+                    );
+                })
+                }  
+                    </div> 
+                
+
         );
         
     }
@@ -174,11 +177,13 @@ export default class RoommateList extends Component {
 
   render() {
     return (
-      <div className="StudentHomeBox-right">
-          <div className="pendingResultsList">
+
+      <div className="StudentHomeBox">
+          <div className="roommate-box">
                             { this.listPendingItems() }
+
                         </div>
-                </div>
+        </div>
     );
   }
 }

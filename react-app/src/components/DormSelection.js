@@ -41,8 +41,11 @@ export default class DormSelection extends Component {
         this.state = {
             current: 0,
             // 空白处内容展示
-            currentDescriptions: {},
+            currentDescriptions: '',
+            hyperlink: '',
             dorm: '',
+            image1: '',
+            image2: '',
             floor: '',
             room: '',
             buildingData: [],
@@ -52,8 +55,8 @@ export default class DormSelection extends Component {
         }
     }
 
+    // Reference: https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
     // Find Building that dorm will be in 
-    // https://stackoverflow.com/questions/48921992/react-js-adding-new-object-to-an-array
     findBuildingInfo() {
         let currentComponent = this;
         // Empty the array, if user goes back to select floor, will not show duplicates
@@ -77,6 +80,8 @@ export default class DormSelection extends Component {
                         description: res[i].description,
                         url: res[i].url,
                         dormID: res[i].dorm_id,
+                        buildingImage1: res[i].image1,
+                        buildingImage2: res[i].image2
                     }
                     newArray.push(obj)  // Push the object
                 }
@@ -90,7 +95,8 @@ export default class DormSelection extends Component {
         this.findBuildingInfo();
     }
 
-    handleDorm = (val) => {
+    handleDorm = (val) => {        
+        console.log("HandleDorm method:  " + val)
         this.setState({ dorm: val });
     };
 
@@ -120,7 +126,7 @@ export default class DormSelection extends Component {
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
                 // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
-                numRoommates: 2
+                numRoommates: 1
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -155,8 +161,8 @@ export default class DormSelection extends Component {
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
                 floorNumber: this.state.floor,
-                // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
-                numRoommates: 2
+// ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
+                numRoommates: 1
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -169,7 +175,9 @@ export default class DormSelection extends Component {
                         value: res[i].roomNumber,
                         roomID: res[i].room_id,
                         maxOccupants: res[i].maxOccupants,
-                        description: res[i].roomDescription
+                        description: res[i].roomDescription,
+                        roomImage1: res[i].image1,
+                        roomImage2: res[i].image2
                     }
 
                     console.log("RoomNumber: " + res[i].roomNumber);
@@ -219,6 +227,7 @@ export default class DormSelection extends Component {
         this.findFloorInfo();
         if (current == 1 || Cookies.get("buildingID") != '') {
             if (!floor) {
+                this.state.description = "";
                 message.error("You Must Select a Floor!");
                 return;
             }
@@ -281,7 +290,9 @@ export default class DormSelection extends Component {
                 roomNumber: this.state.room,     
                 floorNumber: this.state.floor,           
                 studentName: Cookies.get("username"),
-                student_id: Cookies.get("ID")
+                student_id: Cookies.get("ID"),
+                 // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
+                 numRoommates: 1
             })
         }).then((Response) => Response.json())
         .then((result) => {
@@ -311,30 +322,42 @@ export default class DormSelection extends Component {
 
     // 请求接口
     getData = ({ id, name }) => {
-        
+        console.log(name)
         if (name == "dorm") {
-                   var bEnd = true;
-                   var nCounter = 0;
-                   var sToPrint
-                   while(bEnd)
-                   {
-                       // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
-                       if(this.state.buildingData[nCounter].value === id)
-                       {   
-                           bEnd = false;
-                           sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
-                       }
-                       nCounter++;                
-                   }
-                   return{
-                      desc: sToPrint
-                    };
+            var bEnd = true;
+            var nCounter = 0;
+            var sToPrint = ''
+            var url = ''
+            var imagePath1 = ''
+            while(bEnd)
+            {
+                // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
+                if(this.state.buildingData[nCounter].value === id)
+                {   
+                    bEnd = false;
+                    //sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
+                    sToPrint = `${this.state.buildingData[nCounter].description}`;
+                    url = `Hyperlink: ${this.state.buildingData[nCounter].url}`
+                    console.log("getData line 335: " + url)
+                    // imagePath is images/...  created Images folder in public folder, so do not need to import every image
+                    imagePath1 = `${this.state.buildingData[nCounter].buildingImage1 }`
+                    //imagePath1 = `${buildingImage1 }`
+
+                }
+                nCounter++;                
+            }
+            return{                    
+                desc: sToPrint,
+                url,
+                imagePath1
+            };
         }
         else if (name == "floor") {
             return{
                desc: 'Nothing to show as of now...'
              };
         }
+        // Get room data
         else {
             var bEnd = true;
             var nCounter = 0;
@@ -347,25 +370,39 @@ export default class DormSelection extends Component {
                 {   
                     bEnd = false;
                     sToPrint = `${this.state.roomData[nCounter].description}`
+                    imagePath1 = `${this.state.roomData[nCounter].roomImage1 }`
                 }
                 nCounter++;                
             }
             return{
-               desc: sToPrint
+               desc: sToPrint,
+               imagePath1
             };
         }
     };
 
     onChange = (val, stateKey) => {
+        console.log("Line 372, Value in onchange: " + val + " statekey: " + stateKey)
+        // statekey represents what value is being changed, dorm when switching dropdown box
         this.setState({
-            [stateKey]: val,
+            // Returns the state hash for the root node of the wrapper. 
+            // Optionally pass in a prop name and it will return just that value.
+            [stateKey]: val
         });
 
-        // 请求接口，以渲染右侧空白处
+        // 请求接口，以渲染右侧空白处 or Request interface to render right margin
+        // getData is a function on line 322. Return an object in JSON
         const res = this.getData({ id: val, name: stateKey });
+
+        // Check value of res, without JSON.stringify will write [object object] you are alerting instance of an object
+        console.log("Line 385, res in onChange: " + JSON.stringify(res.desc))
+        console.log("Line 386, imagePath1 in onChange: " + res.imagePath1)
+
         this.setState({
-            currentDescriptions: res,
-        });
+            currentDescriptions: res.desc,
+            hyperlink: res.url,
+            image1: res.imagePath1
+        })
     };
 
     onFinish = (values) => {
@@ -381,7 +418,11 @@ export default class DormSelection extends Component {
     render() {
         let {
             current,
+            currentDescriptions,
+            hyperlink,
             dorm,
+            image1,
+            image2,
             floor,
             room,
             buildingData,
@@ -534,7 +575,7 @@ export default class DormSelection extends Component {
                                     );
                                 })}
                             </Select>
-                        </div>
+                        </div>                        
                     )}
 
                     {current == 1 && (
@@ -581,7 +622,10 @@ export default class DormSelection extends Component {
                             flex: 1,
                         }}
                     >
-                        {this.state.currentDescriptions.desc}
+                        <div className='.divSpacing'>{currentDescriptions}</div>
+                        <div classname='.divSpacing'>{hyperlink}</div>
+                        <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
+
                     </div>
                 </div>
                 <div className="steps-action">
@@ -590,6 +634,7 @@ export default class DormSelection extends Component {
                             Next
                         </Button>
                     )}
+
                     {current === steps.length - 1 && (
                         <Button type="primary" onClick={() => this.done()}>
                             Done
