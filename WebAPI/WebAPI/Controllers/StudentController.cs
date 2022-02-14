@@ -493,7 +493,7 @@ namespace WebAPI.Controllers
         }
         [Route("GetPendingOutboundRequests/{studentID}")]
         [HttpPost]
-        public List<studentTblFields> GetDormOccupants(int studentID)
+        public List<studentTblFields> GetPendingOutboundRequests(int studentID)
         {
             List<studentTblFields> occupants = new List<studentTblFields>();
             using (MySqlConnection conn = GetConnection())
