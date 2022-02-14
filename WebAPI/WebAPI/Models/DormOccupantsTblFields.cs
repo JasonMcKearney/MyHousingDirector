@@ -18,5 +18,6 @@ namespace WebAPI.Models
 
         // Below are not related to the table, but are needed to get the ids above and to fill this table
         public int floorNumber { get; set; }
+        public int numRoommates { get; set; }
     }
 }
