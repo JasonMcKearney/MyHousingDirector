@@ -60,3 +60,19 @@
  .divSpacing {
     padding-bottom: 4%;
  }
+
+ div.a{
+    float: left;
+  width:33.33333%;
+  text-align:left;
+ }
+ div.b{
+    float: left;
+    width:33.33333%;
+    text-align:center;
+ }
+ div.c{
+    float: left;
+ width:33.33333%;
+ text-align:right;
+ }

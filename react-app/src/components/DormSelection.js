@@ -48,6 +48,7 @@ export default class DormSelection extends Component {
             image2: '',
             floor: '',
             room: '',
+            canSubmitForm: true,
             buildingData: [],
             floorData: [],
             roomData: [],
@@ -100,7 +101,6 @@ export default class DormSelection extends Component {
         this.setState({ dorm: val });
     };
 
-
     handleFloor = (val) => {
         this.setState({ floor: val });
     };
@@ -112,7 +112,10 @@ export default class DormSelection extends Component {
 
     findFloorInfo() {
         let currentComponent = this;    
-
+         // Clear the screen of text and images
+        currentComponent.state.currentDescriptions = '';
+        currentComponent.state.image1 = '';
+        currentComponent.state.hyperlink = '';
         console.log("this.state.floorData.length: " + this.state.floorData.length)
         this.state.floorData.length = 0;
 
@@ -150,6 +153,12 @@ export default class DormSelection extends Component {
 
     findRoomInfo() {
         let currentComponent = this;
+        // Clear the screen of text and images
+        currentComponent.state.currentDescriptions = '';
+        currentComponent.state.image1 = '';
+        currentComponent.state.hyperlink = '';
+
+        // Erases data that is in the list. Allows the user to go backwards if they want to change their selection.
         currentComponent.state.roomData.length = 0;
         fetch('http://localhost:16648/api/Student/FindRoomInfo', {
             mode: 'cors', // this cannot be 'no-cors'
@@ -168,23 +177,34 @@ export default class DormSelection extends Component {
             .then(function (res) {
                 const newArray = currentComponent.state.roomData.slice(); // Create a copy of the array in state
                 var i;
-                for (i = 0; i < res.length; i++) {
-                    let obj2 = {
-                        // Below represent an object that contains most of the fields in the room_tbl in a list. Can access roomNumber by doing "this.state.roomData[0].value"
-                        label: res[i].roomNumber,
-                        value: res[i].roomNumber,
-                        roomID: res[i].room_id,
-                        maxOccupants: res[i].maxOccupants,
-                        description: res[i].roomDescription,
-                        roomImage1: res[i].image1,
-                        roomImage2: res[i].image2
+                console.log("res length: " + res.length)
+                if(res.length >= 1)
+                {
+                    for (i = 0; i < res.length; i++) {
+                        let obj2 = {
+                            // Below represent an object that contains most of the fields in the room_tbl in a list. Can access roomNumber by doing "this.state.roomData[0].value"
+                            label: res[i].roomNumber,
+                            value: res[i].roomNumber,
+                            roomID: res[i].room_id,
+                            maxOccupants: res[i].maxOccupants,
+                            description: res[i].roomDescription,
+                            roomImage1: res[i].image1,
+                            roomImage2: res[i].image2
+                        }
+                        console.log("RoomNumber: " + res[i].roomNumber);
+                        newArray.push(obj2)  // Push the object
                     }
-
-                    console.log("RoomNumber: " + res[i].roomNumber);
-                    newArray.push(obj2)  // Push the object
+                    // Update the roomData Object array
+                    currentComponent.setState({ roomData: newArray })
+                    currentComponent.setState({canSubmitForm: true});
                 }
-                // Update the roomData Object array
-                currentComponent.setState({ roomData: newArray })
+                // Lets the user know that there are no more rooms available that are large enough
+                else
+                {
+                    currentComponent.state.currentDescriptions = "No rooms are available right now! Check back later.";
+                    currentComponent.setState({room: "No rooms available!"});
+                    currentComponent.setState({canSubmitForm: false});
+                }                             
             })
     }
 
@@ -361,9 +381,10 @@ export default class DormSelection extends Component {
         else {
             var bEnd = true;
             var nCounter = 0;
-            var sToPrint
+            var sToPrint;
+            
             while(bEnd)
-            {
+            {                
                 // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
                 console.log(this.state.roomData[nCounter].value + " id: " + id)
                 if(this.state.roomData[nCounter].value === id)
@@ -375,9 +396,9 @@ export default class DormSelection extends Component {
                 nCounter++;                
             }
             return{
-               desc: sToPrint,
-               imagePath1
-            };
+            desc: sToPrint,
+            imagePath1
+            }; 
         }
     };
 
@@ -425,6 +446,7 @@ export default class DormSelection extends Component {
             image2,
             floor,
             room,
+            canSubmitForm,
             buildingData,
             floorData,
             roomData,
@@ -432,6 +454,17 @@ export default class DormSelection extends Component {
         } = this.state;
         return (
             <div className="dormSelect">
+                <div class="a">
+                    <label>{dorm}</label>
+                </div>
+
+                <div class="b">
+                    <label>{floor}</label>
+                </div>
+                <div class="c">
+                    <label>{room}</label>
+                </div>
+                
                 <Modal
                     footer={null}
                     title="Confirm Your Information"
@@ -551,6 +584,7 @@ export default class DormSelection extends Component {
                         <Step key={item.title} title={item.title} />
                     ))}
                 </Steps>
+
                 <div
                     style={{
                         flex: 1,
@@ -579,7 +613,7 @@ export default class DormSelection extends Component {
                     )}
 
                     {current == 1 && (
-                        <div>
+                        <div>                            
                             <Select
                                 style={{ width: 120 }}
                                 onChange={(val) => {
@@ -636,7 +670,8 @@ export default class DormSelection extends Component {
                     )}
 
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.done()}>
+
+                        <Button type="primary" onClick={() => this.done()} disabled={canSubmitForm == false}>
                             Done
                         </Button>
                     )}
