@@ -48,6 +48,7 @@ export default class DormSelection extends Component {
             image2: '',
             floor: '',
             room: '',
+            canSubmitForm: true,
             buildingData: [],
             floorData: [],
             roomData: [],
@@ -99,7 +100,6 @@ export default class DormSelection extends Component {
         console.log("HandleDorm method:  " + val)
         this.setState({ dorm: val });
     };
-
 
     handleFloor = (val) => {
         this.setState({ floor: val });
@@ -196,12 +196,14 @@ export default class DormSelection extends Component {
                     }
                     // Update the roomData Object array
                     currentComponent.setState({ roomData: newArray })
-                    console.log("Array size: " + newArray.length)
+                    currentComponent.setState({canSubmitForm: true});
                 }
                 // Lets the user know that there are no more rooms available that are large enough
                 else
                 {
-                    currentComponent.state.currentDescriptions = "No rooms available.";
+                    currentComponent.state.currentDescriptions = "No rooms are available right now! Check back later.";
+                    currentComponent.setState({room: "No rooms available!"});
+                    currentComponent.setState({canSubmitForm: false});
                 }                             
             })
     }
@@ -380,11 +382,14 @@ export default class DormSelection extends Component {
             var bEnd = true;
             var nCounter = 0;
             var sToPrint;
+            
             while(bEnd)
-            {
+            {                
                 // https://www.codegrepper.com/code-examples/javascript/how+to+check+date+equality+in+react
+                console.log(this.state.roomData[nCounter].value + " id: " + id)
                 if(this.state.roomData[nCounter].value === id)
                 {   
+                    bEnd = false;
                     sToPrint = `${this.state.roomData[nCounter].description}`
                     imagePath1 = `${this.state.roomData[nCounter].roomImage1 }`
                 }
@@ -441,6 +446,7 @@ export default class DormSelection extends Component {
             image2,
             floor,
             room,
+            canSubmitForm,
             buildingData,
             floorData,
             roomData,
@@ -448,6 +454,17 @@ export default class DormSelection extends Component {
         } = this.state;
         return (
             <div className="dormSelect">
+                <div class="a">
+                    <label>{dorm}</label>
+                </div>
+
+                <div class="b">
+                    <label>{floor}</label>
+                </div>
+                <div class="c">
+                    <label>{room}</label>
+                </div>
+                
                 <Modal
                     footer={null}
                     title="Confirm Your Information"
@@ -567,6 +584,7 @@ export default class DormSelection extends Component {
                         <Step key={item.title} title={item.title} />
                     ))}
                 </Steps>
+
                 <div
                     style={{
                         flex: 1,
@@ -595,7 +613,7 @@ export default class DormSelection extends Component {
                     )}
 
                     {current == 1 && (
-                        <div>
+                        <div>                            
                             <Select
                                 style={{ width: 120 }}
                                 onChange={(val) => {
@@ -652,7 +670,8 @@ export default class DormSelection extends Component {
                     )}
 
                     {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.done()}>
+
+                        <Button type="primary" onClick={() => this.done()} disabled={canSubmitForm == false}>
                             Done
                         </Button>
                     )}
