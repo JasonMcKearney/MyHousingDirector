@@ -55,6 +55,7 @@
     background: #fff;
 }
 
+
 .steps-content-info-words {
     background: rgb(238 238 238);
     border-radius: 6px;
@@ -67,3 +68,31 @@
     display: block;
     width: 100%;
 }
+
+.buildingImgProps { 
+    border: none;
+    margin-top: 30%;
+    width: '30';
+    height: '30'; 
+ }
+ 
+ .divSpacing {
+    padding-bottom: 4%;
+ }
+
+ div.a{
+    float: left;
+  width:33.33333%;
+  text-align:left;
+ }
+ div.b{
+    float: left;
+    width:33.33333%;
+    text-align:center;
+ }
+ div.c{
+    float: left;
+ width:33.33333%;
+ text-align:right;
+ }
+
