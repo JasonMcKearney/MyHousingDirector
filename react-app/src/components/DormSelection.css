@@ -82,8 +82,8 @@
 
  div.a{
     float: left;
-  width:33.33333%;
-  text-align:left;
+    width:33.33333%;
+    text-align:left;
  }
  div.b{
     float: left;
@@ -92,7 +92,6 @@
  }
  div.c{
     float: left;
- width:33.33333%;
- text-align:right;
+    width:33.33333%;
+    text-align:right;
  }
-
