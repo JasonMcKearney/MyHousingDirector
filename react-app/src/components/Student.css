@@ -19,10 +19,10 @@
 }
 
 .Student-page-background {
-  background: rgb(255 255 255);
-  margin: 100px auto 60px;
-  width: 1050px;
-  padding: 70px;
+    background: rgb(255 255 255);
+    margin: 100px auto 60px;
+    width: 1050px;
+    padding: 140px 70px;
 }
 
 .Student-page-wrap {
@@ -80,4 +80,42 @@
   position: absolute;
   right: 20px;
   top: 20px;
+}
+
+.card-grid {
+    display: grid;
+    grid: 348px 348px / repeat(3, 270px)
+}
+
+.roommate-box {
+    height: 90%;
+    width: auto;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 10px;
+    float: left;
+    font-size: 30px;
+    margin: 5px;
+}
+
+.StudentHomeBox {
+    float: left;
+}
+
+.ant-card {
+    width: 100%;
+    height: 100%;
+}
+
+.roommate-card {
+    display: grid;
+    justify-content: center;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    height: 100%;
+    width: 100%;
+    padding-right: 10%;
+    padding-left: 10%
 }

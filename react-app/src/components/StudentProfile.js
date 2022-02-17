@@ -144,6 +144,7 @@ export class StudentProfile extends Component {
         let password = this.state.password;
 
         return (
+
             <div>
                 <div className = "student-image-container">
                     <img className="student-image" src={default_logo}></img>

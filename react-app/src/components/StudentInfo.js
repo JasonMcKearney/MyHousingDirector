@@ -118,7 +118,7 @@ export default class studentinfo extends Component {
 
     render() {
         return (
-            <div>
+            <div className="Student-page-background">
                  <div classname="UserInfo-img">
                     <img src={defaultlogo} className="defaultlogo" style={{ width: '15%' }} />
                 </div>
