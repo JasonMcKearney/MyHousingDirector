@@ -46,7 +46,7 @@ export class StudentProfile extends Component {
     // Get data from student table based upon searched student username
     fetchData(){
         let currentComponent = this;
-        fetch('http://localhost:16648/api/Admin/FindStudentInfo/'+Cookies.get("student"), {
+        /*fetch('http://localhost:16648/api/Admin/FindStudentInfo/'+Cookies.get("student"), {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {                
                 'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export class StudentProfile extends Component {
             currentComponent.setState({email: res[0].email})
             currentComponent.setState({year: res[0].year})
             currentComponent.setState({password: res[0].password})
-        })
+        })*/
     }
 
     // Upon load of page, call fetchData()
@@ -144,6 +144,7 @@ export class StudentProfile extends Component {
         let password = this.state.password;
 
         return (
+
             <div>
                 <div className = "student-image-container">
                     <img className="student-image" src={default_logo}></img>
