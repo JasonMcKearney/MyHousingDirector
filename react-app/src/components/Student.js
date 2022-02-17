@@ -22,30 +22,33 @@ const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
 class Student extends Component {
-  constructor(props) {
+  constructor(props){
     super(props);
-    // fetch('http://localhost:16648/api/Student/', {
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Accept': 'application/json'
-    //         },
-    //         method: 'POST',
-    //         body: JSON.stringify({
-    //             username: Cookies.get("username")
-    //         })
-    //       }).then((Response) => Response.json())
-    //       .then((result) => {
-    //           var ID = result.studentID;
-    //           var firstName = result.firstName;
-    //           var lastName = result.lastName;
-    //           var email = result.email
+    fetch('http://localhost:16648/api/Student/', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                username: Cookies.get("username")
+            })
+          }).then((Response) => Response.json())
+          .then((result) => {
+              var ID = result.studentID;
+              var firstName = result.firstName;
+              var lastName = result.lastName;
+              var email = result.email
+              var user_id = result.user_id;
 
-    //           Cookies.set("ID", ID);
-    //           Cookies.set("FN", firstName);
-    //           Cookies.set("LN", lastName);
-    //           Cookies.set("EM", email);
-    //         })
-  }
+              Cookies.set("ID", ID);
+              Cookies.set("FN", firstName);
+              Cookies.set("LN", lastName);
+              Cookies.set("EM", email);
+              Cookies.set("UD", user_id);
+            })
+            
+    }
 
   state = {
     showModal: false,
