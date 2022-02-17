@@ -50,6 +50,7 @@ class Student extends Component {
             
     }
 
+
   state = {
     showModal: false,
     // 默认图；当请求接口后需要改变此图
@@ -206,6 +207,7 @@ class Student extends Component {
         </Menu>
         {/* <Footer style={{ textAlign: "center" }}></Footer> */}
       </div>
+
     );
   }
 }
