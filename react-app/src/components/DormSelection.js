@@ -11,6 +11,7 @@ import {
     Descriptions,
 } from "antd";
 import Cookies from "js-cookie";
+import dormpic from "../img/dorm.png";
 import "./DormSelection.css";
 
 const { Step } = Steps;
@@ -41,7 +42,7 @@ export default class DormSelection extends Component {
         this.state = {
             current: 0,
             // 空白处内容展示
-            currentDescriptions: '',
+            currentDescriptions:'',
             hyperlink: '',
             dorm: '',
             image1: '',
@@ -453,6 +454,7 @@ export default class DormSelection extends Component {
             showModal,
         } = this.state;
         return (
+            <div className="Student-page-background">
             <div className="dormSelect">
                 <div class="a">
                     <label>{dorm}</label>
@@ -656,11 +658,10 @@ export default class DormSelection extends Component {
                             flex: 1,
                         }}
                     >
-                        <div className='.divSpacing'>{currentDescriptions}</div>
+                            <div className='steps-content-info-words'>{currentDescriptions}</div>
                         <div classname='.divSpacing'>{hyperlink}</div>
                         <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
-
-                    </div>
+                        </div>
                 </div>
                 <div className="steps-action">
                     {current < steps.length - 1 && (
@@ -682,6 +683,7 @@ export default class DormSelection extends Component {
                     )}
                 </div>
             </div>
-        );
-    }
+        </div>
+    );
+}
 }
