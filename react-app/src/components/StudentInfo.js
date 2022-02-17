@@ -29,7 +29,7 @@ export default class studentinfo extends Component {
     constructor() {
         super();
 
-            fetch('http://localhost:16648/api/Student/', {
+            /*fetch('http://localhost:16648/api/Student/', {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
@@ -50,7 +50,7 @@ export default class studentinfo extends Component {
                     Cookies.set("LN", lastName);
                     Cookies.set("YR", year);
                 })
-
+*/
 
         this.state = {
             username: '',
@@ -118,7 +118,7 @@ export default class studentinfo extends Component {
 
     render() {
         return (
-            <div>
+            <div className="Student-page-background">
                  <div classname="UserInfo-img">
                     <img src={defaultlogo} className="defaultlogo" style={{ width: '15%' }} />
                 </div>

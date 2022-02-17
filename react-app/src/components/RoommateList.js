@@ -177,12 +177,13 @@ export default class RoommateList extends Component {
 
   render() {
     return (
-
-      <div className="StudentHomeBox">
+        <div className="Student-page-background">
+             <div className="StudentHomeBox">
           <div className="roommate-box">
                             { this.listPendingItems() }
 
                         </div>
+            </div>
         </div>
     );
   }
