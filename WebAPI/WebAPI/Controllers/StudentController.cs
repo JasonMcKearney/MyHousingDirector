@@ -166,9 +166,9 @@ namespace WebAPI.Controllers
                 CheckRequest.Parameters.AddWithValue("@recieverID", recipient_id);
                 CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
 
-                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
 
-                if (requestExsits >= 1)
+                if (requestExists >= 1)
                 {
                     MySqlCommand DeleteEntry = conn.CreateCommand();
                     DeleteEntry.Parameters.AddWithValue("@requestorID", requestor_id);
@@ -206,11 +206,11 @@ namespace WebAPI.Controllers
                 CheckRequest.Parameters.AddWithValue("@recieverID", ids.reciever_id);
                 CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
 
-                int requestExsits = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
 
-                if (requestExsits >= 1)
+                if (requestExists >= 1)
                 {
-                    return new Response { Status = "Request Exsists", Message = "Already requested that student" };
+                    return new Response { Status = "Request exists", Message = "Already requested that student" };
                 }
                 else
                 {
@@ -490,6 +490,86 @@ namespace WebAPI.Controllers
             }
 
             return new Response { Status = "Successful", Message = "Your selection has been saved. Please stick around for the next steps." };
+        }
+        [Route("GetPendingOutboundRequests/{studentID}")]
+        [HttpPost]
+        public List<studentTblFields> GetPendingOutboundRequests(int studentID)
+        {
+            List<studentTblFields> occupants = new List<studentTblFields>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindRoomInfo = conn.CreateCommand();
+
+                FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
+
+                FindRoomInfo.CommandText =
+                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName,"+
+                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState "+
+                    " FROM roommates_table"+
+                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.roommate_ID"+
+                    " WHERE Requestor_ID = @studentID AND RequestState = \"pending\";";
+
+                FindRoomInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    occupants.Add(new studentTblFields()
+                    {
+                        studentID = reader.GetString(3),
+                        //usernameResult = ReturnedInfo.GetString(1);
+                        firstName = reader.GetString(0),
+                        lastName = reader.GetString(1),
+                        username = reader.GetString(2),
+                        //emailResult = ReturnedInfo.GetString(4);
+                    });
+                }
+                reader.Close();
+            }
+            return occupants;
+        }
+        [Route("GetPendingInboundRequests/{studentID}")]
+        [HttpPost]
+        public List<studentTblFields> GetPendingInboundRequests(int studentID)
+        {
+            List<studentTblFields> occupants = new List<studentTblFields>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindRoomInfo = conn.CreateCommand();
+
+                FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
+
+                FindRoomInfo.CommandText =
+                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName," +
+                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState " +
+                    " FROM roommates_table" +
+                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.Requestor_ID" +
+                    " WHERE roommate_ID = @studentID AND RequestState = \"pending\";";
+
+                FindRoomInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    occupants.Add(new studentTblFields()
+                    {
+                        studentID = reader.GetString(3),
+                        //usernameResult = ReturnedInfo.GetString(1);
+                        firstName = reader.GetString(0),
+                        lastName = reader.GetString(1),
+                        username = reader.GetString(2),
+                        //emailResult = ReturnedInfo.GetString(4);
+                    });
+                }
+                reader.Close();
+            }
+            return occupants;
         }
     }
 }

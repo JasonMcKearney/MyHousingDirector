@@ -41,24 +41,6 @@
     align-items: flex-end;
 }
 
-.Roommate1 {
-    width: 100%;
-    height: 60%;
-}
-
-.Roommate2 {
-    width: 30%;
-    height: 30%;
-/*    display: flex;*/
-    justify-content: flex-end
-}
-
-.Roommate3 {
-    width: 30%;
-    height: 30%;
-/*    display: flex;*/
-    justify-content: flex-end
-}
 
 
 #searchBar{
@@ -80,7 +62,6 @@
     width: 20px;
     border-radius: 10px;
     border-width: 5px;
-    float:left
   }
   
 

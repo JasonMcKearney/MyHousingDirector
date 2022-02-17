@@ -189,7 +189,13 @@ ul{
   }
 
   
-  .icon:hover{
+   .add-icon:hover{
 
-      color:red;
+    background-color: chartreuse;
+
+  }
+  .add-icon:after{
+
+
+    background-color:black;
   }

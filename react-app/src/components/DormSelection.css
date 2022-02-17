@@ -2,52 +2,71 @@
     background: red;
 }
 
-.dormSelect .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
-    background: #47F84E !important;
+.dormSelect
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+    background: #47f84e !important;
 }
 
 .dormSelect .ant-steps-item-process .ant-steps-item-icon {
-    border-color: #47F84E;
+    border-color: #47f84e;
 }
 
 .dormSelect .ant-radio-checked .ant-radio-inner {
-    border-color: #47F84E;
+    border-color: #47f84e;
 }
 
 .dormSelect .ant-radio-inner::after {
-    background: #47F84E !important;
+    background: #47f84e !important;
 }
 
-.dormSelect .ant-radio-wrapper:hover .ant-radio, .ant-radio:hover .ant-radio-inner, .ant-radio-input:focus + .ant-radio-inner {
-    border-color: #47F84E;
+.dormSelect .ant-radio-wrapper:hover .ant-radio,
+.ant-radio:hover .ant-radio-inner,
+.ant-radio-input:focus + .ant-radio-inner {
+    border-color: #47f84e;
 }
 
 .dormSelect .ant-steps-item-finish .ant-steps-item-icon {
-    border-color: #47F84E;
+    border-color: #47f84e;
 }
 
 .dormSelect .anticon {
-    color: #47F84E;
+    color: #47f84e;
 }
 
-.dormSelect .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
-    background: #47F84E !important;
+.dormSelect
+.ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title::after {
+    background: #47f84e !important;
 }
 
 .dormSelect .ant-btn-primary {
-    border-color: #47F84E;
-    background: #47F84E;
+    border-color: #47f84e;
+    background: #47f84e;
 }
 
 .dormSelect .ant-btn:active {
-    color: #47F84E;
-    border-color: #47F84E;
+    color: #47f84e;
+    border-color: #47f84e;
 }
 
-.dormSelect .ant-btn:hover, .ant-btn:focus {
-    color: #47F84E;
-    border-color: #47F84E;
+.dormSelect .ant-btn:hover,
+.ant-btn:focus {
+    color: #47f84e;
+    border-color: #47f84e;
     background: #fff;
+}
+
+
+.steps-content-info-words {
+    background: rgb(238 238 238);
+    border-radius: 6px;
+    margin: 0 0 20px 0;
+    padding: 10px;
+    font-size: 17px;
+}
+
+.steps-content-info img {
+    display: block;
+    width: 100%;
 }
 
 .buildingImgProps { 
@@ -63,8 +82,8 @@
 
  div.a{
     float: left;
-  width:33.33333%;
-  text-align:left;
+    width:33.33333%;
+    text-align:left;
  }
  div.b{
     float: left;
@@ -73,6 +92,6 @@
  }
  div.c{
     float: left;
- width:33.33333%;
- text-align:right;
+    width:33.33333%;
+    text-align:right;
  }
