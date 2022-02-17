@@ -45,7 +45,6 @@ class Student extends Component {
             })
             
     }
-
     state = {
         showModal: false
     }
