@@ -52,9 +52,9 @@ export default class RoommateSelection extends Component {
             <table>
                 <thead>
                     <tr>
-                        <td>First Name</td>
-                        <td>Last Name</td>
-                        <td>year</td>
+                        <td className ="table-head">First Name</td>
+                        <td className ="table-head" >Last Name</td>
+                        <td className ="table-head" >year</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -75,7 +75,7 @@ export default class RoommateSelection extends Component {
                                     {" "}
                                     {val.year}
                                 </td>
-                                <td>
+                                <td className="result-word">
                                     <button className="add-icon">
                                         <FontAwesomeIcon
                                             onClick={() => {
@@ -83,7 +83,7 @@ export default class RoommateSelection extends Component {
                                             }}
                                             type="submit"
                                             icon={faUserPlus}
-                                            size="3x"
+                                            size="2x"
                                             color="green"
                                         />{" "}
                                     </button>
@@ -102,8 +102,7 @@ export default class RoommateSelection extends Component {
         console.log(this.state.userSearchString);
 
         fetch(
-            "http://localhost:16648/api/Student/FindRoommateInfo/" +
-            this.state.userSearchString,
+            "http://localhost:16648/api/Student/FindRoommateInfo/" + this.state.userSearchString,
             {
                 mode: "cors", // this cannot be 'no-cors'
 
