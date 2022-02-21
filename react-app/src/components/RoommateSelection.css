@@ -1,5 +1,6 @@
 .roommate-container{
     margin:0 auto;
+   
 }
 .container-results{
 
@@ -10,6 +11,7 @@
     margin-top: 2%;
     height: 500px;
     width: 85%;
+    background: rgba(255, 255, 255, 0.5);
 }
 .table-header{
 
@@ -88,6 +90,7 @@ float:left;
     width:100%;
     display:inline-block;
     padding-right: 10px;
+    
 }
 .add-icon{
 
@@ -189,13 +192,26 @@ ul{
   }
 
   
-   .add-icon:hover{
+   .fa-user-plus:hover{
 
-    background-color: chartreuse;
+    color: chartreuse;
 
   }
   .add-icon:after{
 
 
     background-color:black;
+  }
+  .table-head{
+
+    font-size: 24px;
+    font-style: bold;
+
+
+  }
+  .icon-cell{
+
+    border-bottom-width:2px;
+    border-color:black;
+
   }
