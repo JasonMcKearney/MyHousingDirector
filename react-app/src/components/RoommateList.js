@@ -71,6 +71,13 @@ export default class RoommateList extends Component {
                         alert("No entries match the character/characters entered.")
                 }
                 currentComponent.setState({searchResults: loopData})
+                console.log("testing commit stages");
+
+
+
+
+
+
             })
         }
     }
