@@ -24,8 +24,11 @@ export default class RoommateSelection extends Component {
         this.printResults = this.printResults.bind(this);
         this.addItemResults = this.addItemResults.bind(this);
         this.setRoommateChoice = this.setRoommateChoice.bind(this);
+        this.removeAllInfo = this.removeAllInfo.bind(this);
     }
-
+    
+    //sets the student list to empty and then calls print list function to clear the early search history
+  
     setSearchText(event) {
         this.setState({ userSearchString: event.target.value });
         console.log(this.state.userSearchString);
@@ -95,7 +98,14 @@ export default class RoommateSelection extends Component {
             </table>
         );
     }
-
+    removeAllInfo(){
+        
+        this.setState({
+            studentList: [],
+        });
+        
+        this.printResults();
+    }
     submitSearchText() {
         let currentComponent = this;
 
@@ -120,6 +130,7 @@ export default class RoommateSelection extends Component {
             .then(function (res) {
                 const studentArray = currentComponent.state.studentList.slice();
 
+                currentComponent.removeAllInfo();
                 console.log("studentArray before filling: " + studentArray);
 
                 var i;
@@ -133,7 +144,8 @@ export default class RoommateSelection extends Component {
                     currentComponent.setState({ firstName: res[i].firstName });
                     currentComponent.setState({ lastName: res[i].lastName });
                     currentComponent.setState({ year: res[i].year });
-
+                    
+                   
                     currentComponent.addItemResults();
                 }
             });
