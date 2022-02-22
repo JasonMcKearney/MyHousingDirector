@@ -7,7 +7,7 @@ import accountcreation from './Accountcreation';
 import Search from './Search';
 import './Home.css';
 import { StudentProfile } from './StudentProfile';
-
+import { AdminDashboard } from './AdminDashboard';
 
 import Homepagelogo from '../img/logo.png';
 
@@ -53,16 +53,16 @@ export class Home extends Component {
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
                                 <Link to="/home/Search">Search for user</Link>
-                            
                         </Menu.Item>
-                            <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
-                                <Link to="/home/Accountcreation">Create new user</Link>
-                                <Link to="/home/Accountcreation">Account creation</Link>
+                        
+                        <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
+                            <Link to="/home/Accountcreation">Create new user</Link>     
                         </Menu.Item>
 
-
-
-                        </Menu>
+                        <Menu.Item key="3" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
+                            <Link to="/home/AdminDashboard">My Dashboard</Link>     
+                        </Menu.Item>
+                    </Menu>
 
 
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
@@ -80,13 +80,13 @@ export class Home extends Component {
                         <Content style={{ margin: '24px 16px 0' }}>
                             <div className="Admin-content-background" style={{ padding: 24, height: '100%' }}>
                                 <Switch>
-                               
                                     <Route path='/home/Search' component = {Search} /> 
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
                                     <Route path='/home/StudentProfile' component ={StudentProfile}/>
-                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />
+                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} /> 
+                                    <Route path='./home/AdminDashboard' component ={AdminDashboard}/>                                     
                                 </Switch>
                             
                             
