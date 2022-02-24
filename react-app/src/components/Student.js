@@ -72,7 +72,31 @@ class Student extends Component {
         // style={{  background: "#eee" }}
         style={{ backgroundImage: `url(${bgPicSrc})` }}
         className="Student-page-wrap"
-      >
+        >
+            <Menu
+                className="Student-nav-bar"
+                mode="horizontal"
+                // theme="dark"
+                defaultSelectedKeys={["1"]}
+            >
+                <Menu.Item key="1">
+                    <Link className="nav-bar-label" to="/student/home">
+                        Home
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="2">
+                    <Link to="/student/DormSelect">Dorm Selection</Link>
+                </Menu.Item>
+                <Menu.Item key="3">
+                    <Link to="/student/RoommateSelect">Roommate Selection</Link>
+                </Menu.Item>
+                <Menu.Item key="4">
+                    <Link to="/student/StudentInfo">Profile</Link>
+                </Menu.Item>
+                <Menu.Item key="5">
+                    <Link to="/student/RoommateList">Roommate List</Link>
+                </Menu.Item>
+            </Menu>
         <Modal
           title="Change Your password"
           visible={showModal}
@@ -177,31 +201,7 @@ class Student extends Component {
             <Route path="/student/StudentInfo" component={StudentInfo} />
             <Route path="/student/RoommateList" component={RoommateList} />
           </Switch>
-        {/* </div> */}
-        <Menu
-          className="Student-nav-bar"
-          mode="horizontal"
-          // theme="dark"
-          defaultSelectedKeys={["1"]}
-        >
-          <Menu.Item key="1">
-            <Link className="nav-bar-label" to="/student/home">
-              Home
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <Link to="/student/DormSelect">Dorm Selection</Link>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Link to="/student/RoommateSelect">Roommate Selection</Link>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <Link to="/student/StudentInfo">Profile</Link>
-          </Menu.Item>
-          <Menu.Item key="5">
-            <Link to="/student/RoommateList">Roommate List</Link>
-          </Menu.Item>
-        </Menu>
+
         {/* <Footer style={{ textAlign: "center" }}></Footer> */}
       </div>
 
