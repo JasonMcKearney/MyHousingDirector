@@ -24,8 +24,11 @@ export default class RoommateSelection extends Component {
         this.printResults = this.printResults.bind(this);
         this.addItemResults = this.addItemResults.bind(this);
         this.setRoommateChoice = this.setRoommateChoice.bind(this);
+        this.removeAllInfo = this.removeAllInfo.bind(this);
     }
-
+    
+    //sets the student list to empty and then calls print list function to clear the early search history
+  
     setSearchText(event) {
         this.setState({ userSearchString: event.target.value });
         console.log(this.state.userSearchString);
@@ -52,9 +55,9 @@ export default class RoommateSelection extends Component {
             <table>
                 <thead>
                     <tr>
-                        <td>First Name</td>
-                        <td>Last Name</td>
-                        <td>year</td>
+                        <td className ="table-head">First Name</td>
+                        <td className ="table-head" >Last Name</td>
+                        <td className ="table-head" >year</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -75,7 +78,7 @@ export default class RoommateSelection extends Component {
                                     {" "}
                                     {val.year}
                                 </td>
-                                <td>
+                                <td className="result-word">
                                     <button className="add-icon">
                                         <FontAwesomeIcon
                                             onClick={() => {
@@ -83,7 +86,7 @@ export default class RoommateSelection extends Component {
                                             }}
                                             type="submit"
                                             icon={faUserPlus}
-                                            size="3x"
+                                            size="2x"
                                             color="green"
                                         />{" "}
                                     </button>
@@ -95,15 +98,21 @@ export default class RoommateSelection extends Component {
             </table>
         );
     }
-
+    removeAllInfo(){
+        
+        this.setState({
+            studentList: [],
+        });
+        
+        this.printResults();
+    }
     submitSearchText() {
         let currentComponent = this;
 
         console.log(this.state.userSearchString);
 
         fetch(
-            "http://localhost:16648/api/Student/FindRoommateInfo/" +
-            this.state.userSearchString,
+            "http://localhost:16648/api/Student/FindRoommateInfo/" + this.state.userSearchString,
             {
                 mode: "cors", // this cannot be 'no-cors'
 
@@ -121,6 +130,7 @@ export default class RoommateSelection extends Component {
             .then(function (res) {
                 const studentArray = currentComponent.state.studentList.slice();
 
+                currentComponent.removeAllInfo();
                 console.log("studentArray before filling: " + studentArray);
 
                 var i;
@@ -134,7 +144,8 @@ export default class RoommateSelection extends Component {
                     currentComponent.setState({ firstName: res[i].firstName });
                     currentComponent.setState({ lastName: res[i].lastName });
                     currentComponent.setState({ year: res[i].year });
-
+                    
+                   
                     currentComponent.addItemResults();
                 }
             });
