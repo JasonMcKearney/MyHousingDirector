@@ -86,10 +86,8 @@ export class Home extends Component {
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
                                     <Route path='/home/StudentProfile' component ={StudentProfile}/>
                                     <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} /> 
-                                    <Route path='./home/AdminDashboard' component ={AdminDashboard}/>                                     
+                                    <Route path='/home/AdminDashboard' component ={AdminDashboard}/>
                                 </Switch>
-                            
-                            
                             </div>
 
                         </Content>
