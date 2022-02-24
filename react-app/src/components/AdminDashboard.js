@@ -6,9 +6,9 @@ export class AdminDashboard extends Component {
   
   render() {
     return (
-      <div>
-        <h1>TEST</h1>
-      </div>
+        <div class="students-Container">
+          Student DATA
+        </div>
     );
   }
 }
