@@ -660,7 +660,7 @@ export default class DormSelection extends Component {
                     >
                             <div className='steps-content-info-words'>{currentDescriptions}</div>
                         <div classname='.divSpacing'>{hyperlink}</div>
-                        <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
+                        <img src={image1} classname=".buildingImgProps" style={{ height: '70%', width: '50%' }}/>
                         </div>
                 </div>
                 <div className="steps-action">
