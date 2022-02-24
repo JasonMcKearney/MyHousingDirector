@@ -491,11 +491,11 @@ namespace WebAPI.Controllers
 
             return new Response { Status = "Successful", Message = "Your selection has been saved. Please stick around for the next steps." };
         }
-        [Route("GetPendingOutboundRequests/{studentID}")]
+        [Route("GetOutboundRequests/{studentID}")]
         [HttpPost]
-        public List<studentTblFields> GetPendingOutboundRequests(int studentID)
+        public List<RoommateReturnObject> GetPendingOutboundRequests(int studentID)
         {
-            List<studentTblFields> occupants = new List<studentTblFields>();
+            List<RoommateReturnObject> occupants = new List<RoommateReturnObject>();
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
@@ -504,11 +504,11 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
 
                 FindRoomInfo.CommandText =
-                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName,"+
-                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState "+
+                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName," +
+                    " student_tbl.email,  roommates_table.RequestState "+
                     " FROM roommates_table"+
                     " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.roommate_ID"+
-                    " WHERE Requestor_ID = @studentID AND RequestState = \"pending\";";
+                    " WHERE Requestor_ID = @studentID;";
 
                 FindRoomInfo.ExecuteNonQuery();
 
@@ -517,25 +517,24 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    occupants.Add(new studentTblFields()
+                    occupants.Add(new RoommateReturnObject()
                     {
-                        studentID = reader.GetString(3),
-                        //usernameResult = ReturnedInfo.GetString(1);
-                        firstName = reader.GetString(0),
-                        lastName = reader.GetString(1),
-                        username = reader.GetString(2),
-                        //emailResult = ReturnedInfo.GetString(4);
+                        studentFirstName = reader.GetString(0),
+                        studentLastName = reader.GetString(1),
+                        studentEmail = reader.GetString(2),
+                        requestState = reader.GetString(3)
                     });
+                    ;
                 }
                 reader.Close();
             }
             return occupants;
         }
-        [Route("GetPendingInboundRequests/{studentID}")]
+        [Route("GetInboundRequests/{studentID}")]
         [HttpPost]
-        public List<studentTblFields> GetPendingInboundRequests(int studentID)
+        public List<RoommateReturnObject> GetPendingInboundRequests(int studentID)
         {
-            List<studentTblFields> occupants = new List<studentTblFields>();
+            List<RoommateReturnObject> occupants = new List<RoommateReturnObject>();
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
@@ -544,11 +543,11 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
 
                 FindRoomInfo.CommandText =
-                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName," +
-                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState " +
+                    "USE housingdirector_schema; SELECT student_tbl.user_id, student_tbl.firstName, student_tbl.lastName," +
+                    " student_tbl.email, roommates_table.RequestState " +
                     " FROM roommates_table" +
                     " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.Requestor_ID" +
-                    " WHERE roommate_ID = @studentID AND RequestState = \"pending\";";
+                    " WHERE roommate_ID = @studentID;";
 
                 FindRoomInfo.ExecuteNonQuery();
 
@@ -557,94 +556,12 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    occupants.Add(new studentTblFields()
+                    occupants.Add(new RoommateReturnObject()
                     {
-                        studentID = reader.GetString(3),
-                        //usernameResult = ReturnedInfo.GetString(1);
-                        firstName = reader.GetString(0),
-                        lastName = reader.GetString(1),
-                        username = reader.GetString(2),
-                        //emailResult = ReturnedInfo.GetString(4);
-                    });
-                }
-                reader.Close();
-            }
-            return occupants;
-        }
-        [Route("GetAnyAcceptedRequest/{studentID}")]
-        [HttpPost]
-        public List<studentTblFields> GetAnyAcceptedRequest(int studentID)
-        {
-            List<studentTblFields> occupants = new List<studentTblFields>();
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                MySqlCommand FindRoomInfo = conn.CreateCommand();
-
-                FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
-
-                FindRoomInfo.CommandText =
-                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName," +
-                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState " +
-                    " FROM roommates_table" +
-                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.Requestor_ID" +
-                    " WHERE (roommate_ID = @studentID OR Requestor_ID = @studentID) AND RequestState = \"accepted\";";
-
-                FindRoomInfo.ExecuteNonQuery();
-
-                // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    occupants.Add(new studentTblFields()
-                    {
-                        studentID = reader.GetString(3),
-                        //usernameResult = ReturnedInfo.GetString(1);
-                        firstName = reader.GetString(0),
-                        lastName = reader.GetString(1),
-                        username = reader.GetString(2),
-                        //emailResult = ReturnedInfo.GetString(4);
-                    });
-                }
-                reader.Close();
-            }
-            return occupants;
-        }
-        [Route("GetAnyDeclinedRequest/{studentID}")]
-        [HttpPost]
-        public List<studentTblFields> GetAnyDeclinedRequest(int studentID)
-        {
-            List<studentTblFields> occupants = new List<studentTblFields>();
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                MySqlCommand FindRoomInfo = conn.CreateCommand();
-
-                FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
-
-                FindRoomInfo.CommandText =
-                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName," +
-                    " student_tbl.username, student_tbl.studentID, roommates_table.RequestState " +
-                    " FROM roommates_table" +
-                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.Requestor_ID" +
-                    " WHERE (roommate_ID = @studentID OR Requestor_ID = @studentID) AND RequestState = \"declined\";";
-
-                FindRoomInfo.ExecuteNonQuery();
-
-                // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindRoomInfo.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    occupants.Add(new studentTblFields()
-                    {
-                        studentID = reader.GetString(3),
-                        //usernameResult = ReturnedInfo.GetString(1);
-                        firstName = reader.GetString(0),
-                        lastName = reader.GetString(1),
-                        username = reader.GetString(2),
-                        //emailResult = ReturnedInfo.GetString(4);
+                        studentFirstName = reader.GetString(0),
+                        studentLastName = reader.GetString(1),
+                        studentEmail = reader.GetString(2),
+                        requestState = reader.GetString(3)
                     });
                 }
                 reader.Close();

@@ -26,7 +26,7 @@ export default class RoommateList extends Component {
         studentID: 0,
         studentName:'',
         studentlist: [],
-        studentObj: {username:'', studentID:'', firstname:'', lastname:'', userID:''}
+        studentObj: {firstname:'', lastname:'', email:'', state:''}
     }
 }
     getResults(){
@@ -38,7 +38,7 @@ export default class RoommateList extends Component {
         if(studentListLength == 0)
         {
             // Passing parameter to Web API through address
-            fetch('http://localhost:16648/api/Student/GetPendingOutboundRequests/'+ Cookies.get("UD"), {
+            fetch('http://localhost:16648/api/Student/GetOutboundRequests/'+ Cookies.get("UD"), {
                 mode: 'cors', // this cannot be 'no-cors'
                 headers: {                
                     'Content-Type': 'application/json',
@@ -58,11 +58,13 @@ export default class RoommateList extends Component {
                     console.log("Next studentID: " + res[i].studentID)
                     if(res[i].username != "")
                     {
-                        currentComponent.setState({studentName: res[i].username})
-                        currentComponent.setState({studentID: res[i].studentID})
-                        currentComponent.setState({firstname: res[i].firstName})
-                        currentComponent.setState({lastname: res[i].lastName})
-                        currentComponent.setState({userID: res[i].user_id})
+                        //currentComponent.setState({studentName: res[i].student})
+                        //currentComponent.setState({studentID: res[i].studentID})
+                        currentComponent.setState({firstname: res[i].studentFirstName})
+                        currentComponent.setState({lastname: res[i].studentLastName})
+                        currentComponent.setState({email: res[i].studentEmail})
+                        currentComponent.setState({state: res[i].requestState})
+                        //currentComponent.setState({userID: res[i].user_id})
                         // Add student to list
                         currentComponent.addItem();
                     }
@@ -84,7 +86,7 @@ export default class RoommateList extends Component {
 
     addItem() {
 
-        const newstudentObj = { username: this.state.studentName, studentID: this.state.studentID, firstname: this.state.firstname, lastname: this.state.lastname }
+        const newstudentObj = { state: this.state.state, email: this.state.email, firstname: this.state.firstname, lastname: this.state.lastname }
       
         console.log("New-Object " + newstudentObj.username)
        
@@ -134,8 +136,8 @@ export default class RoommateList extends Component {
                         
                     >   
                         <p>{val.firstname} {val.lastname}</p>
-                        <p>{val.username}</p>
-                        <p>{val.studentID}</p>
+                        <p>{val.email}</p>
+                        <p>{val.state}</p>
                        <p><Button danger onClick={() => {
 
                         this.DeletePending(val.studentID);
