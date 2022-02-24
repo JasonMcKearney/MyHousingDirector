@@ -3,3 +3,25 @@
     width: 5px;
     flex-direction:column;
 }
+.form-wrapper{
+    width:60%;
+    height:100%;
+    margin-top:10%;
+    margin-left:10%;
+    background: rgba(255, 255, 255, 0.5);
+}
+.question-wrapper{
+
+    margin: 2vh;
+    display:flex;
+}
+.Form-Label{
+    font-weight: 600;
+    font-size:18px;
+    width: 40%;
+    text-align: right;
+}
+.form-select{
+    margin-left: 10px;
+    width: 40%;
+}
