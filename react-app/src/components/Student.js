@@ -73,6 +73,7 @@ class Student extends Component {
         style={{ backgroundImage: `url(${bgPicSrc})` }}
         className="Student-page-wrap"
         >
+            <div className = "StudentPageNavbar">
             <Menu
                 className="Student-nav-bar"
                 mode="horizontal"
@@ -96,7 +97,8 @@ class Student extends Component {
                 <Menu.Item key="5">
                     <Link to="/student/RoommateList">Roommate List</Link>
                 </Menu.Item>
-            </Menu>
+                </Menu>
+            </div>
         <Modal
           title="Change Your password"
           visible={showModal}
@@ -203,7 +205,8 @@ class Student extends Component {
           </Switch>
 
         {/* <Footer style={{ textAlign: "center" }}></Footer> */}
-      </div>
+            </div>
+
 
     );
   }

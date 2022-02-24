@@ -11,9 +11,11 @@
   margin: 16px 0 16px 24px;
 }
 
-.ant-menu-title-content {
+
+.StudentPageNavbar .ant-menu-title-content {
     font-size: 19px !important;
 }
+
 
 .Student-home-page-background {
     background: #fff;
