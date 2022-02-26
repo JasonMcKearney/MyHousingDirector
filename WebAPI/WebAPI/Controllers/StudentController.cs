@@ -656,10 +656,57 @@ namespace WebAPI.Controllers
         [HttpPost]
         public Response submitSurveyQuestions(SurveyQuestions newSurvey)
         {
+            bool surveyExsists = false;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand surveyQuestions = conn.CreateCommand();
+                surveyQuestions.Parameters.AddWithValue("@userID", newSurvey.userID);
+                surveyQuestions.CommandText = "SELECT survey_userid From survey WHERE survey_userid = @userID";
+                surveyQuestions.ExecuteNonQuery();
 
+                
+                MySqlDataReader reader = surveyQuestions.ExecuteReader();
 
+                while (reader.Read())
+                {
+                    surveyExsists = true;
+                }
+                reader.Close();
+                
+                surveyQuestions.Parameters.AddWithValue("@Question1", newSurvey.Question1);
+                surveyQuestions.Parameters.AddWithValue("@Question2", newSurvey.Question2);
+                surveyQuestions.Parameters.AddWithValue("@Question3", newSurvey.Question3);
+                surveyQuestions.Parameters.AddWithValue("@Question4", newSurvey.Question4);
+                surveyQuestions.Parameters.AddWithValue("@Question5", newSurvey.Question5);
+                surveyQuestions.Parameters.AddWithValue("@Question6", newSurvey.Question6);
+                surveyQuestions.Parameters.AddWithValue("@Question7", newSurvey.Question7);
+                surveyQuestions.Parameters.AddWithValue("@Question8", newSurvey.Question8);
+                surveyQuestions.Parameters.AddWithValue("@Question9", newSurvey.Question9);
+                surveyQuestions.Parameters.AddWithValue("@Question10", newSurvey.Question10);
+                surveyQuestions.Parameters.AddWithValue("@Question11", newSurvey.Question11);
+                surveyQuestions.Parameters.AddWithValue("@Question12", newSurvey.Question12);
+                
+                if (surveyExsists == true)
+                {
+                   
 
-             return new Response { Status = "Successful", Message = "The questions have been recieved" };
+                    surveyQuestions.CommandText = "UPDATE survey SET Question1 = @Question1, Question2 = @Question2, Question3 = @Question3," +
+                                                   "Question4 = @Question4, Question5 = @Question5, Question6 = @Question6, Question7 = @Question7," +
+                                                   "Question8 = @Question8, Question9 = @Question9, Question10 = @Question10, Question11 = @Question11," +
+                                                   "Question12 = @Question12 WHERE survey_userid = @userID;";
+
+                }
+                else
+                {
+                    surveyQuestions.CommandText = "INSERT INTO survey (Question1,  Question2,Question3,Question4,Question5,Question6,Question7,Question8,Question9,Question10,Question11,Question12,survey_userid )" +
+                                                  "VALUES (@Question1,@Question2,@Question3,@Question4, @Question5,@Question6,@Question7,@Question8, @Question9, @Question10,@Question11,@Question12,@userID);";
+                                                
+                }
+
+                surveyQuestions.ExecuteNonQuery();
+            }
+                return new Response { Status = "Successful", Message = "The questions have been recieved" };
         
         }
     }
