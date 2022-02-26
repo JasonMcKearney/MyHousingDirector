@@ -657,7 +657,10 @@ namespace WebAPI.Controllers
         public Response submitSurveyQuestions(SurveyQuestions newSurvey)
         {
 
+
+
              return new Response { Status = "Successful", Message = "The questions have been recieved" };
+        
         }
     }
 }
