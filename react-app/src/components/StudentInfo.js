@@ -131,7 +131,7 @@ export default class studentinfo extends Component {
                     </div>
 
                     <div className="question-wrapper" >
-                        <label className ="Form-Label">What time do you sleep?</label>
+                        <label className ="Form-Label">What time do you go to sleep?</label>
                         <input onChange={e => this.onChangeQuestion(e.target.value, 3)} type = "time"></input>
                     </div>
                   
