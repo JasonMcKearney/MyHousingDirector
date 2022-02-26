@@ -11,11 +11,17 @@
   margin: 16px 0 16px 24px;
 }
 
+
+.StudentPageNavbar .ant-menu-title-content {
+    font-size: 19px !important;
+}
+
+
 .Student-home-page-background {
-  background: #fff;
-  margin: 20px auto;
-  width: 700px;
-  padding: 20px;
+    background: #fff;
+    margin: 20px auto;
+    width: 700px;
+    padding: 20px;
 }
 
 .Student-page-background {
@@ -41,7 +47,7 @@
 }
 
 .Student-nav-bar {
-  margin-top: auto;
+/*  margin-top: auto;*/
   height: 70px;
   color: white;
   /* background: #011528; */
