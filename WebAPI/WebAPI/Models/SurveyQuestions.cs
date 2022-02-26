@@ -19,5 +19,6 @@ namespace WebAPI.Models
         public string Question10 { get; set; }
         public string Question11 { get; set; }  
         public string Question12 { get; set; }
+        public int userID { get; set; }
     }
 }

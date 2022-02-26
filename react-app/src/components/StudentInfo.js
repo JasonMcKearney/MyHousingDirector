@@ -113,7 +113,36 @@ export default class studentinfo extends Component {
         });
       };
 
-
+      sendQuestionUpdate()
+      {
+        fetch("http://localhost:16648/api/Student/submitSurveyQuestions", {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+               Question1: this.state.userAnswers.Question1,
+               Question2: this.state.userAnswers.Question2,
+               Question3: this.state.userAnswers.Question3,
+               Question4: this.state.userAnswers.Question4,
+               Question5: this.state.userAnswers.Question5,
+               Question6: this.state.userAnswers.Question6,
+               Question7: this.state.userAnswers.Question7,
+               Question8: this.state.userAnswers.Question8,
+               Question9: this.state.userAnswers.Question9,
+               Question10: this.state.userAnswers.Question10,
+               Question11: this.state.userAnswers.Question11,
+               Question12: this.state.userAnswers.Question12,
+               UserID: Cookies.get("ID"),
+            }),
+        })
+            .then((Response) => Response.json())
+            .then((result) => {
+                console.log("response: " + result.status);
+                alert(result.message);
+            });
+      }
     render() {
 
         

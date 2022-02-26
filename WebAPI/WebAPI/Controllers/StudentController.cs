@@ -651,5 +651,13 @@ namespace WebAPI.Controllers
             }
             return occupants;
         }
+
+        [Route("submitSurveyQuestions")]
+        [HttpPost]
+        public Response submitSurveyQuestions(SurveyQuestions newSurvey)
+        {
+
+             return new Response { Status = "Successful", Message = "The questions have been recieved" };
+        }
     }
 }
