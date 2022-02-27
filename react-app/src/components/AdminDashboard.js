@@ -27,7 +27,7 @@ export class AdminDashboard extends Component {
     }] }
 
     render() {
-      return (
+      return ( 
         <div class="container">
           <div class="totalStudents-box">
             <label style={{paddingTop:'4%'}}>Total Students on Campus</label>

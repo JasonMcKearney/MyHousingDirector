@@ -13,7 +13,6 @@ import Homepagelogo from '../img/logo.png';
 
 import Cookies from "js-cookie";
 
-
 const { Header, Content, Footer, Sider } = Layout;
 const IconFont = createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_2846432_1h7nk13g669.js',
@@ -55,16 +54,15 @@ export class Home extends Component {
 
 
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                        <Menu.Item key="1" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
+                        <Menu.Item key="1" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
+                            <Link to="/home/AdminDashboard">My Dashboard</Link>     
+                        </Menu.Item>
+                        <Menu.Item key="2" icon={<IconFont style={{ fontSize: 30 }} type="icon-zhuye" />}>
                                 <Link to="/home/Search">Search for user</Link>
                         </Menu.Item>
                         
-                        <Menu.Item key="2" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
-                            <Link to="/home/Accountcreation">Create new user</Link>     
-                        </Menu.Item>
-
                         <Menu.Item key="3" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
-                            <Link to="/home/AdminDashboard">My Dashboard</Link>     
+                            <Link to="/home/Accountcreation">Create new user</Link>     
                         </Menu.Item>
                     </Menu>
 
