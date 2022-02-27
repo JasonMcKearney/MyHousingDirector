@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import "./StudentInfo.css"
 import 'antd/dist/antd.css';
-import { Form, Input, Select, Checkbox, Button, Layout, Menu, Breadcrumb, Modal, TimePicker } from 'antd';
 import Cookies from 'js-cookie';
 import defaultlogo from '../img/default_logo.png'
-
+import Select from "react-select"
 
 const { Option } = Select;
 const tailFormItemLayout = {
