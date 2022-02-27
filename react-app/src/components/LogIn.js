@@ -84,7 +84,7 @@ class LogIn extends Component {
                                     pwd: this.state.password
                                 });
 
-                                this.props.history.push('/home')
+                                this.props.history.push('/home/AdminDashboard')
                             }
                         })
                 }
