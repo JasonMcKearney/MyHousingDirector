@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Left } from "react-bootstrap/lib/Media";
 // How to make the piechart.. https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/DoughnutWithTopNSeries/React/Light/
 // Installed PieChart by using this https://js.devexpress.com/Documentation/Guide/React_Components/Add_DevExtreme_to_a_React_Application/
 import PieChart, {
