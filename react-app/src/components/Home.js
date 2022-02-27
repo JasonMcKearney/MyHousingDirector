@@ -24,8 +24,12 @@ const UserIcon = createFromIconfontCN({
 
 export class Home extends Component {
 
-    state = { buttonState: false};
+    state = { buttonState: false, page:''};
 
+    setVariables(v){
+        this.setState(this.state.page = v);
+        console.log("Page: " + this.state.page)
+    }
     render() {
         return (
             <div className="home_leftbox">
@@ -78,18 +82,17 @@ export class Home extends Component {
                 <Layout>
                     <Header className="Admin-background" style={{ padding: 0 }} />
                         <Content style={{ margin: '24px 16px 0' }}>
-                            <div className="Admin-content-background" style={{ padding: 24, height: '100%' }}>
-                                <Switch>
+                        <div className="Admin-content-background" style={{ padding: 24, height: '100%' }}>
+                                <Switch> 
                                     <Route path='/home/Search' component = {Search} /> 
                                     <Route path='/home/Accountcreation' component={accountcreation} /> 
                                     <Route path='/home/nav3' render={() => { return (<h1>nav3</h1>) }} /> 
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
                                     <Route path='/home/StudentProfile' component ={StudentProfile}/>
-                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} /> 
-                                    <Route path='/home/AdminDashboard' component ={AdminDashboard}/>
+                                    <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />  
+                                    <Route path='/home/AdminDashboard' component ={AdminDashboard}/>                                   
                                 </Switch>
                             </div>
-
                         </Content>
 
                     <Footer style={{ textAlign: 'center' }}></Footer>
