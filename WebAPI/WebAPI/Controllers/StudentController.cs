@@ -228,6 +228,46 @@ namespace WebAPI.Controllers
             }
         }
 
+        [Route("ApproveRoommate")]
+        [HttpPost]
+        public Response ApproveRoommate(RoomRequestIds ids)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                int requestor_id = Convert.ToInt32(ids.uid);
+
+                MySqlCommand FindRecipientID = conn.CreateCommand();
+                FindRecipientID.Parameters.AddWithValue("@studentID", ids.reciever_id);
+                FindRecipientID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
+                int recipient_id = Convert.ToInt32(FindRecipientID.ExecuteScalar());
+
+
+                MySqlCommand CheckRequest = conn.CreateCommand();
+                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
+                CheckRequest.Parameters.AddWithValue("@recieverID", recipient_id);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+
+                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
+
+                if (requestExists >= 1)
+                {
+                    MySqlCommand ApproveEntry = conn.CreateCommand();
+                    ApproveEntry.Parameters.AddWithValue("@requestorID", requestor_id);
+                    ApproveEntry.Parameters.AddWithValue("@recieverID", recipient_id);
+                    ApproveEntry.CommandText = "DELETE from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+                    ApproveEntry.ExecuteNonQuery();
+                    return new Response { Status = "Approval successful", Message = "Approved matching entry" };
+
+                }
+                else
+                {
+                    return new Response { Status = "No matching entry", Message = "There is no entry matching the parameters" };
+                }
+
+            }
+        }
+
         // DormSelection Page..
         // Need to get dorm info
         // Find Student Accounts that match a few characters (Student profile on Admin page after search page)
@@ -504,7 +544,7 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
 
                 FindRoomInfo.CommandText =
-                    "USE housingdirector_schema; SELECT student_tbl.firstName, student_tbl.lastName," +
+                    "USE housingdirector_schema; SELECT roommates_table.id, student_tbl.firstName, student_tbl.lastName," +
                     " student_tbl.email,  roommates_table.RequestState "+
                     " FROM roommates_table"+
                     " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.roommate_ID"+
@@ -519,11 +559,12 @@ namespace WebAPI.Controllers
                 {
                     occupants.Add(new RoommateReturnObject()
                     {
-                        studentFirstName = reader.GetString(0),
-                        studentLastName = reader.GetString(1),
-                        studentEmail = reader.GetString(2),
-                        requestState = reader.GetString(3)
-                    });
+                        requestID = reader.GetInt32(0),
+                        studentFirstName = reader.GetString(1),
+                        studentLastName = reader.GetString(2),
+                        studentEmail = reader.GetString(3),
+                        requestState = reader.GetString(4)
+                    }); 
                     ;
                 }
                 reader.Close();
@@ -543,7 +584,7 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@studentID", studentID);
 
                 FindRoomInfo.CommandText =
-                    "USE housingdirector_schema; SELECT student_tbl.user_id, student_tbl.firstName, student_tbl.lastName," +
+                    "USE housingdirector_schema; SELECT roommates_table.id, student_tbl.firstName, student_tbl.lastName," +
                     " student_tbl.email, roommates_table.RequestState " +
                     " FROM roommates_table" +
                     " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.Requestor_ID" +
@@ -558,10 +599,11 @@ namespace WebAPI.Controllers
                 {
                     occupants.Add(new RoommateReturnObject()
                     {
-                        studentFirstName = reader.GetString(0),
-                        studentLastName = reader.GetString(1),
-                        studentEmail = reader.GetString(2),
-                        requestState = reader.GetString(3)
+                        requestID = reader.GetInt32(0),
+                        studentFirstName = reader.GetString(1),
+                        studentLastName = reader.GetString(2),
+                        studentEmail = reader.GetString(3),
+                        requestState = reader.GetString(4)
                     });
                 }
                 reader.Close();

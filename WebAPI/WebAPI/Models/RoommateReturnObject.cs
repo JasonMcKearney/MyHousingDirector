@@ -7,7 +7,7 @@ namespace WebAPI.Models
 {
     public class RoommateReturnObject
     {
-
+        public int requestID { get; set; }
         public string studentFirstName { get; set; }
         public string studentLastName { get; set; }
         public string studentEmail { get; set; }

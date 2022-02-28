@@ -25,13 +25,14 @@ export default class RoommateList extends Component {
     this.state = {
         studentID: 0,
         studentName:'',
-        studentlist: [],
-        studentObj: {firstname:'', lastname:'', email:'', state:''}
+        studentListInbound: [],
+        studentListOutbound: [],
+        studentObj: {reqid:'', firstname:'', lastname:'', email:'', state:''}
     }
 }
-    getResults(){
+    getOutboundResults(){
         let currentComponent = this;
-        let studentListLength = this.state.studentlist;
+        let studentListLength = this.state.studentListOutbound;
 
         console.log("Length: " + studentListLength.length)
 
@@ -58,15 +59,13 @@ export default class RoommateList extends Component {
                     console.log("Next studentID: " + res[i].studentID)
                     if(res[i].username != "")
                     {
-                        //currentComponent.setState({studentName: res[i].student})
-                        //currentComponent.setState({studentID: res[i].studentID})
+                        currentComponent.setState({reqid: res[i].requestID})
                         currentComponent.setState({firstname: res[i].studentFirstName})
                         currentComponent.setState({lastname: res[i].studentLastName})
                         currentComponent.setState({email: res[i].studentEmail})
                         currentComponent.setState({state: res[i].requestState})
-                        //currentComponent.setState({userID: res[i].user_id})
                         // Add student to list
-                        currentComponent.addItem();
+                        currentComponent.addItemOutbound();
                     }
                     // Entries with characters entered do not match any usernames in the database
                     else
@@ -74,44 +73,85 @@ export default class RoommateList extends Component {
                 }
                 currentComponent.setState({searchResults: loopData})
                 console.log("testing commit stages");
-
-
-
-
-
-
             })
         }
     }
 
-    addItem() {
+    getInboundResults(){
+        let currentComponent = this;
+        let studentListLength = this.state.studentListInbound;
 
-        const newstudentObj = { state: this.state.state, email: this.state.email, firstname: this.state.firstname, lastname: this.state.lastname }
+        console.log("Length: " + studentListLength.length)
+
+        if(studentListLength == 0)
+        {
+            // Passing parameter to Web API through address
+            fetch('http://localhost:16648/api/Student/GetInboundRequests/'+ Cookies.get("UD"), {
+                mode: 'cors', // this cannot be 'no-cors'
+                headers: {                
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+            }).then(res=>res.clone().json())
+            .then(function(res) {
+                var loopData = ''
+                var i;
+                for (i = 0; i < res.length; i++) //Iterate through each result returned by the REST API. Skips a matched ID (no self in the roommates list)
+                {
+                    if(res[i].studentID == Cookies.get("ID")){ 
+                        continue;
+                    }
+                   console.log("Next User: " + res[i].username)
+                    console.log("Next studentID: " + res[i].studentID)
+                    if(res[i].username != "")
+                    {
+                        currentComponent.setState({reqid: res[i].requestID})
+                        currentComponent.setState({firstname: res[i].studentFirstName})
+                        currentComponent.setState({lastname: res[i].studentLastName})
+                        currentComponent.setState({email: res[i].studentEmail})
+                        currentComponent.setState({state: res[i].requestState})
+                        // Add student to list
+                        currentComponent.addItemInbound();
+                    }
+                    // Entries with characters entered do not match any usernames in the database
+                    else
+                        alert("No entries match the character/characters entered.")
+                }
+                currentComponent.setState({searchResults: loopData})
+                console.log("testing commit stages");
+            })
+        }
+    }
+    
+    addItemInbound() {
+
+        const newstudentObj = { state: this.state.state, email: this.state.email, firstname: this.state.firstname, lastname: this.state.lastname, reqid: this.state.reqid }
       
-        console.log("New-Object " + newstudentObj.username)
+        console.log("New-Object " + newstudentObj.reqid)
        
-        let newStudentlist = this.state.studentlist;
+        let newStudentlist = this.state.studentListInbound;
 
        for (var i = 0; i < newStudentlist.length; i++)
        {
           console.log('New Student List');
            console.log('-----------------------------');
-           console.log(newStudentlist[i].username);
+           console.log(newStudentlist[i].reqid);
            console.log('-----------------------------\n');
        }
         console.log( newStudentlist.push(newstudentObj))
        
-        for (var i = 0; i < this.state.studentlist.length; i++)
+        for (var i = 0; i < this.state.studentListInbound.length; i++)
         {
             console.log('The State List');
             console.log('-----------------------------');
-            console.log(this.state.studentlist[i].username);
+            console.log(this.state.studentListInbound[i].reqid);
             console.log('-----------------------------');
         }
 
            
          this.setState({
-             studentlist: newStudentlist
+            studentListInbound: newStudentlist
           });
           
 
@@ -121,8 +161,46 @@ export default class RoommateList extends Component {
         showModal: false
     }
     
-    listPendingItems() {
-        let studentlist = this.state.studentlist;
+    addItemOutbound() {
+
+        const newstudentObj = { state: this.state.state, email: this.state.email, firstname: this.state.firstname, lastname: this.state.lastname, reqid: this.state.reqid}
+      
+        console.log("New-Object " + newstudentObj.reqid)
+       
+        let newStudentlist = this.state.studentListOutbound;
+
+       for (var i = 0; i < newStudentlist.length; i++)
+       {
+          console.log('New Student List');
+           console.log('-----------------------------');
+           console.log(newStudentlist[i].reqid);
+           console.log('-----------------------------\n');
+       }
+        console.log( newStudentlist.push(newstudentObj))
+       
+        for (var i = 0; i < this.state.studentListOutbound.length; i++)
+        {
+            console.log('The State List');
+            console.log('-----------------------------');
+            console.log(this.state.studentListOutbound[i].reqid);
+            console.log('-----------------------------');
+        }
+
+           
+         this.setState({
+            studentListOutbound: newStudentlist
+          });
+          
+
+      }
+
+    state = {
+        showModal: false
+    }
+    
+
+    listOutboundItems() {
+        let studentlist = this.state.studentListOutbound;
        
         return (
 
@@ -131,7 +209,7 @@ export default class RoommateList extends Component {
                     
                 studentlist.map((val, index) => {
                     return (
-                    
+
                         <div className="roommate-card"
                         
                     >   
@@ -150,15 +228,50 @@ export default class RoommateList extends Component {
                 })
                 }  
                     </div> 
-                
+        );
+        
+    }
 
+    listInboundItems() {
+        let studentlist = this.state.studentListInbound;
+        return (
+
+            <div className="card-grid">
+                {
+                    
+                studentlist.map((val, index) => {
+                    return (
+
+                        <div className="roommate-card"
+                        
+                    >   
+                        <p>{val.firstname} {val.lastname}</p>
+                        <p>{val.email}</p>
+                        <p>{val.state}</p>
+                       <p><Button danger onClick={() => {
+
+                        this.DeletePending(val.studentID);
+
+                          }} type="primary" htmlType="Delete">
+                              Delete
+                          </Button></p>
+                          <p><Button danger onClick={() => {
+
+                        this.DeletePending(val.studentID);
+
+                            }} type="primary" htmlType="Delete">
+                                Delete
+                            </Button></p>
+                    </div>
+                    );
+                })
+                }  
+                    </div> 
         );
         
     }
 
     DeletePending(user_id){
-
-       
         console.log(user_id)
         console.log("funciton reached")
         fetch('http://localhost:16648/api/Student/DeleteRoommate', {
@@ -181,17 +294,24 @@ export default class RoommateList extends Component {
     }
 
     componentDidMount(){
-        this.getResults();
+        this.getOutboundResults();
+        this.getInboundResults();
     }
 
   render() {
     return (
         <div className="Student-page-background">
              <div className="StudentHomeBox">
-          <div className="roommate-box">
-                            { this.listPendingItems() }
+                 <div className="roommate-box">
+                        <p>Outbound requests</p>
+                            { this.listOutboundItems() }
 
-                        </div>
+                </div>
+                <div className="roommate-box">
+                        <p>Inbound requests</p>
+                            { this.listInboundItems() }
+
+                </div>
             </div>
         </div>
     );
