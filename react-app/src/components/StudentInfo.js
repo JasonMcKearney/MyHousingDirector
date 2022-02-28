@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import "./StudentInfo.css"
-import 'antd/dist/antd.css';
 import Cookies from 'js-cookie';
 import defaultlogo from '../img/default_logo.png'
 import Select from "react-select";
@@ -10,7 +9,7 @@ import Select from "react-select";
 
 
 
-export default class studentinfo extends Component {
+export default class studentinfo extends React.Component {
 
     constructor() {
         super();
@@ -29,6 +28,9 @@ export default class studentinfo extends Component {
                 { label: "Work Study", value: 6 },
                 { label: "Other", value: 7 }
               ],
+              optionsQuestion8: [{label: 'Will allow anyone to come by and stay with us when discussed between roommate',value:'Will allow anyone to come by and stay with us when discussed between roommate'},
+                                  { label:'Will not allow any vistors overnight to stay but people can drop by.',value:'Will not allow any vistors overnight to stay but people can drop by.',},
+                                  { label: 'Will allow any vistors to drop by or stay overnight.', value:'Will allow any vistors to drop by or stay overnight.'}  ],
             userAnswers:{Question1:'placeholder', Question2:'', Question3:'', Question4:'',Question5:'', Question6:'', 
                         Question7:'',Question8:'', Question9:'', Question10:'', Question11:'', Question12:''}
         }
@@ -38,6 +40,11 @@ export default class studentinfo extends Component {
         this.onChange = this.onChange.bind(this);
        this.sendQuestionUpdate = this.sendQuestionUpdate.bind(this);
     }
+    
+    componentDidMount(){
+         this.setSurveyQuestions();
+    }
+
     sendQuestionUpdate ()
       {
 
@@ -78,58 +85,136 @@ export default class studentinfo extends Component {
         console.log("Question Value" + event);
         if(questionNum == 1)
         {
-            
+           
             newUserAnswers.Question1 = event;
-            this.setState({userAnswers: newUserAnswers});
+            Cookies.set("Question1", newUserAnswers.Question1);
             console.log("State value for Question 1: " + this.state.userAnswers.Question1)
         }
         else if(questionNum == 2)
         {
             newUserAnswers.Question2 = event;
+            Cookies.set("Question2", newUserAnswers.Question2);
+
         }
         else if(questionNum == 3)
         {
             newUserAnswers.Question3 = event;
+            Cookies.set("Question3", newUserAnswers.Question3);
+
         }
         else if(questionNum == 4)
         {
             newUserAnswers.Question4 = event;
+            Cookies.set("Question4", newUserAnswers.Question4);
+
         }
         else if(questionNum == 5)
         {
             newUserAnswers.Question5 = event;
+            Cookies.set("Question5", newUserAnswers.Question5);
+
         }
         else if(questionNum == 6)
         {
             newUserAnswers.Question6 = event;
+            Cookies.set("Question6", newUserAnswers.Question6);
+
         }
         else if(questionNum == 7)
         {
             newUserAnswers.Question7 = event;
+            Cookies.set("Question7", newUserAnswers.Question7);
+
         }
         else if(questionNum == 8)
         {
             newUserAnswers.Question8 = event;
+            Cookies.set("Question8", newUserAnswers.Question8);
+
         }
         else if(questionNum == 9)
         {
             newUserAnswers.Question9 = event;
+            Cookies.set("Question9", newUserAnswers.Question9);
+
         }
         else if(questionNum == 10)
         {
             newUserAnswers.Question10 = event;
+            Cookies.set("Question10", newUserAnswers.Question10);
+
         }
         else if(questionNum == 11)
         {
             newUserAnswers.Question11 = event;
+            Cookies.set("Question11", newUserAnswers.Question11);
+
         }
         else if(questionNum == 12)
         {
             newUserAnswers.Question12 = event;
+            Cookies.set("Question12", newUserAnswers.Question12);
+
         }
+        this.setState({userAnswers: newUserAnswers});
+    }
+    setSurveyQuestions(){
+
+        let newUserAnswers = this.state.userAnswers;
+        fetch(
+            "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + Cookies.get("UD"),
+            {
+                mode: "cors", // this cannot be 'no-cors'
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+
+                method: "POST",
+            }
+        ).then((res) => res.clone().json())
+
+            .then(function(res) {
+            
+                console.log("The data has reached");
+                console.log("Question3 " + res.Question1)
+                
+                newUserAnswers.Question1 = res.question1;
+                newUserAnswers.Question2 = res.question2;
+                newUserAnswers.Question3 = res.question3;
+                newUserAnswers.Question4 = res.question4;
+                newUserAnswers.Question5 = res.question5;
+                newUserAnswers.Question6 = res.question6;
+                newUserAnswers.Question7 = res.question7;
+                newUserAnswers.Question8 = res.question8;
+                newUserAnswers.Question9 = res.question9;
+                newUserAnswers.Question10 = res.question10;
+                newUserAnswers.Question11 = res.question11;
+                newUserAnswers.Question12 = res.question12;
+                
+                Cookies.set("Question1", newUserAnswers.Question1);
+                Cookies.set("Question2", newUserAnswers.Question2);
+                Cookies.set("Question3", newUserAnswers.Question3);
+                Cookies.set("Question4", newUserAnswers.Question4);
+                Cookies.set("Question5", newUserAnswers.Question5);
+                Cookies.set("Question6", newUserAnswers.Question6);
+                Cookies.set("Question7", newUserAnswers.Question7);
+                Cookies.set("Question8", newUserAnswers.Question8);
+                Cookies.set("Question9", newUserAnswers.Question9);
+                Cookies.set("Question10", newUserAnswers.Question10);
+                Cookies.set("Question11", newUserAnswers.Question11);
+                Cookies.set("Question12", newUserAnswers.Question12);
+                
+                
+
+
+
+
+
+                this.setState({userAnswers: newUserAnswers});
+            })
 
     }
-
     onChangeCheckbox = e => {
         const isChecked = !this.state.checked;
         this.setState({
@@ -156,7 +241,7 @@ export default class studentinfo extends Component {
             
             
             <div className="form-wrapper">
-                <form> 
+               
                     <div className="question-wrapper">
                         <label className ="Form-Label">When do you wake up? </label>
                         <input onChange={e => this.onChangeQuestion(e.target.value, 1)}type ="time"></input>
@@ -169,8 +254,8 @@ export default class studentinfo extends Component {
                   
                     <div className="question-wrapper">
                         <label className ="Form-Label"> What best decribes your study habits?</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 3)} className='form-select'>
-                            <option>Please selet an option</option>
+                        <select  onChange={e => this.onChangeQuestion(e.target.value, 3)} className='form-select'>
+                            <option value={this.state.userAnswers.Question3}>{this.state.userAnswers.Question3}</option>
                             <option>Ambient noise: I dont mind some background noise but I need to have fewer distractions to study effectively.</option>
                             <option>Don't take work home: I do most of my schoolwork at the library or elsewhere out of my room. I try not to so a lot of work at home.</option>
                             <option>Multitasker: I like to have music or the TV on in my room or can talk on the phone while doing work.</option>
@@ -221,13 +306,14 @@ export default class studentinfo extends Component {
 
                     <div className="question-wrapper">
                     <label className ="Form-Label">What are your preferences on your guests staying in the room?</label>
-                    <select onChange={e => this.onChangeQuestion(e.target.value, 8)} className='form-select' >
-                        <option>Will allow anyone to come by and stay with us when discussed between roommate</option>
-                        <option>Will not allow any vistors overnight to stay but people can drop by.</option>
-                        <option>Will allow any vistors to drop by or stay overnight.</option>
-                    </select>
+                    <Select
+                        onChange={e => this.onChangeQuestion(e.value, 8)}
+                        options = {this.state.optionsQuestion8}
+                        className='form-selecter'
+                        value = {this.state.userAnswers.Question8}
+                        placeholder= {Cookies.get("Question8")}
+                    />
                     </div>
-
                     <div className="question-wrapper">
                         <label className ="Form-Label">What are you involved in on campus,or would lke to be involved?</label>
                         <Select
@@ -274,7 +360,7 @@ export default class studentinfo extends Component {
 
                    
                 
-                </form>
+                
                 <button onClick={this.sendQuestionUpdate} >Submit</button>
                 </div>
          

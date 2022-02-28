@@ -709,5 +709,49 @@ namespace WebAPI.Controllers
                 return new Response { Status = "Successful", Message = "The questions have been recieved" };
         
         }
+
+        [Route("getCurrentSurveyQuestions/{userID}")]
+        [HttpPost]
+
+        public SurveyQuestions getCurrentSurveyQuestions(int userID)
+        {
+
+            SurveyQuestions currentSurvey = new SurveyQuestions();
+            bool surveyExsists = false;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand surveyQuestions = conn.CreateCommand();
+                surveyQuestions.Parameters.AddWithValue("@userID", userID);
+                surveyQuestions.CommandText = "SELECT * From survey WHERE survey_userid = @userID";
+                surveyQuestions.ExecuteNonQuery();
+
+
+                MySqlDataReader reader = surveyQuestions.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    currentSurvey.Question1 = reader[1].ToString();
+                    currentSurvey.Question2 = reader[2].ToString();
+                    currentSurvey.Question3 = reader[3].ToString();
+                    currentSurvey.Question4 = reader[4].ToString();
+                    currentSurvey.Question5 = reader[5].ToString();
+                    currentSurvey.Question6 = reader[6].ToString();
+                    currentSurvey.Question7 = reader[7].ToString();
+                    currentSurvey.Question8 = reader[8].ToString();
+                    currentSurvey.Question9 = reader[9].ToString();
+                    currentSurvey.Question10 = reader[10].ToString();
+                    currentSurvey.Question11 = reader[11].ToString();
+                    currentSurvey.Question12 = reader[12].ToString();
+
+                    surveyExsists = true;
+                }
+                reader.Close();
+
+
+
+                return currentSurvey;
+            }
+        }
     }
 }
