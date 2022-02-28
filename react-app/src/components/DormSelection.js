@@ -129,7 +129,6 @@ export default class DormSelection extends Component {
             method: 'POST',
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
-// ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
                 numRoommates: parseInt(Cookies.get("numRoommates"))
             })
         }).then(res => res.clone().json())
@@ -171,7 +170,7 @@ export default class DormSelection extends Component {
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
                 floorNumber: this.state.floor,
-                numRoommates: parseInt(Cookies.get("numRoommates"))
+                numRoommates: parseInt(Cookies.get("numRoommates")) + 1
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -311,7 +310,6 @@ export default class DormSelection extends Component {
                 floorNumber: this.state.floor,           
                 studentName: Cookies.get("username"),
                 student_id: Cookies.get("ID"),
-                 // ***********************PLACEHOLDER FOR NOW, WAITING FOR COOKIE TO BE CREATED************
                  numRoommates: parseInt(Cookies.get("numRoommates"))
             })
         }).then((Response) => Response.json())
