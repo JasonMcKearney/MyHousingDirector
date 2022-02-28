@@ -28,10 +28,38 @@ export default class studentinfo extends React.Component {
                 { label: "Work Study", value: 6 },
                 { label: "Other", value: 7 }
               ],
+              optionsQuestion3:[{label:'Ambient noise: I dont mind some background noise but I need to have fewer distractions to study effectively.',value:'Ambient noise: I dont mind some background noise but I need to have fewer distractions to study effectively.'},
+                                {label:'Dont take work home: I do most of my schoolwork at the library or elsewhere out of my room. I try not to do a lot of work at home.',value:'Dont take work home: I do most of my schoolwork at the library or elsewhere out of my room. I try not to do a lot of work at home.'},
+                                {label:'Multitasker: I like to have music or the TV on in my room or can talk on the phone while doing work.',value:'Multitasker: I like to have music or the TV on in my room or can talk on the phone while doing work.'},
+                                {label:'Quiet: I require quiet and few distractions to really get stuff done.',value:'Quiet: I require quiet and few distractions to really get stuff done.'}],
               optionsQuestion8: [{label: 'Will allow anyone to come by and stay with us when discussed between roommate',value:'Will allow anyone to come by and stay with us when discussed between roommate'},
-                                  { label:'Will not allow any vistors overnight to stay but people can drop by.',value:'Will not allow any vistors overnight to stay but people can drop by.',},
-                                  { label: 'Will allow any vistors to drop by or stay overnight.', value:'Will allow any vistors to drop by or stay overnight.'}  ],
-            userAnswers:{Question1:'placeholder', Question2:'', Question3:'', Question4:'',Question5:'', Question6:'', 
+                                 { label:'Will not allow any vistors overnight to stay but people can drop by.',value:'Will not allow any vistors overnight to stay but people can drop by.',},
+                                 { label: 'Will allow any vistors to drop by or stay overnight.', value:'Will allow any vistors to drop by or stay overnight.'}  ],
+              optionsQuestion4: [{label:'Can do homework whenever',value:'Can do homework whenever'},
+                                 {label:'After 8pm',value:'After 8pm'},
+                                 {label:'Between 12-5pm',value:'Between 12-5pm'},
+                                 {label:'between 8am-12pm',value:'between 8am-12pm'}],
+             optionsQuestion5: [{label:'Room is a sanctuary: I perfer privacy and personal space.',value:'Room is a sanctuary: I perfer privacy and personal space.'},
+                                {label:'Room is a social hub: I enjoy people dropping by often.', value:'Room is a social hub: I enjoy people dropping by often.'},
+                                {label:'Room varies: I invite friends over but I also need specified quiet time for studying',value:'Room varies: I invite friends over but I also need specified quiet time for studying'}],
+             optionsQuestion6: [{label:'Casual: My personal space is farily clean with some clutter but I value keeping common areas pretty clean.', value:'Casual: My personal space is farily clean with some clutter but I value keeping common areas pretty clean.'},
+                                {label:'Messy: I sometimes drop my stuff right where I am stadning and it stays there until I need it again. Cleanliness is not a high priority', value:'Messy: I sometimes drop my stuff right where I am stadning and it stays there until I need it again. Cleanliness is not a high priority'},
+                                {label:'Neat: I am orderly clean and tidy. I regularly clean common areas.', value:'Neat: I am orderly clean and tidy. I regularly clean common areas.'}],
+             optionsQuestion7: [{label:'Not lending out my items', value:'Not lending out my items'},
+                                {label:'Let anyone borrow my items',value:'Let anyone borrow my items'},
+                                {label:'Lend out my items upon request', value:'Lend out my items upon request'}],
+             optionsQuestion10: [{label:'On campus most weekends', value:'On campus most weekends'},
+                                 {label:'Go home most weekends',value:'Go home most weekends'},
+                                 {label:'Travel with SNHU Athletics Team',value:'Travel with SNHU Athletics Team'},
+                                 {label:'Work',value:'Work'},
+                                 {label:'Go out',value:'Go out'}],
+             optionsQuestion11: [{label:'Never:this means you literally never smoke', value:'Never:this means you literally never smoke'},
+                                 {label:'Occasionally: while you do not typically smoke you may have a cigarette once in a while.',value:'Occasionally: while you do not typically smoke you may have a cigarette once in a while.'},
+                                 {label:'Frequently: you smoke on a regular basis such as daily ot weekly.',value:'Frequently: you smoke on a regular basis such as daily ot weekly.'}],
+             optionsQuestion12: [{label:'Not a drinker and will not allow it in the unit', value:'Not a drinker and will not allow it in the unit'},
+                                 {label:'Not a drinker but may allow in the unit', value:'Not a drinker but may allow in the unit'},
+                                 {label:'Drink reponsibly and will allow in the unit',value:'Drink reponsibly and will allow in the unit'}],
+              userAnswers:{Question1:'placeholder', Question2:'', Question3:'', Question4:'',Question5:'', Question6:'', 
                         Question7:'',Question8:'', Question9:'', Question10:'', Question11:'', Question12:''}
         }
        
@@ -42,7 +70,11 @@ export default class studentinfo extends React.Component {
     }
     
     componentDidMount(){
-         this.setSurveyQuestions();
+        if(this.state.userAnswers.Question2 != '')
+        {
+            this.setSurveyQuestions();
+        } 
+        
     }
 
     sendQuestionUpdate ()
@@ -254,108 +286,118 @@ export default class studentinfo extends React.Component {
                   
                     <div className="question-wrapper">
                         <label className ="Form-Label"> What best decribes your study habits?</label>
-                        <select  onChange={e => this.onChangeQuestion(e.target.value, 3)} className='form-select'>
-                            <option value={this.state.userAnswers.Question3}>{this.state.userAnswers.Question3}</option>
-                            <option>Ambient noise: I dont mind some background noise but I need to have fewer distractions to study effectively.</option>
-                            <option>Don't take work home: I do most of my schoolwork at the library or elsewhere out of my room. I try not to so a lot of work at home.</option>
-                            <option>Multitasker: I like to have music or the TV on in my room or can talk on the phone while doing work.</option>
-                            <option>Quiet: I require quiet and few distractions to really get stuff done.</option>
-                            </select>
-                    </div>
+                        <Select
+                        onChange={e => this.onChangeQuestion(e.value, 3)}
+                        options = {this.state.optionsQuestion3}
+                        className='form-selecter'
+                        value = {this.state.userAnswers.Question3}
+                        placeholder= {Cookies.get("Question3")}
+                        />
+                    </div> 
 
                     <div className="question-wrapper">
                     <label className ="Form-Label">When do you study best?</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 4)} className='form-select'>
-                            <option>Please select an option</option>
-                            <option>Can do homework whenever</option>
-                            <option>After 8pm</option>
-                            <option>Between 12-5pm</option>
-                            <option>between 8am-12pm</option>
-
-                        </select>
+                      <Select
+                        onChange={e => this.onChangeQuestion(e.value, 4)}
+                        options = {this.state.optionsQuestion4}
+                        className='form-selecter'
+                        value = {this.state.userAnswers.Question4}
+                        placeholder= {Cookies.get("Question4")}
+                        />
                     </div>
                    
                     <div className="question-wrapper">
-                    <label className ="Form-Label">Which describes how you prefer to use your room?</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 5)} className='form-select'>
-                            <option>Please select an option</option>
-                            <option>Room is a sanctuary: I perfer privacy and personal space.</option>
-                            <option>Room is a social hub: I enjoy people dropping by often.</option>
-                            <option>Room varies: I invite friends over but I also need specified quiet time for studying </option>
-                        </select>
-                    </div>
+                        <label className ="Form-Label">Which describes how you prefer to use your room?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 5)}
+                                options = {this.state.optionsQuestion5}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question5}
+                                placeholder= {Cookies.get("Question5")}
+                            />
+                        </div>
 
                     <div className="question-wrapper">
                         <label className ="Form-Label">Which best describes your bedroom's apperance?</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 6)} className='form-select'> 
-                            <option>Please select an option</option>
-                            <option>Casual: My personal space is farily clean with some clutter but I value keeping common areas pretty clean.</option>
-                            <option>Messy: I sometimes drop my stuff right where I am stadning and it stays there until I need it again. Cleanliness is not a high priority</option>
-                            <option>Neat: I am orderly clean and tidy. I regularly clean common areas.</option>
-                        </select>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 6)}
+                                options = {this.state.optionsQuestion6}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question6}
+                                placeholder= {Cookies.get("Question6")}
+                            />
                     </div>
                     <div className="question-wrapper" >
-                    <label className ="Form-Label">What are your preferences about lending your items (clothes, food, electronics, etc.)?</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 7)} className='form-select'>
-                            <option>Please select an option</option>
-                            <option>Not lending out my items</option>
-                            <option>Let anyone borrow my items</option>
-                            <option>Lend out my items upon request</option>
-                        </select>
+                        <label className ="Form-Label">What are your preferences about lending your items (clothes, food, electronics, etc.)?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 7)}
+                                options = {this.state.optionsQuestion7}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question7}
+                                placeholder= {Cookies.get("Question7")}
+                            />
+                
                     </div>
 
                     <div className="question-wrapper">
-                    <label className ="Form-Label">What are your preferences on your guests staying in the room?</label>
-                    <Select
-                        onChange={e => this.onChangeQuestion(e.value, 8)}
-                        options = {this.state.optionsQuestion8}
-                        className='form-selecter'
-                        value = {this.state.userAnswers.Question8}
-                        placeholder= {Cookies.get("Question8")}
-                    />
+                        <label className ="Form-Label">What are your preferences on your guests staying in the room?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 8)}
+                                options = {this.state.optionsQuestion8}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question8}
+                                placeholder= {Cookies.get("Question8")}
+                            />
                     </div>
                     <div className="question-wrapper">
                         <label className ="Form-Label">What are you involved in on campus,or would lke to be involved?</label>
-                        <Select
-                            isMulti ={true}
-                            onChange={this.onChange}
-                            options = {this.state.options}
-                            value={this.state.values}
-                            className='form-select'
-                           
-                            />
+                            <Select
+                                isMulti ={true}
+                                onChange={this.onChange}
+                                options = {this.state.options}
+                                value={this.state.values}
+                                className='form-select'
+                            
+                                />
                           
                      </div>
                      <div className="question-wrapper">
                         <label className ="Form-Label">What do you do on a typical weekend?</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 10)} className='form-select'>
-                            <option>Please select an option</option>
-                            <option>On campus most weekends</option>
-                            <option>Go home most weekends</option>
-                            <option>Travel with SNHU Athletics Team</option>
-                            <option>Work</option>
-                            <option>Go out</option>
-                        </select>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 10)}
+                                options = {this.state.optionsQuestion10}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question10}
+                                placeholder= {Cookies.get("Question10")}
+                            />
                     </div>
 
                     <div className="question-wrapper">
                         <label className ="Form-Label">Describe your smoking/vaping habits</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 11)} className='form-select'>
-                            <option>Please select an option</option>
-                            <option>Never:this means you literally never smoke</option>
-                            <option>Occasionally: while you do not typically smoke you may have a cigarette once in a while.</option>
-                            <option>Frequently: you smoke on a regular basis such as daily ot weekly. </option>
-                        </select>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 11)}
+                                options = {this.state.optionsQuestion11}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question11}
+                                placeholder= {Cookies.get("Question11")}
+                             />
                     </div>
 
                     <div className="question-wrapper">
                         <label className ="Form-Label">How do you describe your alcohol use? This will not impact your conduct record.</label>
-                        <select onChange={e => this.onChangeQuestion(e.target.value, 12)} className='form-select'>
+                            <Select
+                                    onChange={e => this.onChangeQuestion(e.value, 12)}
+                                    options = {this.state.optionsQuestion12}
+                                    className='form-selecter'
+                                    value = {this.state.userAnswers.Question12}
+                                    placeholder= {Cookies.get("Question12")}
+                            />
+                        {/* <select onChange={e => this.onChangeQuestion(e.target.value, 12)} className='form-select'>
                             <option>Please select an option</option>
                             <option>Not a drinker and will not allow it in the unit</option>
                             <option>Not a drinker but may allow in the unit</option>
                             <option>Drink reponsibly and will allow in the unit</option> 
-                        </select>
+                        </select> */}
                     </div>
 
                    
