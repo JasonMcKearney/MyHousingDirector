@@ -250,7 +250,6 @@ export default class studentinfo extends React.Component {
                                 placeholder= {Cookies.get("Question1")}
                             />
                     </div>
-
                     <div className="question-wrapper" >
                         <label className ="Form-Label">What time do you go to sleep?</label>
                             <Select

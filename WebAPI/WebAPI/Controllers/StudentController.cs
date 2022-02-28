@@ -333,7 +333,7 @@ namespace WebAPI.Controllers
                 MySqlCommand FindFloorInfo = conn.CreateCommand();
 
                 FindFloorInfo.Parameters.AddWithValue("@dorm_id", floorDetails.dorm_id);
-                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates);
+                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates + 1);
 
                 //FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
 
