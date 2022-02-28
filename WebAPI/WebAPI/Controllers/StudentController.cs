@@ -146,34 +146,26 @@ namespace WebAPI.Controllers
             return eventData;
         }
 
-        [Route("DeleteRoommate")]
+        [Route("DeleteRoommate/{requestID}")]
         [HttpPost]
-        public Response DeleteRoommate(RoomRequestIds ids)
+        public Response DeleteRoommate(RoommateReturnObject request)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                int requestor_id = Convert.ToInt32(ids.uid);
-
-                MySqlCommand FindRecipientID = conn.CreateCommand();
-                FindRecipientID.Parameters.AddWithValue("@studentID", ids.reciever_id);
-                FindRecipientID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
-                int recipient_id = Convert.ToInt32(FindRecipientID.ExecuteScalar());
-
+                int requestID = Convert.ToInt32(request.requestID);
 
                 MySqlCommand CheckRequest = conn.CreateCommand();
-                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
-                CheckRequest.Parameters.AddWithValue("@recieverID", recipient_id);
-                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+                CheckRequest.Parameters.AddWithValue("@requestID", requestID);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
 
                 int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
 
                 if (requestExists >= 1)
                 {
                     MySqlCommand DeleteEntry = conn.CreateCommand();
-                    DeleteEntry.Parameters.AddWithValue("@requestorID", requestor_id);
-                    DeleteEntry.Parameters.AddWithValue("@recieverID", recipient_id);
-                    DeleteEntry.CommandText = "DELETE from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+                    DeleteEntry.Parameters.AddWithValue("@requestID", requestID);
+                    DeleteEntry.CommandText = "DELETE from housingdirector_schema.roommates_table where id = @requestID";
                     DeleteEntry.ExecuteNonQuery();
                     return new Response { Status = "Delete successful", Message = "Deleted matching entry" };
 
@@ -228,36 +220,60 @@ namespace WebAPI.Controllers
             }
         }
 
-        [Route("ApproveRoommate")]
+        [Route("ApproveRoommate/{requestID}")]
         [HttpPost]
-        public Response ApproveRoommate(RoomRequestIds ids)
+        public Response ApproveRoommate(RoommateReturnObject request)
         {
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
-                int requestor_id = Convert.ToInt32(ids.uid);
-
-                MySqlCommand FindRecipientID = conn.CreateCommand();
-                FindRecipientID.Parameters.AddWithValue("@studentID", ids.reciever_id);
-                FindRecipientID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
-                int recipient_id = Convert.ToInt32(FindRecipientID.ExecuteScalar());
-
+                int requestID = Convert.ToInt32(request.requestID);
 
                 MySqlCommand CheckRequest = conn.CreateCommand();
-                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
-                CheckRequest.Parameters.AddWithValue("@recieverID", recipient_id);
-                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
+                CheckRequest.Parameters.AddWithValue("@requestID", requestID);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
 
                 int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
 
                 if (requestExists >= 1)
                 {
-                    MySqlCommand ApproveEntry = conn.CreateCommand();
-                    ApproveEntry.Parameters.AddWithValue("@requestorID", requestor_id);
-                    ApproveEntry.Parameters.AddWithValue("@recieverID", recipient_id);
-                    ApproveEntry.CommandText = "DELETE from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
-                    ApproveEntry.ExecuteNonQuery();
+                    MySqlCommand DeleteEntry = conn.CreateCommand();
+                    DeleteEntry.Parameters.AddWithValue("@requestID", requestID);
+                    DeleteEntry.CommandText = "UPDATE housingdirector_schema.roommates_table SET RequestState = \"accepted\"  WHERE id = @requestID";
+                    DeleteEntry.ExecuteNonQuery();
                     return new Response { Status = "Approval successful", Message = "Approved matching entry" };
+
+                }
+                else
+                {
+                    return new Response { Status = "No matching entry", Message = "There is no entry matching the parameters" };
+                }
+
+            }
+        }
+
+        [Route("DeclineRoommate/{requestID}")]
+        [HttpPost]
+        public Response DeclineRoommate(RoommateReturnObject request)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                int requestID = Convert.ToInt32(request.requestID);
+
+                MySqlCommand CheckRequest = conn.CreateCommand();
+                CheckRequest.Parameters.AddWithValue("@requestID", requestID);
+                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
+
+                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
+
+                if (requestExists >= 1)
+                {
+                    MySqlCommand DeleteEntry = conn.CreateCommand();
+                    DeleteEntry.Parameters.AddWithValue("@requestID", requestID);
+                    DeleteEntry.CommandText = "UPDATE housingdirector_schema.roommates_table SET RequestState = \"declined\"  WHERE id = @requestID";
+                    DeleteEntry.ExecuteNonQuery();
+                    return new Response { Status = "Decline successful", Message = "Declined matching entry" };
 
                 }
                 else

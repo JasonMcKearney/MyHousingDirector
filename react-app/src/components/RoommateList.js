@@ -201,13 +201,35 @@ export default class RoommateList extends Component {
 
     listOutboundItems() {
         let studentlist = this.state.studentListOutbound;
-       
+        let button1, button2;
         return (
 
             <div className="card-grid">
                 {
                     
                 studentlist.map((val, index) => {
+                    if (val.state == "pending"){
+                        button1 = null
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeletePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Delete
+                                </Button></p>
+                    }
+                    else if (val.state == "accepted"){
+                        button1 = null;
+                        button2 = null;
+                    }
+                    else if (val.state == "declined"){
+                        button1 = null;
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeletePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Delete
+                                </Button></p>;
+                    }
                     return (
 
                         <div className="roommate-card"
@@ -216,13 +238,9 @@ export default class RoommateList extends Component {
                         <p>{val.firstname} {val.lastname}</p>
                         <p>{val.email}</p>
                         <p>{val.state}</p>
-                       <p><Button danger onClick={() => {
-
-                        this.DeletePending(val.studentID);
-
-                          }} type="primary" htmlType="Delete">
-                              Delete
-                          </Button></p>
+                        {button1}
+                       {button2}
+                          
                     </div>
                     );
                 })
@@ -234,12 +252,41 @@ export default class RoommateList extends Component {
 
     listInboundItems() {
         let studentlist = this.state.studentListInbound;
+        let button1, button2;
+
         return (
 
             <div className="card-grid">
                 {
                     
                 studentlist.map((val, index) => {
+                    if (val.state == "pending"){
+                        button1 = <p><Button primary onClick={() => {
+                            this.ApprovePending(val.reqid);
+            
+                                }} type="primary" htmlType="Accept">
+                                    Accept
+                                </Button></p>
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeclinePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Decline
+                                </Button></p>
+                    }
+                    else if (val.state == "accepted"){
+                        button1 = null;
+                        button2 = null;
+                    }
+                    else if (val.state == "declined"){
+                        button1 = null;
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeletePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Delete
+                                </Button></p>;
+                    }
                     return (
 
                         <div className="roommate-card"
@@ -248,20 +295,9 @@ export default class RoommateList extends Component {
                         <p>{val.firstname} {val.lastname}</p>
                         <p>{val.email}</p>
                         <p>{val.state}</p>
-                       <p><Button danger onClick={() => {
-
-                        this.DeletePending(val.studentID);
-
-                          }} type="primary" htmlType="Delete">
-                              Delete
-                          </Button></p>
-                          <p><Button danger onClick={() => {
-
-                        this.DeletePending(val.studentID);
-
-                            }} type="primary" htmlType="Delete">
-                                Delete
-                            </Button></p>
+                       {button1}
+                       {button2}
+                            
                     </div>
                     );
                 })
@@ -271,19 +307,57 @@ export default class RoommateList extends Component {
         
     }
 
-    DeletePending(user_id){
-        console.log(user_id)
+    DeletePending(requestID){
+        console.log(requestID)
         console.log("funciton reached")
-        fetch('http://localhost:16648/api/Student/DeleteRoommate', {
+        fetch('http://localhost:16648/api/Student/DeleteRoommate/' + requestID, {
             headers:{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'POST',
             body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
 
-                uid: Cookies.get("UD"),
-                reciever_id: user_id
+        })
+    }
+
+    ApprovePending(requestID){
+        console.log(requestID)
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/ApproveRoommate/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
+
+        })
+    }
+
+    DeclinePending(requestID){
+        console.log(requestID)
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/DeclineRoommate/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
             })
         }).then((Response) => Response.json())
         .then((result) => {
