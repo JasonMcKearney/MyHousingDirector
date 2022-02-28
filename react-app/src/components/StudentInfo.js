@@ -28,6 +28,12 @@ export default class studentinfo extends React.Component {
                 { label: "Work Study", value: 6 },
                 { label: "Other", value: 7 }
               ],
+              optionsQuestion1: [{label:'Before 6 am',value:'Before 6 am'},
+                                 {label:'Between 6 am-9 am',value:'Between 6 am-9 am'},
+                                 {label:'After 9 am',value:'After 9 am'}],
+              optionsQuestion2: [{label:'Before 8 pm',value:'Before 8 pm'},
+                                 {label:'Between 8 pm - 11pm',value:'Between 8 pm - 11 pm'},
+                                 {label:'After 11 pm',value:'After 11 pm'}],
               optionsQuestion3:[{label:'Ambient noise: I dont mind some background noise but I need to have fewer distractions to study effectively.',value:'Ambient noise: I dont mind some background noise but I need to have fewer distractions to study effectively.'},
                                 {label:'Dont take work home: I do most of my schoolwork at the library or elsewhere out of my room. I try not to do a lot of work at home.',value:'Dont take work home: I do most of my schoolwork at the library or elsewhere out of my room. I try not to do a lot of work at home.'},
                                 {label:'Multitasker: I like to have music or the TV on in my room or can talk on the phone while doing work.',value:'Multitasker: I like to have music or the TV on in my room or can talk on the phone while doing work.'},
@@ -118,75 +124,73 @@ export default class studentinfo extends React.Component {
         if(questionNum == 1)
         {
            
-            newUserAnswers.Question1 = event;
-            Cookies.set("Question1", newUserAnswers.Question1);
+            Cookies.set("Question1", event);
+            newUserAnswers.Question1 = Cookies.get("Question1")
             console.log("State value for Question 1: " + this.state.userAnswers.Question1)
         }
         else if(questionNum == 2)
         {
-            newUserAnswers.Question2 = event;
-            Cookies.set("Question2", newUserAnswers.Question2);
+            Cookies.set("Question2", event);
+            newUserAnswers.Question2 = Cookies.get("Question2")
 
         }
         else if(questionNum == 3)
         {
-            newUserAnswers.Question3 = event;
-            Cookies.set("Question3", newUserAnswers.Question3);
+            Cookies.set("Question3", event);
+            newUserAnswers.Question3 = Cookies.get("Question3")
 
         }
         else if(questionNum == 4)
         {
-            newUserAnswers.Question4 = event;
-            Cookies.set("Question4", newUserAnswers.Question4);
+            Cookies.set("Question4", event);
+            newUserAnswers.Question4 = Cookies.get("Question4")
 
         }
         else if(questionNum == 5)
         {
-            newUserAnswers.Question5 = event;
-            Cookies.set("Question5", newUserAnswers.Question5);
+            Cookies.set("Question5", event);
+            newUserAnswers.Question5 = Cookies.get("Question5")
 
         }
         else if(questionNum == 6)
         {
-            newUserAnswers.Question6 = event;
-            Cookies.set("Question6", newUserAnswers.Question6);
-
+            
+            Cookies.set("Question6", event);
+            newUserAnswers.Question6 = Cookies.get("Question6")
         }
         else if(questionNum == 7)
         {
-            newUserAnswers.Question7 = event;
-            Cookies.set("Question7", newUserAnswers.Question7);
+            Cookies.set("Question7", event);
+            newUserAnswers.Question7 = Cookies.get("Question7")
 
         }
         else if(questionNum == 8)
         {
-            newUserAnswers.Question8 = event;
-            Cookies.set("Question8", newUserAnswers.Question8);
+            Cookies.set("Question8", event);
+            newUserAnswers.Question8 = Cookies.get("Question8")
 
         }
         else if(questionNum == 9)
         {
-            newUserAnswers.Question9 = event;
-            Cookies.set("Question9", newUserAnswers.Question9);
+            Cookies.set("Question9", event);
+            newUserAnswers.Question9 = Cookies.get("Question9")
 
         }
         else if(questionNum == 10)
         {
-            newUserAnswers.Question10 = event;
-            Cookies.set("Question10", newUserAnswers.Question10);
-
+            Cookies.set("Question10", event);
+            newUserAnswers.Question10 = Cookies.get("Question10")
         }
         else if(questionNum == 11)
         {
-            newUserAnswers.Question11 = event;
-            Cookies.set("Question11", newUserAnswers.Question11);
+            Cookies.set("Question11", event);
+            newUserAnswers.Question11 = Cookies.get("Question11")
 
         }
         else if(questionNum == 12)
         {
-            newUserAnswers.Question12 = event;
-            Cookies.set("Question12", newUserAnswers.Question12);
-
+            Cookies.set("Question12", event);
+            newUserAnswers.Question12 = Cookies.get("Question12")
         }
         this.setState({userAnswers: newUserAnswers});
     }
@@ -276,23 +280,35 @@ export default class studentinfo extends React.Component {
                
                     <div className="question-wrapper">
                         <label className ="Form-Label">When do you wake up? </label>
-                        <input onChange={e => this.onChangeQuestion(e.target.value, 1)}type ="time"></input>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 1)}
+                                options = {this.state.optionsQuestion1}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question1}
+                                placeholder= {Cookies.get("Question1")}
+                            />
                     </div>
 
                     <div className="question-wrapper" >
                         <label className ="Form-Label">What time do you go to sleep?</label>
-                        <input onChange={e => this.onChangeQuestion(e.target.value, 2)} type = "time"></input>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 2)}
+                                options = {this.state.optionsQuestion2}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question2}
+                                placeholder= {Cookies.get("Question2")}
+                            />
                     </div>
                   
                     <div className="question-wrapper">
                         <label className ="Form-Label"> What best decribes your study habits?</label>
-                        <Select
-                        onChange={e => this.onChangeQuestion(e.value, 3)}
-                        options = {this.state.optionsQuestion3}
-                        className='form-selecter'
-                        value = {this.state.userAnswers.Question3}
-                        placeholder= {Cookies.get("Question3")}
-                        />
+                            <Select
+                            onChange={e => this.onChangeQuestion(e.value, 3)}
+                            options = {this.state.optionsQuestion3}
+                            className='form-selecter'
+                            value = {this.state.userAnswers.Question3}
+                            placeholder= {Cookies.get("Question3")}
+                            />
                     </div> 
 
                     <div className="question-wrapper">
