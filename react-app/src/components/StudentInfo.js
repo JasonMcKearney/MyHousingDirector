@@ -3,31 +3,20 @@ import "./StudentInfo.css"
 import Cookies from 'js-cookie';
 import defaultlogo from '../img/default_logo.png'
 import Select from "react-select";
-
-
-
-
-
-
 export default class studentinfo extends React.Component {
-
     constructor() {
         super();
-        
-
         this.state = {
-            
             checked: false,
             values: [],
             options: [
-                { label: "CAPE", value: 1 },
-                { label: "Athletics", value: 2 },
-                { label: "SGA", value: 3 },
-                { label: "E-Sports", value: 4 },
-                { label: "Theatre/Drama", value: 5 },
-                { label: "Work Study", value: 6 },
-                { label: "Other", value: 7 }
-              ],
+                { label: "CAPE", value: "CAPE" },
+                { label: "Athletics", value: "Athletics" },
+                { label: "SGA", value: "SGA" },
+                { label: "E-Sports", value: "E-Sports" },
+                { label: "Theatre/Drama", value: "Theatre/Drama" },
+                { label: "Work Study", value: "Work Study" },
+                { label: "Other", value: "Other" } ],
               optionsQuestion1: [{label:'Before 6 am',value:'Before 6 am'},
                                  {label:'Between 6 am-9 am',value:'Between 6 am-9 am'},
                                  {label:'After 9 am',value:'After 9 am'}],
@@ -68,21 +57,12 @@ export default class studentinfo extends React.Component {
               userAnswers:{Question1:'placeholder', Question2:'', Question3:'', Question4:'',Question5:'', Question6:'', 
                         Question7:'',Question8:'', Question9:'', Question10:'', Question11:'', Question12:''}
         }
-       
-       //this.userAnswers = this.userAnswers.bind(this);
-       this.onChangeCheckbox = this.onChangeCheckbox.bind(this);
         this.onChange = this.onChange.bind(this);
        this.sendQuestionUpdate = this.sendQuestionUpdate.bind(this);
     }
-    
     componentDidMount(){
-        if(this.state.userAnswers.Question2 != '')
-        {
             this.setSurveyQuestions();
-        } 
-        
     }
-
     sendQuestionUpdate ()
       {
 
@@ -120,7 +100,7 @@ export default class studentinfo extends React.Component {
         let newUserAnswers = this.state.userAnswers;
 
         console.log("Question number" + questionNum);
-        console.log("Question Value" + event);
+        console.log("Question Value" + this.state.values[0]);
         if(questionNum == 1)
         {
            
@@ -172,7 +152,7 @@ export default class studentinfo extends React.Component {
         }
         else if(questionNum == 9)
         {
-            Cookies.set("Question9", event);
+            Cookies.set("Question9", this.state.values);
             newUserAnswers.Question9 = Cookies.get("Question9")
 
         }
@@ -192,6 +172,7 @@ export default class studentinfo extends React.Component {
             Cookies.set("Question12", event);
             newUserAnswers.Question12 = Cookies.get("Question12")
         }
+
         this.setState({userAnswers: newUserAnswers});
     }
     setSurveyQuestions(){
@@ -240,42 +221,24 @@ export default class studentinfo extends React.Component {
                 Cookies.set("Question10", newUserAnswers.Question10);
                 Cookies.set("Question11", newUserAnswers.Question11);
                 Cookies.set("Question12", newUserAnswers.Question12);
-                
-                
-
-
-
-
 
                 this.setState({userAnswers: newUserAnswers});
             })
 
     }
-    onChangeCheckbox = e => {
-        const isChecked = !this.state.checked;
-        this.setState({
-          checked: isChecked,
-          values: isChecked ? this.state.options : this.state.values
-        });
-      };
       onChange = opt => {
         const allOptionsSelected = opt.length === this.state.options.length;
         this.setState({
           checked: allOptionsSelected ? true : false,
           values: opt
         });
+
+       this.onChangeQuestion(this.state.values,9);
       };
 
       
     render() {
-
-        
-
-        return (
-            
-                
-            
-            
+        return (    
             <div className="form-wrapper">
                
                     <div className="question-wrapper">
@@ -408,22 +371,9 @@ export default class studentinfo extends React.Component {
                                     value = {this.state.userAnswers.Question12}
                                     placeholder= {Cookies.get("Question12")}
                             />
-                        {/* <select onChange={e => this.onChangeQuestion(e.target.value, 12)} className='form-select'>
-                            <option>Please select an option</option>
-                            <option>Not a drinker and will not allow it in the unit</option>
-                            <option>Not a drinker but may allow in the unit</option>
-                            <option>Drink reponsibly and will allow in the unit</option> 
-                        </select> */}
                     </div>
-
-                   
-                
-                
-                <button onClick={this.sendQuestionUpdate} >Submit</button>
+                 <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
                 </div>
-         
-
-
         );
     }
 }
