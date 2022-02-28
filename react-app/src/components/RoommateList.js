@@ -120,8 +120,6 @@ export default class RoommateList extends Component {
                 }
                 currentComponent.setState({searchResults: loopData})
                 console.log("testing commit stages");
-                console.log("How many roommates student has: " + studentListLength.length);
-                Cookies.set("numRoommates", studentListLength.length);
             })
         }
     }
