@@ -69,7 +69,6 @@ class Student extends Component {
 
     return (
       <div
-        // style={{  background: "#eee" }}
         style={{ backgroundImage: `url(${bgPicSrc})` }}
         className="Student-page-wrap"
         >
@@ -77,13 +76,10 @@ class Student extends Component {
             <Menu
                 className="Student-nav-bar"
                 mode="horizontal"
-                // theme="dark"
                 defaultSelectedKeys={["1"]}
             >
                 <Menu.Item key="1">
-                    <Link className="nav-bar-label" to="/student/home">
-                        Home
-                    </Link>
+                    <Link to="/student/home">Home</Link>
                 </Menu.Item>
                 <Menu.Item key="2">
                     <Link to="/student/DormSelect">Dorm Selection</Link>
@@ -92,12 +88,12 @@ class Student extends Component {
                     <Link to="/student/RoommateSelect">Roommate Selection</Link>
                 </Menu.Item>
                 <Menu.Item key="4">
-                    <Link to="/student/StudentInfo">Profile</Link>
-                </Menu.Item>
-                <Menu.Item key="5">
                     <Link to="/student/RoommateList">Roommate List</Link>
                 </Menu.Item>
-                </Menu>
+                <Menu.Item key="5">
+                    <Link to="/student/StudentInfo">Profile</Link>
+                </Menu.Item>
+              </Menu>
             </div>
         <Modal
           title="Change Your password"
@@ -171,6 +167,7 @@ class Student extends Component {
           Hi User! <br />
           Welcome to Dly House Director!
         </div> */}
+        
         <Button
           onClick={() => {
             Cookies.remove("ID");
@@ -189,25 +186,14 @@ class Student extends Component {
         >
           Logout
         </Button>
-        {/* <Content style={{ padding: "0 50px" }}> */}
-        {/* <Breadcrumb style={{ margin: "40px 0" }}></Breadcrumb> */}
-        {/* <Layout */}
-        {/* <div className="Student-page-background"> */}
           <Switch>
             <Route path="/student/Home" component={StudentHome} />
-            <Route
-              path="/student/RoommateSelect"
-              component={RoommateSelection}
-            />
+            <Route path="/student/RoommateSelect"component={RoommateSelection}/>
             <Route path="/student/DormSelect" component={DormSelection} />
             <Route path="/student/StudentInfo" component={StudentInfo} />
             <Route path="/student/RoommateList" component={RoommateList} />
           </Switch>
-
-        {/* <Footer style={{ textAlign: "center" }}></Footer> */}
             </div>
-
-
     );
   }
 }
