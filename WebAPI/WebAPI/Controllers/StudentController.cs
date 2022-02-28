@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         // Finds MySQL connection so can access database tables
         private MySqlConnection GetConnection()
         {
-            string myConnectionString = _configuration.GetConnectionString("DevConnection"); //Configuration.GetConnectionString("DevConnection");
+            string myConnectionString = _configuration.GetConnectionString("DevConnection"); 
             return new MySqlConnection(myConnectionString);
         }
 

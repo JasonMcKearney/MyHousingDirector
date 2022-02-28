@@ -240,7 +240,6 @@ export default class studentinfo extends React.Component {
     render() {
         return (    
             <div className="form-wrapper">
-               
                     <div className="question-wrapper">
                         <label className ="Form-Label">When do you wake up? </label>
                             <Select
@@ -373,7 +372,7 @@ export default class studentinfo extends React.Component {
                             />
                     </div>
                  <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
-                </div>
+            </div>
         );
     }
 }
