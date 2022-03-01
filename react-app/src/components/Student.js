@@ -177,6 +177,8 @@ class Student extends Component {
             Cookies.remove("username");
             Cookies.remove("student");
             Cookies.remove("buildingID");
+            Cookies.remove('UD');
+            Cookies.remove('numRoommates');
 
             this.props.history.push("/LogIn");
           }}
