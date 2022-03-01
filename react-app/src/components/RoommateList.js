@@ -25,20 +25,21 @@ export default class RoommateList extends Component {
     this.state = {
         studentID: 0,
         studentName:'',
-        studentlist: [],
-        studentObj: {username:'', studentID:'', firstname:'', lastname:'', userID:''}
+        studentListInbound: [],
+        studentListOutbound: [],
+        studentObj: {reqid:'', firstname:'', lastname:'', email:'', state:''}
     }
 }
-    getResults(){
+    getOutboundResults(){
         let currentComponent = this;
-        let studentListLength = this.state.studentlist;
+        let studentListLength = this.state.studentListOutbound;
 
         console.log("Length: " + studentListLength.length)
 
         if(studentListLength == 0)
         {
             // Passing parameter to Web API through address
-            fetch('http://localhost:16648/api/Student/GetPendingOutboundRequests/'+ Cookies.get("UD"), {
+            fetch('http://localhost:16648/api/Student/GetOutboundRequests/'+ Cookies.get("UD"), {
                 mode: 'cors', // this cannot be 'no-cors'
                 headers: {                
                     'Content-Type': 'application/json',
@@ -58,13 +59,13 @@ export default class RoommateList extends Component {
                     console.log("Next studentID: " + res[i].studentID)
                     if(res[i].username != "")
                     {
-                        currentComponent.setState({studentName: res[i].username})
-                        currentComponent.setState({studentID: res[i].studentID})
-                        currentComponent.setState({firstname: res[i].firstName})
-                        currentComponent.setState({lastname: res[i].lastName})
-                        currentComponent.setState({userID: res[i].user_id})
+                        currentComponent.setState({reqid: res[i].requestID})
+                        currentComponent.setState({firstname: res[i].studentFirstName})
+                        currentComponent.setState({lastname: res[i].studentLastName})
+                        currentComponent.setState({email: res[i].studentEmail})
+                        currentComponent.setState({state: res[i].requestState})
                         // Add student to list
-                        currentComponent.addItem();
+                        currentComponent.addItemOutbound();
                     }
                     // Entries with characters entered do not match any usernames in the database
                     else
@@ -72,44 +73,87 @@ export default class RoommateList extends Component {
                 }
                 currentComponent.setState({searchResults: loopData})
                 console.log("testing commit stages");
-
-
-
-
-
-
             })
         }
     }
 
-    addItem() {
+    getInboundResults(){
+        let currentComponent = this;
+        let studentListLength = this.state.studentListInbound;
 
-        const newstudentObj = { username: this.state.studentName, studentID: this.state.studentID, firstname: this.state.firstname, lastname: this.state.lastname }
+        console.log("Length: " + studentListLength.length)
+
+        if(studentListLength == 0)
+        {
+            // Passing parameter to Web API through address
+            fetch('http://localhost:16648/api/Student/GetInboundRequests/'+ Cookies.get("UD"), {
+                mode: 'cors', // this cannot be 'no-cors'
+                headers: {                
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+            }).then(res=>res.clone().json())
+            .then(function(res) {
+                var loopData = ''
+                var i;
+                for (i = 0; i < res.length; i++) //Iterate through each result returned by the REST API. Skips a matched ID (no self in the roommates list)
+                {
+                    if(res[i].studentID == Cookies.get("ID")){ 
+                        continue;
+                    }
+                   console.log("Next User: " + res[i].username)
+                    console.log("Next studentID: " + res[i].studentID)
+                    if(res[i].username != "")
+                    {
+                        currentComponent.setState({reqid: res[i].requestID})
+                        currentComponent.setState({firstname: res[i].studentFirstName})
+                        currentComponent.setState({lastname: res[i].studentLastName})
+                        currentComponent.setState({email: res[i].studentEmail})
+                        currentComponent.setState({state: res[i].requestState})
+                        // Add student to list
+                        currentComponent.addItemInbound();
+                    }
+                    // Entries with characters entered do not match any usernames in the database
+                    else
+                        alert("No entries match the character/characters entered.")
+                }
+                currentComponent.setState({searchResults: loopData})
+                console.log("testing commit stages");
+                console.log("How many roommates student has: " + studentListLength.length);
+                Cookies.set("numRoommates", studentListLength.length);
+            })
+        }
+    }
+    
+    addItemInbound() {
+
+        const newstudentObj = { state: this.state.state, email: this.state.email, firstname: this.state.firstname, lastname: this.state.lastname, reqid: this.state.reqid }
       
-        console.log("New-Object " + newstudentObj.username)
+        console.log("New-Object " + newstudentObj.reqid)
        
-        let newStudentlist = this.state.studentlist;
+        let newStudentlist = this.state.studentListInbound;
 
        for (var i = 0; i < newStudentlist.length; i++)
        {
           console.log('New Student List');
            console.log('-----------------------------');
-           console.log(newStudentlist[i].username);
+           console.log(newStudentlist[i].reqid);
            console.log('-----------------------------\n');
        }
         console.log( newStudentlist.push(newstudentObj))
        
-        for (var i = 0; i < this.state.studentlist.length; i++)
+        for (var i = 0; i < this.state.studentListInbound.length; i++)
         {
             console.log('The State List');
             console.log('-----------------------------');
-            console.log(this.state.studentlist[i].username);
+            console.log(this.state.studentListInbound[i].reqid);
             console.log('-----------------------------');
         }
 
            
          this.setState({
-             studentlist: newStudentlist
+            studentListInbound: newStudentlist
           });
           
 
@@ -119,56 +163,203 @@ export default class RoommateList extends Component {
         showModal: false
     }
     
-    listPendingItems() {
-        let studentlist = this.state.studentlist;
+    addItemOutbound() {
+
+        const newstudentObj = { state: this.state.state, email: this.state.email, firstname: this.state.firstname, lastname: this.state.lastname, reqid: this.state.reqid}
+      
+        console.log("New-Object " + newstudentObj.reqid)
        
+        let newStudentlist = this.state.studentListOutbound;
+
+       for (var i = 0; i < newStudentlist.length; i++)
+       {
+          console.log('New Student List');
+           console.log('-----------------------------');
+           console.log(newStudentlist[i].reqid);
+           console.log('-----------------------------\n');
+       }
+        console.log( newStudentlist.push(newstudentObj))
+       
+        for (var i = 0; i < this.state.studentListOutbound.length; i++)
+        {
+            console.log('The State List');
+            console.log('-----------------------------');
+            console.log(this.state.studentListOutbound[i].reqid);
+            console.log('-----------------------------');
+        }
+
+           
+         this.setState({
+            studentListOutbound: newStudentlist
+          });
+          
+
+      }
+
+    state = {
+        showModal: false
+    }
+    
+
+    listOutboundItems() {
+        let studentlist = this.state.studentListOutbound;
+        let button1, button2;
         return (
 
             <div className="card-grid">
                 {
                     
                 studentlist.map((val, index) => {
+                    if (val.state == "pending"){
+                        button1 = null
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeletePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Delete
+                                </Button></p>
+                    }
+                    else if (val.state == "accepted"){
+                        button1 = null;
+                        button2 = null;
+                    }
+                    else if (val.state == "declined"){
+                        button1 = null;
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeletePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Delete
+                                </Button></p>;
+                    }
                     return (
-                    
+
                         <div className="roommate-card"
                         
                     >   
                         <p>{val.firstname} {val.lastname}</p>
-                        <p>{val.username}</p>
-                        <p>{val.studentID}</p>
-                       <p><Button danger onClick={() => {
-
-                        this.DeletePending(val.studentID);
-
-                          }} type="primary" htmlType="Delete">
-                              Delete
-                          </Button></p>
+                        <p>{val.email}</p>
+                        <p>{val.state}</p>
+                        {button1}
+                       {button2}
+                          
                     </div>
                     );
                 })
                 }  
                     </div> 
-                
-
         );
         
     }
 
-    DeletePending(user_id){
+    listInboundItems() {
+        let studentlist = this.state.studentListInbound;
+        let button1, button2;
 
-       
-        console.log(user_id)
+        return (
+
+            <div className="card-grid">
+                {
+                    
+                studentlist.map((val, index) => {
+                    if (val.state == "pending"){
+                        button1 = <p><Button primary onClick={() => {
+                            this.ApprovePending(val.reqid);
+            
+                                }} type="primary" htmlType="Accept">
+                                    Accept
+                                </Button></p>
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeclinePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Decline
+                                </Button></p>
+                    }
+                    else if (val.state == "accepted"){
+                        button1 = null;
+                        button2 = null;
+                    }
+                    else if (val.state == "declined"){
+                        button1 = null;
+                        button2 = <p><Button danger onClick={() => {
+                            this.DeletePending(val.reqid);
+            
+                                }} type="primary" htmlType="Delete">
+                                    Delete
+                                </Button></p>;
+                    }
+                    return (
+
+                        <div className="roommate-card"
+                        
+                    >   
+                        <p>{val.firstname} {val.lastname}</p>
+                        <p>{val.email}</p>
+                        <p>{val.state}</p>
+                       {button1}
+                       {button2}
+                            
+                    </div>
+                    );
+                })
+                }  
+                    </div> 
+        );
+        
+    }
+
+    DeletePending(requestID){
+        console.log(requestID)
         console.log("funciton reached")
-        fetch('http://localhost:16648/api/Student/DeleteRoommate', {
+        fetch('http://localhost:16648/api/Student/DeleteRoommate/' + requestID, {
             headers:{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'POST',
             body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
 
-                uid: Cookies.get("UD"),
-                reciever_id: user_id
+        })
+    }
+
+    ApprovePending(requestID){
+        console.log(requestID)
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/ApproveRoommate/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
+
+        })
+    }
+
+    DeclinePending(requestID){
+        console.log(requestID)
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/DeclineRoommate/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
             })
         }).then((Response) => Response.json())
         .then((result) => {
@@ -179,17 +370,24 @@ export default class RoommateList extends Component {
     }
 
     componentDidMount(){
-        this.getResults();
+        this.getOutboundResults();
+        this.getInboundResults();
     }
 
   render() {
     return (
         <div className="Student-page-background">
              <div className="StudentHomeBox">
-          <div className="roommate-box">
-                            { this.listPendingItems() }
+                 <div className="roommate-box">
+                        <p>Outbound requests</p>
+                            { this.listOutboundItems() }
 
-                        </div>
+                </div>
+                <div className="roommate-box">
+                        <p>Inbound requests</p>
+                            { this.listInboundItems() }
+
+                </div>
             </div>
         </div>
     );

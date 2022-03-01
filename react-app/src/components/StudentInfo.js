@@ -239,155 +239,138 @@ export default class studentinfo extends React.Component {
       
     render() {
         return (    
-            <div className='page-container' >
-                
-                <div className="form-wrapper">
-                
-                <h2>Survey:</h2>
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">When do you wake up? </label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 1)}
-                                    options = {this.state.optionsQuestion1}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question1}
-                                    placeholder= {Cookies.get("Question1")}
-                                />
-                        </div>
-
-                        <div className="question-wrapper" >
-                            <label className ="Form-Label">What time do you go to sleep?</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 2)}
-                                    options = {this.state.optionsQuestion2}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question2}
-                                    placeholder= {Cookies.get("Question2")}
-                                />
-                        </div>
-                    
-                        <div className="question-wrapper">
-                            <label className ="Form-Label"> What best decribes your study habits?</label>
-                                <Select
-                                onChange={e => this.onChangeQuestion(e.value, 3)}
-                                options = {this.state.optionsQuestion3}
+            <div className="form-wrapper">
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">When do you wake up? </label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 1)}
+                                options = {this.state.optionsQuestion1}
                                 className='form-selecter'
-                                value = {this.state.userAnswers.Question3}
-                                placeholder= {Cookies.get("Question3")}
-                                />
-                        </div> 
-
-                        <div className="question-wrapper">
-                        <label className ="Form-Label">When do you study best?</label>
-                        <Select
-                            onChange={e => this.onChangeQuestion(e.value, 4)}
-                            options = {this.state.optionsQuestion4}
+                                value = {this.state.userAnswers.Question1}
+                                placeholder= {Cookies.get("Question1")}
+                            />
+                    </div>
+                    <div className="question-wrapper" >
+                        <label className ="Form-Label">What time do you go to sleep?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 2)}
+                                options = {this.state.optionsQuestion2}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question2}
+                                placeholder= {Cookies.get("Question2")}
+                            />
+                    </div>
+                  
+                    <div className="question-wrapper">
+                        <label className ="Form-Label"> What best decribes your study habits?</label>
+                            <Select
+                            onChange={e => this.onChangeQuestion(e.value, 3)}
+                            options = {this.state.optionsQuestion3}
                             className='form-selecter'
-                            value = {this.state.userAnswers.Question4}
-                            placeholder= {Cookies.get("Question4")}
+                            value = {this.state.userAnswers.Question3}
+                            placeholder= {Cookies.get("Question3")}
+                            />
+                    </div> 
+
+                    <div className="question-wrapper">
+                    <label className ="Form-Label">When do you study best?</label>
+                      <Select
+                        onChange={e => this.onChangeQuestion(e.value, 4)}
+                        options = {this.state.optionsQuestion4}
+                        className='form-selecter'
+                        value = {this.state.userAnswers.Question4}
+                        placeholder= {Cookies.get("Question4")}
+                        />
+                    </div>
+                   
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">Which describes how you prefer to use your room?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 5)}
+                                options = {this.state.optionsQuestion5}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question5}
+                                placeholder= {Cookies.get("Question5")}
                             />
                         </div>
-                    
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">Which describes how you prefer to use your room?</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 5)}
-                                    options = {this.state.optionsQuestion5}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question5}
-                                    placeholder= {Cookies.get("Question5")}
-                                />
-                            </div>
 
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">Which best describes your bedroom's apperance?</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 6)}
-                                    options = {this.state.optionsQuestion6}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question6}
-                                    placeholder= {Cookies.get("Question6")}
-                                />
-                        </div>
-                        <div className="question-wrapper" >
-                            <label className ="Form-Label">What are your preferences about lending your items (clothes, food, electronics, etc.)?</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 7)}
-                                    options = {this.state.optionsQuestion7}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question7}
-                                    placeholder= {Cookies.get("Question7")}
-                                />
-                    
-                        </div>
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">Which best describes your bedroom's apperance?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 6)}
+                                options = {this.state.optionsQuestion6}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question6}
+                                placeholder= {Cookies.get("Question6")}
+                            />
+                    </div>
+                    <div className="question-wrapper" >
+                        <label className ="Form-Label">What are your preferences about lending your items (clothes, food, electronics, etc.)?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 7)}
+                                options = {this.state.optionsQuestion7}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question7}
+                                placeholder= {Cookies.get("Question7")}
+                            />
+                
+                    </div>
 
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">What are your preferences on your guests staying in the room?</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 8)}
-                                    options = {this.state.optionsQuestion8}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question8}
-                                    placeholder= {Cookies.get("Question8")}
-                                />
-                        </div>
-                        {/* Do to time constraints this question has to be commented out. Hoping to come back to it later */}
-                        {/* <div className="question-wrapper">
-                            <label className ="Form-Label">What are you involved in on campus,or would lke to be involved?</label>
-                                <Select
-                                    isMulti ={true}
-                                    onChange={this.onChange}
-                                    options = {this.state.options}
-                                    value={this.state.values}
-                                    className='form-select'
-                                
-                                    />
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">What are your preferences on your guests staying in the room?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 8)}
+                                options = {this.state.optionsQuestion8}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question8}
+                                placeholder= {Cookies.get("Question8")}
+                            />
+                    </div>
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">What are you involved in on campus,or would lke to be involved?</label>
+                            <Select
+                                isMulti ={true}
+                                onChange={this.onChange}
+                                options = {this.state.options}
+                                value={this.state.values}
+                                className='form-select'
                             
-                        </div> */}
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">What do you do on a typical weekend?</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 10)}
-                                    options = {this.state.optionsQuestion10}
+                                />
+                          
+                     </div>
+                     <div className="question-wrapper">
+                        <label className ="Form-Label">What do you do on a typical weekend?</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 10)}
+                                options = {this.state.optionsQuestion10}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question10}
+                                placeholder= {Cookies.get("Question10")}
+                            />
+                    </div>
+
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">Describe your smoking/vaping habits</label>
+                            <Select
+                                onChange={e => this.onChangeQuestion(e.value, 11)}
+                                options = {this.state.optionsQuestion11}
+                                className='form-selecter'
+                                value = {this.state.userAnswers.Question11}
+                                placeholder= {Cookies.get("Question11")}
+                             />
+                    </div>
+
+                    <div className="question-wrapper">
+                        <label className ="Form-Label">How do you describe your alcohol use? This will not impact your conduct record.</label>
+                            <Select
+                                    onChange={e => this.onChangeQuestion(e.value, 12)}
+                                    options = {this.state.optionsQuestion12}
                                     className='form-selecter'
-                                    value = {this.state.userAnswers.Question10}
-                                    placeholder= {Cookies.get("Question10")}
-                                />
-                        </div>
-
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">Describe your smoking/vaping habits</label>
-                                <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 11)}
-                                    options = {this.state.optionsQuestion11}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question11}
-                                    placeholder= {Cookies.get("Question11")}
-                                />
-                        </div>
-
-                        <div className="question-wrapper">
-                            <label className ="Form-Label">How do you describe your alcohol use? This will not impact your conduct record.</label>
-                                <Select
-                                        onChange={e => this.onChangeQuestion(e.value, 12)}
-                                        options = {this.state.optionsQuestion12}
-                                        className='form-selecter'
-                                        value = {this.state.userAnswers.Question12}
-                                        placeholder= {Cookies.get("Question12")}
-                                />
-                        </div>
-                        
-                        <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
-                </div>
-
-                  <div className='info-wrapper'>
-                            <h2>Profile Information:</h2>
-                            
-                            <div>
-                                
-                            </div>
-                  </div>
-
+                                    value = {this.state.userAnswers.Question12}
+                                    placeholder= {Cookies.get("Question12")}
+                            />
+                    </div>
+                 <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
             </div>
         );
     }
