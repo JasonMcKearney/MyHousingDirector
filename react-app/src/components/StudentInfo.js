@@ -360,17 +360,48 @@ export default class studentinfo extends React.Component {
                              />
                     </div>
 
-                    <div className="question-wrapper">
-                        <label className ="Form-Label">How do you describe your alcohol use? This will not impact your conduct record.</label>
-                            <Select
-                                    onChange={e => this.onChangeQuestion(e.value, 12)}
-                                    options = {this.state.optionsQuestion12}
-                                    className='form-selecter'
-                                    value = {this.state.userAnswers.Question12}
-                                    placeholder= {Cookies.get("Question12")}
-                            />
-                    </div>
-                 <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
+                        <div className="question-wrapper">
+                            <label className ="Form-Label">How do you describe your alcohol use? This will not impact your conduct record.</label>
+                                <Select
+                                        onChange={e => this.onChangeQuestion(e.value, 12)}
+                                        options = {this.state.optionsQuestion12}
+                                        className='form-selecter'
+                                        value = {this.state.userAnswers.Question12}
+                                        placeholder= {Cookies.get("Question12")}
+                                />
+                        </div>
+                        
+                        <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
+                </div>
+
+                  <div className='info-wrapper'>
+                            <h2>Profile Information:</h2>
+                            
+                            <div className='userinfo-grid'>
+                                <div className='user-data-wrapper'>
+                                    <label className="user-label">Name:</label>
+                                    <p className='user-info'>{Cookies.get("FN") + " " + Cookies.get("LN")}</p>
+                                </div>
+                                <div className='user-data-wrapper'>
+                                    <label className="user-label">Email:</label>
+                                    <p className='user-info'>{Cookies.get("EM")}</p>
+                                </div>
+                                <div className='user-data-wrapper'>
+                                    <label className="user-label">Student ID:</label>
+                                    <p className='user-info'>{Cookies.get("ID")}</p>
+                                </div>
+                                <div className='user-data-wrapper'>
+                                    <label className="user-label">Year:</label>
+                                    <p className='user-info'>{Cookies.get("YR")}</p>
+                                </div>
+                                <div className='user-data-wrapper'>
+                                    <label className="user-label">Gender:</label>
+                                    <p className='user-info'>{Cookies.get("GR")}</p>
+                                </div>
+
+                            </div>
+                  </div>
+
             </div>
         );
     }
