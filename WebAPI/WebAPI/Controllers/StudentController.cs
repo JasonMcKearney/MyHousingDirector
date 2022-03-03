@@ -277,7 +277,7 @@ namespace WebAPI.Controllers
                 MySqlCommand FindFloorInfo = conn.CreateCommand();
 
                 FindFloorInfo.Parameters.AddWithValue("@dorm_id", floorDetails.dorm_id);
-                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates + 1);
+                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates);
 
                 //FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
 
@@ -314,7 +314,7 @@ namespace WebAPI.Controllers
 
                 FindRoomInfo.Parameters.AddWithValue("@dorm_id", paramsObj.dorm_id);
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
-                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates + 1);
+                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates);
 
                 FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and @numRoommates <= maxOccupants and currentOccupants >= 0";
                 FindRoomInfo.ExecuteNonQuery();
