@@ -66,7 +66,7 @@ export class AdminDashboard extends Component {
               <PieChart
                 id="pie"
                 type="doughnut"
-                title="Max Building Occupancies"
+                title="Maximum Number of Students in Each Building"
                 palette="Bright"
                 dataSource={this.state.NumStudentsInBuildings}
               >
