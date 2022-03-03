@@ -451,7 +451,11 @@ export default class DormSelection extends Component {
             showModal,
         } = this.state;
         return (
-            <div className="Student-page-background">
+            <div className="Student-page-background"
+                style={{
+                    margin: "0 auto ",
+                    flex: 1,
+                    width: "80%"}}>
             <div className="dormSelect">
                 <div class="a">
                     <label>{dorm}</label>

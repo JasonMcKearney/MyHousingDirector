@@ -177,7 +177,12 @@ export default class RoommateSelection extends Component {
     }
     render() {
         return (
-            <div className="Student-page-background">
+            <div className="Student-page-background"
+                style={{
+                    margin: "0 auto ",
+                    flex: 1,
+                    width: "80%"
+                }}>
                 <div>
                     <div clasName="roommate-container">
                         <div className="wrapper">

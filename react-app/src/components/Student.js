@@ -11,6 +11,7 @@ import StudentHome from "./StudentHome";
 import RoommateSelection from "./RoommateSelection";
 import StudentInfo from "./StudentInfo";
 import RoommateList from "./RoommateList";
+import { bounce } from "react-animations";
 
 import {
   UserOutlined,
@@ -18,6 +19,7 @@ import {
   NotificationOutlined,
 } from "@ant-design/icons";
 
+/*const Bounce = styled.div'animation: 2s ${keyframes}'*/
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 

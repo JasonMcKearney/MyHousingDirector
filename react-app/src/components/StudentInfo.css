@@ -3,14 +3,10 @@
     width: 5px;
     flex-direction:column;
 }
-.form-wrapper{
-    width:50%;
-    height:100%;
-    margin-top:1%;
-    margin-left:1%;
-    background: rgba(255, 255, 255, 0.5);
-    margin-right: 0%;
-    float: left;
+.form-wrapper {
+    width: 50%;
+    height: 100%; 
+    margin: 0 auto; 
 }
 .question-wrapper{
 

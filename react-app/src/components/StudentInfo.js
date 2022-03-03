@@ -238,7 +238,14 @@ export default class studentinfo extends React.Component {
 
       
     render() {
-        return (    
+        return ( 
+            <div className="Student-page-background"
+                style={{
+                    margin: "0 auto ",
+/*                    flex: 1,*/
+                    width: "80%",
+                   /* justifyContent: "center"*/
+                }}>
             <div className="form-wrapper">
                     <div className="question-wrapper">
                         <label className ="Form-Label">When do you wake up? </label>
@@ -371,6 +378,7 @@ export default class studentinfo extends React.Component {
                             />
                     </div>
                  <button id ="primary-button" onClick={this.sendQuestionUpdate} >Submit</button>
+                </div>
             </div>
         );
     }
