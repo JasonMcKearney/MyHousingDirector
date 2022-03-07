@@ -178,7 +178,7 @@ class LogIn extends Component {
 
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                             <Button onClick={this.login}
-                                type="primary" htmlType="submit">
+                                type="primary" onKeyDown={e => e.key === 'Enter'} htmlType="submit">
                                 Submit
                             </Button>
                         </Form.Item>
