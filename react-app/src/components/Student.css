@@ -91,7 +91,7 @@
 
 .card-grid {
     display: grid;
-    grid: 348px 348px / repeat(3, 270px);
+    grid: 348px 348px / repeat(3, 320px);
     background: rgba(255, 255, 255, 0.5);
   
 }
@@ -119,6 +119,7 @@
 }
 
 .roommate-card {
+    font-size: smaller;
     display: grid;
     justify-content: center;
     border-style: solid;
