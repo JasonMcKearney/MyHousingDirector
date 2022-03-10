@@ -1,9 +1,8 @@
 .container {
     width:100%;
     height:130%;
-    padding-top:30px;
-    padding-left:15px;
-    padding-right:15px;
+    margin-top: 1.8%;
+    margin-left: 4.5%;
 }
 
 .totalStudents-box{
@@ -11,7 +10,7 @@
     background-color: #fff;
     width: 16%;
     height: 22%;
-    margin-left:5%;
+    margin-left: -1%;
     border-style: groove;
     border-radius: 14px!important;
 }
@@ -23,7 +22,7 @@
     width: 16%;
     height: 22%;
     border-style: groove;
-    margin-left:30.5%;
+    margin-left: 29%;
     border-radius: 14px!important;
 }
 
@@ -34,7 +33,7 @@
     width: 16%;
     height: 22%;
     border-style: groove;
-    margin-left: 56%;
+    margin-left: 58%;
     border-radius: 14px!important;
 }
 
@@ -45,7 +44,7 @@
     height: 46%;
     border-style: groove;
     margin-top: 14%;
-    margin-left: 2%;
+    margin-left: -2%;
     border-radius: 14px!important;
 }
 

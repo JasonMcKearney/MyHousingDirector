@@ -301,54 +301,72 @@ namespace WebAPI.Controllers
             return new Response { Status = "Success", Message = "Deleted student." };
         }
 
-        [HttpPost]
-        public List<AdminDashboardInfo> GetAdminDashboardInfo(AdminDashboardInfo dashboard)
+        [Route("GetAdminDashboardData")]
+        [HttpGet]
+        public AdminDashboardInfo GetAdminDashboardData()
         {
-            List<AdminDashboardInfo> dataArray = new List<AdminDashboardInfo>();
+            AdminDashboardInfo dashboardInfo = new AdminDashboardInfo();
 
-            // Check for number of requests for choosing a dorm room -> each person has to do a request
-                // Dorm selection, if one person requests a room, they will reserve the room for their other group members, but each will have to 
-                // request the room by themselves
+            // Get total counts for total students on campus and total dorm requests
+            using (MySqlConnection conn = GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand GetTotalStudents = conn.CreateCommand();
+
+                    GetTotalStudents.CommandText = "select count(user_id) as numberOfStudents from housingdirector_schema.student_tbl";
+
+                    dashboardInfo.nTotalStudents = Convert.ToInt32(GetTotalStudents.ExecuteScalar());
+                }
+                catch (Exception e)
+                {
+                    dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
+                }
+            }
+            using (MySqlConnection conn2 = GetConnection())
+            {
+                try
+                {
+                    conn2.Open();
+                    MySqlCommand GetTotalRequests = conn2.CreateCommand();
+
+                    GetTotalRequests.CommandText = "select count(submissionState) as numberOfRequests from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
+                    GetTotalRequests.Parameters.AddWithValue("@submissionState", "requested");
+
+                    dashboardInfo.nTotalDormRqsts = Convert.ToInt32(GetTotalRequests.ExecuteScalar());
+                }
+                catch (Exception e)
+                {
+                    dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
+                }
+            }
+
+            // Write query to find max number of dorm rooms where can get building id, number of studetns and name
 
 
+            // Write query to find the available dorm buildings
 
+            // write query to find the most popular building on campus, use above info
 
+            using (MySqlConnection conn3 = GetConnection())
+            {
+                try
+                {
+                    conn2.Open();
+                    MySqlCommand GetTotalRequests = conn2.CreateCommand();
 
+                    GetTotalRequests.CommandText = "select count(submissionState) as numberOfRequests from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
+                    GetTotalRequests.Parameters.AddWithValue("@submissionState", "requested");
 
-            /* System.Diagnostics.Debug.WriteLine(check.username);
-             string usernameResult = null;
-             string studentIDResult = null;
-             string firstNameResult = null;
-             string lastNameResult = null;
-             string emailResult = null;
-             string useridResult = null;
-
-             using (MySqlConnection conn = GetConnection())
-             {
-                 conn.Open();
-                 MySqlCommand getID = conn.CreateCommand();
-
-                 getID.Parameters.AddWithValue("@username", check.username);
-
-                 getID.CommandText = "select studentID, username, firstName, lastName, email, user_id from housingdirector_schema.student_tbl where username = @username";
-
-                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
-
-                 while (ReturnedInfo.Read())
-                 {
-                     studentIDResult = ReturnedInfo.GetString(0);
-                     usernameResult = ReturnedInfo.GetString(1);
-                     firstNameResult = ReturnedInfo.GetString(2);
-                     lastNameResult = ReturnedInfo.GetString(3);
-                     emailResult = ReturnedInfo.GetString(4);
-                     useridResult = ReturnedInfo.GetString(5);
-                 }
-                 ReturnedInfo.Close();
-
-             }
-             return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult, };
-            */
-            return dataArray;
+                    dashboardInfo.nTotalDormRqsts = Convert.ToInt32(GetTotalRequests.ExecuteScalar());
+                }
+                catch (Exception e)
+                {
+                    dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
+                }
+            }
+            return dashboardInfo;
         }
     }
 }
