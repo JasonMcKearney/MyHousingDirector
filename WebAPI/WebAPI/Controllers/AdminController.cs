@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -301,13 +302,25 @@ namespace WebAPI.Controllers
             return new Response { Status = "Success", Message = "Deleted student." };
         }
 
+/*        // Returns list of names and 
+        List<KeyValuePair<string,string>> NameBuildingFromID(List<DormBuilding> buildingDetailsList)
+        {
+            var buildingNames = new List<KeyValuePair<string, string>>();
+
+            for(int counter = 0; counter < buildingDetailsList)
+
+
+            return buildingNames;
+        }
+*/
+
         [Route("GetAdminDashboardData")]
         [HttpGet]
         public AdminDashboardInfo GetAdminDashboardData()
         {
             AdminDashboardInfo dashboardInfo = new AdminDashboardInfo();
 
-            // Get total counts for total students on campus and total dorm requests
+            // Get total students on campus
             using (MySqlConnection conn = GetConnection())
             {
                 try
@@ -324,6 +337,8 @@ namespace WebAPI.Controllers
                     dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
                 }
             }
+
+            // Get total dorm requests on campus
             using (MySqlConnection conn2 = GetConnection())
             {
                 try
@@ -342,19 +357,80 @@ namespace WebAPI.Controllers
                 }
             }
 
-            // Write query to find max number of dorm rooms where can get building id, number of studetns and name
+            // Finds max student capacity in each dorm building
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindBuildingInfo = conn.CreateCommand();
+                FindBuildingInfo.CommandText = "select dorm_id, name, sizeBuilding from housingdirector_schema.dormBuilding_tbl";
+                FindBuildingInfo.ExecuteNonQuery();
 
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
 
-            // Write query to find the available dorm buildings
+                while (reader.Read())
+                {
+                    dashboardInfo.totalStdntsInBuildings.Add(new DormBuilding
+                    {
+                        dorm_id = reader[0].ToString(),
+                        name = reader[1].ToString(),
+                        sizeBuilding = (int)reader[2]
+                    });
+                }
+                reader.Close();
+            }
 
+            // Finds available dorm buildings
+            using (MySqlConnection conn = GetConnection())
+            {
+                //var buildingNames = new List<KeyValuePair<string, string>>();
+                List<string> buildingNames = new List<string>();
+                var totalRoomsAvailable = new List<KeyValuePair<int, string>>();
+
+                conn.Open();
+                MySqlCommand FindBuildingInfo = conn.CreateCommand();
+                FindBuildingInfo.CommandText = "select dorm_id from housingdirector_schema.room_tbl where currentOccupants < maxOccupants";
+                FindBuildingInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    // Trying to add name and id into keyvaluepair
+                    string id = reader[0].ToString();
+                    // Finds object that has the specific dorm_id
+                    var obj = dashboardInfo.totalStdntsInBuildings.FirstOrDefault(o => o.dorm_id == id);
+                    // Gets the name saved in instance of class DormBuilding
+                    string name = obj.name;
+
+                    buildingNames.Add(name);
+                }
+                reader.Close();
+
+                buildingNames.GroupBy(n => n).Any(c => c.Count() > 1);
+
+         /*       foreach (var value in buildingNames)
+                {
+                    // When the key is not found, "count" will be initialized to 0
+                    dashboardInfo.availableBuildingsList.TryGetValue(value, out int count);
+                    dashboardInfo.availableBuildingsList[value] = count + 1;
+                }
+         */
+            }
+         
             // write query to find the most popular building on campus, use above info
 
-            using (MySqlConnection conn3 = GetConnection())
+         /*   using (MySqlConnection conn = GetConnection())
             {
+                SortedList buildingSortedList = new SortedList();
                 try
                 {
-                    conn2.Open();
-                    MySqlCommand GetTotalRequests = conn2.CreateCommand();
+                    conn.Open();
+                    MySqlCommand GetPopularBuilding = conn.CreateCommand();
+
+
+
 
                     GetTotalRequests.CommandText = "select count(submissionState) as numberOfRequests from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
                     GetTotalRequests.Parameters.AddWithValue("@submissionState", "requested");
@@ -366,6 +442,7 @@ namespace WebAPI.Controllers
                     dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
                 }
             }
+         */
             return dashboardInfo;
         }
     }

@@ -17,10 +17,10 @@ namespace WebAPI.Models
         public int nPopularBuilding { get; set; }
 
         // available dorm rooms
-        public List<string> roomInBuildingList { get; set; }
+        public Dictionary<string, int> availableBuildingsList { get; set; }
 
         // maximum number of students in each building
-        public List<DormBuilding> totalStdntsInBuildings { get; set; }
+        public List<DormBuilding> totalStdntsInBuildings = new List<DormBuilding>();
 
         public List<Response> message { get; set; }
     }

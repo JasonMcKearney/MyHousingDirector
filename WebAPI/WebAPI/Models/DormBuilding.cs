@@ -19,7 +19,7 @@ namespace WebAPI.Models
         
         public string image2 { get; set; }
 
-        public int sizeBuilding;
+        public int sizeBuilding { get; set; }
 
     }
 }
