@@ -11,7 +11,7 @@ import StudentHome from "./StudentHome";
 import RoommateSelection from "./RoommateSelection";
 import StudentInfo from "./StudentInfo";
 import RoommateList from "./RoommateList";
-import { bounce } from "react-animations";
+/*import { bounce } from "react-animations";*/
 
 import {
   UserOutlined,
@@ -71,7 +71,8 @@ class Student extends Component {
 
     return (
       <div
-        style={{ backgroundImage: `url(${bgPicSrc})` }}
+            style={{ backgroundImage: `url(${bgPicSrc})` }}
+
         className="Student-page-wrap"
         >
             <div className = "StudentPageNavbar">

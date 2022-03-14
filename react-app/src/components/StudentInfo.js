@@ -242,7 +242,7 @@ export default class studentinfo extends React.Component {
             <div className="Student-page-background"
                 style={{
                     margin: "0 auto ",
-/*                    flex: 1,*/
+                    flex: 1,
                     width: "80%",
                    /* justifyContent: "center"*/
                 }}>
