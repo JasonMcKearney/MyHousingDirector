@@ -29,6 +29,11 @@
 } */
 
 
+/* disables scrollbar that is outside the container on all pages */
+body
+{
+    overflow: hidden;
+}
 
 .box {
     width: 100%;
