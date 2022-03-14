@@ -129,7 +129,7 @@ export default class DormSelection extends Component {
             method: 'POST',
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
-                numRoommates: parseInt(Cookies.get("numRoommates"))
+                numRoommates: 1//parseInt(Cookies.get("numRoommates"))
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -309,8 +309,7 @@ export default class DormSelection extends Component {
                 roomNumber: this.state.room,     
                 floorNumber: this.state.floor,           
                 studentName: Cookies.get("username"),
-                student_id: Cookies.get("ID"),
-                 numRoommates: parseInt(Cookies.get("numRoommates"))
+                student_id: Cookies.get("ID")
             })
         }).then((Response) => Response.json())
         .then((result) => {
@@ -506,6 +505,7 @@ export default class DormSelection extends Component {
                                     this.submitForm()
                                 }}
                                 type="primary"
+                                onKeyDown={e => e.key === 'Enter'}
                                 htmlType="submit"
                             >
                                 Submit
@@ -655,10 +655,11 @@ export default class DormSelection extends Component {
                             flex: 1,
                         }}
                     >
-                            <div className='steps-content-info-words'>{currentDescriptions}</div>
+
+                        <div className='steps-content-info-words'>{currentDescriptions}</div>
                         <div classname='.divSpacing'>{hyperlink}</div>
                         <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
-                        </div>
+                    </div>
                 </div>
                 <div className="steps-action">
                     {current < steps.length - 1 && (

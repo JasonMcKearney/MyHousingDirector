@@ -46,7 +46,7 @@ export class StudentProfile extends Component {
     // Get data from student table based upon searched student username
     fetchData(){
         let currentComponent = this;
-        /*fetch('http://localhost:16648/api/Admin/FindStudentInfo/'+Cookies.get("student"), {
+        fetch('http://localhost:16648/api/Admin/FindStudentInfo/'+Cookies.get("student"), {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {                
                 'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export class StudentProfile extends Component {
             currentComponent.setState({email: res[0].email})
             currentComponent.setState({year: res[0].year})
             currentComponent.setState({password: res[0].password})
-        })*/
+        })
     }
 
     // Upon load of page, call fetchData()
@@ -153,18 +153,18 @@ export class StudentProfile extends Component {
                     <div>
                         <label className = "student-info-label">Firstname:</label>
 
-                        <input className= "student-infor-input" type = "text" defaultValue= {firstName} onChange={this.firstName}></input>
+                        <input className= "student-infor-input" disabled = {true} type = "text" defaultValue= {firstName} onChange={this.firstName}></input>
 
                     </div> 
 
                     <div>
                         <label className = "student-info-label">Lastname:</label>
-                        <input className= "student-infor-input" type = "text" defaultValue={lastName} onChange={this.lastName} ></input>
+                        <input className= "student-infor-input" disabled = {true} type = "text" defaultValue={lastName} onChange={this.lastName} ></input>
                     </div> 
                     
                     <div className = "student-container">
                         <label className = "student-info-label">Username:</label>
-                        <input disabled = {true} className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
+                        <input className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
                     </div>
 
                     <div className = "student-container">
@@ -179,7 +179,7 @@ export class StudentProfile extends Component {
                     
                     <div className = "student-container">
                         <label className = "student-info-label" >Password:</label>
-                        <input className= "student-infor-input" type = "text" defaultValue = {password} onChange={this.password} autoComplete = "off"></input>
+                        <input className= "student-infor-input" disabled = {true} type = "text" defaultValue = {password} onChange={this.password} autoComplete = "off"></input>
                     </div>
 
                 </div>
