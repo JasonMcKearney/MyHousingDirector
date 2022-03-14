@@ -231,12 +231,6 @@ export default class DormSelection extends Component {
                 }
                 Cookies.set("buildingID", buildingData[counter].dormID)
                 
-/*                this.setState((preState) => {
-                    return {
-                        current: preState.current + 1,
-                    };
-                });
-*/                
                 this.setState({ current: this.state.current + 1 }, () => {
                     console.log(this.state.current, 'in next(): current: ');
                 });            
@@ -250,12 +244,6 @@ export default class DormSelection extends Component {
                 message.error("You Must Select a Floor!");
                 return;
             }
-/*            this.setState((preState) => {
-                return {
-                    current: preState.current + 1,
-                };
-            });
-*/
             this.setState({ current: this.state.current + 1 }, () => {
                 console.log(this.state.current, 'in next(): current: ');
             });                        
@@ -266,24 +254,13 @@ export default class DormSelection extends Component {
             if (!room) {
                 message.error("You Must Select a Room to Continue!");
                 return;
-            }
-/*            this.setState((preState) => {
-                return {
-                    current: preState.current + 1,
-                };
-            });
-*/        
+            }  
         }
     };
 
     prev = () => {
         console.log("State of Current in prev: " + this.state.current)
-/*        this.setState((preState) => {
-            return {
-                current: preState.current - 1,
-            };
-        });
-*/
+
         this.setState({ current: this.state.current - 1 }, () => {
             console.log(this.state.current, 'dealersOverallTotal1');
           }); 
