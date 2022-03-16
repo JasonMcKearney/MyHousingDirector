@@ -47,6 +47,9 @@ namespace WebAPI.Controllers
             string lastNameResult = null;
             string emailResult = null;
             string useridResult = null;
+            string useryearResult = null;
+            string usergenderResult = null;
+    
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -55,7 +58,7 @@ namespace WebAPI.Controllers
 
                 getID.Parameters.AddWithValue("@username", check.username);
 
-                getID.CommandText = "select studentID, username, firstName, lastName, email, user_id from housingdirector_schema.student_tbl where username = @username";
+                getID.CommandText = "select studentID, username, firstName, lastName, email, user_id, year, gender from housingdirector_schema.student_tbl where username = @username";
 
                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
 
@@ -67,11 +70,13 @@ namespace WebAPI.Controllers
                     lastNameResult = ReturnedInfo.GetString(3);
                     emailResult = ReturnedInfo.GetString(4);
                     useridResult = ReturnedInfo.GetString(5);
+                    useryearResult = ReturnedInfo.GetString(6);
+                    usergenderResult = ReturnedInfo.GetString(7);
                 }
                 ReturnedInfo.Close();
 
             }
-            return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult, };
+            return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult,year = useryearResult, gender = usergenderResult, };
         }
 
         [HttpDelete("{id}")]
@@ -333,12 +338,12 @@ namespace WebAPI.Controllers
                 MySqlCommand FindFloorInfo = conn.CreateCommand();
 
                 FindFloorInfo.Parameters.AddWithValue("@dorm_id", floorDetails.dorm_id);
-                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates);
+                FindFloorInfo.Parameters.AddWithValue("@numRoommates", floorDetails.numRoommates + 1);
 
                 //FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
 
                 // Select the floor number based upon the building, room size, maxOccupants = num_roommates + 1
-                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id and maxOccupants >= @numRoommates and currentOccupants = 0";
+                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id and maxOccupants >= @numRoommates and currentOccupants < @numRoommates";
 
                 FindFloorInfo.ExecuteNonQuery();
 
@@ -370,9 +375,9 @@ namespace WebAPI.Controllers
 
                 FindRoomInfo.Parameters.AddWithValue("@dorm_id", paramsObj.dorm_id);
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
-                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates);
+                FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates + 1);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and @numRoommates <= maxOccupants and currentOccupants >= 0";
+                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and currentOccupants < @numRoommates";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -479,13 +484,14 @@ namespace WebAPI.Controllers
                 {
                     conn2.Open();
                     MySqlCommand InsertDataDormOcupnts = conn2.CreateCommand();
-                    InsertDataDormOcupnts.CommandText = "insert into dormOccupants_tbl (dorm_id, room_id, roomNumber, student_id, studentName) " +
-                         "values(@dormID, @roomID, @roomNumber, @student_id, @studentName)";
+                    InsertDataDormOcupnts.CommandText = "insert into dormOccupants_tbl (dorm_id, room_id, roomNumber, student_id, studentName, submissionState) " +
+                         "values(@dormID, @roomID, @roomNumber, @student_id, @studentName, @submissionState)";
                     InsertDataDormOcupnts.Parameters.AddWithValue("@dormID", dormOccupantsTBL.dorm_ID);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@roomID", dormOccupantsTBL.room_ID);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@student_id", dormOccupantsTBL.student_id);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@studentName", dormOccupantsTBL.studentName);
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@submissionState", "request");
                     InsertDataDormOcupnts.ExecuteNonQuery();
                 }
                 catch (Exception e)
@@ -531,7 +537,7 @@ namespace WebAPI.Controllers
                         MySqlCommand UpdateRoomOccupntsField = conn2.CreateCommand();
                         UpdateRoomOccupntsField.CommandText = "update room_tbl set currentOccupants = @currentOccupants " +
                             "where room_id = @roomid and dorm_id = @dormid and roomNumber = @roomNumber";
-                        UpdateRoomOccupntsField.Parameters.AddWithValue("@currentOccupants", nCurrentOccupants + 1 + dormOccupantsTBL.numRoommates);
+                        UpdateRoomOccupntsField.Parameters.AddWithValue("@currentOccupants", nCurrentOccupants + 1);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@dormid", dormOccupantsTBL.dorm_ID);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@roomid", dormOccupantsTBL.room_ID);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
@@ -682,12 +688,11 @@ namespace WebAPI.Controllers
                 surveyQuestions.ExecuteNonQuery();
             }
                 return new Response { Status = "Successful", Message = "The questions have been recieved" };
-        
         }
+
 
         [Route("getCurrentSurveyQuestions/{userID}")]
         [HttpPost]
-
         public SurveyQuestions getCurrentSurveyQuestions(int userID)
         {
 
@@ -722,9 +727,6 @@ namespace WebAPI.Controllers
                     surveyExsists = true;
                 }
                 reader.Close();
-
-
-
                 return currentSurvey;
             }
         }
