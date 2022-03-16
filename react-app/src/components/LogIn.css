@@ -32,7 +32,7 @@
 /* disables scrollbar that is outside the container on all pages */
 body
 {
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .box {

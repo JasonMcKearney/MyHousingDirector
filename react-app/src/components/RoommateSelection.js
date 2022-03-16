@@ -181,7 +181,8 @@ export default class RoommateSelection extends Component {
                 style={{
                     margin: "0 auto ",
                     flex: 1,
-                    width: "80%"
+                    width: "80%",
+
                 }}>
                 <div>
                     <div clasName="roommate-container">
