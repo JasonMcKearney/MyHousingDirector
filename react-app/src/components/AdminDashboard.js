@@ -11,6 +11,7 @@ import PieChart, {
   Connector,
 } from 'devextreme-react/pie-chart';
 import "./AdminDashboard.css";
+import { AutoComplete } from "antd";
 
 // Export means any module (Home.js file in this case) can use this script by importing it
 export class AdminDashboard extends Component {
@@ -28,21 +29,23 @@ export class AdminDashboard extends Component {
 
     render() {
       return ( 
-        <div class="container">
+          <div>
               <div class="totalStudents-box">
                   <Link >
                   <label style={{paddingTop:'4%'}}>Total Students on Campus</label>
                   <div style={{ padding: '10%' }}><h1>10</h1></div>
                   </Link>
-          </div>
+               </div>
 
               <div class="dormRequests-box" >
                   <Link >
-            <label style={{paddingTop:'6%'}}>Total Dorm Requests</label>
-            <div style={{padding:'2%'}}><h1>2</h1></div>
+                      <label style={{ paddingTop: '6%' }}>Total Dorm Requests</label>
+                     
+                <div style={{padding:'2%'}}><h1>2</h1></div>
                       <div style={{ fontSize: '120%' }}><a class="link">See Requests</a></div> 
                   </Link >
-          </div>
+              </div>
+               
 
               <div class="popularBuildings-box">
                   <Link >

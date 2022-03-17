@@ -6,11 +6,11 @@
 #searchBar{
 
     height: 5vh;
-    width: 93.7%;
+    width: 80%;
     margin-left:5px;
     padding-left:5px;
     float: left;
-    border-radius:10px;
+    border-radius:3%;
     border-width: 3px;
     border-style: solid;
     font-size: 3vh;
@@ -64,12 +64,12 @@
 .container-search{
 
     height:100%;
-
+    width:100%
 }
   .search-bar{
 
     float: left;
-    width: 100%;
+    width: 80%;
     border: 1px solid red;
 }
 
