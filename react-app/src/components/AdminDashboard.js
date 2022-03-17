@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 // How to make the piechart.. https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/DoughnutWithTopNSeries/React/Light/
 // Installed PieChart by using this https://js.devexpress.com/Documentation/Guide/React_Components/Add_DevExtreme_to_a_React_Application/
 import PieChart, {
@@ -28,20 +29,26 @@ export class AdminDashboard extends Component {
     render() {
       return ( 
         <div class="container">
-          <div class="totalStudents-box">
-            <label style={{paddingTop:'4%'}}>Total Students on Campus</label>
-            <div style={{padding:'10%'}}><h1>10</h1></div>
+              <div class="totalStudents-box">
+                  <Link >
+                  <label style={{paddingTop:'4%'}}>Total Students on Campus</label>
+                  <div style={{ padding: '10%' }}><h1>10</h1></div>
+                  </Link>
           </div>
 
-          <div class="dormRequests-box">
+              <div class="dormRequests-box" >
+                  <Link >
             <label style={{paddingTop:'6%'}}>Total Dorm Requests</label>
             <div style={{padding:'2%'}}><h1>2</h1></div>
-            <div style={{fontSize: '120%'}}><a class="link">See Requests</a></div> 
+                      <div style={{ fontSize: '120%' }}><a class="link">See Requests</a></div> 
+                  </Link >
           </div>
 
-          <div class="popularBuildings-box">
-            <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
-            <div style={{padding:'10%'}}><h1>Kingston</h1></div>
+              <div class="popularBuildings-box">
+                  <Link >
+                      <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
+                      <div style={{ padding: '10%' }}><h1>Kingston</h1></div>
+                      </Link >
           </div>
 
           <div class="availableDormRooms-box">

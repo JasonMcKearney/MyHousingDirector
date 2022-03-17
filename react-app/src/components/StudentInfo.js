@@ -238,7 +238,13 @@ export default class studentinfo extends React.Component {
 
       
     render() {
-        return (   
+        return (
+            <div className="Student-page-background"
+            style={{
+                margin: "0 auto ",
+                flex: 1,
+                width: "80%"
+            }}>
             <div className='paige-container'>
             <div className="form-wrapper">
                 <div className="question-wrapper">
@@ -378,7 +384,8 @@ export default class studentinfo extends React.Component {
 
                     </div>
                 </div>
-                </div> 
+                </div>
+                </div>
 
     
         );
