@@ -196,8 +196,6 @@ namespace WebAPI.Controllers
                 FindRequestorID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
 
                 int requestor_id = Convert.ToInt32(FindRequestorID.ExecuteScalar());
-
-
                 MySqlCommand CheckRequest = conn.CreateCommand();
                 CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
                 CheckRequest.Parameters.AddWithValue("@recieverID", ids.reciever_id);
@@ -427,17 +425,12 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    // true if maxOccupants != currurrentOccupants
-                    //if (reader[2] != reader[4])
-                    //{
                     occupants.Add(new studentTblFields()
                     {
                         studentID = reader.GetString(5),
-                        //usernameResult = ReturnedInfo.GetString(1);
                         firstName = reader.GetString(1),
                         lastName = reader.GetString(2),
                         username = reader.GetString(3),
-                        //emailResult = ReturnedInfo.GetString(4);
                     });
                 }
                 reader.Close();
