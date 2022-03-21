@@ -34,8 +34,8 @@ ReactDOM.render(
 
         {/* <App /> */}
       </div>
-    </BrowserRouter>,
-        </CookiesProvider>,
+    </BrowserRouter>
+        </CookiesProvider>
         </Provider>,
   rootElement
 );

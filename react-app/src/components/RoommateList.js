@@ -375,8 +375,14 @@ export default class RoommateList extends Component {
     }
 
   render() {
-    return (
-        <div className="Student-page-background">
+      return (
+
+          <div className="Student-page-background"
+              style={{
+                  margin: "0 auto ",
+                  flex: 1,
+                  width: "80%"
+              }}>
              <div className="StudentHomeBox">
                  <div className="roommate-box">
                         <p>Outbound requests</p>
@@ -389,7 +395,8 @@ export default class RoommateList extends Component {
 
                 </div>
             </div>
-        </div>
+              </div>
+
     );
   }
 }
