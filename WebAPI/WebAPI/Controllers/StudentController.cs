@@ -303,7 +303,9 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
 
-                FindBuildingInfo.CommandText = "select * from housingdirector_schema.dormBuilding_tbl";
+                FindBuildingInfo.CommandText = "SELECT Building_tbl.dorm_id, Building_tbl.name, Building_Description_tbl.Description_Text,Building_Image_tbl.Image_Link FROM Building_tbl INNER JOIN Building_Image_tbl on Building_Image_tbl.Image_ID_Building_ID = Building_tbl.dorm_id INNER JOIN Building_Description_tbl on Building_Description_tbl.Dorm_ID = Building_tbl.dorm_id";
+
+                                                
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -316,9 +318,8 @@ namespace WebAPI.Controllers
                         dorm_id = reader[0].ToString(),
                         name = reader[1].ToString(),
                         description = reader[2].ToString(),
-                        url = reader[3].ToString(),
-                        image1 = reader[4].ToString(),
-                        image2 = reader[5].ToString()
+                        image1 = reader[3].ToString()
+                     
                     });
                 }
                 reader.Close();

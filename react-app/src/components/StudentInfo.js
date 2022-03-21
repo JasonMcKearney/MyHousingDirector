@@ -378,6 +378,24 @@ export default class studentinfo extends React.Component {
 
                     </div>
                 </div>
+
+                    <div className='info-wrapper'>
+                        
+                    <div className='user-data-wrapper'>
+                            <label className="user-label">Dorm:</label>
+                            <p className='user-info'>Monadnock</p>
+                    </div>
+                    <div className='user-data-wrapper'>
+                        <label className="user-label">Number of Beds:</label>
+                        <p className='user-info'>4</p>
+                    </div>
+                    <div className='user-data-wrapper'>
+                        <label className="user-label">Room Number:</label>
+                        <p className='user-info'>104</p>
+                    </div>
+
+
+                    </div>
                 </div> 
 
     
