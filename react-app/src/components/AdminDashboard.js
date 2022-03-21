@@ -26,6 +26,13 @@ export class AdminDashboard extends Component {
       percent: 300,
     }] }
 
+    componentDidMount()
+    {
+
+      console.log("data has been received..")
+
+    }
+
     render() {
       return ( 
         <div class="container">

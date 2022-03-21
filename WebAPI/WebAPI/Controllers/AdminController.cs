@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -301,54 +302,131 @@ namespace WebAPI.Controllers
             return new Response { Status = "Success", Message = "Deleted student." };
         }
 
-        [HttpPost]
-        public List<AdminDashboardInfo> GetAdminDashboardInfo(AdminDashboardInfo dashboard)
+/*        // Returns list of names and 
+        List<KeyValuePair<string,string>> NameBuildingFromID(List<DormBuilding> buildingDetailsList)
         {
-            List<AdminDashboardInfo> dataArray = new List<AdminDashboardInfo>();
+            var buildingNames = new List<KeyValuePair<string, string>>();
 
-            // Check for number of requests for choosing a dorm room -> each person has to do a request
-                // Dorm selection, if one person requests a room, they will reserve the room for their other group members, but each will have to 
-                // request the room by themselves
+            for(int counter = 0; counter < buildingDetailsList)
 
 
+            return buildingNames;
+        }
+*/
 
+        [Route("GetAdminDashboardData")]
+        [HttpGet]
+        public AdminDashboardInfo GetAdminDashboardData()
+        {
+            AdminDashboardInfo dashboardInfo = new AdminDashboardInfo();
 
+            // Get total students on campus
+            using (MySqlConnection conn = GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    MySqlCommand GetTotalStudents = conn.CreateCommand();
 
+                    GetTotalStudents.CommandText = "select count(user_id) as numberOfStudents from housingdirector_schema.student_tbl";
 
-            /* System.Diagnostics.Debug.WriteLine(check.username);
-             string usernameResult = null;
-             string studentIDResult = null;
-             string firstNameResult = null;
-             string lastNameResult = null;
-             string emailResult = null;
-             string useridResult = null;
+                    dashboardInfo.nTotalStudents = Convert.ToInt32(GetTotalStudents.ExecuteScalar());
+                }
+                catch (Exception e)
+                {
+                    dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
+                }
+            }
 
-             using (MySqlConnection conn = GetConnection())
-             {
-                 conn.Open();
-                 MySqlCommand getID = conn.CreateCommand();
+            // Get total dorm requests on campus
+            using (MySqlConnection conn2 = GetConnection())
+            {
+                try
+                {
+                    conn2.Open();
+                    MySqlCommand GetTotalRequests = conn2.CreateCommand();
 
-                 getID.Parameters.AddWithValue("@username", check.username);
+                    GetTotalRequests.CommandText = "select count(submissionState) as numberOfRequests from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
+                    GetTotalRequests.Parameters.AddWithValue("@submissionState", "requested");
 
-                 getID.CommandText = "select studentID, username, firstName, lastName, email, user_id from housingdirector_schema.student_tbl where username = @username";
+                    dashboardInfo.nTotalDormRqsts = Convert.ToInt32(GetTotalRequests.ExecuteScalar());
+                }
+                catch (Exception e)
+                {
+                    dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
+                }
+            }
 
-                 MySqlDataReader ReturnedInfo = getID.ExecuteReader();
+            // Finds max student capacity in each dorm building
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindBuildingInfo = conn.CreateCommand();
+                FindBuildingInfo.CommandText = "select dorm_id, name, sizeBuilding from housingdirector_schema.Building_tbl";
+                FindBuildingInfo.ExecuteNonQuery();
 
-                 while (ReturnedInfo.Read())
-                 {
-                     studentIDResult = ReturnedInfo.GetString(0);
-                     usernameResult = ReturnedInfo.GetString(1);
-                     firstNameResult = ReturnedInfo.GetString(2);
-                     lastNameResult = ReturnedInfo.GetString(3);
-                     emailResult = ReturnedInfo.GetString(4);
-                     useridResult = ReturnedInfo.GetString(5);
-                 }
-                 ReturnedInfo.Close();
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
 
-             }
-             return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult, };
-            */
-            return dataArray;
+                while (reader.Read())
+                {
+                    dashboardInfo.totalStdntsInBuildings.Add(new DormBuilding
+                    {
+                        dorm_id = reader[0].ToString(),
+                        name = reader[1].ToString(),
+                        sizeBuilding = (int)reader[2]
+                    });
+                }
+                reader.Close();
+            }
+
+            // Finds available dorm buildings
+            using (MySqlConnection conn = GetConnection())
+            {
+                List<string> buildingNames = new List<string>();
+                var totalRoomsAvailable = new List<KeyValuePair<int, string>>();
+
+                conn.Open();
+                MySqlCommand FindBuildingInfo = conn.CreateCommand();
+                FindBuildingInfo.CommandText = "select dorm_id from housingdirector_schema.room_tbl where currentOccupants < maxOccupants";
+                FindBuildingInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
+                
+                while (reader.Read())
+                {
+                    // Trying to add name and id into keyvaluepair
+                    string id = reader[0].ToString();
+                    // Finds object that has the specific dorm_id in totalSTdntsInBuildings list
+                    var obj = dashboardInfo.totalStdntsInBuildings.FirstOrDefault(o => o.dorm_id == id);
+                    // Gets the name saved in instance of class DormBuilding
+                    string name = obj.name;
+
+                    buildingNames.Add(name);
+                }
+                reader.Close();
+
+                // Counts duplicates that are in a list using linq
+                var q = from x in buildingNames
+                        group x by x into g
+                        let count = g.Count()
+                        orderby count descending
+                        select new { Value = g.Key, Count = count };
+                // Loop through list and count values
+                foreach (var x in q)
+                {
+                    // Adds name of building and how many dorm rooms are open to the dictionary
+                    dashboardInfo.availableBuildingsDictionary.Add(x.Count, x.Value.ToString());
+                }
+            }
+
+            // Sorts dictionary
+            var sortedDict = from entry in dashboardInfo.availableBuildingsDictionary orderby entry.Value ascending select entry;
+            // Gets first value in list
+            dashboardInfo.nPopularBuilding = sortedDict.ElementAt(0).Value.ToString();
+
+            return dashboardInfo;
         }
     }
 }

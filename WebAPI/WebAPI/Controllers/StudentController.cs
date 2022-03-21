@@ -491,7 +491,7 @@ namespace WebAPI.Controllers
                     InsertDataDormOcupnts.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@student_id", dormOccupantsTBL.student_id);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@studentName", dormOccupantsTBL.studentName);
-                    InsertDataDormOcupnts.Parameters.AddWithValue("@submissionState", "request");
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@submissionState", "requested");
                     InsertDataDormOcupnts.ExecuteNonQuery();
                 }
                 catch (Exception e)
