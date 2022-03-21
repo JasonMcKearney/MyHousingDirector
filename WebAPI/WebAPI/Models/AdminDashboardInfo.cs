@@ -14,10 +14,10 @@ namespace WebAPI.Models
         public int nTotalDormRqsts { get; set; }
 
         // most popular Building on Campus
-        public int nPopularBuilding { get; set; }
+        public string nPopularBuilding { get; set; }
 
         // available dorm rooms
-        public Dictionary<string, int> availableBuildingsList { get; set; }
+        public Dictionary<int, string> availableBuildingsDictionary = new Dictionary<int, string>();
 
         // maximum number of students in each building
         public List<DormBuilding> totalStdntsInBuildings = new List<DormBuilding>();

@@ -362,7 +362,7 @@ namespace WebAPI.Controllers
             {
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
-                FindBuildingInfo.CommandText = "select dorm_id, name, sizeBuilding from housingdirector_schema.dormBuilding_tbl";
+                FindBuildingInfo.CommandText = "select dorm_id, name, sizeBuilding from housingdirector_schema.Building_tbl";
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -383,7 +383,6 @@ namespace WebAPI.Controllers
             // Finds available dorm buildings
             using (MySqlConnection conn = GetConnection())
             {
-                //var buildingNames = new List<KeyValuePair<string, string>>();
                 List<string> buildingNames = new List<string>();
                 var totalRoomsAvailable = new List<KeyValuePair<int, string>>();
 
@@ -399,7 +398,7 @@ namespace WebAPI.Controllers
                 {
                     // Trying to add name and id into keyvaluepair
                     string id = reader[0].ToString();
-                    // Finds object that has the specific dorm_id
+                    // Finds object that has the specific dorm_id in totalSTdntsInBuildings list
                     var obj = dashboardInfo.totalStdntsInBuildings.FirstOrDefault(o => o.dorm_id == id);
                     // Gets the name saved in instance of class DormBuilding
                     string name = obj.name;
@@ -408,41 +407,25 @@ namespace WebAPI.Controllers
                 }
                 reader.Close();
 
-                buildingNames.GroupBy(n => n).Any(c => c.Count() > 1);
-
-         /*       foreach (var value in buildingNames)
+                // Counts duplicates that are in a list using linq
+                var q = from x in buildingNames
+                        group x by x into g
+                        let count = g.Count()
+                        orderby count descending
+                        select new { Value = g.Key, Count = count };
+                // Loop through list and count values
+                foreach (var x in q)
                 {
-                    // When the key is not found, "count" will be initialized to 0
-                    dashboardInfo.availableBuildingsList.TryGetValue(value, out int count);
-                    dashboardInfo.availableBuildingsList[value] = count + 1;
-                }
-         */
-            }
-         
-            // write query to find the most popular building on campus, use above info
-
-         /*   using (MySqlConnection conn = GetConnection())
-            {
-                SortedList buildingSortedList = new SortedList();
-                try
-                {
-                    conn.Open();
-                    MySqlCommand GetPopularBuilding = conn.CreateCommand();
-
-
-
-
-                    GetTotalRequests.CommandText = "select count(submissionState) as numberOfRequests from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
-                    GetTotalRequests.Parameters.AddWithValue("@submissionState", "requested");
-
-                    dashboardInfo.nTotalDormRqsts = Convert.ToInt32(GetTotalRequests.ExecuteScalar());
-                }
-                catch (Exception e)
-                {
-                    dashboardInfo.message.Add(new Response { Status = "Invalid Response", Message = e.Message });
+                    // Adds name of building and how many dorm rooms are open to the dictionary
+                    dashboardInfo.availableBuildingsDictionary.Add(x.Count, x.Value.ToString());
                 }
             }
-         */
+
+            // Sorts dictionary
+            var sortedDict = from entry in dashboardInfo.availableBuildingsDictionary orderby entry.Value ascending select entry;
+            // Gets first value in list
+            dashboardInfo.nPopularBuilding = sortedDict.ElementAt(0).Value.ToString();
+
             return dashboardInfo;
         }
     }
