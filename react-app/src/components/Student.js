@@ -11,7 +11,6 @@ import StudentHome from "./StudentHome";
 import RoommateSelection from "./RoommateSelection";
 import StudentInfo from "./StudentInfo";
 import RoommateList from "./RoommateList";
-/*import { bounce } from "react-animations";*/
 
 import {
   UserOutlined,
@@ -19,7 +18,6 @@ import {
   NotificationOutlined,
 } from "@ant-design/icons";
 
-/*const Bounce = styled.div'animation: 2s ${keyframes}'*/
 const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -42,14 +40,12 @@ class Student extends Component {
                var lastName = result.lastName;
                var email = result.email
                var user_id = result.user_id;
-               var year = result.year;
 
                Cookies.set("ID", ID);
                Cookies.set("FN", firstName);
                Cookies.set("LN", lastName);
                Cookies.set("EM", email);
                Cookies.set("UD", user_id);
-               Cookies.set("YR", year);
              })
   }
   state = {
@@ -57,24 +53,12 @@ class Student extends Component {
     // 默认图；当请求接口后需要改变此图
     bgPicSrc: bg001,
   };
-
-  // componentDidMount() {
-  //     console.log("this.props = ", this.props.userinfo)
-  //     let { username, pwd } = this.props.userinfo;
-  //     if (pwd == 'george') {
-  //         this.setState({
-  //             showModal: true
-  //         })
-  //     }
-  // }
-
   render() {
     let { showModal, bgPicSrc } = this.state;
 
     return (
       <div
-            style={{ backgroundImage: `url(${bgPicSrc})` }}
-
+        style={{ backgroundImage: `url(${bgPicSrc})` }}
         className="Student-page-wrap"
         >
             <div className = "StudentPageNavbar">
@@ -167,12 +151,6 @@ class Student extends Component {
             </Form.Item>
           </div>
         </Modal>
-        {/* <div className="Student-desc1">Southern New Hampshire University</div>
-        <div className="Student-desc2">
-          Hi User! <br />
-          Welcome to Dly House Director!
-        </div> */}
-        
         <Button
           onClick={() => {
             Cookies.remove("ID");
