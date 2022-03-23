@@ -7,11 +7,21 @@ namespace WebAPI.Models
 {
     public class AdminDashboardInfo
     {
-        private int nTotalStudentsOnCampus = 0;
-        private int nTotalDormRequests = 0;
-        private int nMostPopularBuildins = 0;
-        private List<string> availableDormRooms = new List<string>();
+        // total students on campus
+        public int nTotalStudents { get; set; }
 
-        // Also need a way to get how many students there are in each dorm, such as Monadnock, Washington, etc.
+        // total dorm requests
+        public int nTotalDormRqsts { get; set; }
+
+        // most popular Building on Campus
+        public string nPopularBuilding { get; set; }
+
+        // available dorm rooms
+        public Dictionary<int, string> availableBuildingsDictionary = new Dictionary<int, string>();
+
+        // maximum number of students in each building
+        public List<DormBuilding> totalStdntsInBuildings = new List<DormBuilding>();
+
+        public List<Response> message { get; set; }
     }
 }
