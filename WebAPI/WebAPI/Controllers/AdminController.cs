@@ -367,10 +367,10 @@ namespace WebAPI.Controllers
 
                 // Execute the SQL command against the DB:
                 MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
-
+                dashboardInfo.totalStdntsInBuildingsList = new List<DormBuilding>();
                 while (reader.Read())
                 {
-                    dashboardInfo.totalStdntsInBuildings.Add(new DormBuilding
+                    dashboardInfo.totalStdntsInBuildingsList.Add(new DormBuilding
                     {
                         dorm_id = reader[0].ToString(),
                         name = reader[1].ToString(),
@@ -393,13 +393,12 @@ namespace WebAPI.Controllers
 
                 // Execute the SQL command against the DB:
                 MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
-                
                 while (reader.Read())
                 {
                     // Trying to add name and id into keyvaluepair
                     string id = reader[0].ToString();
                     // Finds object that has the specific dorm_id in totalSTdntsInBuildings list
-                    var obj = dashboardInfo.totalStdntsInBuildings.FirstOrDefault(o => o.dorm_id == id);
+                    var obj = dashboardInfo.totalStdntsInBuildingsList.FirstOrDefault(o => o.dorm_id == id);
                     // Gets the name saved in instance of class DormBuilding
                     string name = obj.name;
 
@@ -413,18 +412,24 @@ namespace WebAPI.Controllers
                         let count = g.Count()
                         orderby count descending
                         select new { Value = g.Key, Count = count };
+
+                dashboardInfo.availableBuildingsList = new List<DormBuilding>();
                 // Loop through list and count values
                 foreach (var x in q)
                 {
-                    // Adds name of building and how many dorm rooms are open to the dictionary
-                    dashboardInfo.availableBuildingsDictionary.Add(x.Count, x.Value.ToString());
+                    // Adds name of building and how many dorm rooms are open as an object to the list
+                    dashboardInfo.availableBuildingsList.Add(new DormBuilding
+                    {
+                        numRoomsAvailable = x.Count,
+                        name = x.Value.ToString()
+                    });
                 }
             }
 
             // Sorts dictionary
-            var sortedDict = from entry in dashboardInfo.availableBuildingsDictionary orderby entry.Value ascending select entry;
+            var sortedList = from entry in dashboardInfo.availableBuildingsList orderby entry.numRoomsAvailable ascending select entry;
             // Gets first value in list
-            dashboardInfo.nPopularBuilding = sortedDict.ElementAt(0).Value.ToString();
+            dashboardInfo.sPopularBuilding = sortedList.ElementAt(0).name.ToString();
 
             return dashboardInfo;
         }
