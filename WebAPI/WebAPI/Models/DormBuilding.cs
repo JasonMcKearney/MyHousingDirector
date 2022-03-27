@@ -21,5 +21,7 @@ namespace WebAPI.Models
 
         public int sizeBuilding { get; set; }
 
+        public int numRoomsAvailable { get; set; }
+
     }
 }
