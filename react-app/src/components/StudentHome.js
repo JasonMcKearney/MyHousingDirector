@@ -13,12 +13,13 @@ export default class DormSelection extends Component {
       firstName: "",
       lastName: "",
       email: "",
+      userMessage: ""
     };
   }
 
   componentDidMount() {
     //var currentComponent = this;
-    
+    var user_id;
     fetch('http://localhost:16648/api/Student/', {
       headers: {
           'Content-Type': 'application/json',
@@ -34,13 +35,14 @@ export default class DormSelection extends Component {
         var firstName = result.firstName;
         var lastName = result.lastName;
         var email = result.email
-        var user_id = result.user_id;
+        user_id = result.user_id;
 
         Cookies.set("ID", ID);
         Cookies.set("FN", firstName);
         Cookies.set("LN", lastName);
         Cookies.set("EM", email);
         Cookies.set("UD", user_id);
+        this.checkSurveyCompletion();
       });
   }
 
@@ -57,7 +59,7 @@ export default class DormSelection extends Component {
           method: "POST",
       }).then(res=>res.clone().json())
       .then((res) => {
-            if (res.question1 == null || res.question12 == null){
+        if (res.question1 === null || res.question2 === null || res.question3 === null  || res.question4 === null || res.question5 === null || res.question6 === null || res.question7 === null  || res.question8 === null  || res.question9 === null  || res.question10 === null || res.question11 === null || res.question12 === null){
               var surveyStatus = false;
             }
             else{
@@ -74,9 +76,9 @@ export default class DormSelection extends Component {
                 "Content-Type": "application/json",
                 Accept: "application/json",
             },
-  
+
             method: "POST",
-        }
+        } 
     ).then(res=>res.clone().json())
   
         .then((res) => {
@@ -93,9 +95,11 @@ export default class DormSelection extends Component {
             Cookies.set("Question11", res.question11);
             Cookies.set("Question12", res.question12);
           });
+        };
+    surveyError(){
     if(Cookies.get("survey") === "false"){
       return(
-        <div className="survey-notification">Your survey is not complete. In order to select roommates, your survey must be completed.</div>
+        <div className="survey-notification">Your survey is not complete. In order to select roommates or your dorm location, your survey must be completed.</div>
       );
     } 
   } 
@@ -108,7 +112,7 @@ export default class DormSelection extends Component {
           Hello { Cookies.get("FN") }! <br/>
           Welcome to My Housing Director!
         </div>
-        { this.checkSurveyCompletion() }
+        { this.surveyError() }
       </>
     );
   }
