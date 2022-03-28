@@ -8,6 +8,7 @@ import Search from './Search';
 import './Home.css';
 import { StudentProfile } from './StudentProfile';
 import { AdminDashboard } from './AdminDashboard';
+import {AdminDormRequests} from './AdminDormRequests';
 
 import Homepagelogo from '../img/logo.png';
 
@@ -88,7 +89,8 @@ export class Home extends Component {
                                     <Route path='/home/nav4' render={() => { return (<h1>nav4</h1>) }} /> 
                                     <Route path='/home/StudentProfile' component ={StudentProfile}/>
                                     <Route path='/User_Form' render={() => { return (<h1>nav1</h1>) }} />  
-                                    <Route path='/home/AdminDashboard' component ={AdminDashboard}/>                                   
+                                    <Route path='/home/AdminDashboard' component ={AdminDashboard}/>   
+                                    <Route path='/home/AdminDormRequests' component = {AdminDormRequests}/>                               
                                 </Switch>
                             </div>
                         </Content>

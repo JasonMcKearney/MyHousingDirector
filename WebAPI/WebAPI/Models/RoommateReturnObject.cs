@@ -12,6 +12,9 @@ namespace WebAPI.Models
         public string studentLastName { get; set; }
         public string studentEmail { get; set; }
         public string requestState { get; set; }
+        public string requestorFirstName { get; set; }
+        public string requestorLastName { get; set; }
+        public int recieverID { get; set; }
 
     }
 }

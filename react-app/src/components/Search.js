@@ -40,6 +40,7 @@ export default class search extends Component {
     }
 
     searchText(event) {
+        console.log(event.target.value)
         this.setState({ searchText: event.target.value });
        // this.setState({ studentlist: [] })
     }
@@ -114,6 +115,14 @@ export default class search extends Component {
         
         );
       }
+      removeAllInfo(){
+        
+        this.setState({
+            studentlist: [],
+        });
+        
+        this.listItems();
+    }
 
     // Find results if there are any in the database
     getResults(){
@@ -122,9 +131,8 @@ export default class search extends Component {
 
         console.log("Length: " + studentListLength.length)
 
-        // Does not allow for multiple strings to be displayed if the input has not changed by the user
-        if(studentListLength == 0)
-        {
+        currentComponent.removeAllInfo();
+         
             // Passing parameter to Web API through address
             fetch('http://localhost:16648/api/Admin/FindStudents/'+this.state.searchText, {
                 mode: 'cors', // this cannot be 'no-cors'
@@ -156,7 +164,8 @@ export default class search extends Component {
                 }
                 currentComponent.setState({searchResults: loopData})
             })
-        }
+        
+        
     }
     
     render() {
