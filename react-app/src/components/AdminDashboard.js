@@ -84,6 +84,7 @@ export class AdminDashboard extends Component {
               }  
           })
   }
+ // <div className='.button'><button onClick={() => { this.props.history.push('/home/AdminDormRequests');}} id ='primary-button' >See Requests</button></div>                  
     
     render() {
       let {
@@ -97,30 +98,24 @@ export class AdminDashboard extends Component {
        return ( 
         <div class="container">
               <div class="totalStudents-box">
-                  <Link >
                   <label style={{paddingTop:'4%'}}>Total Students on Campus</label>
-            <div style={{padding:'10%', paddingTop:'14%'}}><h1>{totalStudents}</h1></div>
-                  </Link>
+              <div style={{padding:'10%', paddingTop:'14%'}}><h1>{totalStudents}</h1></div>
           </div>
 
-              <div class="dormRequests-box" >
-                  <Link >
-            <label style={{paddingTop:'6%'}}>Total Dorm Requests</label>
-            <div style={{padding:'0%', paddingTop:'10%'}}><h1>{totalDormRqsts}</h1></div>
-                      <div style={{ fontSize: '120%' }}><a class="link">See Requests</a></div> 
-                  </Link >
-          </div>
+            <div class="dormRequests-box" >                  
+              <label style={{paddingTop:'6%'}}>Total Dorm Requests</label>
+              <div style={{padding:'0%', paddingTop:'10%'}}><h1>{totalDormRqsts}</h1></div>
+              <Link to='./AdminDormRequests' className="btn btn-primary">See Requests</Link>
+            </div>
 
               <div class="popularBuildings-box">
-                  <Link >
                       <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
-            <div style={{padding:'10%', marginTop:'-3%'}}><h1>{popularBuilding}</h1></div>
-                      </Link >
+                      <div style={{padding:'10%', marginTop:'-3%'}}><h1>{popularBuilding}</h1></div>
           </div>
 
           <div class="availableDormRooms-box">
             <label style={{paddingTop:'2%'}}>Available Dorm Rooms</label>
-            <div class="viewDorms-div"><a class="link">View Dorms</a></div>
+            <div class="viewDorms-div"><Link className="btn btn-primary">View Dorms</Link></div>
             <div class="buildingsList-div">
               <ul>
                 {availableBuildingsList.map((data) => (
@@ -158,8 +153,5 @@ export class AdminDashboard extends Component {
         </div>
       </div>
     );
-  }
-  customizeLabel(point) {
-    return `${point.argumentText}: ${point.valueText} students`;
   }
 }
