@@ -4,11 +4,13 @@ import Cookies from 'js-cookie';
 import defaultlogo from '../img/default_logo.png'
 import Select from "react-select";
 export default class studentinfo extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+     
         this.state = {
             checked: false,
             values: [],
+            RoomateRequestsList: [],
             options: [
                 { label: "CAPE", value: "CAPE" },
                 { label: "Athletics", value: "Athletics" },
@@ -17,6 +19,11 @@ export default class studentinfo extends React.Component {
                 { label: "Theatre/Drama", value: "Theatre/Drama" },
                 { label: "Work Study", value: "Work Study" },
                 { label: "Other", value: "Other" } ],
+                studentFirstName: '',
+                studentLastName: '',
+                requestorFirstName: '',
+                requestorLastName: '',
+               requestState:'',
               optionsQuestion1: [{label:'Before 6 am',value:'Before 6 am'},
                                  {label:'Between 6 am-9 am',value:'Between 6 am-9 am'},
                                  {label:'After 9 am',value:'After 9 am'}],
@@ -57,11 +64,16 @@ export default class studentinfo extends React.Component {
               userAnswers:{Question1:'placeholder', Question2:'', Question3:'', Question4:'',Question5:'', Question6:'', 
                         Question7:'',Question8:'', Question9:'', Question10:'', Question11:'', Question12:''}
         }
-        this.onChange = this.onChange.bind(this);
+       
+       
        this.sendQuestionUpdate = this.sendQuestionUpdate.bind(this);
+       this.displayRoomateChecklist = this.displayRoomateChecklist.bind(this);
+   
     }
     componentDidMount(){
             this.setSurveyQuestions();
+            this.getRoommateRequestChecklsit();
+           
     }
     sendQuestionUpdate ()
       {
@@ -175,6 +187,77 @@ export default class studentinfo extends React.Component {
 
         this.setState({userAnswers: newUserAnswers});
     }
+    
+
+    displayRoomateChecklist()
+    {
+        console.log("made it to display")
+        let tempRequestCheckList  = this.state.RoomateRequestsList  
+       console.log( this.state.RoomateRequestsList)
+            return(
+
+                <div className='checklist-container'>
+                    <p>Roomate Request Checklist</p>
+                     {tempRequestCheckList.map((val, index) => {
+                         return(
+                            <div className="checklist-item-wrapper" >
+                                <p className='checklist-item'>{val.requestorFirstName} {val.requestorLastName}</p>
+                                <p className='checklist-item'>{val.requestState}</p>
+                                <p className='checklist-item'>{val.studentFirstName} {val.studentLastName}</p>
+                            </div>
+                         );
+                    })}
+                </div>
+
+            );
+
+    }
+    addCheckListItem()
+    {
+            let newCheckListItem = {studentFirstName: this.state.studentFirstName, studentLastName: this.state.studentLastName, requestorFirstName: this.state.requestorFirstName, requestorLastName: this.state.requestorLastName,  requestState:this.state.requestState};
+            let tempRequestCheckList = this.state.RoomateRequestsList;
+
+            tempRequestCheckList.push(newCheckListItem)
+            
+            this.setState({RoomateRequestsList: tempRequestCheckList});
+    
+    
+    }
+    getRoommateRequestChecklsit(){
+        let currentComponent = this;
+        
+        fetch("http://localhost:16648/api/Student/getRoommateRequestStates/" + Cookies.get("UD"),
+            {
+                mode: "cors", // this cannot be 'no-cors'
+                headers: {
+                    "Content-Type": "application/json",
+                    'Accept': 'application/json',
+                },
+
+                method: "POST",
+            }
+        ).then(res => res.clone().json())
+            
+        .then(function(res) {
+            var i;
+            for( i = 0; i < res.length; i++)
+            {
+            
+
+                currentComponent.setState({studentFirstName: res[i].studentFirstName})
+                currentComponent.setState({studentLastName: res[i].studentLastName})
+                currentComponent.setState({requestorFirstName: res[i].requestorFirstName})
+                currentComponent.setState({requestorLastName: res[i].requestorLastName})
+                currentComponent.setState({requestState: res[i].requestState})
+
+              currentComponent.addCheckListItem()
+            
+            
+             }
+             
+        })
+
+    }
     setSurveyQuestions(){
 
         let newUserAnswers = this.state.userAnswers;
@@ -222,8 +305,9 @@ export default class studentinfo extends React.Component {
                 Cookies.set("Question11", newUserAnswers.Question11);
                 Cookies.set("Question12", newUserAnswers.Question12);
 
-                this.setState({userAnswers: newUserAnswers});
+                
             })
+            this.setState({userAnswers: newUserAnswers});
 
     }
       onChange = opt => {
@@ -379,24 +463,17 @@ export default class studentinfo extends React.Component {
                     </div>
                 </div>
 
-                    <div className='info-wrapper'>
+                <div className='info-wrapper '>
                         
-                    <div className='user-data-wrapper'>
-                            <label className="user-label">Dorm:</label>
-                            <p className='user-info'>Monadnock</p>
-                    </div>
-                    <div className='user-data-wrapper'>
-                        <label className="user-label">Number of Beds:</label>
-                        <p className='user-info'>4</p>
-                    </div>
-                    <div className='user-data-wrapper'>
-                        <label className="user-label">Room Number:</label>
-                        <p className='user-info'>104</p>
-                    </div>
-
-
-                    </div>
-                </div> 
+                 
+                    
+                            
+                    {this.displayRoomateChecklist()} 
+                    
+                         
+                     
+                </div>
+                 </div> 
 
     
         );
