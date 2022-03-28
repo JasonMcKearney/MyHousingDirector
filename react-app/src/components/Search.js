@@ -27,10 +27,11 @@ export default class search extends Component {
     this.listItems = this.listItems.bind(this);
   }
 
-  searchText(event) {
-    this.setState({ searchText: event.target.value });
-    // this.setState({ studentlist: [] })
-  }
+    searchText(event) {
+        console.log(event.target.value)
+        this.setState({ searchText: event.target.value });
+       // this.setState({ studentlist: [] })
+    }
 
   // Is called after studentName is set, adds the student to the list
   addItem() {
