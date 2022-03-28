@@ -469,9 +469,6 @@ export default class DormSelection extends Component {
                             <Descriptions.Item label="LastName">
                                 {Cookies.get("LN")}
                             </Descriptions.Item>
-                            <Descriptions.Item label="Telephone">
-                                Telephone number not saved
-                            </Descriptions.Item>
                             <Descriptions.Item label="StudentID">
                                 {Cookies.get("ID")}
                             </Descriptions.Item>
@@ -504,60 +501,7 @@ export default class DormSelection extends Component {
                             </Button>
                         </Form.Item>
 
-                        {/* <Form
-                                style={{
-                                    top: 0,
-                                    transform: 'translateY(0%)'
-                                }}
-                                // labelCol={{ span: 8 }}
-                                // wrapperCol={{ span: 16 }}
-
-                                onFinish={this.onFinish}
-                                onFinishFailed={this.onFinishFailed}
-                                autoComplete="off"
-                            >
-                                <Form.Item
-                                    name="first name"
-                                    label="first name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input your first name!',
-                                        },
-                                    ]}
-                                    hasFeedback
-                                >
-                                    <Input type="text" />
-                                </Form.Item>
-                                <Form.Item
-                                    name="last name"
-                                    label="last name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input your last name!',
-                                        },
-                                    ]}
-                                    hasFeedback
-                                >
-                                    <Input type="text" />
-                                </Form.Item>
-
-                                <Form.Item>
-                                    <Button style={{
-                                        marginRight: 20
-                                    }} type="primary" htmlType="submit">
-                                        Submit
-                                    </Button>
-                                    <Button onClick={() => {
-                                        this.setState({
-                                            showModal: false
-                                        })
-                                    }} type="danger">
-                                        Cancel
-                                    </Button>
-                                </Form.Item>
-                            </Form> */}
+                        
                     </>
                 </Modal>
                 <Steps current={current}>
