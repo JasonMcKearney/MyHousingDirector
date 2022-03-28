@@ -57,7 +57,7 @@ export default class DormSelection extends Component {
         <div className="Student-desc1">Southern New Hampshire University</div>
         <div className="Student-desc2">
           Hi User! <br/>
-          Welcome to My House Director!
+          Welcome to MyHousing Director!
         </div>
 
       </>

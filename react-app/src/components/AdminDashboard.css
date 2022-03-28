@@ -101,13 +101,14 @@ label{
     font-size: 120%;
 }
 
-.link
+link
 {
     background-color: rgba(81, 171, 255, 0.993);
     padding: 8px 18px; 
     color: white;
     font-weight: bold;
     border-radius: 10px!important;
+    font-Size: '120%';
 }
 
 /* Creates a custom scrollbar for who page*/
