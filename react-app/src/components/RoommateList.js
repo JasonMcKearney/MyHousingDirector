@@ -257,10 +257,8 @@ export default class RoommateList extends Component {
         let button1, button2;
 
         return (
-
             <div className="card-grid">
-                {
-                    
+                {    
                 studentlist.map((val, index) => {
                     if (val.state == "pending"){
                         button1 = <p><Button primary onClick={() => {
@@ -290,17 +288,13 @@ export default class RoommateList extends Component {
                                 </Button></p>;
                     }
                     return (
-
-                        <div className="roommate-card"
-                        
-                    >   
-                        <p>{val.firstname} {val.lastname}</p>
-                        <p>{val.email}</p>
-                        <p>{val.state}</p>
-                       {button1}
-                       {button2}
-                            
-                    </div>
+                        <div className="roommate-card">   
+                            <p>{val.firstname} {val.lastname}</p>
+                            <p>{val.email}</p>
+                            <p>{val.state}</p>
+                            {button1}
+                            {button2}
+                        </div>
                     );
                 })
                 }  
