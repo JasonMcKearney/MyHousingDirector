@@ -379,6 +379,28 @@ namespace WebAPI.Controllers
                 }
                 reader.Close();
             }
+            // new query
+           using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand FindBuildingInfo = conn.CreateCommand();
+                FindBuildingInfo.CommandText = "select dorm_id, name, sizeBuilding from housingdirector_schema.Building_tbl";
+                FindBuildingInfo.ExecuteNonQuery();
+
+                // Execute the SQL command against the DB:
+                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
+                dashboardInfo.totalStdntsInBuildingsList = new List<DormBuilding>();
+                while (reader.Read())
+                {
+                    dashboardInfo.totalStdntsInBuildingsList.Add(new DormBuilding
+                    {
+                        dorm_id = reader[0].ToString(),
+                        name = reader[1].ToString(),
+                        sizeBuilding = (int)reader[2]
+                    });
+                }
+                reader.Close();
+            }
 
             // Finds available dorm buildings
             using (MySqlConnection conn = GetConnection())
