@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+﻿﻿import React, { Component } from 'react';
 import {
     Steps,
     Button,
@@ -511,7 +511,6 @@ export default class DormSelection extends Component {
                                 }}
                                 // labelCol={{ span: 8 }}
                                 // wrapperCol={{ span: 16 }}
-
                                 onFinish={this.onFinish}
                                 onFinishFailed={this.onFinishFailed}
                                 autoComplete="off"
@@ -542,7 +541,6 @@ export default class DormSelection extends Component {
                                 >
                                     <Input type="text" />
                                 </Form.Item>
-
                                 <Form.Item>
                                     <Button style={{
                                         marginRight: 20
