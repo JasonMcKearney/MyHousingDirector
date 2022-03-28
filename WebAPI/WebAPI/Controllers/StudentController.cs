@@ -160,11 +160,11 @@ namespace WebAPI.Controllers
                 conn.Open();
                 int requestID = Convert.ToInt32(request.requestID);
 
-                MySqlCommand CheckRequest = conn.CreateCommand();
-                CheckRequest.Parameters.AddWithValue("@requestID", requestID);
-                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
+                MySqlCommand Remove = conn.CreateCommand();
+                Remove.Parameters.AddWithValue("@requestID", requestID);
+                Remove.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
 
-                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(Remove.ExecuteScalar());
 
                 if (requestExists >= 1)
                 {
@@ -196,14 +196,12 @@ namespace WebAPI.Controllers
                 FindRequestorID.CommandText = "select user_id from housingdirector_schema.student_tbl where studentID = @studentID";
 
                 int requestor_id = Convert.ToInt32(FindRequestorID.ExecuteScalar());
+                MySqlCommand Add = conn.CreateCommand();
+                Add.Parameters.AddWithValue("@requestorID", requestor_id);
+                Add.Parameters.AddWithValue("@recieverID", ids.reciever_id);
+                Add.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
 
-
-                MySqlCommand CheckRequest = conn.CreateCommand();
-                CheckRequest.Parameters.AddWithValue("@requestorID", requestor_id);
-                CheckRequest.Parameters.AddWithValue("@recieverID", ids.reciever_id);
-                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where Requestor_ID = @requestorID AND roommate_ID = @recieverID";
-
-                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(Add.ExecuteScalar());
 
                 if (requestExists >= 1)
                 {
@@ -234,11 +232,11 @@ namespace WebAPI.Controllers
                 conn.Open();
                 int requestID = Convert.ToInt32(request.requestID);
 
-                MySqlCommand CheckRequest = conn.CreateCommand();
-                CheckRequest.Parameters.AddWithValue("@requestID", requestID);
-                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
+                MySqlCommand Approve = conn.CreateCommand();
+                Approve.Parameters.AddWithValue("@requestID", requestID);
+                Approve.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
 
-                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(Approve.ExecuteScalar());
 
                 if (requestExists >= 1)
                 {
@@ -266,11 +264,11 @@ namespace WebAPI.Controllers
                 conn.Open();
                 int requestID = Convert.ToInt32(request.requestID);
 
-                MySqlCommand CheckRequest = conn.CreateCommand();
-                CheckRequest.Parameters.AddWithValue("@requestID", requestID);
-                CheckRequest.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
+                MySqlCommand Decline = conn.CreateCommand();
+                Decline.Parameters.AddWithValue("@requestID", requestID);
+                Decline.CommandText = "select count(*) from housingdirector_schema.roommates_table where id = @requestID";
 
-                int requestExists = Convert.ToInt32(CheckRequest.ExecuteScalar());
+                int requestExists = Convert.ToInt32(Decline.ExecuteScalar());
 
                 if (requestExists >= 1)
                 {
@@ -344,7 +342,10 @@ namespace WebAPI.Controllers
                 //FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
 
                 // Select the floor number based upon the building, room size, maxOccupants = num_roommates + 1
-                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id and maxOccupants >= @numRoommates and currentOccupants < @numRoommates";
+                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl " +
+                    "where dorm_id = @dorm_id " +
+                    "and maxOccupants >= @numRoommates " +
+                    "and currentOccupants < @numRoommates";
 
                 FindFloorInfo.ExecuteNonQuery();
 
@@ -378,7 +379,11 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
                 FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates + 1);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 from housingdirector_schema.room_tbl where dorm_id = @dorm_id and floorNumber = @floorNumber and maxOccupants >= @numRoommates and currentOccupants < @numRoommates";
+                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 " +
+                    "from housingdirector_schema.room_tbl " +
+                    "where dorm_id = @dorm_id " +
+                    "and floorNumber = @floorNumber " +
+                    "and maxOccupants >= @numRoommates and currentOccupants < @numRoommates";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -428,17 +433,12 @@ namespace WebAPI.Controllers
 
                 while (reader.Read())
                 {
-                    // true if maxOccupants != currurrentOccupants
-                    //if (reader[2] != reader[4])
-                    //{
                     occupants.Add(new studentTblFields()
                     {
                         studentID = reader.GetString(5),
-                        //usernameResult = ReturnedInfo.GetString(1);
                         firstName = reader.GetString(1),
                         lastName = reader.GetString(2),
                         username = reader.GetString(3),
-                        //emailResult = ReturnedInfo.GetString(4);
                     });
                 }
                 reader.Close();
@@ -492,7 +492,7 @@ namespace WebAPI.Controllers
                     InsertDataDormOcupnts.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@student_id", dormOccupantsTBL.student_id);
                     InsertDataDormOcupnts.Parameters.AddWithValue("@studentName", dormOccupantsTBL.studentName);
-                    InsertDataDormOcupnts.Parameters.AddWithValue("@submissionState", "request");
+                    InsertDataDormOcupnts.Parameters.AddWithValue("@submissionState", "requested");
                     InsertDataDormOcupnts.ExecuteNonQuery();
                 }
                 catch (Exception e)

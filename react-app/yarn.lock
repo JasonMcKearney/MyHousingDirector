@@ -1126,10 +1126,10 @@
   dependencies:
     "tslib" "2.0.1"
 
-"@devexpress/utils@1.3.2":
-  "integrity" "sha512-Ii7hpz6ItNMLKz23qQOlHom/k0e1TSnIQKCwZlKuYBwpIEBX5I/PQxvAwbdBnu5EZZSkdjnhzxl6luhl/k4LdA=="
-  "resolved" "https://registry.npmjs.org/@devexpress/utils/-/utils-1.3.2.tgz"
-  "version" "1.3.2"
+"@devexpress/utils@1.3.14":
+  "integrity" "sha512-vJmUq9Rg6wqYPuZ7qvTHBsd6vkGBj5ZCMzNUJIRWIZPuQfGt576cMqDOD68EQyy/5EBqwowtoYgFdQ1a/1iVpA=="
+  "resolved" "https://registry.npmjs.org/@devexpress/utils/-/utils-1.3.14.tgz"
+  "version" "1.3.14"
   dependencies:
     "tslib" "2.0.1"
 
@@ -3103,17 +3103,17 @@
   "resolved" "https://registry.npmjs.org/boolbase/-/boolbase-1.0.0.tgz"
   "version" "1.0.0"
 
-"bootstrap@^5.1.3":
-  "integrity" "sha512-fcQztozJ8jToQWXxVuEyXWW+dSo8AiXWKwiSSrKWsRB/Qt+Ewwza+JWoLKiTuQLaEPhdNAJ7+Dosc9DOIqNy7Q=="
-  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-5.1.3.tgz"
-  "version" "5.1.3"
-
-"bootstrap4@npm:bootstrap@^4.6.0":
+"bootstrap-v4@npm:bootstrap@^4.6.0":
   "integrity" "sha512-0dj+VgI9Ecom+rvvpNZ4MUZJz8dcX7WCX+eTID9+/8HgOkv3dsRzi8BGeZJCQU6flWQVYxwTQnEZFrmJSEO7og=="
   "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-4.6.1.tgz"
   "version" "4.6.1"
 
-"bootstrap5@npm:bootstrap@^5.0.2":
+"bootstrap-v5@npm:bootstrap@^5.0.2":
+  "integrity" "sha512-fcQztozJ8jToQWXxVuEyXWW+dSo8AiXWKwiSSrKWsRB/Qt+Ewwza+JWoLKiTuQLaEPhdNAJ7+Dosc9DOIqNy7Q=="
+  "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-5.1.3.tgz"
+  "version" "5.1.3"
+
+"bootstrap@^5.1.3":
   "integrity" "sha512-fcQztozJ8jToQWXxVuEyXWW+dSo8AiXWKwiSSrKWsRB/Qt+Ewwza+JWoLKiTuQLaEPhdNAJ7+Dosc9DOIqNy7Q=="
   "resolved" "https://registry.npmjs.org/bootstrap/-/bootstrap-5.1.3.tgz"
   "version" "5.1.3"
@@ -4074,23 +4074,23 @@
     "defined" "^1.0.0"
     "minimist" "^1.1.1"
 
-"devexpress-diagram@2.1.45":
-  "integrity" "sha512-kOBqGM7/t2pp/M/A/7ce20Cls2OMn44PCDRgm61HxwFnRMFYI6synZZEIhW6rwQ0e2EgkuZZdr4W3LeGIaDQbQ=="
-  "resolved" "https://registry.npmjs.org/devexpress-diagram/-/devexpress-diagram-2.1.45.tgz"
-  "version" "2.1.45"
+"devexpress-diagram@2.1.47":
+  "integrity" "sha512-wU2NKTBChHvY/fBTmf7a2xrLwHFybpEtoPfvutqneresC0KR0IkmjvHJAFZ4zLNgQ93CLI0qVg2HUvux59NkcA=="
+  "resolved" "https://registry.npmjs.org/devexpress-diagram/-/devexpress-diagram-2.1.47.tgz"
+  "version" "2.1.47"
   dependencies:
     "@devexpress/utils" "1.3.13"
     "es6-object-assign" "^1.1.0"
 
-"devexpress-gantt@4.0.3":
-  "integrity" "sha512-rOwNro1BPmgLwUO2lu0pPc5WvSW0ttNZg1TqKUv9kgP+3f1UDuW54JLxiK7A4UYI6vTHxkUcjiBFSxpicZGzeg=="
-  "resolved" "https://registry.npmjs.org/devexpress-gantt/-/devexpress-gantt-4.0.3.tgz"
-  "version" "4.0.3"
+"devexpress-gantt@4.0.12":
+  "integrity" "sha512-eqHvmmfzF36njDRiTm/25N41tRA0WcbRIklcmlA7pLAuhrN1kIOQmhWf/QtSkZDfMD/dZvJyFDcLxnva/+PpqQ=="
+  "resolved" "https://registry.npmjs.org/devexpress-gantt/-/devexpress-gantt-4.0.12.tgz"
+  "version" "4.0.12"
   dependencies:
-    "@devexpress/utils" "1.3.2"
+    "@devexpress/utils" "1.3.14"
     "tslib" "2.3.1"
 
-"devextreme-quill@~1.5.10":
+"devextreme-quill@~1.5.12":
   "integrity" "sha512-tTgYIGMu7QI9ESil+9figY0Z+g11CgpqByIziRGir4ghqYIi4XbRJoCOH4pE3LaaTKQkrxgkrzdnmcpMCyz7Yw=="
   "resolved" "https://registry.npmjs.org/devextreme-quill/-/devextreme-quill-1.5.12.tgz"
   "version" "1.5.12"
@@ -4104,9 +4104,9 @@
     "quill-delta" "4.2.2"
 
 "devextreme-react@^21.2.4":
-  "integrity" "sha512-vgI62tCbQpx/5ynvA0VHmEdtvnMzX3HXiK1nU+egtQNAnza0LTq/i4Tt7MNkp1+mOTBKlWqplIrqerbQ7nFgKg=="
-  "resolved" "https://registry.npmjs.org/devextreme-react/-/devextreme-react-21.2.5.tgz"
-  "version" "21.2.5"
+  "integrity" "sha512-UkYh50bXnWgRNMor2BKfqGZ8zR6khskyDBkxPvayjc4O7KuYC0YEBxZgCNJDTOkyKRUo+cNPAbYQX3JK2JqlvQ=="
+  "resolved" "https://registry.npmjs.org/devextreme-react/-/devextreme-react-21.2.6.tgz"
+  "version" "21.2.6"
   dependencies:
     "prop-types" "^15.6.1"
 
@@ -4118,29 +4118,29 @@
     "yargs" "^17.2.1"
 
 "devextreme-themebuilder@^21.2.4":
-  "integrity" "sha512-LfkzZRV7KkByuSl4Gbf1KVsRqaNCF83HBXwtJ9hzwkQPCFtM0JGm1KT8Lyxk/idm+qfWA09t5JAvzgiBDGDTuA=="
-  "resolved" "https://registry.npmjs.org/devextreme-themebuilder/-/devextreme-themebuilder-21.2.5.tgz"
-  "version" "21.2.5"
+  "integrity" "sha512-0ehmvbg8W90hdZKT2kr5tDjFRca5U9xADV+UA3d3nXo22asqpazEQKkxtND9qpIM2+UXeTR4JdFZHjI04MVR6Q=="
+  "resolved" "https://registry.npmjs.org/devextreme-themebuilder/-/devextreme-themebuilder-21.2.6.tgz"
+  "version" "21.2.6"
   dependencies:
     "autoprefixer" "^10.2.4"
-    "bootstrap4" "npm:bootstrap@^4.6.0"
-    "bootstrap5" "npm:bootstrap@^5.0.2"
+    "bootstrap-v4" "npm:bootstrap@^4.6.0"
+    "bootstrap-v5" "npm:bootstrap@^5.0.2"
     "clean-css" "^5.1.0"
     "less" "^3.13.1"
     "postcss" "^8.2.6"
     "sass" "1.43.5"
     "semver" "^5.7.1"
 
-"devextreme@^21.2.4", "devextreme@~21.2.5":
-  "integrity" "sha512-oWAkib2za3JAjsBBx1RNblD2gq0hEMbTYAs/1s0ILoskeFOLkquDzx+PHCJ6spB9qmpVKSXypBha+5z9cpEq9Q=="
-  "resolved" "https://registry.npmjs.org/devextreme/-/devextreme-21.2.5.tgz"
-  "version" "21.2.5"
+"devextreme@^21.2.4", "devextreme@~21.2.6":
+  "integrity" "sha512-+oo72uQ2JY1a4a2LWdPyBAXiCpLxKAP+C3MJq35YYX8PUWMGYsOg1+QrykwUdqG5eUPN9UR/2QlFDafnTavGOg=="
+  "resolved" "https://registry.npmjs.org/devextreme/-/devextreme-21.2.6.tgz"
+  "version" "21.2.6"
   dependencies:
     "@babel/runtime" "^7.12.1"
     "@devextreme/runtime" "~2.3.14"
-    "devexpress-diagram" "2.1.45"
-    "devexpress-gantt" "4.0.3"
-    "devextreme-quill" "~1.5.10"
+    "devexpress-diagram" "2.1.47"
+    "devexpress-gantt" "4.0.12"
+    "devextreme-quill" "~1.5.12"
     "devextreme-showdown" "^1.0.1"
     "inferno" "^7.4.9"
     "inferno-compat" "^7.4.9"
@@ -5557,6 +5557,16 @@
   "integrity" "sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ=="
   "resolved" "https://registry.npmjs.org/ignore/-/ignore-5.2.0.tgz"
   "version" "5.2.0"
+
+"image-size@~0.5.0":
+  "integrity" "sha1-Cd/Uq50g4p6xw+gLiZA3jfnjy5w="
+  "resolved" "https://registry.npmjs.org/image-size/-/image-size-0.5.5.tgz"
+  "version" "0.5.5"
+
+"immediate@~3.0.5":
+  "integrity" "sha1-nbHb0Pr43m++D13V5Wu2BigN5ps="
+  "resolved" "https://registry.npmjs.org/immediate/-/immediate-3.0.6.tgz"
+  "version" "3.0.6"
 
 "immer@^9.0.7":
   "integrity" "sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA=="
@@ -10067,16 +10077,7 @@
     "is-fullwidth-code-point" "^2.0.0"
     "strip-ansi" "^4.0.0"
 
-"string-width@^4.1.0", "string-width@^4.2.0":
-  "integrity" "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g=="
-  "resolved" "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
-  "version" "4.2.3"
-  dependencies:
-    "emoji-regex" "^8.0.0"
-    "is-fullwidth-code-point" "^3.0.0"
-    "strip-ansi" "^6.0.1"
-
-"string-width@^4.2.3":
+"string-width@^4.1.0", "string-width@^4.2.0", "string-width@^4.2.3":
   "integrity" "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g=="
   "resolved" "https://registry.npmjs.org/string-width/-/string-width-4.2.3.tgz"
   "version" "4.2.3"
@@ -10518,7 +10519,12 @@
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   "version" "1.14.1"
 
-"tslib@^2.0.3":
+"tslib@^1.9.0":
+  "integrity" "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="
+  "resolved" "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
+  "version" "1.14.1"
+
+"tslib@^2.0.0", "tslib@^2.0.3", "tslib@^2.3.0", "tslib@2.3.1":
   "integrity" "sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   "version" "2.3.1"
@@ -11321,8 +11327,8 @@
   "version" "0.1.0"
 
 "zone.js@^0.10.2 || ^0.11.3":
-  "integrity" "sha512-DDh2Ab+A/B+9mJyajPjHFPWfYU1H+pdun4wnnk0OcQTNjem1XQSZ2CDW+rfZEUDjv5M19SBqAkjZi0x5wuB5Qw=="
-  "resolved" "https://registry.npmjs.org/zone.js/-/zone.js-0.11.4.tgz"
-  "version" "0.11.4"
+  "integrity" "sha512-D1/7VxEuQ7xk6z/kAROe4SUbd9CzxY4zOwVGnGHerd/SgLIVU5f4esDzQUsOCeArn933BZfWMKydH7l7dPEp0g=="
+  "resolved" "https://registry.npmjs.org/zone.js/-/zone.js-0.11.5.tgz"
+  "version" "0.11.5"
   dependencies:
-    "tslib" "^2.0.0"
+    "tslib" "^2.3.0"
