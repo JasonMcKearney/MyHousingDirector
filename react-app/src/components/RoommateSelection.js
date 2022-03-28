@@ -175,6 +175,18 @@ export default class RoommateSelection extends Component {
         console.log("test");
         this.setState({ user_id: event });
     }
+
+    noSurveyError(){
+        if(Cookies.get("survey") === "false"){
+            alert("Your survey is not complete. Please complete your survey before using this function.");
+        }
+    }
+
+    componentDidMount(){
+        this.noSurveyError();
+        this.props.history.push('/student/StudentInfo');
+    }
+
     render() {
         return (
             <div className="Student-page-background"
@@ -185,7 +197,7 @@ export default class RoommateSelection extends Component {
 
                 }}>
                 <div>
-                    <div clasName="roommate-container">
+                    <div className="roommate-container">
                         <div className="wrapper">
                             <form>
                                 <input

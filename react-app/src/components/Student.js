@@ -55,7 +55,6 @@ class Student extends Component {
   };
   render() {
     let { showModal, bgPicSrc } = this.state;
-
     return (
       <div
         style={{ backgroundImage: `url(${bgPicSrc})` }}
