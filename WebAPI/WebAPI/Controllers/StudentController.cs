@@ -26,7 +26,7 @@ namespace WebAPI.Controllers
         // Finds MySQL connection so can access database tables
         private MySqlConnection GetConnection()
         {
-            string myConnectionString = _configuration.GetConnectionString("DevConnection"); 
+            string myConnectionString = _configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
         }
 
@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
             string useridResult = null;
             string useryearResult = null;
             string usergenderResult = null;
-    
+
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -76,7 +76,7 @@ namespace WebAPI.Controllers
                 ReturnedInfo.Close();
 
             }
-            return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult,year = useryearResult, gender = usergenderResult, };
+            return new studentTblFields { user_id = Int32.Parse(useridResult), studentID = studentIDResult, username = usernameResult, firstName = firstNameResult, lastName = lastNameResult, email = emailResult, year = useryearResult, gender = usergenderResult, };
         }
 
         [HttpDelete("{id}")]
@@ -179,7 +179,7 @@ namespace WebAPI.Controllers
                 {
                     return new Response { Status = "No matching entry", Message = "There is no entry matching the parameters" };
                 }
-                   
+
             }
         }
 
@@ -301,7 +301,9 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
 
-                FindBuildingInfo.CommandText = "select * from housingdirector_schema.dormBuilding_tbl";
+                FindBuildingInfo.CommandText = "SELECT Building_tbl.dorm_id, Building_tbl.name, Building_Description_tbl.Description_Text,Building_Image_tbl.Image_Link FROM Building_tbl INNER JOIN Building_Image_tbl on Building_Image_tbl.Image_ID_Building_ID = Building_tbl.dorm_id INNER JOIN Building_Description_tbl on Building_Description_tbl.Dorm_ID = Building_tbl.dorm_id";
+
+
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -314,16 +316,15 @@ namespace WebAPI.Controllers
                         dorm_id = reader[0].ToString(),
                         name = reader[1].ToString(),
                         description = reader[2].ToString(),
-                        url = reader[3].ToString(),
-                        image1 = reader[4].ToString(),
-                        image2 = reader[5].ToString()
+                        image1 = reader[3].ToString()
+
                     });
                 }
                 reader.Close();
             }
             return buildingData;
         }
-        
+
         // Find the floor numbers that have rooms available
         [Route("FindFloorInfo")]
         [HttpPost]
@@ -399,12 +400,12 @@ namespace WebAPI.Controllers
                         image1 = reader[4].ToString(),
                         image2 = reader[5].ToString()
                     });
-                    
+
                 }
                 reader.Close();
             }
             return roomList;
-        }     
+        }
 
         [Route("GetDormOccupants")]
         [HttpPost]
@@ -567,9 +568,9 @@ namespace WebAPI.Controllers
 
                 FindRoomInfo.CommandText =
                     "USE housingdirector_schema; SELECT roommates_table.id, student_tbl.firstName, student_tbl.lastName," +
-                    " student_tbl.email,  roommates_table.RequestState "+
-                    " FROM roommates_table"+
-                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.roommate_ID"+
+                    " student_tbl.email,  roommates_table.RequestState " +
+                    " FROM roommates_table" +
+                    " INNER JOIN student_tbl ON student_tbl.user_id = roommates_table.roommate_ID" +
                     " WHERE Requestor_ID = @studentID;";
 
                 FindRoomInfo.ExecuteNonQuery();
@@ -586,7 +587,7 @@ namespace WebAPI.Controllers
                         studentLastName = reader.GetString(2),
                         studentEmail = reader.GetString(3),
                         requestState = reader.GetString(4)
-                    }); 
+                    });
                     ;
                 }
                 reader.Close();
@@ -646,7 +647,7 @@ namespace WebAPI.Controllers
                 surveyQuestions.CommandText = "SELECT survey_userid From survey WHERE survey_userid = @userID";
                 surveyQuestions.ExecuteNonQuery();
 
-                
+
                 MySqlDataReader reader = surveyQuestions.ExecuteReader();
 
                 while (reader.Read())
@@ -654,7 +655,7 @@ namespace WebAPI.Controllers
                     surveyExsists = true;
                 }
                 reader.Close();
-                
+
                 surveyQuestions.Parameters.AddWithValue("@Question1", newSurvey.Question1);
                 surveyQuestions.Parameters.AddWithValue("@Question2", newSurvey.Question2);
                 surveyQuestions.Parameters.AddWithValue("@Question3", newSurvey.Question3);
@@ -667,10 +668,10 @@ namespace WebAPI.Controllers
                 surveyQuestions.Parameters.AddWithValue("@Question10", newSurvey.Question10);
                 surveyQuestions.Parameters.AddWithValue("@Question11", newSurvey.Question11);
                 surveyQuestions.Parameters.AddWithValue("@Question12", newSurvey.Question12);
-                
+
                 if (surveyExsists == true)
                 {
-                   
+
 
                     surveyQuestions.CommandText = "UPDATE survey SET Question1 = @Question1, Question2 = @Question2, Question3 = @Question3," +
                                                    "Question4 = @Question4, Question5 = @Question5, Question6 = @Question6, Question7 = @Question7," +
@@ -682,12 +683,12 @@ namespace WebAPI.Controllers
                 {
                     surveyQuestions.CommandText = "INSERT INTO survey (Question1,  Question2,Question3,Question4,Question5,Question6,Question7,Question8,Question9,Question10,Question11,Question12,survey_userid )" +
                                                   "VALUES (@Question1,@Question2,@Question3,@Question4, @Question5,@Question6,@Question7,@Question8, @Question9, @Question10,@Question11,@Question12,@userID);";
-                                                
+
                 }
 
                 surveyQuestions.ExecuteNonQuery();
             }
-                return new Response { Status = "Successful", Message = "The questions have been recieved" };
+            return new Response { Status = "Successful", Message = "The questions have been recieved" };
         }
 
 
@@ -729,6 +730,110 @@ namespace WebAPI.Controllers
                 reader.Close();
                 return currentSurvey;
             }
+
+        }
+        [Route("getRoommateRequestStates/{userID}")]
+        [HttpPost]
+        //Checks all request between a student and their roommates to make sure they have all requested each other.
+        public List<RoommateReturnObject> getRoommateRequestStates(int userID)
+        {
+            List<RoommateReturnObject> requestorsRequests = new List<RoommateReturnObject>();
+            List<RoommateReturnObject> RoomateRequestState = new List<RoommateReturnObject>();
+            bool requestWasFound = false;
+
+            using (MySqlConnection conn = GetConnection())
+            {
+                int userRequestCount;
+                conn.Open();
+
+                //First gets all the First names,ids, and las names of all the recievers of users requests
+                MySqlCommand requestorID = conn.CreateCommand();
+                requestorID.Parameters.AddWithValue("@userID", userID);
+                requestorID.CommandText = "Select roommates_table.Requestor_ID, roommates_table.roommate_ID, roommates_table.RequestState, student_tbl.firstName, student_tbl.lastName FROM roommates_table INNER JOIN student_tbl ON roommates_table.roommate_ID = student_tbl.user_id WHERE Requestor_ID = 5;";
+
+                requestorID.ExecuteNonQuery();
+
+
+                MySqlDataReader reader = requestorID.ExecuteReader();
+
+                while (reader.Read())
+                {
+
+                    requestorsRequests.Add(new RoommateReturnObject()
+                    {
+                        recieverID = reader.GetInt32(1),
+                        studentFirstName = reader[3].ToString(),
+                        studentLastName = reader[4].ToString(),
+                        requestState = reader[2].ToString()
+
+                    }) ;
+                }
+                reader.Close();
+                 userRequestCount = requestorsRequests.Count();
+                //goes one reciever at a time and check if they hace requested any of the recievers that the user has requester
+                    for (int i = 0; i < userRequestCount; i++)
+                    {
+
+                    
+                    //finds all the reqest that this reviever has made
+                        for (int c = 0; c < userRequestCount; c++)
+                        {
+                            requestWasFound = false;
+                                requestorID = conn.CreateCommand();
+                                requestorID.Parameters.AddWithValue("@requestorID", requestorsRequests[i].recieverID.ToString());
+                                requestorID.CommandText = "SELECT roommates_table.roommate_ID, roommates_table.Requestor_ID, student_tbl.firstName, student_tbl.lastName, roommates_table.RequestState FROM roommates_table INNER JOIN student_tbl ON roommates_table.Requestor_ID = student_tbl.user_id WHERE Requestor_ID = @requestorID;";
+                                requestorID.ExecuteNonQuery();
+                   
+                                reader = requestorID.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                        
+                                int comparedValue = reader.GetInt32(0);
+
+                                if (comparedValue == requestorsRequests[c].recieverID )
+                                {
+                                    if (reader[4].ToString() != "accepted")
+                                    {
+
+
+                                        RoomateRequestState.Add(new RoommateReturnObject()
+                                        {
+                                            studentFirstName = reader[2].ToString(),
+                                            studentLastName = reader[3].ToString(),
+                                            requestState = reader[4].ToString(),
+                                            requestorFirstName = requestorsRequests[c].studentFirstName,
+                                            requestorLastName = requestorsRequests[c].studentLastName,
+
+                                        });
+
+
+                                    }
+                                    requestWasFound = true;
+                                }
+                    
+
+                            }
+                                if(!requestWasFound && requestorsRequests[i].recieverID != requestorsRequests[c].recieverID)
+                                {
+                                    RoomateRequestState.Add(new RoommateReturnObject()
+                                    {
+                                        studentFirstName = requestorsRequests[i].studentFirstName,
+                                        studentLastName = requestorsRequests[i].studentLastName,
+                                        requestState = "Has not requested",
+                                        requestorFirstName = requestorsRequests[c].studentFirstName,
+                                        requestorLastName = requestorsRequests[c].studentLastName,
+
+                                    });
+                            
+                                }
+                                reader.Close();
+                        }
+                    
+                    }
+               
+            }
+            return RoomateRequestState;
         }
     }
 }

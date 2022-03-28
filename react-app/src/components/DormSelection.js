@@ -1,4 +1,4 @@
-﻿﻿import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import {
     Steps,
     Button,
@@ -468,9 +468,6 @@ export default class DormSelection extends Component {
                             </Descriptions.Item>
                             <Descriptions.Item label="LastName">
                                 {Cookies.get("LN")}
-                            </Descriptions.Item>
-                            <Descriptions.Item label="Telephone">
-                                Telephone number not saved
                             </Descriptions.Item>
                             <Descriptions.Item label="StudentID">
                                 {Cookies.get("ID")}
