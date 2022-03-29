@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
 
         private MySqlConnection GetConnection()
         {
-            string myConnectionString = _configuration.GetConnectionString("DevConnection"); 
+            string myConnectionString = _configuration.GetConnectionString("DevConnection");
             return new MySqlConnection(myConnectionString);
         }
 
@@ -173,7 +173,7 @@ namespace WebAPI.Controllers
                         {
                             username = reader[0].ToString(),
                             user_id = reader.GetInt32(1)
-                        }) ;
+                        });
                     }
                     reader.Close();
                 }
@@ -183,7 +183,7 @@ namespace WebAPI.Controllers
                     {
                         username = "",
                         user_id = 0
-                    }) ;
+                    });
                 }
             }
             return eventData;
@@ -256,10 +256,10 @@ namespace WebAPI.Controllers
                 }
             }
             catch (Exception)
-			{
+            {
                 return new Response { Status = "Invalid", Message = "Update Student info unsuccessful." };
-            }            
-            
+            }
+
             return new Response { Status = "Success", Message = "Updated Student Info" };
         }
 
@@ -301,18 +301,6 @@ namespace WebAPI.Controllers
 
             return new Response { Status = "Success", Message = "Deleted student." };
         }
-
-/*        // Returns list of names and 
-        List<KeyValuePair<string,string>> NameBuildingFromID(List<DormBuilding> buildingDetailsList)
-        {
-            var buildingNames = new List<KeyValuePair<string, string>>();
-
-            for(int counter = 0; counter < buildingDetailsList)
-
-
-            return buildingNames;
-        }
-*/
 
         [Route("GetAdminDashboardData")]
         [HttpGet]
@@ -432,6 +420,108 @@ namespace WebAPI.Controllers
             dashboardInfo.sPopularBuilding = sortedList.ElementAt(0).name.ToString();
 
             return dashboardInfo;
+        }
+
+
+
+
+
+        [Route("GetAdminDashboardRequests")]
+        [HttpGet]
+        public List<AdminDormRequestData> GetAdminDashboardRequests()
+        {
+            List<AdminDormRequestData> requestDataList = new List<AdminDormRequestData>();
+            List<TempIDsStruct> tempIDList = new List<TempIDsStruct>();
+
+            // Open the MySql connection
+            using (MySqlConnection conn = GetConnection())
+            {
+                // Get IDs
+                try
+                {
+                    conn.Open();
+                    MySqlCommand GetRequestData = conn.CreateCommand();
+                    GetRequestData.CommandText = "select record_ID, dorm_ID, room_ID, roomNumber, studentName, submissionState from housingdirector_schema.dormOccupants_tbl;";
+
+                    GetRequestData.ExecuteNonQuery();
+
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = GetRequestData.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        // Populate tempIDList with ids that are used to figure out name of building, room
+                        tempIDList.Add(new TempIDsStruct
+                        {
+                            record_ID = reader[0].ToString(),
+                            dorm_ID = reader[1].ToString(),
+                            room_ID = reader[2].ToString()
+                        });
+
+                        // Save values into AdminDormRequestData class so can pass list to React JS to retrieve and manipulate the data
+                        requestDataList.Add(new AdminDormRequestData
+                        {
+                            record_ID = reader[0].ToString(),
+                            roomNumber = reader[3].ToString(),
+                            studentName = reader[4].ToString(),
+                            submissionState = reader[5].ToString()                            
+                        });
+                    }
+                    reader.Close();
+                }
+                catch (Exception e)
+                {
+                    //TempIDsStruct tempObject = new TempIDsStruct();
+                    requestDataList.Add(new TempIDsStruct
+                    {
+                        message = (new Response { Status = "Invalid Response", Message = e.Message })
+                    });  
+                }
+
+                // Find names using IDs saved inside of struct object and then save data into AdminDormRequestData class to send to React.js in JSON
+                try
+                {
+                    for (int counter = 0; counter < tempIDList.Count(); counter++)
+                    {
+                        conn.Open();
+                        MySqlCommand GetRequestData2 = conn.CreateCommand();
+                        GetRequestData2.CommandText = " select b.name, r.floorNumber from Building_tbl b cross join room_tbl r on b.dorm_id = @dormID and r.room_id = @roomID";
+                        GetRequestData2.Parameters.AddWithValue("@dormid", tempIDList[counter].dorm_ID);
+                        GetRequestData2.Parameters.AddWithValue("@dormid", tempIDList[counter].room_ID);
+                        GetRequestData2.ExecuteNonQuery();
+
+                        // Execute the SQL command against the DB:
+                        MySqlDataReader reader = GetRequestData2.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            // Populate tempIDList with ids that are used to figure out name of building, room
+                            tempIDList.Add(new TempIDsStruct
+                            {
+                                record_ID = reader[0].ToString(),
+                                dorm_ID = reader[1].ToString(),
+                                room_ID = reader[2].ToString()
+                            });
+                        }
+                        reader.Close();
+                    }
+                    
+                }
+                catch (Exception e)
+                {
+                    requestDataList.Add(new AdminDormRequestData
+                    {
+                        message = (new Response { Status = "Invalid Response", Message = e.Message })
+                    });
+                }
+            }
+
+            return requestDataList;
+        }
+
+        struct TempIDsStruct{
+            public string record_ID;
+            public string dorm_ID;
+            public string room_ID;
+            public Response message;
         }
     }
 }

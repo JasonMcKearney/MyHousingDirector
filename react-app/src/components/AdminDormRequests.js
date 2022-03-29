@@ -21,8 +21,6 @@ export class AdminDormRequests extends Component {
                         <td className ="table-head">Room Number</td>
                         <td className ="table-head">Accept</td>
                         <td className ="table-head">Decline</td>
-
-                       
                     </tr>
                 </thead>
               {/*  <tbody>
