@@ -75,7 +75,7 @@ export class AdminDormRequests extends Component {
         */}
             <div class="container-BuildingDataBox">
                 <label style={{paddingTop:'3%'}}>Available Dorm Rooms</label>
-                <div class="buildingsList-div">
+                <div class="buildingStudentList-div">
                     <li>
                         building name
                         <ul>
