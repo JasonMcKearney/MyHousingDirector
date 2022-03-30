@@ -1,14 +1,82 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee, faSubway } from "@fortawesome/free-solid-svg-icons";
+import { faCoffee, faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./AdminDormRequests.css";
 
 // Export means any module (AdminDashboard.js file in this case) can use this script by importing it
 export class AdminDormRequests extends Component {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+            requestList: []
+        }
+      }
+  
+  
     componentDidMount()
     {
-        console.log("You have reached the page!!");
+        this.GetRequests()
     }
+
+    GetRequests()
+    {
+      let currentComponent = this;
+      console.log("Made it to FindData() function!!");
+      
+      fetch('http://localhost:16648/api/Admin/GetAdminDormRequests', {
+          mode: 'cors', // this cannot be 'no-cors'
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          method: 'GET',
+      }).then(res => res.clone().json())
+          .then(function (res) {
+              console.log("res: " + JSON.stringify(res));
+              console.log("res: " + res);
+   //           try
+   //           {
+                console.log("List with contents inside: " + currentComponent.state.requestList)
+                currentComponent.removeAllInfo();
+                // method does not affect the original list
+                var requestListTemp = currentComponent.state.requestList.slice();
+                console.log("List with nothing in it: " + requestListTemp)
+                
+                console.log("res.length: " + res.length)
+                var i;
+                for (i = 0; i < res.length; i++) {
+                    console.log("---------record_ID: " + res[0].submissionState)
+                    const newRequestObj = {
+                        record_ID: res[i].record_ID,
+                        buildingName: res[i].buildingName,     
+                        floorNumber: res[i].floorNumber,
+                        roomNumber: res[i].roomNumber,
+                        studentName: res[i].studentName,
+                        submissionState: res[i].submissionState
+                    };
+                    console.log(newRequestObj);
+                    requestListTemp.push(newRequestObj);
+                }
+                currentComponent.setState({
+                    requestList: requestListTemp,
+                });
+        
+                console.log("items added to the list");
+     //         }
+  //            catch
+  //            {
+  //              console.log("there was an error in code above line 66!!");
+  //            }  
+          }) 
+    }
+
+    removeAllInfo(){
+        this.setState({
+            requestList: [],
+        });
+    }
+    
 
     printResults() {
         return (
@@ -23,32 +91,40 @@ export class AdminDormRequests extends Component {
                         <td className ="table-head">Decline</td>
                     </tr>
                 </thead>
-              {/*  <tbody>
-              https://fontawesome.com/icons/check?s=solid   for button
+                <tbody>
+                    {this.state.requestList.map((val, index) => {
                         return (
                             <tr>
                                 <td className="result-word" key={index}>
                                     {" "}
-                                    test
+                                    {val.buildingName}
                                 </td>
                                 <td className="result-word" key={index}>
                                     {" "}
-                                    test
+                                    {val.floorNumber}
                                 </td>
                                 <td className="result-word" key={index}>
                                     {" "}
-                                    test
+                                    {val.roomNumber}
+                                </td>
+                                <td className="result-word" key={index}>
+                                    {" "}
+                                    {val.studentName}
+                                </td>
+                                <td className="result-word" key={index}>
+                                    {" "}
+                                    {val.submissionState}
                                 </td>
                                 <td className="result-word">
                                     <button className="add-icon">
                                         <FontAwesomeIcon
                                             onClick={() => {
-                                                console.log("you have pressed a button")
+                                                console.log("You have clicked on Accept Request!")
                                             }}
                                             type="submit"
-                                            icon={faUserPlus}
-                                            size="2x"
-                                            color="green"
+                                            icon={faCheck}
+                                         //   size="2x"
+                                         //   color="green"
                                         />{" "}
                                     </button>
                                 </td>
@@ -56,7 +132,6 @@ export class AdminDormRequests extends Component {
                         );
                     })}
                 </tbody>
-            */}
             </table>
         );
     }
@@ -77,7 +152,7 @@ export class AdminDormRequests extends Component {
                     <li>
                         building name
                         <ul>
-                            studentNames
+                            studentNames - roomNumber
                         {/* {availableBuildingsList.map((data) => (
                             <li key={data.name}>
                                 {data.name} ({data.numRoomsAvailable})                
