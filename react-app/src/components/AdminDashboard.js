@@ -31,7 +31,6 @@ export class AdminDashboard extends Component {
     }
   }
  
-
   componentDidMount()
   {
     this.FetchData();
@@ -84,7 +83,6 @@ export class AdminDashboard extends Component {
               }  
           })
   }
- // <div className='.button'><button onClick={() => { this.props.history.push('/home/AdminDormRequests');}} id ='primary-button' >See Requests</button></div>                  
     
     render() {
       let {
@@ -109,9 +107,9 @@ export class AdminDashboard extends Component {
             </div>
 
               <div class="popularBuildings-box">
-                      <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
-                      <div style={{padding:'10%', marginTop:'-3%'}}><h1>{popularBuilding}</h1></div>
-          </div>
+                  <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
+                  <div style={{padding:'10%', marginTop:'-3%'}}><h1>{popularBuilding}</h1></div>
+              </div>
 
           <div class="availableDormRooms-box">
             <label style={{paddingTop:'2%'}}>Available Dorm Rooms</label>

@@ -441,7 +441,7 @@ namespace WebAPI.Controllers
                 {
                     conn.Open();
                     MySqlCommand GetRequestData = conn.CreateCommand();
-                    GetRequestData.CommandText = "select record_ID, dorm_ID, room_ID from housingdirector_schema.dormOccupants_tbl";
+                    GetRequestData.CommandText = "select record_ID, dorm_ID, room_ID from housingdirector_schema.dormOccupants_tbl where submissionState = 'requested'";
 
                     GetRequestData.ExecuteNonQuery();
 
@@ -478,7 +478,10 @@ namespace WebAPI.Controllers
                     for (int counter = 0; counter < tempIDList.Count(); counter++)
                     { 
                         MySqlCommand GetRequestData2 = conn2.CreateCommand();
-                        GetRequestData2.CommandText = "select d.record_ID, b.name, r.floorNumber, d.roomNumber, d.studentName, d.submissionState from Building_tbl b cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid";
+                        GetRequestData2.CommandText = "select b.name, r.floorNumber, d.roomNumber, d.studentName from Building_tbl b " +
+                            "cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid and " +
+                            "d.record_ID = @recordid";
+                        GetRequestData2.Parameters.AddWithValue("@recordid", tempIDList[counter].record_ID);
                         GetRequestData2.Parameters.AddWithValue("@dormid", tempIDList[counter].dorm_ID);
                         GetRequestData2.Parameters.AddWithValue("@roomid", tempIDList[counter].room_ID);
                         GetRequestData2.ExecuteNonQuery();
@@ -490,12 +493,12 @@ namespace WebAPI.Controllers
                             // Save values into AdminDormRequestData class so can pass list to React JS to retrieve and manipulate the data
                             requestDataList.Add(new AdminDormRequestData
                             {
-                                record_ID = reader[0].ToString(),
-                                buildingName = reader[1].ToString(),     
-                                floorNumber = reader[2].ToString(),
-                                roomNumber = reader[3].ToString(),
-                                studentName = reader[4].ToString(),
-                                submissionState = reader[5].ToString()
+                                record_ID = tempIDList[counter].ToString(),
+                                buildingName = reader[0].ToString(),     
+                                floorNumber = reader[1].ToString(),
+                                roomNumber = reader[2].ToString(),
+                                studentName = reader[3].ToString(),
+                                submissionState = "requested"
                             });
                         }
                         reader.Close();

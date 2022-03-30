@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCoffee, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCoffee, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./AdminDormRequests.css";
 
 // Export means any module (AdminDashboard.js file in this case) can use this script by importing it
@@ -35,8 +35,8 @@ export class AdminDormRequests extends Component {
           .then(function (res) {
               console.log("res: " + JSON.stringify(res));
               console.log("res: " + res);
-   //           try
-   //           {
+              try
+              {
                 console.log("List with contents inside: " + currentComponent.state.requestList)
                 currentComponent.removeAllInfo();
                 // method does not affect the original list
@@ -63,11 +63,11 @@ export class AdminDormRequests extends Component {
                 });
         
                 console.log("items added to the list");
-     //         }
-  //            catch
-  //            {
-  //              console.log("there was an error in code above line 66!!");
-  //            }  
+              }
+              catch
+              {
+                console.log("there was an error in code above line 66!!");
+              }  
           }) 
     }
 
@@ -77,13 +77,35 @@ export class AdminDormRequests extends Component {
         });
     }
     
+    // Delete requests, then call Get requests function above
+    DeletePendingRequests(requestID){
+        console.log(requestID)
+        console.log("funciton reached")
+        fetch('http://localhost:16648/api/Student/DeleteRoommate/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
+
+        })
+    }
+
+    // accept requests, then call get requests
 
     printResults() {
         return (
             <table>
                 <thead>
                     <tr>
-                        <td className ="table-head">Full-name</td>
+                        <td className ="table-head">StudentName</td>
                         <td className ="table-head">BuildingName</td>
                         <td className ="table-head">Floor Number</td>
                         <td className ="table-head">Room Number</td>
@@ -97,6 +119,10 @@ export class AdminDormRequests extends Component {
                             <tr>
                                 <td className="result-word" key={index}>
                                     {" "}
+                                    {val.studentName}
+                                </td>
+                                <td className="result-word" key={index}>
+                                    {" "}
                                     {val.buildingName}
                                 </td>
                                 <td className="result-word" key={index}>
@@ -106,26 +132,33 @@ export class AdminDormRequests extends Component {
                                 <td className="result-word" key={index}>
                                     {" "}
                                     {val.roomNumber}
-                                </td>
-                                <td className="result-word" key={index}>
-                                    {" "}
-                                    {val.studentName}
-                                </td>
-                                <td className="result-word" key={index}>
-                                    {" "}
-                                    {val.submissionState}
-                                </td>
+                                </td>     
                                 <td className="result-word">
-                                    <button className="add-icon">
+                                    <button className="accept-icon">
+                                        {" "}
                                         <FontAwesomeIcon
                                             onClick={() => {
                                                 console.log("You have clicked on Accept Request!")
                                             }}
                                             type="submit"
                                             icon={faCheck}
-                                         //   size="2x"
-                                         //   color="green"
-                                        />{" "}
+                                            //size="2x"
+                                            color="green"
+                                        />
+                                    </button>
+                                </td>
+                                <td className="result-word">    
+                                     <button className="delete-icon">
+                                        {" "}
+                                        <FontAwesomeIcon
+                                            onClick={() => {
+                                                console.log("You have clicked on Delete Request!")
+                                            }}
+                                            type="submit"
+                                            icon={faTrash}
+                                            //size="1x"
+                                            color="green"
+                                        />
                                     </button>
                                 </td>
                             </tr>
