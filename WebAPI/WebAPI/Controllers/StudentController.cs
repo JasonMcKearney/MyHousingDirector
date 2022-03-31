@@ -342,10 +342,7 @@ namespace WebAPI.Controllers
                 //FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl where dorm_id = @dorm_id";
 
                 // Select the floor number based upon the building, room size, maxOccupants = num_roommates + 1
-                FindFloorInfo.CommandText = "select floorNumber from housingdirector_schema.room_tbl " +
-                    "where dorm_id = @dorm_id " +
-                    "and maxOccupants >= @numRoommates " +
-                    "and currentOccupants < @numRoommates";
+                FindFloorInfo.CommandText = "select Floor_tbl.floorNumber, Floor_tbl.floor_id, FloorDescription_tbl.floorDescription FROM Floor_tbl INNER JOIN FloorDescription_tbl ON Floor_tbl.floor_id = FloorDescription_tbl.Floor_tbl_Floor_Description WHERE Floor_tbl_Building_tbl = @dorm_id;";
 
                 FindFloorInfo.ExecuteNonQuery();
 
@@ -356,10 +353,15 @@ namespace WebAPI.Controllers
                 {
                     floorNumsForBuilding.Add(new FloorInfoDormSelection()
                     {
+                        floorID = reader.GetInt32(1),
                         floorNumber = reader[0].ToString(),
-                    });
+                        floorDescription = reader[2].ToString(),
+
+                    }) ;
                 }
                 reader.Close();
+                
+
             }
             return floorNumsForBuilding;
         }

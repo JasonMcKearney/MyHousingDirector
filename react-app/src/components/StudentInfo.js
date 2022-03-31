@@ -480,6 +480,7 @@ export default class studentinfo extends React.Component {
                      
                 </div>
                  </div> 
+                </div>
 
     
         );
