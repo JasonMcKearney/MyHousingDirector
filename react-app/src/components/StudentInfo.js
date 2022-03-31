@@ -106,6 +106,13 @@ export default class studentinfo extends React.Component {
                 console.log("response: " + result.status);
                 alert(result.message);
             });
+            if (this.state.userAnswers.Question1 === null || this.state.userAnswers.Question2 === null || this.state.userAnswers.Question3 === null  || this.state.userAnswers.Question4 === null || this.state.userAnswers.Question5 === null || this.state.userAnswers.Question6 === null || this.state.userAnswers.Question7 === null  || this.state.userAnswers.Question8 === null  || this.state.userAnswers.Question9 === null  || this.state.userAnswers.Question10 === null || this.state.userAnswers.Question11 === null || this.state.userAnswers.Question12 === null){
+                var surveyStatus = false;
+              }
+              else{
+                var surveyStatus = true;
+              }
+              Cookies.set("survey", surveyStatus);
       };
     onChangeQuestion(event,questionNum){
 
