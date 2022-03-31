@@ -480,10 +480,14 @@ export default class studentinfo extends React.Component {
                      
                 </div>
                  </div> 
+<<<<<<< HEAD
                  </div> 
 
+=======
+                 </div>
+>>>>>>> Jason-backend
 
-    </div>
+    
         );
     }
 }
