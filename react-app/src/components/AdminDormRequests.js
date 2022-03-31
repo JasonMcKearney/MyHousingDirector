@@ -11,8 +11,7 @@ export class AdminDormRequests extends Component {
         this.state = {
             requestList: []
         }
-      }
-  
+    }
   
     componentDidMount()
     {
@@ -77,7 +76,7 @@ export class AdminDormRequests extends Component {
         });
     }
     
-    // Delete requests, then call Get requests function above
+    // JASON FIX.... Delete requests, then call Get requests function above
     DeletePendingRequests(requestID){
         console.log(requestID)
         console.log("funciton reached")
@@ -94,11 +93,10 @@ export class AdminDormRequests extends Component {
         .then((result) => {
             console.log("response: " + result.status)
             alert(result.message);
-
         })
     }
 
-    // accept requests, then call get requests
+    // JASON TODO... accept requests, then call get requests function
 
     printResults() {
         return (
@@ -171,18 +169,15 @@ export class AdminDormRequests extends Component {
     render(){
         return(
             <div class="container">
-                <div style={{borderRadius: '10px', borderWidth: '5px'}}>
-                    <label style={{fontSize:'180%', paddingBottom: '1%', paddingRight:'0%', fontSize: '200%'}}><strong>Dorm Requests Page</strong></label>
-                </div>
                 <div className="container-results" style={{width:'80%'}}>{this.printResults()}</div>
              {/*   <div class="requests-box">
                     <div style={{padding:'10%', paddingTop:'14%'}}>test</div>
                 </div>
         */}
             <div class="container-BuildingDataBox">
-                <label style={{paddingTop:'3%'}}>Available Dorm Rooms</label>
+                <label style={{paddingTop:'3%'}}>Accepted Dorm Requests per Student</label>
                 <div class="buildingStudentList-div">
-                    <li>
+                    <ul>
                         building name
                         <ul>
                             studentNames - roomNumber
@@ -193,7 +188,14 @@ export class AdminDormRequests extends Component {
                         ))}
                         */}
                         </ul>
-                    </li>
+                        Building Name
+                        <ul>
+                            studentNames - roomNumber
+                        </ul>
+                        <ul>
+                            studentNames - roomNumber
+                        </ul>
+                    </ul>
                 </div>
             </div>
         </div>    

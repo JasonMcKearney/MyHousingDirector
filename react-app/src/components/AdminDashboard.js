@@ -135,7 +135,7 @@ export class AdminDashboard extends Component {
                 dataSource={numStdntsInBuildingsList}
               >
               <Series argumentField="buildingName" valueField="numStudents">
-                <SmallValuesGrouping mode="topN" topCount={3} />
+                <SmallValuesGrouping mode="topN" topCount={8} />
                 <Label
                   visible={true}
                   format="fixedPoint"
