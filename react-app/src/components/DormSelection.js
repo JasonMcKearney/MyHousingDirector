@@ -95,13 +95,13 @@ export default class DormSelection extends Component {
     // Get dorm info from Database when the component is rendered
     componentDidMount() {
         this.noSurveyError();
-        this.props.history.push('/student/StudentInfo');
         this.findBuildingInfo();
     }
 
     noSurveyError(){
         if(Cookies.get("survey") === "false"){
             alert("Your survey is not complete. Please complete your survey before using this function.");
+            this.props.history.push('/student/StudentInfo');
         }
     }
 
