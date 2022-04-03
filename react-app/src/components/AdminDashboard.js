@@ -114,7 +114,7 @@ export class AdminDashboard extends Component {
 
           <div class="availableDormRooms-box">
             <label style={{paddingTop:'2%'}}>Available Dorm Rooms</label>
-            <div class="viewDorms-div"><Link className="btn btn-primary">View Dorms</Link></div>
+            <div class="addDorms-div"><Link className="btn btn-primary">Add Dorms</Link></div>
             <div class="buildingsList-div">
               <ul>
                 {availableBuildingsList.map((data) => (
