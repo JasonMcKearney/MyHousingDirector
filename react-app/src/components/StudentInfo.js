@@ -204,7 +204,7 @@ export default class studentinfo extends React.Component {
             return(
 
                 <div className='checklist-container'>
-                    <p>Roomate Request Checklist</p>
+                    <h2>Roomate Request Checklist</h2>
                      {tempRequestCheckList.map((val, index) => {
                          return(
                             <div className="checklist-item-wrapper" >
