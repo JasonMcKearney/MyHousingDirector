@@ -198,6 +198,7 @@ export default class RoommateSelection extends Component {
 
                 }}>
                 <div>
+                    <h1>Roommate Selection</h1>
                     <div className="roommate-container">
                         <div className="wrapper">
                             <form>

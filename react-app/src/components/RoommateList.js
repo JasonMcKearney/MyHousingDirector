@@ -377,6 +377,7 @@ export default class RoommateList extends Component {
                   flex: 1,
                   width: "80%"
               }}>
+            <h1>Your Roommates and Requests</h1>
              <div className="StudentHomeBox">
                  <div className="roommate-box">
                         <p>Outbound requests</p>
