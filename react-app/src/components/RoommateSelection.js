@@ -186,7 +186,6 @@ export default class RoommateSelection extends Component {
 
     componentDidMount(){
         this.noSurveyError();
-        
     }
 
     render() {
