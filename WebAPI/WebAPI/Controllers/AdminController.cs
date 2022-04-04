@@ -160,7 +160,8 @@ namespace WebAPI.Controllers
 
                     // Pulls all students usernames that match entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "select username,user_id from housingdirector_schema.student_tbl where username like @username";
+                    FindUsersLike.CommandText = "select username,user_id, email from housingdirector_schema.student_tbl where username like @username";
+                  //  FindUsersLike.CommandText = "SELECT dorm_ID, roomNumber from housingdirector_schema.dormOccupants_tbl where submissionState = \"accepted\"";
 
                     FindUsersLike.ExecuteNonQuery();
 
@@ -172,7 +173,8 @@ namespace WebAPI.Controllers
                         eventData.Add(new studentTblFields()
                         {
                             username = reader[0].ToString(),
-                            user_id = reader.GetInt32(1)
+                            user_id = reader.GetInt32(1),
+                            email = reader[2].ToString(),
                         });
                     }
                     reader.Close();
@@ -186,6 +188,54 @@ namespace WebAPI.Controllers
                     });
                 }
             }
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                // Check if there are more than one student that matches the username entered
+                MySqlCommand FindTotalUsers = conn.CreateCommand();
+                FindTotalUsers.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.student_tbl where username like @username";
+                FindTotalUsers.ExecuteNonQuery();
+
+                // If nNumStudents is 1 then there are at least one student account created to check
+                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+
+                if (nNumStudents >= 1)
+                {
+                    MySqlCommand FindUsersLike = conn.CreateCommand();
+
+                    // Pulls all students usernames that match entered characters
+                    FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
+                   // FindUsersLike.CommandText = "select username,user_id, email from housingdirector_schema.student_tbl where username like @username";
+                    FindUsersLike.CommandText = "SELECT dorm_ID, roomNumber from housingdirector_schema.dormOccupants_tbl where submissionState = \"accepted\"";
+
+                    FindUsersLike.ExecuteNonQuery();
+
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
+
+                    while (reader.Read()) // Read returns false if the user does not exist!
+                    {
+                        eventData.Add(new studentTblFields()
+                        {
+                            dorm_ID = Int32.Parse(reader[0].ToString()),
+                            roomNumber = reader[1].ToString(),
+
+
+                        });
+                    }
+                    reader.Close();
+                }
+                else
+                {
+                    eventData.Add(new studentTblFields()
+                    {
+                        username = "",
+                        user_id = 0
+                    });
+                }
+            }
+
             return eventData;
         }
 
@@ -203,7 +253,7 @@ namespace WebAPI.Controllers
 
                 // Pulls all students usernames like entered characters
                 FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
-                FindUsersInfo.CommandText = "SELECT student_tbl.user_id, student_tbl.firstName, student_tbl.lastName, student_tbl.username, student_tbl.email, student_tbl.year, student_tbl.password,student_tbl.studentID, dormOccupants_tbl.dorm_ID, dormOccupants_tbl.room_ID, Building_tbl.name, Building_tbl.sizeBuilding, room_tbl.floorNumber, room_tbl.maxOccupants FROM student_tbl LEFT JOIN dormOccupants_tbl ON dormOccupants_tbl.student_id = dormOccupants_tbl.student_id left join Building_tbl on Building_tbl.dorm_id = dormOccupants_tbl.dorm_ID left join room_tbl on room_tbl.room_id = dormOccupants_tbl.room_ID";
+                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, studentID, email, year, password from housingdirector_schema.student_tbl where username = @username ";
                 FindUsersInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -217,15 +267,11 @@ namespace WebAPI.Controllers
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
                         username = reader[3].ToString(),
-                        email = reader[4].ToString(),
-                        year = reader[5].ToString(),
-                        password = reader[6].ToString(),
-                        studentID = reader[7].ToString()
-                        dorm_ID = reader[8].ToString(),
-                        room_ID = reader[9].ToString(),
-                        name = reader[10].ToString(),
-                        floorNumber = Int32.Parse(reader[11].ToString()),
-                        maxOccupants = Int32.Parse(reader[12].ToString()),
+                        studentID  = reader[4].ToString(),
+                        email = reader[5].ToString(),
+                        year = reader[6].ToString(),
+                        password = reader[7].ToString(),
+                        
                     }); ;
 
                 }
@@ -405,7 +451,7 @@ namespace WebAPI.Controllers
 
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
-                FindBuildingInfo.CommandText = "select dorm_id from housingdirector_schema.room_tbl where currentOccupants < maxOccupants";
+                FindBuildingInfo.CommandText = "select building_id from housingdirector_schema.room_tbl where currentOccupants < maxOccupants";
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:

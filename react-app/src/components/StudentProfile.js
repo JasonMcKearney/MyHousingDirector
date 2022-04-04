@@ -90,7 +90,8 @@ export class StudentProfile extends Component {
                 lastName: this.state.lastName,
                 email: this.state.email,
                 year: this.state.year,                
-                password: this.state.password
+                password: this.state.password,
+                studentID: this.state.studentID
             })
         }).then((Response) => Response.json())
         .then((result) => {
@@ -142,6 +143,7 @@ export class StudentProfile extends Component {
         let email = this.state.email;
         let year = this.state.year;
         let password = this.state.password;
+        let studentID = this.state.studentID
 
         return (
 
@@ -167,6 +169,11 @@ export class StudentProfile extends Component {
                         <input className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
                     </div>
 
+                    <div className="student-container">
+                        <label className="student-info-label" >Student ID</label>
+                        <input className="student-infor-input" disabled={true} type="text" defaultValue={studentID} onChange={this.studentID} autoComplete="off"></input>
+                    </div>
+
                     <div className = "student-container">
                         <label className = "student-info-label">Email:</label>
                         <input className= "student-infor-input" type = "text" defaultValue = {email} onChange={this.email}autoComplete = "off"></input>
@@ -181,6 +188,8 @@ export class StudentProfile extends Component {
                         <label className = "student-info-label" >Password:</label>
                         <input className= "student-infor-input" disabled = {true} type = "text" defaultValue = {password} onChange={this.password} autoComplete = "off"></input>
                     </div>
+
+
 
                 </div>
 

@@ -102,7 +102,7 @@ export default class search extends Component {
         ),
       },
       ];
-     console.log(12233, studentlist)
+
     return (
         <Table columns={columns} dataSource={studentlist} pagination={false} />
     //   <Table
@@ -149,7 +149,9 @@ export default class search extends Component {
               currentComponent.setState({ studentName: res[i].username });
                 currentComponent.setState({ user_id: res[i].user_id });
                 currentComponent.setState({ email: res[i].email });
-
+                console.log("studentName" + res[i].username)
+                console.log("email" + res[i].email)
+                console.log("user_id" + res[i].user_id)
               // Add student to list
               currentComponent.addItem();
             }
