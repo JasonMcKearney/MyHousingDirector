@@ -203,7 +203,7 @@ namespace WebAPI.Controllers
 
                 // Pulls all students usernames like entered characters
                 FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
-                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, email, year, password from housingdirector_schema.student_tbl where username = @username";
+                FindUsersInfo.CommandText = "SELECT student_tbl.user_id, student_tbl.firstName, student_tbl.lastName, student_tbl.username, student_tbl.email, student_tbl.year, student_tbl.password,student_tbl.studentID, dormOccupants_tbl.dorm_ID, dormOccupants_tbl.room_ID, Building_tbl.name, Building_tbl.sizeBuilding, room_tbl.floorNumber, room_tbl.maxOccupants FROM student_tbl LEFT JOIN dormOccupants_tbl ON dormOccupants_tbl.student_id = dormOccupants_tbl.student_id left join Building_tbl on Building_tbl.dorm_id = dormOccupants_tbl.dorm_ID left join room_tbl on room_tbl.room_id = dormOccupants_tbl.room_ID";
 
                 FindUsersInfo.ExecuteNonQuery();
 
@@ -221,6 +221,12 @@ namespace WebAPI.Controllers
                         email = reader[4].ToString(),
                         year = reader[5].ToString(),
                         password = reader[6].ToString(),
+                        studentID = reader[7].ToString()
+                        dorm_ID = reader[8].ToString(),
+                        room_ID = reader[9].ToString(),
+                        name = reader[10].ToString(),
+                        floorNumber = Int32.Parse(reader[11].ToString()),
+                        maxOccupants = Int32.Parse(reader[12].ToString()),
                     }); ;
 
                 }
@@ -368,15 +374,17 @@ namespace WebAPI.Controllers
                 reader.Close();
             }
             // new query
-           using (MySqlConnection conn = GetConnection())
+          /* using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
-                FindBuildingInfo.CommandText = "select dorm_id, name, sizeBuilding from housingdirector_schema.Building_tbl";
+                FindBuildingInfo.CommandText = "select b.name, r.floorNumber, d.roomNumber, d.studentName from Building_tbl b " +
+                            "cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid and " +
+                            "d.record_ID = @recordid";
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
-                MySqlDataReader reader = FindBuildingInfo.ExecuteReader();
+                MySqlDataReader reader = SearchUserInfo.ExecuteReader();
                 dashboardInfo.totalStdntsInBuildingsList = new List<DormBuilding>();
                 while (reader.Read())
                 {
@@ -388,7 +396,7 @@ namespace WebAPI.Controllers
                     });
                 }
                 reader.Close();
-            }
+            }*/
 
             // Finds available dorm buildings
             using (MySqlConnection conn = GetConnection())
@@ -537,6 +545,9 @@ namespace WebAPI.Controllers
 
             return requestDataList;
         }
+
+
+
 
         struct TempIDsStruct{
             public string record_ID;

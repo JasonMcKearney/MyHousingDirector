@@ -14,8 +14,9 @@ export default class search extends Component {
       searchResults: "",
       user_id: 0,
       studentName: "",
+      email:"",
       studentlist: [],
-      studentObj: { username: "", user_id: "" },
+      studentObj: { username: "", user_id: "" ,email:""},
     };
 
     //Student Object to store all the student data
@@ -38,6 +39,7 @@ export default class search extends Component {
     const newstudentObj = {
       username: this.state.studentName,
       user_id: this.state.user_id,
+      email:this.state.email,
     };
 
     //this.setState({studentObj: newstudentObj} )
@@ -79,7 +81,12 @@ export default class search extends Component {
         title: "Username",
         dataIndex: "username",
         //   render: (text) => <a>{text}</a>,
-      },
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            //   render: (text) => <a>{text}</a>,
+        },
       {
         title: "Action",
         render: (text, record) => (
@@ -140,7 +147,8 @@ export default class search extends Component {
             console.log("Next User_id: " + res[i].user_id);
             if (res[i].username != "") {
               currentComponent.setState({ studentName: res[i].username });
-              currentComponent.setState({ user_id: res[i].user_id });
+                currentComponent.setState({ user_id: res[i].user_id });
+                currentComponent.setState({ email: res[i].email });
 
               // Add student to list
               currentComponent.addItem();
