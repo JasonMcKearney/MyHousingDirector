@@ -181,6 +181,7 @@ export default class RoommateSelection extends Component {
             alert("Your survey is not complete. Please complete your survey before using this function.");
             this.props.history.push('/student/StudentInfo');
         }
+
     }
 
     componentDidMount(){

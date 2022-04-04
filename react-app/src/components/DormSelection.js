@@ -148,8 +148,9 @@ export default class DormSelection extends Component {
                 for (i = 0; i < res.length; i++) {
                     let obj2 = {
                         label: res[i].floorNumber,
-                        value: res[i].floorNumber,
+                        value: res[i].floorID,
                         dormID: currentComponent.state.dorm,
+                        floorDescription: res[i].floorDescription,
                     }
                     newArray.push(obj2)  // Push the object
                 }
@@ -257,7 +258,7 @@ export default class DormSelection extends Component {
             });                        
         }
 
-        this.findRoomInfo();
+       // this.findRoomInfo();
         if (current == 2 || floorData.length > 0) {
             if (!room) {
                 message.error("You Must Select a Room to Continue!");
@@ -355,9 +356,17 @@ export default class DormSelection extends Component {
             };
         }
         else if (name == "floor") {
-            return{
-               desc: 'Nothing to show as of now...'
-             };
+            console.log("HERE" + id);
+            for(var i = 0; i < this.state.floorData.length;i++)
+            {
+                if(this.state.floorData[i].floorID == id)
+                {
+                    return{
+                        desc:  `${this.state.floorData[i].floorDescription}`,
+                      };
+                }
+            }
+           
         }
         // Get room data
         else {
