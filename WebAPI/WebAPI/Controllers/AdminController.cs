@@ -204,7 +204,6 @@ namespace WebAPI.Controllers
                 // Pulls all students usernames like entered characters
                 FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
                 FindUsersInfo.CommandText = "SELECT student_tbl.user_id, student_tbl.firstName, student_tbl.lastName, student_tbl.username, student_tbl.email, student_tbl.year, student_tbl.password,student_tbl.studentID, dormOccupants_tbl.dorm_ID, dormOccupants_tbl.room_ID, Building_tbl.name, Building_tbl.sizeBuilding, room_tbl.floorNumber, room_tbl.maxOccupants FROM student_tbl LEFT JOIN dormOccupants_tbl ON dormOccupants_tbl.student_id = dormOccupants_tbl.student_id left join Building_tbl on Building_tbl.dorm_id = dormOccupants_tbl.dorm_ID left join room_tbl on room_tbl.room_id = dormOccupants_tbl.room_ID";
-
                 FindUsersInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
