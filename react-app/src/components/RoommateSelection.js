@@ -179,12 +179,14 @@ export default class RoommateSelection extends Component {
     noSurveyError(){
         if(Cookies.get("survey") === "false"){
             alert("Your survey is not complete. Please complete your survey before using this function.");
+            this.props.history.push('/student/StudentInfo');
         }
+
     }
 
     componentDidMount(){
         this.noSurveyError();
-        this.props.history.push('/student/StudentInfo');
+        
     }
 
     render() {

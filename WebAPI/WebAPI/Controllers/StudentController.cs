@@ -751,7 +751,7 @@ namespace WebAPI.Controllers
                 //First gets all the First names,ids, and las names of all the recievers of users requests
                 MySqlCommand requestorID = conn.CreateCommand();
                 requestorID.Parameters.AddWithValue("@userID", userID);
-                requestorID.CommandText = "Select roommates_table.Requestor_ID, roommates_table.roommate_ID, roommates_table.RequestState, student_tbl.firstName, student_tbl.lastName FROM roommates_table INNER JOIN student_tbl ON roommates_table.roommate_ID = student_tbl.user_id WHERE Requestor_ID = 5;";
+                requestorID.CommandText = "Select roommates_table.Requestor_ID, roommates_table.roommate_ID, roommates_table.RequestState, student_tbl.firstName, student_tbl.lastName FROM roommates_table INNER JOIN student_tbl ON roommates_table.roommate_ID = student_tbl.user_id WHERE Requestor_ID = @userID;";
 
                 requestorID.ExecuteNonQuery();
 
