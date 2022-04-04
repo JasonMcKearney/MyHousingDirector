@@ -25,16 +25,11 @@
 }
 
 .Student-page-background {
-    background: rgb(128 128 128 / 0.75);
-    /* margin: 100px auto 60px; */
+    background: rgba(176, 196, 222, 0.514);
     width: 100%;
     height: 100%;
     padding: 70px;
-    border-color:black;
-    border-width:2px;
-    border-style:solid;
-    border-radius:2%;
-/*    margin-top:20px;*/
+    border-radius:10px;
 }
 
 .Student-page-wrap {
@@ -70,12 +65,12 @@
 }
 
 .Student-desc1 {
-  width: 669px;
+  width: 40%;
   background: rgb(255 255 255 / 45%);
-  height: 160px;
+  height: 20%;
   margin: 100px auto 0;
   font-size: 40px;
-  font-family: fantasy;
+  font-family: italic;
   text-align: center;
   padding: 50px 0px 0 0;
   border-radius: 20px;
@@ -83,12 +78,12 @@
 
 .Student-desc2 {
     margin: 30px auto 0;
-    background: rgb(255 255 255 / 45%);
+    background: rgb(255 255 255 / 85%);
     border-radius: 10px;
     font-size: 30px;
     font-family: serif;
     text-align: center;
-    color: rgb(76, 255, 0);
+    color: rgb(0, 0, 0);
 }
 
 .survey-notification{
@@ -121,9 +116,6 @@
 .roommate-box {
     height: 90%;
     width: 80%;
-    border-width: 3px;
-    border-style: solid;
-    border-color: black;
     border-radius: 10px;
     float: left;
     font-size: 30px;
@@ -145,12 +137,12 @@
     font-size: smaller;
     display: grid;
     justify-content: center;
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
-    height: 100%;
-    width: 100%;
+    height: 95%;
+    width: 95%;
     padding-right: 10%;
-    padding-left: 10%
+    padding-left: 10%;
+    border-radius: 10px;
+    margin-left: 2.5%;
+    background-color: lightgray;
     
 }

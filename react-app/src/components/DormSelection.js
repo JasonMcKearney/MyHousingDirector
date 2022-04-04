@@ -450,6 +450,7 @@ export default class DormSelection extends Component {
                     flex: 1,
                     width: "80%"
                 }}>
+            <h1>Dorm Selection</h1>
             <div className="dormSelect">
                 <div class="a">
                     <label>{dorm}</label>

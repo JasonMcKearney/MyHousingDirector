@@ -107,7 +107,7 @@ export default class DormSelection extends Component {
   render() {
     return (
       <>
-        <div className="Student-desc1">Southern New Hampshire University</div>
+        <div className="Student-desc1">Southern New Hampshire University<p>Office of Residence Life</p></div>
         <div className="Student-desc2">
           Hello { Cookies.get("FN") }! <br/>
           Welcome to My Housing Director!
