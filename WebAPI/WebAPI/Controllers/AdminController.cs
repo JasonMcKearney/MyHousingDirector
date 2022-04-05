@@ -376,7 +376,7 @@ namespace WebAPI.Controllers
 
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
-                FindBuildingInfo.CommandText = "select dorm_id from housingdirector_schema.room_tbl where currentOccupants < maxOccupants";
+                FindBuildingInfo.CommandText = "select building_id from housingdirector_schema.room_tbl where currentOccupants < maxOccupants";
                 FindBuildingInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -422,13 +422,9 @@ namespace WebAPI.Controllers
             return dashboardInfo;
         }
 
-
-
-
-
-        [Route("GetAdminDormRequests")]
+        [Route("GetAdminDormRequests/{requestState}")]
         [HttpGet]
-        public List<AdminDormRequestData> GetAdminDormRequests()
+        public List<AdminDormRequestData> GetAdminDormRequests(string requestState)
         {
             List<AdminDormRequestData> requestDataList = new List<AdminDormRequestData>();
             List<TempIDsStruct> tempIDList = new List<TempIDsStruct>();
@@ -441,8 +437,8 @@ namespace WebAPI.Controllers
                 {
                     conn.Open();
                     MySqlCommand GetRequestData = conn.CreateCommand();
-                    GetRequestData.CommandText = "select record_ID, dorm_ID, room_ID from housingdirector_schema.dormOccupants_tbl where submissionState = 'requested'";
-
+                    GetRequestData.CommandText = "select request_ID, dorm_ID, room_ID from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
+                    GetRequestData.Parameters.AddWithValue("@submissionState", requestState);
                     GetRequestData.ExecuteNonQuery();
 
                     // Execute the SQL command against the DB:
@@ -452,7 +448,7 @@ namespace WebAPI.Controllers
                         // Populate tempIDList with ids that are used to figure out name of building, room
                         tempIDList.Add(new TempIDsStruct
                         {
-                            record_ID = reader[0].ToString(),
+                            request_ID = reader[0].ToString(),
                             dorm_ID = reader[1].ToString(),
                             room_ID = reader[2].ToString()
                         });
@@ -478,10 +474,10 @@ namespace WebAPI.Controllers
                     for (int counter = 0; counter < tempIDList.Count(); counter++)
                     { 
                         MySqlCommand GetRequestData2 = conn2.CreateCommand();
-                        GetRequestData2.CommandText = "select b.name, r.floorNumber, d.roomNumber, d.studentName from Building_tbl b " +
+                        GetRequestData2.CommandText = "select b.name, d.roomNumber, d.studentName from Building_tbl b " +
                             "cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid and " +
-                            "d.record_ID = @recordid";
-                        GetRequestData2.Parameters.AddWithValue("@recordid", tempIDList[counter].record_ID);
+                            "d.request_ID = @requestID";
+                        GetRequestData2.Parameters.AddWithValue("@requestId", tempIDList[counter].request_ID);
                         GetRequestData2.Parameters.AddWithValue("@dormid", tempIDList[counter].dorm_ID);
                         GetRequestData2.Parameters.AddWithValue("@roomid", tempIDList[counter].room_ID);
                         GetRequestData2.ExecuteNonQuery();
@@ -493,12 +489,11 @@ namespace WebAPI.Controllers
                             // Save values into AdminDormRequestData class so can pass list to React JS to retrieve and manipulate the data
                             requestDataList.Add(new AdminDormRequestData
                             {
-                                record_ID = tempIDList[counter].ToString(),
+                                request_ID = tempIDList[counter].request_ID,
                                 buildingName = reader[0].ToString(),     
-                                floorNumber = reader[1].ToString(),
-                                roomNumber = reader[2].ToString(),
-                                studentName = reader[3].ToString(),
-                                submissionState = "requested"
+                                roomNumber = reader[1].ToString(),
+                                studentName = reader[2].ToString(),
+                                submissionState = requestState
                             });
                         }
                         reader.Close();
@@ -512,12 +507,65 @@ namespace WebAPI.Controllers
                     });
                 }
             }
-
             return requestDataList;
         }
 
+        // Allows administrators to accept or decline a dorm submission
+        [Route("AcceptDormRequest/{requestID}")]
+        [HttpPost]
+        public Response AcceptDormRequest(string requestID)
+        {
+            try
+            {
+                using (MySqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand CheckUser = conn.CreateCommand();
+
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "update housingdirector_schema.dormOccupants_tbl " +
+                        "set submissionState = \"accepted\" where request_ID=@requestID";
+                    Query.Parameters.AddWithValue("@requestID", requestID);
+                    Query.ExecuteNonQuery();
+                }
+            }
+            catch (Exception)
+            {
+                return new Response { Status = "Invalid", Message = "Accepted Student Dorm Request Unsuccessful." };
+            }
+            return new Response { Status = "Success", Message = "Updated Student Dorm Request." };
+        }
+
+        // Create student account
+        [Route("DeclineDormRequest/{requestID}")]
+        [HttpPost]
+        public Response DeclineDormRequest(string requestID)
+        {
+            try
+            {
+                using (MySqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand CheckUser = conn.CreateCommand();
+
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "update housingdirector_schema.dormOccupants_tbl " +
+                        "set submissionState = \"decline\" where request_ID=@requestID";
+                    Query.Parameters.AddWithValue("@requestID", requestID);
+                    Query.ExecuteNonQuery();
+                }
+            }
+            catch (Exception)
+            {
+                return new Response { Status = "Invalid", Message = "Declined Student Dorm Request Unsuccessful." };
+            }
+            return new Response { Status = "Success", Message = "Updated Student Dorm Request." };
+        }
+
         struct TempIDsStruct{
-            public string record_ID;
+            public string request_ID;
             public string dorm_ID;
             public string room_ID;
             public Response message;

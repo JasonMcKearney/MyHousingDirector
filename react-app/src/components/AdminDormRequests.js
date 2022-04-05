@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./AdminDormRequests.css";
+import { CommonAxisSettingsConstantLineStyle } from "devextreme-react/chart";
 
 // Export means any module (AdminDashboard.js file in this case) can use this script by importing it
 export class AdminDormRequests extends Component {
@@ -9,21 +10,21 @@ export class AdminDormRequests extends Component {
         super(props);
     
         this.state = {
-            requestList: []
+            requestList: [],
+            acceptedRequestList: []
         }
     }
   
     componentDidMount()
     {
-        this.GetRequests()
+        this.GetRequests("requested")
+        this.printBuildingAndStudentNames()
     }
 
-    GetRequests()
+    GetRequests(requestState)
     {
       let currentComponent = this;
-      console.log("Made it to FindData() function!!");
-      
-      fetch('http://localhost:16648/api/Admin/GetAdminDormRequests', {
+      fetch('http://localhost:16648/api/Admin/GetAdminDormRequests/' + requestState, {
           mode: 'cors', // this cannot be 'no-cors'
           headers: {
               'Content-Type': 'application/json',
@@ -32,41 +33,49 @@ export class AdminDormRequests extends Component {
           method: 'GET',
       }).then(res => res.clone().json())
           .then(function (res) {
-              console.log("res: " + JSON.stringify(res));
-              console.log("res: " + res);
-              try
-              {
-                console.log("List with contents inside: " + currentComponent.state.requestList)
-                currentComponent.removeAllInfo();
-                // method does not affect the original list
-                var requestListTemp = currentComponent.state.requestList.slice();
-                console.log("List with nothing in it: " + requestListTemp)
+//              try
+//              {
+                  if(requestState == "requested")
+                  {
+                    // Remove requests that are already found in the requestList
+                    currentComponent.removeAllInfo();
+                  }
                 
-                console.log("res.length: " + res.length)
+                // Method does not affect the original list
+                var requestListTemp = currentComponent.state.requestList.slice();
+                
                 var i;
                 for (i = 0; i < res.length; i++) {
-                    console.log("---------record_ID: " + res[0].submissionState)
                     const newRequestObj = {
-                        record_ID: res[i].record_ID,
+                        request_ID: res[i].request_ID,
                         buildingName: res[i].buildingName,     
-                        floorNumber: res[i].floorNumber,
                         roomNumber: res[i].roomNumber,
                         studentName: res[i].studentName,
                         submissionState: res[i].submissionState
                     };
-                    console.log(newRequestObj);
                     requestListTemp.push(newRequestObj);
                 }
-                currentComponent.setState({
-                    requestList: requestListTemp,
-                });
-        
-                console.log("items added to the list");
-              }
-              catch
-              {
-                console.log("there was an error in code above line 66!!");
-              }  
+                // Alphabetize sort building names by first letter
+                requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
+                console.log("requestListTemp after sort: " + JSON.stringify(requestListTemp))
+
+                if(requestState === "accepted")
+                {
+                    currentComponent.setState({
+                        acceptedRequestList: requestListTemp
+                    });
+                }
+                else
+                {
+                    currentComponent.setState({
+                        requestList: requestListTemp
+                    });
+                }
+//              }
+//              catch
+//              {
+//                console.log("there was an error in code above line 77!!");
+//              }  
           }) 
     }
 
@@ -75,12 +84,11 @@ export class AdminDormRequests extends Component {
             requestList: [],
         });
     }
-    
-    // JASON FIX.... Delete requests, then call Get requests function above
-    DeletePendingRequests(requestID){
-        console.log(requestID)
-        console.log("funciton reached")
-        fetch('http://localhost:16648/api/Student/DeleteRoommate/' + requestID, {
+
+
+    // Declines pending requests and updates database
+    DeclinePendingRequests(requestID){
+        fetch('http://localhost:16648/api/Admin/DeclineDormRequest/' + requestID, {
             headers:{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -96,7 +104,23 @@ export class AdminDormRequests extends Component {
         })
     }
 
-    // JASON TODO... accept requests, then call get requests function
+    // Accepts pending requests and updates database
+    AcceptPendingRequest(requestID){
+        fetch('http://localhost:16648/api/Admin/AcceptDormRequest/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            console.log("response: " + result.status)
+            alert(result.message);
+        })
+    }
 
     printResults() {
         return (
@@ -105,7 +129,6 @@ export class AdminDormRequests extends Component {
                     <tr>
                         <td className ="table-head">StudentName</td>
                         <td className ="table-head">BuildingName</td>
-                        <td className ="table-head">Floor Number</td>
                         <td className ="table-head">Room Number</td>
                         <td className ="table-head">Accept</td>
                         <td className ="table-head">Decline</td>
@@ -125,10 +148,6 @@ export class AdminDormRequests extends Component {
                                 </td>
                                 <td className="result-word" key={index}>
                                     {" "}
-                                    {val.floorNumber}
-                                </td>
-                                <td className="result-word" key={index}>
-                                    {" "}
                                     {val.roomNumber}
                                 </td>     
                                 <td className="result-word">
@@ -136,7 +155,8 @@ export class AdminDormRequests extends Component {
                                         {" "}
                                         <FontAwesomeIcon
                                             onClick={() => {
-                                                console.log("You have clicked on Accept Request!")
+                                                this.AcceptPendingRequest(val.request_ID)
+                                                this.GetRequests("requested")
                                             }}
                                             type="submit"
                                             icon={faCheck}
@@ -146,11 +166,12 @@ export class AdminDormRequests extends Component {
                                     </button>
                                 </td>
                                 <td className="result-word">    
-                                     <button className="delete-icon">
+                                    <button className="delete-icon">
                                         {" "}
                                         <FontAwesomeIcon
                                             onClick={() => {
-                                                console.log("You have clicked on Delete Request!")
+                                                this.DeclinePendingRequests(val.request_ID)
+                                                this.GetRequests("requested")
                                             }}
                                             type="submit"
                                             icon={faTrash}
@@ -164,8 +185,51 @@ export class AdminDormRequests extends Component {
                     })}
                 </tbody>
             </table>
-        );
+        );        
     }
+
+    printBuildingAndStudentNames() {
+        this.GetRequests("accepted");
+        console.log("-----------------made it to line 173, printBuildingAndStudentNames() function--------------")
+        // Create object names buildings
+            // has member variables of list that holds names
+
+        // Get copy of requestList without changing
+        var buildingStudentNamesList = this.state.acceptedRequestList.slice();
+
+
+/*
+        // Find building names and what student lives in which building, their dorm room number
+        for(var counter = 0; counter < this.state.requestList.length(); counter++)
+        {
+            // Index matches one student in studentNameList and in roomNumberList
+            var buildingObject = 
+            {
+                buildingName: this.state.requestList[counter].buildingName,
+                studentNameList: this.state.requestList[counter].studentName,
+                roomNumberList: this.state.requestList[counter].roomNumber
+            };
+            buildingStudentNamesList.push(buildingObject)
+        }       
+*/        
+        return (
+            <tbody>
+                {this.state.buildingStudentNamesList.map((val, index) => {
+                    return (
+                        <ul>
+                            {buildingStudentNamesList.val.buildingName}
+                        <ul>
+                            {buildingStudentNamesList.val.studentNameList[index]} + {buildingStudentNamesList.val.roomNumberList[index]}
+                        </ul>
+                    </ul>
+                    );
+                })}
+            </tbody>  
+        )
+    }
+
+
+        
     render(){
         return(
             <div class="container">
@@ -177,25 +241,7 @@ export class AdminDormRequests extends Component {
             <div class="container-BuildingDataBox">
                 <label style={{paddingTop:'3%'}}>Accepted Dorm Requests per Student</label>
                 <div class="buildingStudentList-div">
-                    <ul>
-                        building name
-                        <ul>
-                            studentNames - roomNumber
-                        {/* {availableBuildingsList.map((data) => (
-                            <li key={data.name}>
-                                {data.name} ({data.numRoomsAvailable})                
-                            </li>
-                        ))}
-                        */}
-                        </ul>
-                        Building Name
-                        <ul>
-                            studentNames - roomNumber
-                        </ul>
-                        <ul>
-                            studentNames - roomNumber
-                        </ul>
-                    </ul>
+                    
                 </div>
             </div>
         </div>    
