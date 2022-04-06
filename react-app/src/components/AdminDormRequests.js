@@ -2,28 +2,41 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./AdminDormRequests.css";
+import { CommonAxisSettingsConstantLineStyle } from "devextreme-react/chart";
+import { waitFor } from "@testing-library/react";
 
-// Export means any module (AdminDashboard.js file in this case) can use this script by importing it
 export class AdminDormRequests extends Component {
     constructor(props) {
         super(props);
     
         this.state = {
-            requestList: []
+            requestList: [],
+            acceptedRequestList: []
         }
     }
   
     componentDidMount()
     {
-        this.GetRequests()
+        this.getRequestsAndBuildings();
     }
 
-    GetRequests()
+    getRequestsAndBuildings()
+    {
+        this.removeAllInfo();
+        // Find dorm requests
+        this.GetRequests("requested");
+
+        // Find accepted dorm requests
+        this.GetRequests("accepted");
+
+        // Print data into building and student name box for accepted requests
+        this.printBuildingAndStudentNames();
+    }
+
+    GetRequests(requestState)
     {
       let currentComponent = this;
-      console.log("Made it to FindData() function!!");
-      
-      fetch('http://localhost:16648/api/Admin/GetAdminDormRequests', {
+      fetch('http://localhost:16648/api/Admin/GetAdminDormRequests/' + requestState, {
           mode: 'cors', // this cannot be 'no-cors'
           headers: {
               'Content-Type': 'application/json',
@@ -32,55 +45,66 @@ export class AdminDormRequests extends Component {
           method: 'GET',
       }).then(res => res.clone().json())
           .then(function (res) {
-              console.log("res: " + JSON.stringify(res));
-              console.log("res: " + res);
               try
               {
-                console.log("List with contents inside: " + currentComponent.state.requestList)
-                currentComponent.removeAllInfo();
-                // method does not affect the original list
-                var requestListTemp = currentComponent.state.requestList.slice();
-                console.log("List with nothing in it: " + requestListTemp)
+                  var requestListTemp;
+                  if(requestState === "requested")
+                  {
+                    console.log("requested state")
+                    // Method does not affect the original list
+                    requestListTemp = currentComponent.state.requestList.slice();
+                  }
+                  else
+                  {
+                    requestListTemp = currentComponent.state.acceptedRequestList.slice();
+                  }
+                     
+                    var i;
+                    for (i = 0; i < res.length; i++) {
+                        const newRequestObj = {
+                            request_ID: res[i].request_ID,
+                            buildingName: res[i].buildingName,     
+                            roomNumber: res[i].roomNumber,
+                            studentName: res[i].studentName,
+                            submissionState: res[i].submissionState
+                        };
+                        requestListTemp.push(newRequestObj);
+                    }
                 
-                console.log("res.length: " + res.length)
-                var i;
-                for (i = 0; i < res.length; i++) {
-                    console.log("---------record_ID: " + res[0].submissionState)
-                    const newRequestObj = {
-                        record_ID: res[i].record_ID,
-                        buildingName: res[i].buildingName,     
-                        floorNumber: res[i].floorNumber,
-                        roomNumber: res[i].roomNumber,
-                        studentName: res[i].studentName,
-                        submissionState: res[i].submissionState
-                    };
-                    console.log(newRequestObj);
-                    requestListTemp.push(newRequestObj);
+                // Alphabetically sort building names by first letter
+                requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
+
+                // Sets lists accordingly
+                if(requestState === "accepted")
+                {
+                    currentComponent.setState({
+                        acceptedRequestList: requestListTemp
+                    });
                 }
-                currentComponent.setState({
-                    requestList: requestListTemp,
-                });
-        
-                console.log("items added to the list");
+                else
+                {
+                    currentComponent.setState({
+                        requestList: requestListTemp
+                    });
+                }
               }
               catch
               {
-                console.log("there was an error in code above line 66!!");
+                console.log("there was an error in code above line 77!!");
               }  
           }) 
     }
 
     removeAllInfo(){
         this.setState({
-            requestList: [],
+            requestList: [],   
+            acceptedRequestList: [] 
         });
     }
-    
-    // JASON FIX.... Delete requests, then call Get requests function above
-    DeletePendingRequests(requestID){
-        console.log(requestID)
-        console.log("funciton reached")
-        fetch('http://localhost:16648/api/Student/DeleteRoommate/' + requestID, {
+
+    // Declines pending requests and updates database
+    DeclinePendingRequests(requestID){
+        fetch('http://localhost:16648/api/Admin/DeclineDormRequest/' + requestID, {
             headers:{
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -91,12 +115,31 @@ export class AdminDormRequests extends Component {
             })
         }).then((Response) => Response.json())
         .then((result) => {
+            window.location.reload(false);  
             console.log("response: " + result.status)
             alert(result.message);
         })
     }
 
-    // JASON TODO... accept requests, then call get requests function
+    // Accepts pending requests and updates database
+    AcceptPendingRequest(requestID){
+        fetch('http://localhost:16648/api/Admin/AcceptDormRequest/' + requestID, {
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                requestID: requestID
+            })
+        }).then((Response) => Response.json())
+        .then((result) => {
+            // Reloads page
+            window.location.reload(false);
+            console.log("response: " + result.status)
+            alert(result.message);
+        })        
+    }
 
     printResults() {
         return (
@@ -105,7 +148,6 @@ export class AdminDormRequests extends Component {
                     <tr>
                         <td className ="table-head">StudentName</td>
                         <td className ="table-head">BuildingName</td>
-                        <td className ="table-head">Floor Number</td>
                         <td className ="table-head">Room Number</td>
                         <td className ="table-head">Accept</td>
                         <td className ="table-head">Decline</td>
@@ -125,10 +167,6 @@ export class AdminDormRequests extends Component {
                                 </td>
                                 <td className="result-word" key={index}>
                                     {" "}
-                                    {val.floorNumber}
-                                </td>
-                                <td className="result-word" key={index}>
-                                    {" "}
                                     {val.roomNumber}
                                 </td>     
                                 <td className="result-word">
@@ -136,7 +174,8 @@ export class AdminDormRequests extends Component {
                                         {" "}
                                         <FontAwesomeIcon
                                             onClick={() => {
-                                                console.log("You have clicked on Accept Request!")
+                                                this.AcceptPendingRequest(val.request_ID)
+                                                this.GetRequests("requested")
                                             }}
                                             type="submit"
                                             icon={faCheck}
@@ -146,11 +185,12 @@ export class AdminDormRequests extends Component {
                                     </button>
                                 </td>
                                 <td className="result-word">    
-                                     <button className="delete-icon">
+                                    <button className="delete-icon">
                                         {" "}
                                         <FontAwesomeIcon
                                             onClick={() => {
-                                                console.log("You have clicked on Delete Request!")
+                                                this.DeclinePendingRequests(val.request_ID)
+                                                this.GetRequests("requested")
                                             }}
                                             type="submit"
                                             icon={faTrash}
@@ -164,38 +204,78 @@ export class AdminDormRequests extends Component {
                     })}
                 </tbody>
             </table>
-        );
+        );        
     }
+   
+    printBuildingAndStudentNames() 
+    {
+        // Get copy of requestList without changing
+        var buildingStudentNamesList = this.state.acceptedRequestList.slice();
+        var retrieveNextBuildingBool = true;
+        console.log("list of request accepts: " + JSON.stringify(this.state.acceptedRequestList))
+        return (
+            <tbody>
+                {/*Iterates through acceptedRequestList*/}
+                {this.state.acceptedRequestList.map((val, index, elements) => {
+                    console.log("buildingName with index " + val.buildingName[0])
+                    var nextElement = elements[index + 1];
+
+                    // Prints first building name and data on screen
+                    if(index != 0)
+                    {
+                        // Next element, values are out of bounds of list
+                        if(nextElement != undefined)
+                        {
+                            // Check current building name with previous
+                            if(val.buildingName == elements[index - 1].buildingName)
+                            {
+                                // Does not display building name on screen
+                                retrieveNextBuildingBool = false;
+                            }
+                            else
+                            {
+                                retrieveNextBuildingBool = true;    
+                            }
+                        }
+                        else
+                        {
+                            if(val.buildingName == elements[index - 1].buildingName)
+                            {
+                                retrieveNextBuildingBool = false;
+                            }
+                            else
+                            {
+                               retrieveNextBuildingBool = true;        
+                            }
+                        }
+        
+                    }
+
+                    return (                        
+                        <ul>
+                            { retrieveNextBuildingBool == true && 
+                                <label>{val.buildingName}</label>
+                            }
+
+                            <ul>
+                                {val.studentName} - Room # {val.roomNumber}
+                            </ul>
+                        </ul>
+                    );
+                })}
+            </tbody>
+        );        
+    }
+       
     render(){
         return(
             <div class="container">
                 <div className="container-results" style={{width:'80%'}}>{this.printResults()}</div>
-             {/*   <div class="requests-box">
-                    <div style={{padding:'10%', paddingTop:'14%'}}>test</div>
-                </div>
-        */}
+                
             <div class="container-BuildingDataBox">
                 <label style={{paddingTop:'3%'}}>Accepted Dorm Requests per Student</label>
                 <div class="buildingStudentList-div">
-                    <ul>
-                        building name
-                        <ul>
-                            studentNames - roomNumber
-                        {/* {availableBuildingsList.map((data) => (
-                            <li key={data.name}>
-                                {data.name} ({data.numRoomsAvailable})                
-                            </li>
-                        ))}
-                        */}
-                        </ul>
-                        Building Name
-                        <ul>
-                            studentNames - roomNumber
-                        </ul>
-                        <ul>
-                            studentNames - roomNumber
-                        </ul>
-                    </ul>
+                    {this.printBuildingAndStudentNames()}
                 </div>
             </div>
         </div>    

@@ -14,9 +14,8 @@ namespace WebAPI.Models
               select b.name, r.floorNumber from Building_tbl b cross join room_tbl r on b.dorm_id = 2 and r.room_id = 4;
               washington   3
       */
-        public string record_ID { get; set; }
+        public string request_ID { get; set; }
         public string buildingName { get; set; }
-        public string floorNumber { get; set; }
         public string roomNumber { get; set; }
         public string studentName { get; set; }
         public string submissionState { get; set; }
