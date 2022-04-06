@@ -42,7 +42,6 @@
 }
 
 
-
 #searchBar{
 
     height: 5vh;
@@ -79,6 +78,41 @@
     background: #555; 
   }
 .StudentHomeBox-right::-webkit-scrollbar-track {
+
+    border-radius: 5px;
+
+  } 
+
+
+.container-results{
+    margin-left: -8%;
+    border-style: groove;
+    border-radius: 14px!important;
+    overflow-y: scroll;
+    float:left;
+}
+
+.container-results::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 2px;
+    border-width: 2px;
+  }
+  
+
+.container-results::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+
+.container-results::-webkit-scrollbar-thumb {
+    background: #888; 
+     border-radius: 5px
+  }
+  
+ 
+.container-results::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+.container-results::-webkit-scrollbar-track {
 
     border-radius: 5px;
 
