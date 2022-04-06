@@ -160,8 +160,7 @@ namespace WebAPI.Controllers
 
                     // Pulls all students usernames that match entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "select username,user_id, email from housingdirector_schema.student_tbl where username like @username";
-                  //  FindUsersLike.CommandText = "SELECT dorm_ID, roomNumber from housingdirector_schema.dormOccupants_tbl where submissionState = \"accepted\"";
+                    FindUsersLike.CommandText = "select username,user_id from housingdirector_schema.student_tbl where username like @username";
 
                     FindUsersLike.ExecuteNonQuery();
 
@@ -173,8 +172,7 @@ namespace WebAPI.Controllers
                         eventData.Add(new studentTblFields()
                         {
                             username = reader[0].ToString(),
-                            user_id = reader.GetInt32(1),
-                            email = reader[2].ToString(),
+                            user_id = reader.GetInt32(1)
                         });
                     }
                     reader.Close();
@@ -188,54 +186,6 @@ namespace WebAPI.Controllers
                     });
                 }
             }
-            using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                // Check if there are more than one student that matches the username entered
-                MySqlCommand FindTotalUsers = conn.CreateCommand();
-                FindTotalUsers.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.student_tbl where username like @username";
-                FindTotalUsers.ExecuteNonQuery();
-
-                // If nNumStudents is 1 then there are at least one student account created to check
-                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
-
-                if (nNumStudents >= 1)
-                {
-                    MySqlCommand FindUsersLike = conn.CreateCommand();
-
-                    // Pulls all students usernames that match entered characters
-                    FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                   // FindUsersLike.CommandText = "select username,user_id, email from housingdirector_schema.student_tbl where username like @username";
-                    FindUsersLike.CommandText = "SELECT dorm_ID, roomNumber from housingdirector_schema.dormOccupants_tbl where submissionState = \"accepted\"";
-
-                    FindUsersLike.ExecuteNonQuery();
-
-                    // Execute the SQL command against the DB:
-                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
-
-                    while (reader.Read()) // Read returns false if the user does not exist!
-                    {
-                        eventData.Add(new studentTblFields()
-                        {
-                            dorm_ID = Int32.Parse(reader[0].ToString()),
-                            roomNumber = reader[1].ToString(),
-
-
-                        });
-                    }
-                    reader.Close();
-                }
-                else
-                {
-                    eventData.Add(new studentTblFields()
-                    {
-                        username = "",
-                        user_id = 0
-                    });
-                }
-            }
-
             return eventData;
         }
 
@@ -253,7 +203,8 @@ namespace WebAPI.Controllers
 
                 // Pulls all students usernames like entered characters
                 FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
-                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, studentID, email, year, password from housingdirector_schema.student_tbl where username = @username ";
+                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, email, year, password from housingdirector_schema.student_tbl where username = @username";
+
                 FindUsersInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -267,11 +218,9 @@ namespace WebAPI.Controllers
                         firstName = reader[1].ToString(),
                         lastName = reader[2].ToString(),
                         username = reader[3].ToString(),
-                        studentID  = reader[4].ToString(),
-                        email = reader[5].ToString(),
-                        year = reader[6].ToString(),
-                        password = reader[7].ToString(),
-                        
+                        email = reader[4].ToString(),
+                        year = reader[5].ToString(),
+                        password = reader[6].ToString(),
                     }); ;
 
                 }
@@ -418,30 +367,6 @@ namespace WebAPI.Controllers
                 }
                 reader.Close();
             }
-            // new query
-          /* using (MySqlConnection conn = GetConnection())
-            {
-                conn.Open();
-                MySqlCommand FindBuildingInfo = conn.CreateCommand();
-                FindBuildingInfo.CommandText = "select b.name, r.floorNumber, d.roomNumber, d.studentName from Building_tbl b " +
-                            "cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid and " +
-                            "d.record_ID = @recordid";
-                FindBuildingInfo.ExecuteNonQuery();
-
-                // Execute the SQL command against the DB:
-                MySqlDataReader reader = SearchUserInfo.ExecuteReader();
-                dashboardInfo.totalStdntsInBuildingsList = new List<DormBuilding>();
-                while (reader.Read())
-                {
-                    dashboardInfo.totalStdntsInBuildingsList.Add(new DormBuilding
-                    {
-                        dorm_id = reader[0].ToString(),
-                        name = reader[1].ToString(),
-                        sizeBuilding = (int)reader[2]
-                    });
-                }
-                reader.Close();
-            }*/
 
             // Finds available dorm buildings
             using (MySqlConnection conn = GetConnection())
@@ -497,13 +422,9 @@ namespace WebAPI.Controllers
             return dashboardInfo;
         }
 
-
-
-
-
-        [Route("GetAdminDormRequests")]
+        [Route("GetAdminDormRequests/{requestState}")]
         [HttpGet]
-        public List<AdminDormRequestData> GetAdminDormRequests()
+        public List<AdminDormRequestData> GetAdminDormRequests(string requestState)
         {
             List<AdminDormRequestData> requestDataList = new List<AdminDormRequestData>();
             List<TempIDsStruct> tempIDList = new List<TempIDsStruct>();
@@ -516,8 +437,8 @@ namespace WebAPI.Controllers
                 {
                     conn.Open();
                     MySqlCommand GetRequestData = conn.CreateCommand();
-                    GetRequestData.CommandText = "select record_ID, dorm_ID, room_ID from housingdirector_schema.dormOccupants_tbl where submissionState = 'requested'";
-
+                    GetRequestData.CommandText = "select request_ID, dorm_ID, room_ID from housingdirector_schema.dormOccupants_tbl where submissionState = @submissionState";
+                    GetRequestData.Parameters.AddWithValue("@submissionState", requestState);
                     GetRequestData.ExecuteNonQuery();
 
                     // Execute the SQL command against the DB:
@@ -527,7 +448,7 @@ namespace WebAPI.Controllers
                         // Populate tempIDList with ids that are used to figure out name of building, room
                         tempIDList.Add(new TempIDsStruct
                         {
-                            record_ID = reader[0].ToString(),
+                            request_ID = reader[0].ToString(),
                             dorm_ID = reader[1].ToString(),
                             room_ID = reader[2].ToString()
                         });
@@ -553,10 +474,10 @@ namespace WebAPI.Controllers
                     for (int counter = 0; counter < tempIDList.Count(); counter++)
                     { 
                         MySqlCommand GetRequestData2 = conn2.CreateCommand();
-                        GetRequestData2.CommandText = "select b.name, r.floorNumber, d.roomNumber, d.studentName from Building_tbl b " +
+                        GetRequestData2.CommandText = "select b.name, d.roomNumber, d.studentName from Building_tbl b " +
                             "cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid and " +
-                            "d.record_ID = @recordid";
-                        GetRequestData2.Parameters.AddWithValue("@recordid", tempIDList[counter].record_ID);
+                            "d.request_ID = @requestID";
+                        GetRequestData2.Parameters.AddWithValue("@requestId", tempIDList[counter].request_ID);
                         GetRequestData2.Parameters.AddWithValue("@dormid", tempIDList[counter].dorm_ID);
                         GetRequestData2.Parameters.AddWithValue("@roomid", tempIDList[counter].room_ID);
                         GetRequestData2.ExecuteNonQuery();
@@ -568,12 +489,11 @@ namespace WebAPI.Controllers
                             // Save values into AdminDormRequestData class so can pass list to React JS to retrieve and manipulate the data
                             requestDataList.Add(new AdminDormRequestData
                             {
-                                record_ID = tempIDList[counter].ToString(),
+                                request_ID = tempIDList[counter].request_ID,
                                 buildingName = reader[0].ToString(),     
-                                floorNumber = reader[1].ToString(),
-                                roomNumber = reader[2].ToString(),
-                                studentName = reader[3].ToString(),
-                                submissionState = "requested"
+                                roomNumber = reader[1].ToString(),
+                                studentName = reader[2].ToString(),
+                                submissionState = requestState
                             });
                         }
                         reader.Close();
@@ -587,15 +507,65 @@ namespace WebAPI.Controllers
                     });
                 }
             }
-
             return requestDataList;
         }
 
+        // Allows administrators to accept or decline a dorm submission
+        [Route("AcceptDormRequest/{requestID}")]
+        [HttpPost]
+        public Response AcceptDormRequest(string requestID)
+        {
+            try
+            {
+                using (MySqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand CheckUser = conn.CreateCommand();
 
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "update housingdirector_schema.dormOccupants_tbl " +
+                        "set submissionState = \"accepted\" where request_ID=@requestID";
+                    Query.Parameters.AddWithValue("@requestID", requestID);
+                    Query.ExecuteNonQuery();
+                }
+            }
+            catch (Exception)
+            {
+                return new Response { Status = "Invalid", Message = "Accepted Student Dorm Request Unsuccessful." };
+            }
+            return new Response { Status = "Success", Message = "Updated Student Dorm Request." };
+        }
 
+        // Create student account
+        [Route("DeclineDormRequest/{requestID}")]
+        [HttpPost]
+        public Response DeclineDormRequest(string requestID)
+        {
+            try
+            {
+                using (MySqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    MySqlCommand CheckUser = conn.CreateCommand();
+
+                    // Inserting data into fields of database
+                    MySqlCommand Query = conn.CreateCommand();
+                    Query.CommandText = "update housingdirector_schema.dormOccupants_tbl " +
+                        "set submissionState = \"declined\" where request_ID=@requestID";
+                    Query.Parameters.AddWithValue("@requestID", requestID);
+                    Query.ExecuteNonQuery();
+                }
+            }
+            catch (Exception)
+            {
+                return new Response { Status = "Invalid", Message = "Declined Student Dorm Request Unsuccessful." };
+            }
+            return new Response { Status = "Success", Message = "Updated Student Dorm Request." };
+        }
 
         struct TempIDsStruct{
-            public string record_ID;
+            public string request_ID;
             public string dorm_ID;
             public string room_ID;
             public Response message;
