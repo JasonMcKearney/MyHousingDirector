@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoffee, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./AdminDormRequests.css";
 import { CommonAxisSettingsConstantLineStyle } from "devextreme-react/chart";
+import { waitFor } from "@testing-library/react";
 
-// Export means any module (AdminDashboard.js file in this case) can use this script by importing it
 export class AdminDormRequests extends Component {
     constructor(props) {
         super(props);
@@ -17,8 +17,20 @@ export class AdminDormRequests extends Component {
   
     componentDidMount()
     {
-        this.GetRequests("requested")
-        this.printBuildingAndStudentNames()
+        this.getRequestsAndBuildings();
+    }
+
+    getRequestsAndBuildings()
+    {
+        this.removeAllInfo();
+        // Find dorm requests
+        this.GetRequests("requested");
+
+        // Find accepted dorm requests
+        this.GetRequests("accepted");
+
+        // Print data into building and student name box for accepted requests
+        this.printBuildingAndStudentNames();
     }
 
     GetRequests(requestState)
@@ -33,32 +45,36 @@ export class AdminDormRequests extends Component {
           method: 'GET',
       }).then(res => res.clone().json())
           .then(function (res) {
-//              try
-//              {
-                  if(requestState == "requested")
+              try
+              {
+                  var requestListTemp;
+                  if(requestState === "requested")
                   {
-                    // Remove requests that are already found in the requestList
-                    currentComponent.removeAllInfo();
+                    console.log("requested state")
+                    // Method does not affect the original list
+                    requestListTemp = currentComponent.state.requestList.slice();
                   }
+                  else
+                  {
+                    requestListTemp = currentComponent.state.acceptedRequestList.slice();
+                  }
+                     
+                    var i;
+                    for (i = 0; i < res.length; i++) {
+                        const newRequestObj = {
+                            request_ID: res[i].request_ID,
+                            buildingName: res[i].buildingName,     
+                            roomNumber: res[i].roomNumber,
+                            studentName: res[i].studentName,
+                            submissionState: res[i].submissionState
+                        };
+                        requestListTemp.push(newRequestObj);
+                    }
                 
-                // Method does not affect the original list
-                var requestListTemp = currentComponent.state.requestList.slice();
-                
-                var i;
-                for (i = 0; i < res.length; i++) {
-                    const newRequestObj = {
-                        request_ID: res[i].request_ID,
-                        buildingName: res[i].buildingName,     
-                        roomNumber: res[i].roomNumber,
-                        studentName: res[i].studentName,
-                        submissionState: res[i].submissionState
-                    };
-                    requestListTemp.push(newRequestObj);
-                }
-                // Alphabetize sort building names by first letter
+                // Alphabetically sort building names by first letter
                 requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
-                console.log("requestListTemp after sort: " + JSON.stringify(requestListTemp))
 
+                // Sets lists accordingly
                 if(requestState === "accepted")
                 {
                     currentComponent.setState({
@@ -71,20 +87,20 @@ export class AdminDormRequests extends Component {
                         requestList: requestListTemp
                     });
                 }
-//              }
-//              catch
-//              {
-//                console.log("there was an error in code above line 77!!");
-//              }  
+              }
+              catch
+              {
+                console.log("there was an error in code above line 77!!");
+              }  
           }) 
     }
 
     removeAllInfo(){
         this.setState({
-            requestList: [],
+            requestList: [],   
+            acceptedRequestList: [] 
         });
     }
-
 
     // Declines pending requests and updates database
     DeclinePendingRequests(requestID){
@@ -99,6 +115,7 @@ export class AdminDormRequests extends Component {
             })
         }).then((Response) => Response.json())
         .then((result) => {
+            window.location.reload(false);  
             console.log("response: " + result.status)
             alert(result.message);
         })
@@ -117,9 +134,11 @@ export class AdminDormRequests extends Component {
             })
         }).then((Response) => Response.json())
         .then((result) => {
+            // Reloads page
+            window.location.reload(false);
             console.log("response: " + result.status)
             alert(result.message);
-        })
+        })        
     }
 
     printResults() {
@@ -187,61 +206,76 @@ export class AdminDormRequests extends Component {
             </table>
         );        
     }
-
-    printBuildingAndStudentNames() {
-        this.GetRequests("accepted");
-        console.log("-----------------made it to line 173, printBuildingAndStudentNames() function--------------")
-        // Create object names buildings
-            // has member variables of list that holds names
-
+   
+    printBuildingAndStudentNames() 
+    {
         // Get copy of requestList without changing
         var buildingStudentNamesList = this.state.acceptedRequestList.slice();
-
-
-/*
-        // Find building names and what student lives in which building, their dorm room number
-        for(var counter = 0; counter < this.state.requestList.length(); counter++)
-        {
-            // Index matches one student in studentNameList and in roomNumberList
-            var buildingObject = 
-            {
-                buildingName: this.state.requestList[counter].buildingName,
-                studentNameList: this.state.requestList[counter].studentName,
-                roomNumberList: this.state.requestList[counter].roomNumber
-            };
-            buildingStudentNamesList.push(buildingObject)
-        }       
-*/        
+        var retrieveNextBuildingBool = true;
+        console.log("list of request accepts: " + JSON.stringify(this.state.acceptedRequestList))
         return (
             <tbody>
-                {this.state.buildingStudentNamesList.map((val, index) => {
-                    return (
+                {/*Iterates through acceptedRequestList*/}
+                {this.state.acceptedRequestList.map((val, index, elements) => {
+                    console.log("buildingName with index " + val.buildingName[0])
+                    var nextElement = elements[index + 1];
+
+                    // Prints first building name and data on screen
+                    if(index != 0)
+                    {
+                        // Next element, values are out of bounds of list
+                        if(nextElement != undefined)
+                        {
+                            // Check current building name with previous
+                            if(val.buildingName == elements[index - 1].buildingName)
+                            {
+                                // Does not display building name on screen
+                                retrieveNextBuildingBool = false;
+                            }
+                            else
+                            {
+                                retrieveNextBuildingBool = true;    
+                            }
+                        }
+                        else
+                        {
+                            if(val.buildingName == elements[index - 1].buildingName)
+                            {
+                                retrieveNextBuildingBool = false;
+                            }
+                            else
+                            {
+                               retrieveNextBuildingBool = true;        
+                            }
+                        }
+        
+                    }
+
+                    return (                        
                         <ul>
-                            {buildingStudentNamesList.val.buildingName}
-                        <ul>
-                            {buildingStudentNamesList.val.studentNameList[index]} + {buildingStudentNamesList.val.roomNumberList[index]}
+                            { retrieveNextBuildingBool == true && 
+                                <label>{val.buildingName}</label>
+                            }
+
+                            <ul>
+                                {val.studentName} - Room # {val.roomNumber}
+                            </ul>
                         </ul>
-                    </ul>
                     );
                 })}
-            </tbody>  
-        )
+            </tbody>
+        );        
     }
-
-
-        
+       
     render(){
         return(
             <div class="container">
                 <div className="container-results" style={{width:'80%'}}>{this.printResults()}</div>
-             {/*   <div class="requests-box">
-                    <div style={{padding:'10%', paddingTop:'14%'}}>test</div>
-                </div>
-        */}
+                
             <div class="container-BuildingDataBox">
                 <label style={{paddingTop:'3%'}}>Accepted Dorm Requests per Student</label>
                 <div class="buildingStudentList-div">
-                    
+                    {this.printBuildingAndStudentNames()}
                 </div>
             </div>
         </div>    

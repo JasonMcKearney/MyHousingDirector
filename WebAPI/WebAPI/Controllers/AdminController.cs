@@ -552,7 +552,7 @@ namespace WebAPI.Controllers
                     // Inserting data into fields of database
                     MySqlCommand Query = conn.CreateCommand();
                     Query.CommandText = "update housingdirector_schema.dormOccupants_tbl " +
-                        "set submissionState = \"decline\" where request_ID=@requestID";
+                        "set submissionState = \"declined\" where request_ID=@requestID";
                     Query.Parameters.AddWithValue("@requestID", requestID);
                     Query.ExecuteNonQuery();
                 }
