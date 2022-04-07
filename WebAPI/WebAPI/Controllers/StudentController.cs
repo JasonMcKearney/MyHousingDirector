@@ -381,11 +381,7 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
                 FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates + 1);
 
-                FindRoomInfo.CommandText = "select room_id, roomNumber, roomDescription, maxOccupants, image1, image2 " +
-                    "from housingdirector_schema.room_tbl " +
-                    "where dorm_id = @dorm_id " +
-                    "and floorNumber = @floorNumber " +
-                    "and maxOccupants >= @numRoommates and currentOccupants < @numRoommates";
+                FindRoomInfo.CommandText = "SELECT room_tbl.room_id, room_tbl.roomNumber, room_tbl.maxOccupants, Room_Decription_tbl.description_id, Room_Decription_tbl.room_description FROM room_tbl INNER JOIN Room_Decription_tbl  on room_tbl.room_id =  Room_Decription_tbl.room_description_id WHERE floorID = @floorNumber AND building_id = @dorm_id;";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -397,10 +393,9 @@ namespace WebAPI.Controllers
                     {
                         room_id = reader[0].ToString(),
                         roomNumber = reader[1].ToString(),
-                        roomDescription = reader[2].ToString(),
-                        maxOccupants = reader[3].ToString(),
-                        image1 = reader[4].ToString(),
-                        image2 = reader[5].ToString()
+                       roomDescription = reader[4].ToString(),
+                        maxOccupants = reader[2].ToString(),
+                        
                     });
 
                 }
@@ -460,8 +455,8 @@ namespace WebAPI.Controllers
                     conn.Open();
                     MySqlCommand GetIDs = conn.CreateCommand();
 
-                    GetIDs.CommandText = "select room_tbl.room_id from room_tbl where floorNumber = @floorNumber and roomNumber = @roomNumber";
-                    GetIDs.Parameters.AddWithValue("@floorNumber", dormOccupantsTBL.floorNumber);
+                    GetIDs.CommandText = "select room_tbl.room_id from room_tbl where floorID = @floorID and roomNumber = @roomNumber";
+                    GetIDs.Parameters.AddWithValue("@floorID", dormOccupantsTBL.floorNumber);
                     GetIDs.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
                     GetIDs.ExecuteNonQuery();
 
