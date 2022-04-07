@@ -160,7 +160,7 @@ namespace WebAPI.Controllers
 
                     // Pulls all students usernames that match entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID, dormOccupants_tbl.dorm_ID, dormOccupants_tbl.room_ID, Building_tbl.`name`, Building_tbl.sizeBuilding, room_tbl.maxOccupants,dormOccupants_tbl.submissionState,dormOccupants_tbl.student_id FROM student_tbl LEFT JOIN dormOccupants_tbl ON student_tbl.studentID = dormOccupants_tbl.student_id left join Building_tbl on Building_tbl.dorm_id = dormOccupants_tbl.dorm_ID left join room_tbl on room_tbl.room_id = dormOccupants_tbl.room_ID where student_tbl.username like @username";
+                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID from student_tbl";
                     FindUsersLike.ExecuteNonQuery();
 
                     // Execute the SQL command against the DB:
@@ -168,6 +168,9 @@ namespace WebAPI.Controllers
 
                     while (reader.Read()) // Read returns false if the user does not exist!
                     {
+                     
+                        
+
                         eventData.Add(new studentTblField2()
                         {
                             user_id = reader.GetInt32(0),
@@ -175,8 +178,7 @@ namespace WebAPI.Controllers
                             firstName = reader[2].ToString(),
                             lastName = reader[3].ToString(),
                             studentID = reader[4].ToString(),
-                            dorm_ID = reader.GetInt32(5),
-
+                            
                         });
                     }
                     reader.Close();
@@ -189,7 +191,8 @@ namespace WebAPI.Controllers
                         user_id = 0,
                         firstName = "",
                         lastName = "",
-                        dorm_ID = 0,
+                        studentID = "",
+
 
                     });
                 }

@@ -19,6 +19,5 @@ namespace WebAPI.Models
         public string year { get; set; }
         public string studentID { get; set; }
 
-        public int dorm_ID { get; set; }
     }
 }
