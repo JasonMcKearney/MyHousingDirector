@@ -3,6 +3,7 @@ import { Card } from "antd";
 import "./StudentHome.css";
 import Cookies from "js-cookie";
 import defaultlogo from "../img/default_logo.png";
+import { fixControlledValue } from "antd/lib/input/Input";
 const { Meta } = Card;
 
 export default class DormSelection extends Component {
@@ -13,12 +14,24 @@ export default class DormSelection extends Component {
       firstName: "",
       lastName: "",
       email: "",
-      userMessage: ""
+      userMessage: "",
+      requestList: []
     };
   }
-
+ 
   componentDidMount() {
-    //var currentComponent = this;
+    this.setCookiesAndGetRequests();
+  }
+
+  setCookiesAndGetRequests()
+  {
+    this.setCookies();
+    // Get dorm requests
+    this.GetRequests(); 
+  }
+
+  setCookies()
+  {
     var user_id;
     fetch('http://localhost:16648/api/Student/', {
       headers: {
@@ -45,7 +58,6 @@ export default class DormSelection extends Component {
         this.checkSurveyCompletion();
       });
   }
-
   checkSurveyCompletion(){
     fetch(
       "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + Cookies.get("UD"),
@@ -55,7 +67,6 @@ export default class DormSelection extends Component {
               "Content-Type": "application/json",
               Accept: "application/json",
           },
-
           method: "POST",
       }).then(res=>res.clone().json())
       .then((res) => {
@@ -79,8 +90,7 @@ export default class DormSelection extends Component {
 
             method: "POST",
         } 
-    ).then(res=>res.clone().json())
-  
+    ).then(res=>res.clone().json())  
         .then((res) => {
             Cookies.set("Question1", res.question1);
             Cookies.set("Question2", res.question2);
@@ -96,6 +106,7 @@ export default class DormSelection extends Component {
             Cookies.set("Question12", res.question12);
           });
         };
+
     surveyError(){
     if(Cookies.get("survey") === "false"){
       return(
@@ -103,6 +114,149 @@ export default class DormSelection extends Component {
       );
     } 
   } 
+
+  GetRequests()
+    {
+      let currentComponent = this;
+      fetch('http://localhost:16648/api/Student/getStudentDormRequests/' + Cookies.get("ID"), {
+          mode: 'cors', // this cannot be 'no-cors'
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+          },
+          method: 'GET',
+      }).then(res => res.clone().json())
+          .then(function (res) {
+              try
+              {
+                    var requestListTemp = currentComponent.state.requestList.slice();                                       
+                    var i;
+                    for (i = 0; i < res.length; i++) {
+                        const newRequestObj = {
+                            request_ID: res[i].request_ID,
+                            buildingName: res[i].buildingName,     
+                            roomNumber: res[i].roomNumber,
+                            studentName: res[i].studentName,
+                            submissionState: res[i].submissionState
+                        };
+                        requestListTemp.push(newRequestObj);
+                    }
+                
+                // Alphabetically sort building names by first letter
+                requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
+               
+                currentComponent.setState({
+                    requestList: requestListTemp
+                });
+              }
+              catch
+              {
+                console.log("there was an error in code above line 154!!");
+              }  
+          }) 
+  } 
+  
+/* use this in code.... 
+   // Refreshes the page
+    window.location.reload(false);
+*/
+
+  // Print out requests on Student home page
+  printResults() { 
+    console.log("**************requestList: " + JSON.stringify(this.state.requestList))
+
+    if(Cookies.get("survey") === "true")
+    {       
+      if(this.state.requestList.length > 0)
+      {
+        return (
+          <div className="container-results" style={{marginLeft: '20%', marginTop: '30%', position: 'fixed', height: '30%', width:'60%'}}>
+            <div style={{textAlign:'center', fontSize:'220%'}}>
+              Dorm Selection Requests
+            </div>
+          <table>
+              <thead>
+                  <tr>
+                      <td className ="table-head">StudentName</td>
+                      <td className ="table-head">BuildingName</td>
+                      <td className ="table-head">Room Number</td>
+                      <td className="table-head">Submission State</td>
+                  </tr>
+              </thead>
+              <tbody>
+                  {this.state.requestList.map((val, index) => {
+                      return (
+                          <tr>
+                              <td className="result-word" key={index}>
+                                  {" "}
+                                  {val.studentName}
+                              </td>
+                              <td className="result-word" key={index}>
+                                  {" "}
+                                  {val.buildingName}
+                              </td>
+                              <td className="result-word" key={index}>
+                                  {" "}
+                                  {val.roomNumber}
+                              </td>  
+                              <td className="result-word" key={index}>
+                                  {" "}
+                                  {val.submissionState}
+                              </td>     
+                          </tr>
+                      );
+                  })}
+              </tbody>
+          </table>
+        </div>
+        )
+      }
+      else
+      {
+        // Reloads the page once
+        console.log(window.location.hash)
+        if(!window.location.hash) {
+            window.location = window.location + '#loaded';
+            window.location.reload(false);
+        }
+        
+        return(
+          <div className="container-results" style={{marginLeft: '20%', marginTop: '28%', position: 'fixed', height: '30%', width:'60%'}}>
+            <div classname="container-results" style={{textAlign:'center', fontSize:'220%'}}>
+              Dorm Selection Requests
+            </div>
+          <table>
+              <thead>
+                  <tr>
+                      <td className ="table-head">StudentName</td>
+                      <td className ="table-head">BuildingName</td>
+                      <td className ="table-head">Room Number</td>
+                      <td className="table-head">Submission State</td>
+                  </tr>
+              </thead>
+              <tbody>  
+                  <tr>
+                      <td className="result-word">
+                        {"N/A"}
+                      </td>
+                      <td className="result-word">
+                        {"N/A"}
+                      </td>
+                      <td className="result-word">
+                        {"N/A"}
+                      </td>  
+                      <td className="result-word">
+                        {"N/A"}
+                      </td>     
+                  </tr>
+              );  
+              </tbody>
+          </table>
+        </div>
+        );
+      }
+  }        
+}
 
   render() {
     return (
@@ -113,6 +267,8 @@ export default class DormSelection extends Component {
           Welcome to My Housing Director!
         </div>
         { this.surveyError() }
+        
+        { this.printResults() }
       </>
     );
   }

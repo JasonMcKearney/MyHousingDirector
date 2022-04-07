@@ -274,7 +274,7 @@ export class AdminDormRequests extends Component {
                 
             <div class="container-BuildingDataBox">
                 <label style={{paddingTop:'3%'}}>Accepted Dorm Requests per Student</label>
-                <div class="buildingStudentList-div">
+                <div class="buildingStudentList-div" style={{overflowy: "scroll"}}>
                     {this.printBuildingAndStudentNames()}
                 </div>
             </div>
