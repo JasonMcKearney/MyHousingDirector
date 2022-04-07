@@ -95,6 +95,7 @@ export default class DormSelection extends Component {
     // Get dorm info from Database when the component is rendered
     componentDidMount() {
         this.noSurveyError();
+      
         this.findBuildingInfo();
     }
 
@@ -152,8 +153,12 @@ export default class DormSelection extends Component {
                         dormID: currentComponent.state.dorm,
                         floorDescription: res[i].floorDescription,
                     }
+                    console.log(obj2.value)
+                    console.log("Description for floor " + obj2.label + ": "+ obj2.floorDescription )
                     newArray.push(obj2)  // Push the object
                 }
+
+                
                 // Update the floorData Object array
                 currentComponent.setState({ floorData: newArray })
             })
@@ -166,7 +171,9 @@ export default class DormSelection extends Component {
         currentComponent.state.currentDescriptions = '';
         currentComponent.state.image1 = '';
         currentComponent.state.hyperlink = '';
-
+        console.log(this.state.floor + " is the floor number");
+        console.log( Cookies.get("buildingID") + " is the building number");
+        console.log( parseInt(Cookies.get("numRoommates")) + 1 + " is the number of roommates");
         // Erases data that is in the list. Allows the user to go backwards if they want to change their selection.
         currentComponent.state.roomData.length = 0;
         fetch('http://localhost:16648/api/Student/FindRoomInfo', {
@@ -179,7 +186,7 @@ export default class DormSelection extends Component {
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
                 floorNumber: this.state.floor,
-                numRoommates: parseInt(Cookies.get("numRoommates")) + 1
+                numRoommates: 4
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -258,7 +265,8 @@ export default class DormSelection extends Component {
             });                        
         }
 
-       // this.findRoomInfo();
+        console.log("Made it to FINDROOMINFO")
+        this.findRoomInfo();
         if (current == 2 || floorData.length > 0) {
             if (!room) {
                 message.error("You Must Select a Room to Continue!");
@@ -356,11 +364,12 @@ export default class DormSelection extends Component {
             };
         }
         else if (name == "floor") {
-            console.log("HERE" + id);
+           
             for(var i = 0; i < this.state.floorData.length;i++)
             {
-                if(this.state.floorData[i].floorID == id)
+                if(this.state.floorData[i].value == id)
                 {
+                    console.log("Description:" + this.state.floorData[i].floorDescription)
                     return{
                         desc:  `${this.state.floorData[i].floorDescription}`,
                       };
@@ -519,58 +528,7 @@ export default class DormSelection extends Component {
                             </Button>
                         </Form.Item>
 
-                        {/* <Form
-                                style={{
-                                    top: 0,
-                                    transform: 'translateY(0%)'
-                                }}
-                                // labelCol={{ span: 8 }}
-                                // wrapperCol={{ span: 16 }}
-                                onFinish={this.onFinish}
-                                onFinishFailed={this.onFinishFailed}
-                                autoComplete="off"
-                            >
-                                <Form.Item
-                                    name="first name"
-                                    label="first name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input your first name!',
-                                        },
-                                    ]}
-                                    hasFeedback
-                                >
-                                    <Input type="text" />
-                                </Form.Item>
-                                <Form.Item
-                                    name="last name"
-                                    label="last name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input your last name!',
-                                        },
-                                    ]}
-                                    hasFeedback
-                                >
-                                    <Input type="text" />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button style={{
-                                        marginRight: 20
-                                    }} type="primary" htmlType="submit">
-                                        Submit
-                                    </Button>
-                                    <Button onClick={() => {
-                                        this.setState({
-                                            showModal: false
-                                        })
-                                    }} type="danger">
-                                        Cancel
-                                    </Button>
-                                </Form.Item>
-                            </Form> */}
+                       
                     </>
                 </Modal>
                 <Steps current={current}>
