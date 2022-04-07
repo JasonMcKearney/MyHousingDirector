@@ -27,7 +27,7 @@ export default class DormSelection extends Component {
   {
     this.setCookies();
     // Get dorm requests
-    this.GetRequests();
+    this.GetRequests(); 
   }
 
   setCookies()
@@ -151,7 +151,7 @@ export default class DormSelection extends Component {
               }
               catch
               {
-                console.log("there was an error in code above line 77!!");
+                console.log("there was an error in code above line 154!!");
               }  
           }) 
   } 
@@ -161,16 +161,12 @@ export default class DormSelection extends Component {
     window.location.reload(false);
 */
 
-  printNoResultsInTable()
-  {
-    console.log("made it to printNoResultsInTable()")    
-  }
-
   // Print out requests on Student home page
-  printResults() {  
+  printResults() { 
+    console.log("**************requestList: " + JSON.stringify(this.state.requestList))
+
     if(Cookies.get("survey") === "true")
     {       
-      console.log("list of requests" + this.state.requestList)
       if(this.state.requestList.length > 0)
       {
         return (
@@ -217,6 +213,13 @@ export default class DormSelection extends Component {
       }
       else
       {
+        // Reloads the page once
+        console.log(window.location.hash)
+        if(!window.location.hash) {
+            window.location = window.location + '#loaded';
+            window.location.reload(false);
+        }
+        
         return(
           <div className="container-results" style={{marginLeft: '20%', marginTop: '28%', position: 'fixed', height: '30%', width:'60%'}}>
             <div classname="container-results" style={{textAlign:'center', fontSize:'220%'}}>
@@ -255,7 +258,6 @@ export default class DormSelection extends Component {
   }        
 }
 
-
   render() {
     return (
       <>
@@ -266,7 +268,7 @@ export default class DormSelection extends Component {
         </div>
         { this.surveyError() }
         
-          {this.printResults()}
+        { this.printResults() }
       </>
     );
   }
