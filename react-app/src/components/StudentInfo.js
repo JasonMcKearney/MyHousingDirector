@@ -450,7 +450,7 @@ export default class studentinfo extends React.Component {
                 <button id="primary-button" onClick={this.sendQuestionUpdate}>Submit</button>
             </div>
             <div className='info-wrapper'>
-                    <h2>Profile Information:</h2>
+                    <h2>Your Information</h2>
 
                     <div className='userinfo-grid'>
                         <div className='user-data-wrapper'>

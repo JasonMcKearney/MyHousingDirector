@@ -108,7 +108,7 @@
 
 .card-grid {
     display: grid;
-    grid: 348px 348px / repeat(2, 50%);
+    grid: 10% 10% / repeat(2, 50%);
     background: rgba(255, 255, 255, 0.85);
   
 }
