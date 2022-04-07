@@ -321,6 +321,7 @@ export default class RoommateList extends Component {
             alert(result.message);
 
         })
+        window.location.reload(false);
     }
 
     ApprovePending(requestID){
@@ -341,6 +342,7 @@ export default class RoommateList extends Component {
             alert(result.message);
 
         })
+        window.location.reload(false);
     }
 
     DeclinePending(requestID){
@@ -361,6 +363,7 @@ export default class RoommateList extends Component {
             alert(result.message);
 
         })
+        window.location.reload(false);
     }
 
     componentDidMount(){
