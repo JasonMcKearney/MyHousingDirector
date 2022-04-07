@@ -18,7 +18,7 @@ export default class search extends Component {
             lastName: "",
             email: "",
             dorm_ID: 0,
-            studentlist: [],
+            studentList: [],
             studentObj: { username: "", firstName: "", lastName: "", user_id: "", email: "" },
             requestList: [],
         };
@@ -53,31 +53,31 @@ export default class search extends Component {
 
         console.log("New-Object " + newstudentObj.username);
 
-        let newStudentlist = this.state.studentlist;
+        let newstudentList = this.state.studentList;
 
-        for (var i = 0; i < newStudentlist.length; i++) {
+        for (var i = 0; i < newstudentList.length; i++) {
             console.log("New Student List");
             console.log("-----------------------------");
-            console.log(newStudentlist[i].username);
+            console.log(newstudentList[i].username);
             console.log("-----------------------------\n");
         }
-        console.log(newStudentlist.push(newstudentObj));
+        console.log(newstudentList.push(newstudentObj));
 
-        for (var i = 0; i < this.state.studentlist.length; i++) {
+        for (var i = 0; i < this.state.studentList.length; i++) {
             console.log("The State List");
             console.log("-----------------------------");
-            console.log(this.state.studentlist[i].username);
+            console.log(this.state.studentList[i].username);
             console.log("-----------------------------");
         }
 
         this.setState({
-            studentlist: JSON.parse(JSON.stringify(newStudentlist)),
+            studentList: JSON.parse(JSON.stringify(newstudentList)),
         });
     }
 
     // Returns list of students in a list format and updates cookies for later use throughout the application
     listItems() {
-        let studentlist = this.state.studentlist;
+        let studentList = this.state.studentList;
         const columns = [
             {
                 title: "ID",
@@ -116,7 +116,7 @@ export default class search extends Component {
         ];
 
         return (
-            <Table columns={columns} dataSource={studentlist} pagination={false} />
+            <Table columns={columns} dataSource={studentList} pagination={false} />
             //   <Table
             //     columns={columns}
             //     dataSource={[
@@ -130,78 +130,119 @@ export default class search extends Component {
     // Find results if there are any in the database
     getResults() {
         let currentComponent = this;
-        let studentListLength = this.state.studentlist;
+        let studentListLength = this.state.studentList;
 
         console.log("Length: " + studentListLength.length);
 
         // Does not allow for multiple strings to be displayed if the input has not changed by the user
-        if (studentListLength == 0) {
-            // Passing parameter to Web API through address
-            GetRequests()
+        // Passing parameter to Web API through address
+
+        fetch(
+            "http://localhost:16648/api/Admin/FindStudents/" +
+            this.state.searchText,
             {
-                let currentComponent = this;
-                fetch('http://localhost:16648/api/Student/getStudentDormRequests/' + Cookies.get("ID"), {
-                    mode: 'cors', // this cannot be 'no-cors'
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
-                    method: 'GET',
-                }).then(res => res.clone().json())
-                    .then(function (res) {
-                        try {
-                            var requestListTemp = currentComponent.state.requestList.slice();
-                            var i;
-                            for (i = 0; i < res.length; i++) {
-                                const newRequestObj = {
-                                    request_ID: res[i].request_ID,
-                                    buildingName: res[i].buildingName,
-                                    roomNumber: res[i].roomNumber,
-                                    studentName: res[i].studentName,
-                                    submissionState: res[i].submissionState
-                                };
-                                requestListTemp.push(newRequestObj);
-                            }
-
-                            // Alphabetically sort building names by first letter
-                            requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
-
-                            currentComponent.setState({
-                                requestList: requestListTemp
-                            });
-                        }
-                        catch
-                        {
-                            console.log("there was an error in code above line 154!!");
-                        }
-                    })
+                mode: "cors", // this cannot be 'no-cors'
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                method: "POST",
             }
-
-
-            render() {
-                return (
-                    <div className="container-search">
-                        <div>
-                            <h1>Search</h1>
-                            <Search
-                                onChange={this.searchText}
-                                placeholder="Please input a Students name or ID"
-                                allowClear
-                                enterButton="Search"
-                                size="large"
-                                onSearch={this.getResults}
-                                style={{ margin: "0 0 30px 0 " }}
-                            />
-                        </div>
-                        <section>
-                            <div>
-                                <div className="resultsBox">{this.listItems()}</div>
-                            </div>
-                        </section>
-                    </div>
-                );
-            }
-        }
+        )
+            .then((res) => res.clone().json())
+            .then(function (res) {
+                console.log("hello " + res[0].username);
+                var loopData = "";
+                var i;
+                for (i = 0; i < res.length; i++) {
+                    // console.log("Next User: " + res[i].username)
+                    console.log("Next User_id: " + res[i].user_id);
+                    if (res[i].username != "") {
+                        currentComponent.setState({ studentName: res[i].username });
+                        currentComponent.setState({ user_id: res[i].user_id });
+                        currentComponent.setState({ email: res[i].email });
+                        console.log("studentName" + res[i].username)
+                        currentComponent.setState({ dorm_ID: res[i].dorm_ID });
+                        currentComponent.setState({ firstName: res[i].firstName });
+                        currentComponent.setState({ lastName: res[i].lastName });
+                        console.log("firstName" + res[i].username)
+                        console.log("lastName" + res[i].username)
+                        console.log("email" + res[i].email)
+                        console.log("user_id" + res[i].user_id)
+                        // Add student to list
+                        currentComponent.addItem();
+                    }
+                    // Entries with characters entered do not match any usernames in the database
+                    else alert("No entries match the character/characters entered.");
+                }
+                currentComponent.setState({ searchResults: loopData });
+            });
     }
 
+
+
+    StudenentInfo() {
+        let currentComponent = this;
+        fetch('http://localhost:16648/api/Student/GetAdminSearchingRequests/' + Cookies.get("ID"), {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'GET',
+        }.then(res => res.clone().json())
+            .then(function (res) {
+                try {
+                    var requestListTemp = currentComponent.state.requestList.slice();
+                    var i;
+                    for (i = 0; i < res.length; i++) {
+                        const newRequestObj = {
+                            request_ID: res[i].request_ID,
+                            buildingName: res[i].buildingName,
+                            roomNumber: res[i].roomNumber,
+                            studentName: res[i].studentName,
+                            submissionState: res[i].submissionState
+                        };
+                        requestListTemp.push(newRequestObj);
+                    }
+
+                    // Alphabetically sort building names by first letter
+                    requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
+
+                    currentComponent.setState({
+                        requestList: requestListTemp
+                    });
+                }
+                catch
+                {
+                    console.log("there was an error in code above line 154!!");
+                }
+            }));
+       }
+
+    render() {
+        return (
+            <div className="container-search">
+                <div>
+                    <h1>Search</h1>
+                    <Search
+                        onChange={this.searchText}
+                        placeholder="Please input a Students name or ID"
+                        allowClear
+                        enterButton="Search"
+                        size="large"
+                        onSearch={this.getResults}
+                        style={{ margin: "0 0 30px 0 " }}
+                    />
+                </div>
+                <section>
+                    <div>
+                        <div className="resultsBox">{this.listItems()}</div>
+                    </div>
+                </section>
+            </div>
+        );
+    }
 }
+
+
