@@ -48,6 +48,7 @@ export default class DormSelection extends Component {
             image1: '',
             image2: '',
             floor: '',
+            floor_id: '',
             room: '',
             canSubmitForm: true,
             buildingData: [],
@@ -156,6 +157,7 @@ export default class DormSelection extends Component {
                     console.log(obj2.value)
                     console.log("Description for floor " + obj2.label + ": "+ obj2.floorDescription )
                     newArray.push(obj2)  // Push the object
+
                 }
 
                 
@@ -372,6 +374,7 @@ export default class DormSelection extends Component {
                     console.log("Description:" + this.state.floorData[i].floorDescription)
                     return{
                         desc:  `${this.state.floorData[i].floorDescription}`,
+                        floor_id: `${this.state.floorData[i].value}`
                       };
                 }
             }

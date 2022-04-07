@@ -455,8 +455,8 @@ namespace WebAPI.Controllers
                     conn.Open();
                     MySqlCommand GetIDs = conn.CreateCommand();
 
-                    GetIDs.CommandText = "select room_tbl.room_id from room_tbl where floorNumber = @floorNumber and roomNumber = @roomNumber";
-                    GetIDs.Parameters.AddWithValue("@floorNumber", dormOccupantsTBL.floorNumber);
+                    GetIDs.CommandText = "select room_tbl.room_id from room_tbl where floorID = @floorID and roomNumber = @roomNumber";
+                    GetIDs.Parameters.AddWithValue("@floorID", dormOccupantsTBL.floorNumber);
                     GetIDs.Parameters.AddWithValue("@roomNumber", dormOccupantsTBL.roomNumber);
                     GetIDs.ExecuteNonQuery();
 
