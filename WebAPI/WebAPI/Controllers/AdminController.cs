@@ -138,9 +138,9 @@ namespace WebAPI.Controllers
         // Find Student Accounts that match a few characters (Search functionality on Admin page)
         [Route("FindStudents/{sUsernameToSearch}")]
         [HttpPost]
-        public List<studentTblFields> FindStudents(string sUsernameToSearch)
+        public List<studentTblField2> FindStudents(string sUsernameToSearch)
         {
-            List<studentTblFields> eventData = new List<studentTblFields>();
+            List<studentTblField2> eventData = new List<studentTblField2>();
 
             using (MySqlConnection conn = GetConnection())
             {
@@ -160,8 +160,7 @@ namespace WebAPI.Controllers
 
                     // Pulls all students usernames that match entered characters
                     FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "select username,user_id from housingdirector_schema.student_tbl where username like @username";
-
+                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID, dormOccupants_tbl.dorm_ID, dormOccupants_tbl.room_ID, Building_tbl.`name`, Building_tbl.sizeBuilding, room_tbl.maxOccupants,dormOccupants_tbl.submissionState,dormOccupants_tbl.student_id FROM student_tbl LEFT JOIN dormOccupants_tbl ON student_tbl.studentID = dormOccupants_tbl.student_id left join Building_tbl on Building_tbl.dorm_id = dormOccupants_tbl.dorm_ID left join room_tbl on room_tbl.room_id = dormOccupants_tbl.room_ID where student_tbl.username like @username";
                     FindUsersLike.ExecuteNonQuery();
 
                     // Execute the SQL command against the DB:
@@ -169,20 +168,29 @@ namespace WebAPI.Controllers
 
                     while (reader.Read()) // Read returns false if the user does not exist!
                     {
-                        eventData.Add(new studentTblFields()
+                        eventData.Add(new studentTblField2()
                         {
-                            username = reader[0].ToString(),
-                            user_id = reader.GetInt32(1)
+                            user_id = reader.GetInt32(0),
+                            username = reader[1].ToString(),
+                            firstName = reader[2].ToString(),
+                            lastName = reader[3].ToString(),
+                            studentID = reader[4].ToString(),
+                            dorm_ID = reader.GetInt32(5),
+
                         });
                     }
                     reader.Close();
                 }
                 else
                 {
-                    eventData.Add(new studentTblFields()
+                    eventData.Add(new studentTblField2()
                     {
                         username = "",
-                        user_id = 0
+                        user_id = 0,
+                        firstName = "",
+                        lastName = "",
+                        dorm_ID = 0,
+
                     });
                 }
             }

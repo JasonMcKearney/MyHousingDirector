@@ -13,10 +13,13 @@ export default class search extends Component {
       searchText: "",
       searchResults: "",
       user_id: 0,
-      studentName: "",
-      email:"",
+        studentName: "",
+        firstName: "",
+      lastName:"",
+        email: "",
+      dorm_ID: 0,
       studentlist: [],
-      studentObj: { username: "", user_id: "" ,email:""},
+        studentObj: { username: "", firstName: "", lastName: "", user_id: "" ,email:""},
     };
 
     //Student Object to store all the student data
@@ -39,7 +42,10 @@ export default class search extends Component {
     const newstudentObj = {
       username: this.state.studentName,
       user_id: this.state.user_id,
-      email:this.state.email,
+      email: this.state.email,
+      firstName: this.state.firstName,
+        lastName: this.state.lastName,
+      dorm_ID: this.state.dorm_ID,
     };
 
     //this.setState({studentObj: newstudentObj} )
@@ -78,13 +84,18 @@ export default class search extends Component {
         //   render: (text) => <a>{text}</a>,
       },
       {
-        title: "Username",
-        dataIndex: "username",
+        title: "FirstName",
+        dataIndex: "firstName",
         //   render: (text) => <a>{text}</a>,
         },
         {
-            title: "Email",
-            dataIndex: "email",
+            title: "LastName",
+            dataIndex: "lastName",
+            //   render: (text) => <a>{text}</a>,
+        },
+        {
+            title: "Dorm",
+            dataIndex: "dorm_ID",
             //   render: (text) => <a>{text}</a>,
         },
       {
@@ -148,8 +159,11 @@ export default class search extends Component {
             if (res[i].username != "") {
               currentComponent.setState({ studentName: res[i].username });
                 currentComponent.setState({ user_id: res[i].user_id });
-                currentComponent.setState({ email: res[i].email });
-                console.log("studentName" + res[i].username)
+                currentComponent.setState({ dorm_ID: res[i].dorm_ID });
+                currentComponent.setState({ firstName: res[i].firstName });
+                currentComponent.setState({ lastName: res[i].lastName });
+                console.log("firstName" + res[i].username)
+                console.log("lastName" + res[i].username)
                 console.log("email" + res[i].email)
                 console.log("user_id" + res[i].user_id)
               // Add student to list
