@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { Card } from "antd";
 import "./StudentHome.css";
 import Cookies from "js-cookie";
-import defaultlogo from "../img/default_logo.png";
-import { fixControlledValue } from "antd/lib/input/Input";
 const { Meta } = Card;
 
 export default class DormSelection extends Component {
@@ -26,8 +24,6 @@ export default class DormSelection extends Component {
   setCookiesAndGetRequests()
   {
     this.setCookies();
-    // Get dorm requests
-    this.GetRequests(); 
   }
 
   setCookies()
@@ -55,12 +51,21 @@ export default class DormSelection extends Component {
         Cookies.set("LN", lastName);
         Cookies.set("EM", email);
         Cookies.set("UD", user_id);
+        console.log(result.studentID)
+        
+        this.setState({
+          studentID: result.studentID
+        })
         this.checkSurveyCompletion();
+        // Get dorm requests
+        this.GetRequests();   
       });
+      
   }
+
   checkSurveyCompletion(){
     fetch(
-      "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + Cookies.get("UD"),
+      "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + this.state.studentID,
       {
           mode: "cors", // this cannot be 'no-cors'
           headers: {
@@ -77,10 +82,11 @@ export default class DormSelection extends Component {
               var surveyStatus = true;
             }
             Cookies.set("survey", surveyStatus);
+            console.log("survey state " + surveyStatus)
       });
 
       fetch(
-        "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + Cookies.get("UD"),
+        "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + this.state.studentID,
         {
             mode: "cors", // this cannot be 'no-cors'
             headers: {
@@ -105,9 +111,9 @@ export default class DormSelection extends Component {
             Cookies.set("Question11", res.question11);
             Cookies.set("Question12", res.question12);
           });
-        };
+      }
 
-    surveyError(){
+  surveyError(){
     if(Cookies.get("survey") === "false"){
       return(
         <div className="survey-notification">Your survey is not complete. In order to select roommates or your dorm location, your survey must be completed.</div>
@@ -116,9 +122,13 @@ export default class DormSelection extends Component {
   } 
 
   GetRequests()
-    {
+  {
       let currentComponent = this;
-      fetch('http://localhost:16648/api/Student/getStudentDormRequests/' + Cookies.get("ID"), {
+      console.log("Made it to GetRequests()")
+      console.log("Cookie id: " + Cookies.get("ID"));
+      console.log("Cookie id in GetRequests Function: " + JSON.stringify(currentComponent.state.studentID));      var id = currentComponent.state.studentID;
+
+    fetch("http://localhost:16648/api/Student/getStudentDormRequests/" + currentComponent.state.studentID, {
           mode: 'cors', // this cannot be 'no-cors'
           headers: {
               'Content-Type': 'application/json',
@@ -127,6 +137,23 @@ export default class DormSelection extends Component {
           method: 'GET',
       }).then(res => res.clone().json())
           .then(function (res) {
+            if(res.length === 0)
+            {
+              var requestListTemp = currentComponent.state.requestList.slice();                                       
+                        const newRequestObj = {
+                            buildingName: "N/A",     
+                            roomNumber: "N/A",
+                            studentName: "N/A",
+                            submissionState: "N/A"
+                        };
+                        requestListTemp.push(newRequestObj);
+
+                currentComponent.setState({
+                    requestList: requestListTemp
+                });
+            }
+            else
+            {
               try
               {
                     var requestListTemp = currentComponent.state.requestList.slice();                                       
@@ -141,7 +168,7 @@ export default class DormSelection extends Component {
                         };
                         requestListTemp.push(newRequestObj);
                     }
-                
+               
                 // Alphabetically sort building names by first letter
                 requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
                
@@ -152,23 +179,16 @@ export default class DormSelection extends Component {
               catch
               {
                 console.log("there was an error in code above line 154!!");
-              }  
-          }) 
+              }
+            }  
+          })    
   } 
-  
-/* use this in code.... 
-   // Refreshes the page
-    window.location.reload(false);
-*/
 
   // Print out requests on Student home page
   printResults() { 
     console.log("**************requestList: " + JSON.stringify(this.state.requestList))
-
     if(Cookies.get("survey") === "true")
     {       
-      if(this.state.requestList.length > 0)
-      {
         return (
           <div className="container-results" style={{marginLeft: '20%', marginTop: '30%', position: 'fixed', height: '30%', width:'60%'}}>
             <div style={{textAlign:'center', fontSize:'220%'}}>
@@ -210,51 +230,6 @@ export default class DormSelection extends Component {
           </table>
         </div>
         )
-      }
-      else
-      {
-        // Reloads the page once
-        console.log(window.location.hash)
-        if(!window.location.hash) {
-            window.location = window.location + '#loaded';
-            window.location.reload(false);
-        }
-        
-        return(
-          <div className="container-results" style={{marginLeft: '20%', marginTop: '28%', position: 'fixed', height: '30%', width:'60%'}}>
-            <div classname="container-results" style={{textAlign:'center', fontSize:'220%'}}>
-              Dorm Selection Requests
-            </div>
-          <table>
-              <thead>
-                  <tr>
-                      <td className ="table-head">StudentName</td>
-                      <td className ="table-head">BuildingName</td>
-                      <td className ="table-head">Room Number</td>
-                      <td className="table-head">Submission State</td>
-                  </tr>
-              </thead>
-              <tbody>  
-                  <tr>
-                      <td className="result-word">
-                        {"N/A"}
-                      </td>
-                      <td className="result-word">
-                        {"N/A"}
-                      </td>
-                      <td className="result-word">
-                        {"N/A"}
-                      </td>  
-                      <td className="result-word">
-                        {"N/A"}
-                      </td>     
-                  </tr>
-              );  
-              </tbody>
-          </table>
-        </div>
-        );
-      }
   }        
 }
 

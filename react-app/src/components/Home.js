@@ -52,7 +52,7 @@ export class Home extends Component {
                         <div className="Homepagecontent" style={{ padding: 24, minHeight: 50 }}>
                             Welcome, { Cookies.get("username") }
                         </div>
-
+                
 
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                         <Menu.Item key="1" icon={<UserIcon style={{ fontSize: 30 }} type="icon-yonghu" />}>
@@ -70,8 +70,17 @@ export class Home extends Component {
 
                         <Form.Item Logout={{ offset: 8, span: 16 }}>
                             <Button onClick={() => {
-                                    Cookies.remove('username')
-                                    this.props.history.push('/LogIn');
+                                Cookies.remove('UD')
+                                Cookies.remove('FN')
+                                Cookies.remove('username')
+                                Cookies.remove('LN')
+                                Cookies.remove('Question10')
+                                Cookies.remove('Question9')
+                                Cookies.remove('EM')
+                                Cookies.remove('ID')
+                                Cookies.remove('survey')
+                                Cookies.remove('Question6')
+                            this.props.history.push('/LogIn');
                             }} type="primary" htmlType="Logout">
                                 Logout
                             </Button>
