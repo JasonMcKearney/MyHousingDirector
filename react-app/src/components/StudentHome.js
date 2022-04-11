@@ -24,6 +24,7 @@ export default class DormSelection extends Component {
   setCookiesAndGetRequests()
   {
     this.setCookies();
+    this.checkSurveyCompletion();
   }
 
   setCookies()
@@ -56,7 +57,6 @@ export default class DormSelection extends Component {
         this.setState({
           studentID: result.studentID
         })
-        this.checkSurveyCompletion();
         // Get dorm requests
         this.GetRequests();   
       });
@@ -65,7 +65,7 @@ export default class DormSelection extends Component {
 
   checkSurveyCompletion(){
     fetch(
-      "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + this.state.studentID,
+      "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + Cookies.get("UD"),
       {
           mode: "cors", // this cannot be 'no-cors'
           headers: {
@@ -86,7 +86,7 @@ export default class DormSelection extends Component {
       });
 
       fetch(
-        "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + this.state.studentID,
+        "http://localhost:16648/api/Student/getCurrentSurveyQuestions/" + Cookies.get("UD"),
         {
             mode: "cors", // this cannot be 'no-cors'
             headers: {
