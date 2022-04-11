@@ -149,6 +149,57 @@ namespace WebAPI.Controllers
             List<SearchTempIDsStruct> tempIDList = new List<SearchTempIDsStruct>();
 
             // Open the MySql connection
+            
+            // Open the MySql connection
+           /* using (MySqlConnection conn2 = GetConnection())
+            {
+                conn2.Open();                // Check if there are more than one student that matches the username entered                
+                MySqlCommand FindTotalUsers = conn2.CreateCommand();
+                FindTotalUsers.Parameters.AddWithValue("@username", username + "%");
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.student_tbl where where username = @username";
+                FindTotalUsers.ExecuteNonQuery();
+                // If nNumStudents is 1 then there are at least one student account created to check
+                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+                if (nNumStudents >= 1)
+                {
+                    MySqlCommand FindUsersLike = conn2.CreateCommand();
+                    // Pulls all students usernames that match entered characters
+                    FindUsersLike.Parameters.AddWithValue("@username", username + "%");
+                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID from student_tbl where where username = @username";
+                    FindUsersLike.ExecuteNonQuery();
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
+                    while (reader.Read())
+                        // Read returns false if the user does not exist!
+                    {
+                        searchDataList.Add(new studentTblField2()
+                        {
+                            user_id = reader.GetInt32(0),
+                            username = reader[1].ToString(),
+                            firstName = reader[2].ToString(),
+                            lastName = reader[3].ToString(), 
+                            studentID = reader[4].ToString(),
+                            dorm_ID = reader.GetInt32(5),
+                            room_ID = reader.GetInt32(6),
+                        });
+                    }
+                    reader.Close();
+                }
+                else
+                {
+                    searchDataList.Add(new studentTblField2()
+                    {
+                        username = "",
+                        user_id = 0,
+                        firstName = "", 
+                        lastName = "", 
+                        dorm_ID = 0,     
+                        studentID = "",
+                        room_ID = 0,
+                    });
+                }
+            }*/
+
             using (MySqlConnection conn = GetConnection())
             {
                 // Get IDs
@@ -183,57 +234,8 @@ namespace WebAPI.Controllers
                     });
                 }
             }
-            // Open the MySql connection
-            using (MySqlConnection conn2 = GetConnection())
-            {
-                conn2.Open();                // Check if there are more than one student that matches the username entered                
-                MySqlCommand FindTotalUsers = conn2.CreateCommand();
-                FindTotalUsers.Parameters.AddWithValue("@username", studentID + "%");
-                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.student_tbl where where username = @username";
-                FindTotalUsers.ExecuteNonQuery();
-                // If nNumStudents is 1 then there are at least one student account created to check
-                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
-                if (nNumStudents >= 1)
-                {
-                    MySqlCommand FindUsersLike = conn2.CreateCommand();
-                    // Pulls all students usernames that match entered characters
-                    FindUsersLike.Parameters.AddWithValue("@username", studentID + "%");
-                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID from student_tbl where where username = @username";
-                    FindUsersLike.ExecuteNonQuery();
-                    // Execute the SQL command against the DB:
-                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
-                    while (reader.Read())
-                        // Read returns false if the user does not exist!
-                    {
-                        searchDataList.Add(new studentTblField2()
-                        {
-                            user_id = reader.GetInt32(0),
-                            username = reader[1].ToString(),
-                            firstName = reader[2].ToString(),
-                            lastName = reader[3].ToString(), 
-                            studentID = reader[4].ToString(),
-                            dorm_ID = reader.GetInt32(5),
-                            room_ID = reader.GetInt32(6),
-                        });
-                    }
-                    reader.Close();
-                }
-                else
-                {
-                    searchDataList.Add(new studentTblField2()
-                    {
-                        username = "",
-                        user_id = 0,
-                        firstName = "", 
-                        lastName = "", 
-                        dorm_ID = 0,     
-                        studentID = "",
-                        room_ID = 0,
-                    });
-                }
-            } 
 
-                return searchDataList;
+            return searchDataList;
         }
 
         struct SearchTempIDsStruct
