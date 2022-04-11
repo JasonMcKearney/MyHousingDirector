@@ -3,6 +3,8 @@ import { Input, Table, Button, Modal, Descriptions } from "antd";
 import "antd/dist/antd.css";
 import "./Search.css";
 import Cookies from "js-cookie";
+import { ConstantLine } from "devextreme-react/chart";
+import { List } from "react-bootstrap/lib/Media";
 
 const { Search } = Input;
 export default class search extends Component {
@@ -58,7 +60,7 @@ export default class search extends Component {
         let newstudentList = this.state.studentList;
 
         for (var i = 0; i < newstudentList.length; i++) {
-            console.log("New Student List");
+            console.log("New Student List in AddItem Function");
             console.log("-----------------------------");
             console.log(newstudentList[i].username);
             console.log("-----------------------------\n");
@@ -138,8 +140,9 @@ export default class search extends Component {
     getResults() {
         let currentComponent = this;
         let studentListLength = this.state.studentList;
+        
 
-        console.log("Length: " + studentListLength.length);
+        console.log("************************Length: " + studentListLength.length);
 
         // Does not allow for multiple strings to be displayed if the input has not changed by the user
         // Passing parameter to Web API through address
@@ -158,7 +161,7 @@ export default class search extends Component {
         )
             .then((res) => res.clone().json())
             .then(function (res) {
-                console.log("hello " + res[0].username);
+                
                 var loopData = "";
                 var i;
                 for (i = 0; i < res.length; i++) {
@@ -186,14 +189,17 @@ export default class search extends Component {
                 currentComponent.setState({ searchResults: loopData });
             });
 
-        fetch('http://localhost:16648/api/Student/GetAdminSearchingRequests/' + Cookies.get("ID"), {
+
+        console.log("***********on line 190")
+        console.log("******studentID: " + Cookies.get("ID"))
+        fetch("http://localhost:16648/api/Admin/GetAdminSearchingRequests/" + this.state.user_id, {
             mode: 'cors', // this cannot be 'no-cors'
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
             method: 'GET',
-        }.then(res => res.clone().json())
+        }).then(res => res.clone().json())
             .then(function (res) {
                 try {
                     var requestListTemp = currentComponent.state.requestList.slice();
@@ -207,9 +213,10 @@ export default class search extends Component {
                             submissionState: res[i].submissionState
                         };
                     }
-
                     // Alphabetically sort building names by first letter
                     requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
+
+                    console.log("------requestList" + requestListTemp)
 
                     currentComponent.setState({
                         requestList: requestListTemp
@@ -219,7 +226,7 @@ export default class search extends Component {
                 {
                     console.log("there was an error in code above line 154!!");
                 }
-            }));
+            })
     }
 
 
