@@ -18,6 +18,7 @@ export default class search extends Component {
             lastName: "",
             email: "",
             dorm_ID: 0,
+            room_ID:0,
             studentList: [],
             studentObj: { username: "", firstName: "", lastName: "", user_id: "", email: "" },
             requestList: [],
@@ -47,6 +48,7 @@ export default class search extends Component {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             dorm_ID: this.state.dorm_ID,
+            room_ID: this.state.room_ID,
         };
 
         //this.setState({studentObj: newstudentObj} )
@@ -77,7 +79,7 @@ export default class search extends Component {
 
     // Returns list of students in a list format and updates cookies for later use throughout the application
     listItems() {
-        let studentList = this.state.studentList;
+        let studentList = this.state.studentList ;
         const columns = [
             {
                 title: "ID",
@@ -97,6 +99,11 @@ export default class search extends Component {
             {
                 title: "Dorm",
                 dataIndex: "dorm_ID",
+                //   render: (text) => <a>{text}</a>,
+            },
+            {
+                title: "Room",
+                dataIndex: "Room_ID",
                 //   render: (text) => <a>{text}</a>,
             },
             {
@@ -163,6 +170,7 @@ export default class search extends Component {
                         currentComponent.setState({ email: res[i].email });
                         console.log("studentName" + res[i].username)
                         currentComponent.setState({ dorm_ID: res[i].dorm_ID });
+                        currentComponent.setState({ room_ID: res[i].room_ID });
                         currentComponent.setState({ firstName: res[i].firstName });
                         currentComponent.setState({ lastName: res[i].lastName });
                         console.log("firstName" + res[i].username)
@@ -177,11 +185,46 @@ export default class search extends Component {
                 }
                 currentComponent.setState({ searchResults: loopData });
             });
+
+        fetch('http://localhost:16648/api/Student/GetAdminSearchingRequests/' + Cookies.get("ID"), {
+            mode: 'cors', // this cannot be 'no-cors'
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            method: 'GET',
+        }.then(res => res.clone().json())
+            .then(function (res) {
+                try {
+                    var requestListTemp = currentComponent.state.requestList.slice();
+                    var i;
+                    for (i = 0; i < res.length; i++) {
+                        const newRequestObj = {
+                            request_ID: res[i].request_ID,
+                            buildingName: res[i].buildingName,
+                            roomNumber: res[i].roomNumber,
+                            studentName: res[i].studentName,
+                            submissionState: res[i].submissionState
+                        };
+                    }
+
+                    // Alphabetically sort building names by first letter
+                    requestListTemp.sort((a, b) => (a.buildingName > b.buildingName) ? 1 : -1)
+
+                    currentComponent.setState({
+                        requestList: requestListTemp
+                    });
+                }
+                catch
+                {
+                    console.log("there was an error in code above line 154!!");
+                }
+            }));
     }
 
 
-
-    StudenentInfo() {
+/*
+    StudentDormInfo() {
         let currentComponent = this;
         fetch('http://localhost:16648/api/Student/GetAdminSearchingRequests/' + Cookies.get("ID"), {
             mode: 'cors', // this cannot be 'no-cors'
@@ -203,7 +246,6 @@ export default class search extends Component {
                             studentName: res[i].studentName,
                             submissionState: res[i].submissionState
                         };
-                        requestListTemp.push(newRequestObj);
                     }
 
                     // Alphabetically sort building names by first letter
@@ -218,7 +260,7 @@ export default class search extends Component {
                     console.log("there was an error in code above line 154!!");
                 }
             }));
-       }
+       }*/
 
     render() {
         return (

@@ -195,7 +195,13 @@ export class StudentProfile extends Component {
 
                     <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
 
-                    <button onClick={this.deleteStudent} id = "primary-button" htmlType="submit">Delete Student Profile</button>    
+                <button onClick={this.deleteStudent} id="primary-button" htmlType="submit">Delete Student</button>
+
+                <button onClick={() => {
+                    this.props.history.push('/home/Search');
+                }} id="primary-button" htmlType="submit">
+                    Back
+                            </button> 
             </div>
 
         );

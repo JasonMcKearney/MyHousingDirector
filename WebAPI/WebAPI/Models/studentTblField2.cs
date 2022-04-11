@@ -18,6 +18,7 @@ namespace WebAPI.Models
         public string gender { get; set; }
         public string year { get; set; }
         public string studentID { get; set; }
-
+        public int dorm_ID { get; set; }
+        public int room_ID { get; set; }
     }
 }

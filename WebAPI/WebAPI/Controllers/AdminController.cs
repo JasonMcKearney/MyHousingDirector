@@ -141,11 +141,11 @@ namespace WebAPI.Controllers
 
 
 
-         [Route("GetAdminSearchingRequests/{studentID}")]
+        [Route("GetAdminSearchingRequests/{studentID}")]
         [HttpGet]
-        public List<AdminDormRequestData> GetAdminSearchingRequests(string studentID)
+        public List<studentTblField2> GetAdminSearchingRequests(string studentID)
         {
-            List<AdminDormRequestData> requestDataList = new List<AdminDormRequestData>();
+            List<studentTblField2> searchDataList = new List<studentTblField2>();
             List<SearchTempIDsStruct> tempIDList = new List<SearchTempIDsStruct>();
 
             // Open the MySql connection
@@ -186,47 +186,54 @@ namespace WebAPI.Controllers
             // Open the MySql connection
             using (MySqlConnection conn2 = GetConnection())
             {
-                // Find names using IDs saved inside of struct object and then save data into AdminDormRequestData class to send to React.js in JSON
-                try
+                conn2.Open();                // Check if there are more than one student that matches the username entered                
+                MySqlCommand FindTotalUsers = conn2.CreateCommand();
+                FindTotalUsers.Parameters.AddWithValue("@username", studentID + "%");
+                FindTotalUsers.CommandText = "SELECT count(*) FROM housingdirector_schema.student_tbl where where username = @username";
+                FindTotalUsers.ExecuteNonQuery();
+                // If nNumStudents is 1 then there are at least one student account created to check
+                int nNumStudents = Convert.ToInt32(FindTotalUsers.ExecuteScalar());
+                if (nNumStudents >= 1)
                 {
-                    conn2.Open();
-                    for (int counter = 0; counter < tempIDList.Count(); counter++)
+                    MySqlCommand FindUsersLike = conn2.CreateCommand();
+                    // Pulls all students usernames that match entered characters
+                    FindUsersLike.Parameters.AddWithValue("@username", studentID + "%");
+                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID from student_tbl where where username = @username";
+                    FindUsersLike.ExecuteNonQuery();
+                    // Execute the SQL command against the DB:
+                    MySqlDataReader reader = FindUsersLike.ExecuteReader();
+                    while (reader.Read())
+                        // Read returns false if the user does not exist!
                     {
-                        MySqlCommand GetRequestData2 = conn2.CreateCommand();
-                        GetRequestData2.CommandText = "select b.name, d.roomNumber, d.studentName, d.submissionState from Building_tbl b " +
-                            "cross join room_tbl r cross join dormOccupants_tbl d on b.dorm_id = @dormid and r.room_id = @roomid and " +
-                            "d.request_ID = @requestID";
-                        GetRequestData2.Parameters.AddWithValue("@requestId", tempIDList[counter].request_ID);
-                        GetRequestData2.Parameters.AddWithValue("@dormid", tempIDList[counter].dorm_ID);
-                        GetRequestData2.Parameters.AddWithValue("@roomid", tempIDList[counter].room_ID);
-                        GetRequestData2.ExecuteNonQuery();
-
-                        // Execute the SQL command against the DB:
-                        MySqlDataReader reader = GetRequestData2.ExecuteReader();
-                        while (reader.Read())
+                        searchDataList.Add(new studentTblField2()
                         {
-                            // Save values into AdminDormRequestData class so can pass list to React JS to retrieve and manipulate the data
-                            requestDataList.Add(new AdminDormRequestData
-                            {
-                                request_ID = tempIDList[counter].request_ID,
-                                buildingName = reader[0].ToString(),
-                                roomNumber = reader[1].ToString(),
-                                studentName = reader[2].ToString(),
-                                submissionState = reader[3].ToString()
-                            });
-                        }
-                        reader.Close();
+                            user_id = reader.GetInt32(0),
+                            username = reader[1].ToString(),
+                            firstName = reader[2].ToString(),
+                            lastName = reader[3].ToString(), 
+                            studentID = reader[4].ToString(),
+                            dorm_ID = reader.GetInt32(5),
+                            room_ID = reader.GetInt32(6),
+                        });
                     }
+                    reader.Close();
                 }
-                catch (Exception e)
+                else
                 {
-                    requestDataList.Add(new AdminDormRequestData
+                    searchDataList.Add(new studentTblField2()
                     {
-                        message = (new Response { Status = "Invalid Response", Message = e.Message })
+                        username = "",
+                        user_id = 0,
+                        firstName = "", 
+                        lastName = "", 
+                        dorm_ID = 0,     
+                        studentID = "",
+                        room_ID = 0,
                     });
                 }
-            }
-            return requestDataList;
+            } 
+
+                return searchDataList;
         }
 
         struct SearchTempIDsStruct
@@ -265,8 +272,8 @@ namespace WebAPI.Controllers
                     MySqlCommand FindUsersLike = conn.CreateCommand();
 
                     // Pulls all students usernames that match entered characters
-                    FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%");
-                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID from student_tbl" ;
+                    FindUsersLike.Parameters.AddWithValue("@username", sUsernameToSearch + "%"); 
+                    FindUsersLike.CommandText = "SELECT student_tbl.user_id, student_tbl.username, student_tbl.firstName, student_tbl.lastName, student_tbl.studentID from student_tbl where username like @username";
                     FindUsersLike.ExecuteNonQuery();
 
                     // Execute the SQL command against the DB:
@@ -320,7 +327,7 @@ namespace WebAPI.Controllers
 
                 // Pulls all students usernames like entered characters
                 FindUsersInfo.Parameters.AddWithValue("@username", sUsernameToSearch);
-                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, email, year, password from housingdirector_schema.student_tbl where username = @username";
+                FindUsersInfo.CommandText = "select user_id, firstname, lastname, username, email, year, password, studentID from housingdirector_schema.student_tbl where username = @username";
 
                 FindUsersInfo.ExecuteNonQuery();
 
@@ -338,6 +345,7 @@ namespace WebAPI.Controllers
                         email = reader[4].ToString(),
                         year = reader[5].ToString(),
                         password = reader[6].ToString(),
+                        studentID = reader[7].ToString(),
                     }); ;
 
                 }
