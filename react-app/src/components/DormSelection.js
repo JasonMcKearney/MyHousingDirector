@@ -139,7 +139,7 @@ export default class DormSelection extends Component {
             method: 'POST',
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
-                numRoommates: 1//parseInt(Cookies.get("numRoommates"))
+                numRoommates: 0//parseInt(Cookies.get("numRoommates"))
             })
         }).then(res => res.clone().json())
             .then(function (res) {
@@ -175,7 +175,7 @@ export default class DormSelection extends Component {
         currentComponent.state.hyperlink = '';
         console.log(this.state.floor + " is the floor number");
         console.log( Cookies.get("buildingID") + " is the building number");
-        console.log( parseInt(Cookies.get("numRoommates")) + 1 + " is the number of roommates");
+        //console.log( parseInt(Cookies.get("numRoommates")) + 1 + " is the number of roommates");
         // Erases data that is in the list. Allows the user to go backwards if they want to change their selection.
         currentComponent.state.roomData.length = 0;
         fetch('http://localhost:16648/api/Student/FindRoomInfo', {
@@ -188,7 +188,7 @@ export default class DormSelection extends Component {
             body: JSON.stringify({
                 dorm_id: Cookies.get("buildingID"),
                 floorNumber: this.state.floor,
-                numRoommates: 4
+                numRoommates: 0
             })
         }).then(res => res.clone().json())
             .then(function (res) {
