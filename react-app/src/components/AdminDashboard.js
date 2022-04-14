@@ -101,16 +101,16 @@ export class AdminDashboard extends Component {
               <div style={{padding:'10%', paddingTop:'14%'}}><h1>{totalStudents}</h1></div>
           </div>
 
-            <div class="dormRequests-box" >                  
-              <label style={{paddingTop:'6%'}}>Total Dorm Requests</label>
-              <div style={{padding:'0%', paddingTop:'10%'}}><h1>{totalDormRqsts}</h1></div>
-              <Link to='./AdminDormRequests' className="btn btn-primary">See Requests</Link>
-            </div>
+          <div class="dormRequests-box" >                  
+            <label style={{paddingTop:'6%'}}>Total Dorm Requests</label>
+            <div style={{padding:'0%', paddingTop:'10%'}}><h1>{totalDormRqsts}</h1></div>
+            <Link to='./AdminDormRequests' className="btn btn-primary">See Requests</Link>
+          </div>
 
-              <div class="popularBuildings-box">
-                  <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
-                  <div style={{padding:'10%', marginTop:'-3%'}}><h1>{popularBuilding}</h1></div>
-              </div>
+          <div class="popularBuildings-box">
+              <label style={{paddingTop:'4%'}}>Most Popular Building on Campus</label>
+              <div style={{padding:'10%', marginTop:'-3%'}}><h1>{popularBuilding}</h1></div>
+          </div>
 
           <div class="availableDormRooms-box">
             <label style={{paddingTop:'2%'}}>Available Dorm Rooms</label>

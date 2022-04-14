@@ -17,7 +17,7 @@
     float: right;
     background-color: #fff;
     width: 25%;
-    height: 56%;
+    height: 53%;
     border-style: solid;
     margin-top: 1.3%;
     margin-left: 53%;
@@ -39,12 +39,17 @@
     white-space: nowrap;
 }
 
-.container-results{
-    margin-left: -8%;
-    border-style: groove;
+.requestscontainer-results{
+    margin-left: -4%;
+    margin-top: 2%;
+    height: 41%;
+    float: left;
+    border-style: solid;
     border-radius: 14px!important;
 
-    float:left;
+    /*Scroll bar is added if list exceeds size of the div */
+    overflow: auto;
+    white-space: nowrap;
 }
 
 .container-results::-webkit-scrollbar {
