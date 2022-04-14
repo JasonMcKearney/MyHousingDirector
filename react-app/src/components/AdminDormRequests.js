@@ -115,6 +115,7 @@ export class AdminDormRequests extends Component {
             })
         }).then((Response) => Response.json())
         .then((result) => {
+            // Refreshes the page
             window.location.reload(false);  
             console.log("response: " + result.status)
             alert(result.message);
@@ -270,11 +271,11 @@ export class AdminDormRequests extends Component {
     render(){
         return(
             <div class="container">
-                <div className="container-results" style={{width:'80%'}}>{this.printResults()}</div>
+                <div className="requestscontainer-results" style={{width:'80%'}}>{this.printResults()}</div>
                 
             <div class="container-BuildingDataBox">
                 <label style={{paddingTop:'3%'}}>Accepted Dorm Requests per Student</label>
-                <div class="buildingStudentList-div" style={{overflowy: "scroll"}}>
+                <div class="buildingStudentList-div">
                     {this.printBuildingAndStudentNames()}
                 </div>
             </div>
