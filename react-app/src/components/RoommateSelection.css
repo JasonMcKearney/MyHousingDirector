@@ -2,6 +2,11 @@
     margin:0 auto;
    
 }
+.button-search{
+  margin-right: 40%;
+    margin-top: .3%;
+}
+
 .container-results{
     border-radius: 3px;
     margin-top: 2%;
@@ -82,7 +87,7 @@ float:left;
 .wrapper{
     width:100%;
     display:inline-block;
-    padding-right: 10px;
+  
     
 }
 .add-icon{
@@ -140,8 +145,9 @@ ul{
    z-index: 0;
    padding-bottom:1px;
    padding-top:1px;
-   margin-left:20px;
+   margin-left:1px;
    margin-top: 2px;
+  
   }
 
   #primary-button::after
