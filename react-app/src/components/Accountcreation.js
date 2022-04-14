@@ -148,15 +148,15 @@ export default class accountcreation extends Component {
         return (
             <div>
                 <h1>Create New User</h1>
-            <div>
+            <div className='field-wrapper'>
                 <Form>
                 <Form.Item
+                        className= "question-label"
                         name="username"
                         label = "Username"
-                        tooltip="What do you want others to call you?"
                         rules={[{ required: true, message: 'Please input your username!', whitespace: true }]}  
                     >
-                        <Input type="text" onChange={this.username} />
+                        <Input className='question-input' type="text" onChange={this.username} />
                     </Form.Item>
 
                     <Form.Item
