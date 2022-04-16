@@ -507,7 +507,7 @@ namespace WebAPI.Controllers
                 {
                     conn3.Open();
                     MySqlCommand FndCurrentOcupntsInRm = conn3.CreateCommand();
-                    FndCurrentOcupntsInRm.CommandText = "select currentOccupants from room_tbl where building_id = @dormid and room_id = @roomid and roomNumber = @roomNumber";
+                    FndCurrentOcupntsInRm.CommandText = "select currentOccupants from room_tbl where dorm_id = @dormid and room_id = @roomid and roomNumber = @roomNumber";
                     FndCurrentOcupntsInRm.Parameters.AddWithValue("dormid", dormOccupantsTBL.dorm_ID);
                     FndCurrentOcupntsInRm.Parameters.AddWithValue("roomid", dormOccupantsTBL.room_ID);
                     FndCurrentOcupntsInRm.Parameters.AddWithValue("roomNumber", dormOccupantsTBL.roomNumber);
@@ -534,7 +534,7 @@ namespace WebAPI.Controllers
                         conn2.Open();
                         MySqlCommand UpdateRoomOccupntsField = conn2.CreateCommand();
                         UpdateRoomOccupntsField.CommandText = "update room_tbl set currentOccupants = @currentOccupants " +
-                            "where room_id = @roomid and building_id = @dormid and roomNumber = @roomNumber";
+                            "where room_id = @roomid and dorm_id = @dormid and roomNumber = @roomNumber";
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@currentOccupants", nCurrentOccupants + 1);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@dormid", dormOccupantsTBL.dorm_ID);
                         UpdateRoomOccupntsField.Parameters.AddWithValue("@roomid", dormOccupantsTBL.room_ID);
