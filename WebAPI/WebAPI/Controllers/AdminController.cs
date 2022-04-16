@@ -243,13 +243,11 @@ namespace WebAPI.Controllers
 
                     // Inserting data into fields of database
                     MySqlCommand Query = conn.CreateCommand();
-                    Query.CommandText = "update housingdirector_schema.student_tbl set firstName=@firstname, lastName=@lastname, " +
-                        "email=@email, year=@year, password=@password where user_id=@userid";
-                    Query.Parameters.AddWithValue("@firstname", student.firstName);
-                    Query.Parameters.AddWithValue("@lastname", student.lastName);
+                    Query.CommandText = "update housingdirector_schema.student_tbl set firstName=@firstname, lastName=@lastname, username=@username, " +
+                        "email=@email, year=@year, where user_id=@userid";
+                    Query.Parameters.AddWithValue("@username", student.username);
                     Query.Parameters.AddWithValue("@email", student.email);
                     Query.Parameters.AddWithValue("@year", student.year);
-                    Query.Parameters.AddWithValue("@password", student.password);
                     Query.Parameters.AddWithValue("@userid", student.user_id);
 
                     Query.ExecuteNonQuery();
@@ -259,7 +257,7 @@ namespace WebAPI.Controllers
             {
                 return new Response { Status = "Invalid", Message = "Update Student info unsuccessful." };
             }
-
+        
             return new Response { Status = "Success", Message = "Updated Student Info" };
         }
 

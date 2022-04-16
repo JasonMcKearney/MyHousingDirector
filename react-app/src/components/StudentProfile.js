@@ -77,6 +77,7 @@ export class StudentProfile extends Component {
     // Go to below function after users clicks on the submit button
     updateStudentFields()
     {
+        console.log("username: "+ this.state.username)
         // Admin add student account...
         fetch('http://localhost:16648/api/Admin/UpdateProfile', {
             headers: {
@@ -88,6 +89,7 @@ export class StudentProfile extends Component {
                 user_id: this.state.studentID,
                 firstName: this.state.firstName,           
                 lastName: this.state.lastName,
+                username: this.state.username,
                 email: this.state.email,
                 year: this.state.year,                
                 password: this.state.password
@@ -184,9 +186,9 @@ export class StudentProfile extends Component {
 
                 </div>
 
-                    <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
+                    <button onClick={this.updateStudentFields} id = "primary-button" style={{height: "100%", marginTop:"4%", marginRight: "37.5%", margintop:"20%" }}htmlType="submit">Submit</button>    
 
-                    <button onClick={this.deleteStudent} id = "primary-button" htmlType="submit">Delete Student Profile</button>    
+                    <button onClick={this.deleteStudent} id = "primary-button" style={{height: "100%", marginTop: "2%"}}htmlType="submit">Delete Student Profile</button>    
             </div>
 
         );
