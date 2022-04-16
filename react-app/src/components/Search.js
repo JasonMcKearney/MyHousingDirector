@@ -179,7 +179,7 @@ export default class search extends Component {
                         <input type="text" onChange ={this.searchText} id = "searchBar" Placeholder="Please input a Students name or ID" />
 
                     </form>
-                    <button onClick={this.getResults} id = "primary-button" htmlType="submit">Search </button>    
+                    <button onClick={this.getResults} id = "primary-button" htmlType="submit" style={{right: "37.5%", marginTop: "2%"}}>Search</button>    
 
                 </div>
 

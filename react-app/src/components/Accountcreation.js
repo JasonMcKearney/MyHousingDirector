@@ -120,8 +120,9 @@ export default class accountcreation extends Component {
                 }
                 else
                 {
+                    window.location.reload();
                     // Bring to Account Creation page
-                    this.props.history.push('/home')
+                    this.props.history.push('/home/Accountcreation');
                     alert("Student Created");
                 }
             })
