@@ -77,6 +77,7 @@ export class StudentProfile extends Component {
     // Go to below function after users clicks on the submit button
     updateStudentFields()
     {
+        console.log("username: "+ this.state.username)
         // Admin add student account...
         fetch('http://localhost:16648/api/Admin/UpdateProfile', {
             headers: {
@@ -88,10 +89,10 @@ export class StudentProfile extends Component {
                 user_id: this.state.studentID,
                 firstName: this.state.firstName,           
                 lastName: this.state.lastName,
+                username: this.state.username,
                 email: this.state.email,
                 year: this.state.year,                
-                password: this.state.password,
-                studentID: this.state.studentID
+                password: this.state.password
             })
         }).then((Response) => Response.json())
         .then((result) => {
@@ -143,7 +144,6 @@ export class StudentProfile extends Component {
         let email = this.state.email;
         let year = this.state.year;
         let password = this.state.password;
-        let studentID = this.state.studentID
 
         return (
 
@@ -169,11 +169,6 @@ export class StudentProfile extends Component {
                         <input className= "student-infor-input" type = "text" defaultValue = {username} onChange={this.username} autoComplete = "off"></input>
                     </div>
 
-                    <div className="student-container">
-                        <label className="student-info-label" >Student ID</label>
-                        <input className="student-infor-input" disabled={true} type="text" defaultValue={studentID} onChange={this.studentID} autoComplete="off"></input>
-                    </div>
-
                     <div className = "student-container">
                         <label className = "student-info-label">Email:</label>
                         <input className= "student-infor-input" type = "text" defaultValue = {email} onChange={this.email}autoComplete = "off"></input>
@@ -189,19 +184,11 @@ export class StudentProfile extends Component {
                         <input className= "student-infor-input" disabled = {true} type = "text" defaultValue = {password} onChange={this.password} autoComplete = "off"></input>
                     </div>
 
-
-
                 </div>
 
-                    <button onClick={this.updateStudentFields} id = "primary-button" htmlType="submit">Submit</button>    
+                    <button onClick={this.updateStudentFields} id = "primary-button" style={{height: "100%", marginTop:"4%", marginRight: "37.5%", margintop:"20%" }}htmlType="submit">Submit</button>    
 
-                <button onClick={this.deleteStudent} id="primary-button" htmlType="submit">Delete Student</button>
-
-                <button onClick={() => {
-                    this.props.history.push('/home/Search');
-                }} id="primary-button" htmlType="submit">
-                    Back
-                            </button> 
+                    <button onClick={this.deleteStudent} id = "primary-button" style={{height: "100%", marginTop: "2%"}}htmlType="submit">Delete Student Profile</button>    
             </div>
 
         );
