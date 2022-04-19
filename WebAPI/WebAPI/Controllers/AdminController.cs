@@ -243,8 +243,8 @@ namespace WebAPI.Controllers
 
                     // Inserting data into fields of database
                     MySqlCommand Query = conn.CreateCommand();
-                    Query.CommandText = "update housingdirector_schema.student_tbl set firstName=@firstname, lastName=@lastname, username=@username, " +
-                        "email=@email, year=@year, where user_id=@userid";
+                    Query.CommandText = "update housingdirector_schema.student_tbl set username=@username, " +
+                        "email=@email, year=@year where user_id=@userid";
                     Query.Parameters.AddWithValue("@username", student.username);
                     Query.Parameters.AddWithValue("@email", student.email);
                     Query.Parameters.AddWithValue("@year", student.year);
@@ -256,8 +256,7 @@ namespace WebAPI.Controllers
             catch (Exception)
             {
                 return new Response { Status = "Invalid", Message = "Update Student info unsuccessful." };
-            }
-        
+            }        
             return new Response { Status = "Success", Message = "Updated Student Info" };
         }
 
@@ -413,7 +412,7 @@ namespace WebAPI.Controllers
             }
 
             // Sorts dictionary
-            var sortedList = from entry in dashboardInfo.availableBuildingsList orderby entry.numRoomsAvailable ascending select entry;
+            var sortedList = from entry in dashboardInfo.availableBuildingsList orderby entry.numRoomsAvailable descending select entry;
             // Gets first value in list
             dashboardInfo.sPopularBuilding = sortedList.ElementAt(0).name.ToString();
 

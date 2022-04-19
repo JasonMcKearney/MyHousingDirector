@@ -301,7 +301,7 @@ namespace WebAPI.Controllers
                 conn.Open();
                 MySqlCommand FindBuildingInfo = conn.CreateCommand();
 
-                FindBuildingInfo.CommandText = "SELECT Building_tbl.dorm_id, Building_tbl.name, Building_Description_tbl.Description_Text,Building_Image_tbl.Image_Link FROM Building_tbl INNER JOIN Building_Image_tbl on Building_Image_tbl.Image_ID_Building_ID = Building_tbl.dorm_id INNER JOIN Building_Description_tbl on Building_Description_tbl.Dorm_ID = Building_tbl.dorm_id";
+                FindBuildingInfo.CommandText = "SELECT Building_tbl.dorm_id, Building_tbl.name, Building_tbl.url, Building_Description_tbl.Description_Text,Building_Image_tbl.Image_Link FROM Building_tbl INNER JOIN Building_Image_tbl on Building_Image_tbl.Image_ID_Building_ID = Building_tbl.dorm_id INNER JOIN Building_Description_tbl on Building_Description_tbl.Dorm_ID = Building_tbl.dorm_id";
 
 
                 FindBuildingInfo.ExecuteNonQuery();
@@ -315,9 +315,9 @@ namespace WebAPI.Controllers
                     {
                         dorm_id = reader[0].ToString(),
                         name = reader[1].ToString(),
-                        description = reader[2].ToString(),
-                        image1 = reader[3].ToString()
-
+                        url = reader[2].ToString(),
+                        description = reader[3].ToString(),
+                        image1 = reader[4].ToString()
                     });
                 }
                 reader.Close();
@@ -372,6 +372,7 @@ namespace WebAPI.Controllers
         public List<RoomTblFields> FindRoomInfo(GetRoomInfoDormSelection paramsObj)
         {
             List<RoomTblFields> roomList = new List<RoomTblFields>();
+
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
@@ -381,7 +382,10 @@ namespace WebAPI.Controllers
                 FindRoomInfo.Parameters.AddWithValue("@floorNumber", paramsObj.floorNumber);
                 FindRoomInfo.Parameters.AddWithValue("@numRoommates", paramsObj.numRoommates + 1);
 
-                FindRoomInfo.CommandText = "SELECT room_tbl.room_id, room_tbl.roomNumber, room_tbl.maxOccupants, Room_Decription_tbl.description_id, Room_Decription_tbl.room_description FROM room_tbl INNER JOIN Room_Decription_tbl  on room_tbl.room_id =  Room_Decription_tbl.room_description_id WHERE floorID = @floorNumber AND building_id = @dorm_id;";
+                //FindRoomInfo.CommandText = "SELECT room_tbl.room_id, room_tbl.roomNumber, room_tbl.maxOccupants, Room_Decription_tbl.description_id, Room_Decription_tbl.room_description FROM room_tbl INNER JOIN Room_Decription_tbl  on room_tbl.room_id = Room_Decription_tbl.room_description_id WHERE floorID = @floorNumber AND building_id = @dorm_id";
+                //FindRoomInfo.CommandText = "SELECT room_tbl.room_id, room_tbl.roomNumber, room_tbl.maxOccupants, Room_images_tbl.image_url, Room_Decription_tbl.description_id, Room_Decription_tbl.room_description FROM room_tbl INNER JOIN Room_Decription_tbl Inner join Room_images_tbl on room_tbl.room_id = Room_Decription_tbl.room_description_id WHERE floorID = @floorNumber AND building_id = @dorm_id and Room_images_tbl.image_room_id = room_tbl.room_id";
+                // Working query with a picture
+                FindRoomInfo.CommandText = "SELECT room_tbl.room_id, room_tbl.roomNumber, room_tbl.maxOccupants, Room_images_tbl.image_url, Room_Decription_tbl.description_id, Room_Decription_tbl.room_description FROM room_tbl JOIN Room_Decription_tbl on room_tbl.room_id = Room_Decription_tbl.room_description_id join Room_images_tbl on Room_images_tbl.image_room_id = room_tbl.room_id WHERE floorID = @floorNumber AND building_id = @dorm_id";
                 FindRoomInfo.ExecuteNonQuery();
 
                 // Execute the SQL command against the DB:
@@ -393,11 +397,10 @@ namespace WebAPI.Controllers
                     {
                         room_id = reader[0].ToString(),
                         roomNumber = reader[1].ToString(),
-                       roomDescription = reader[4].ToString(),
+                        roomDescription = reader[5].ToString(),
                         maxOccupants = reader[2].ToString(),
-                        
+                        image1 = reader[3].ToString()
                     });
-
                 }
                 reader.Close();
             }

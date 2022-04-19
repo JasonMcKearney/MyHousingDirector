@@ -149,7 +149,7 @@ export class StudentProfile extends Component {
 
             <div>
                 <div className = "student-image-container">
-                    <img className="student-image" src={default_logo}></img>
+                    <img className="student-image" src={default_logo.png}></img>
                 </div> 
                 <div>
                     <div>

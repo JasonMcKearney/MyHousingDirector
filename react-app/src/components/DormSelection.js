@@ -350,7 +350,7 @@ export default class DormSelection extends Component {
                     bEnd = false;
                     //sToPrint = `${this.state.buildingData[nCounter].description + "\nURL: " + this.state.buildingData[nCounter].url }`
                     sToPrint = `${this.state.buildingData[nCounter].description}`;
-                    url = `Hyperlink: ${this.state.buildingData[nCounter].url}`
+                    url = `For more information visit  ${this.state.buildingData[nCounter].url}`
                     console.log("getData line 335: " + url)
                     // imagePath is images/...  created Images folder in public folder, so do not need to import every image
                     imagePath1 = `${this.state.buildingData[nCounter].buildingImage1 }`
@@ -419,8 +419,8 @@ export default class DormSelection extends Component {
         const res = this.getData({ id: val, name: stateKey });
 
         // Check value of res, without JSON.stringify will write [object object] you are alerting instance of an object
-        console.log("Line 385, res in onChange: " + JSON.stringify(res.desc))
-        console.log("Line 386, imagePath1 in onChange: " + res.imagePath1)
+        console.log("Line 422, res in onChange: " + JSON.stringify(res.desc))
+        console.log("Line 423, imagePath1 in onChange: " + res.imagePath1)
 
         this.setState({
             currentDescriptions: res.desc,
@@ -613,8 +613,8 @@ export default class DormSelection extends Component {
                     >
 
                         <div className='steps-content-info-words'>{currentDescriptions}</div>
-                        <div classname='.divSpacing'>{hyperlink}</div>
-                        <img src={image1} classname=".buildingImgProps" style={{ height: '30', width: '30%' }}/>
+                        <div classname='.divSpacing' style={{background:"white"}}>{hyperlink}</div>
+                        <img src={image1} classname=".buildingImgProps" style={{ padding:"1%", height: '50', width: '50%' }}/>
                     </div>
                 </div>
                 <div className="steps-action">
